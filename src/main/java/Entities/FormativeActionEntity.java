@@ -1,4 +1,4 @@
-package UserStory13573;
+package Entities;
 
 /**
  * Domain model data for the courses

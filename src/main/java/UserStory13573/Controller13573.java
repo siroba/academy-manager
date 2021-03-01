@@ -4,11 +4,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
+import java.time.Duration;
 
 import javax.swing.table.TableModel;
 
+import Entities.FormativeActionEntity;
 import Utils.SwingUtil;
+import Utils.Util;
 
 public class Controller13573 {
 	private Model13573 model;
@@ -47,14 +55,78 @@ public class Controller13573 {
 
 	
 	/**
-	 * When selecting an item in the table, it shows the detail with the value of the discount percentage of the selected race and the values of this entity.
-	 * of the selected race and the values of this entity.
+	 * Create a new formative action object and add it to the db
 	 */
 	public void createFormativeAction() {
-		FormativeActionEntity formativeAction = new FormativeActionEntity(view.getName(), view.getObjectives(), view.getMainContents(), view.getTeacher(), Integer.parseInt(view.getRemuneration()), view.getLocation(), view.getDay(), Integer.parseInt(view.getNumberOfHours()), Integer.parseInt(view.getSpaces()), view.getEnrollmentPeriodStart(), view.getEnrollmentPeriodEnd());
+		
+		// Reset warnings
+		view.setWarningDay("");
+		view.setWarningEnrollmentPeriodStart("");
+		view.setWarningEnrollmentPeriodEnd("");
+		view.setWarningEnrollmentPeriodStart2("");
+		view.setWarningEnrollmentPeriodEnd2("");
+		
+		// Get dates
+		Date dateFormativeAction = Util.isoStringToDate(view.getDayYear() + "-"+ view.getDayMonth() + "-" + view.getDayDay());
+		Date dateEnrollStart = Util.isoStringToDate(view.getEnrollStartYear() + "-"+ view.getEnrollStartMonth() + "-" + view.getEnrollStartDay());
+		Date dateEnrollEnd = Util.isoStringToDate(view.getEnrollEndYear() + "-"+ view.getEnrollEndMonth() + "-" + view.getEnrollEndDay());
+		
+		// Validate dates 
+		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)==false) {
+			return;
+		}
+		
+		// Create new formative action and add it to DB 
+		FormativeActionEntity formativeAction = new FormativeActionEntity(view.getName(), view.getObjectives(), view.getMainContents(), view.getTeacher(), Integer.parseInt(view.getRemuneration()), view.getLocation(), Util.dateToIsoString(dateFormativeAction), Integer.parseInt(view.getNumberOfHours()), Integer.parseInt(view.getSpaces()), Util.dateToIsoString(dateEnrollStart), Util.dateToIsoString(dateEnrollEnd));
 		model.setFormativeAction(formativeAction);
+		view.getFrame().setVisible(false); 
 		
 	}
 	
+	/**
+	 * Check if the provided dates for the formative action, the start & end of the enrollment period are valid 
+	 */
+	public boolean validateDates(Date formativeAction,Date enrollStart, Date enrollEnd) {
+		Date now = new Date(System.currentTimeMillis());
+		long daysBetweenStartAction = daysBetween(enrollStart, formativeAction);
+		long daysBetweenEndAction = daysBetween(enrollEnd, formativeAction);
+		long daysBetweenStartEnd = daysBetween(enrollStart, enrollEnd);
+		long daysBetweenNowStart = daysBetween(now, enrollStart);
+		long daysBetweenNowEnd = daysBetween(now, enrollEnd);
+		long daysBetweenNowAction = daysBetween(now, formativeAction);
+		if (daysBetweenNowAction <= 0) {
+			view.setWarningDay("Can't take place in the past");
+			return false;
+		}
+		if (daysBetweenNowStart <= 0) {
+			view.setWarningEnrollmentPeriodStart2("Can't start in the past");
+			return false;
+		}
+		if (daysBetweenNowEnd <= 0) {
+			view.setWarningEnrollmentPeriodEnd2("Can't end in the past");
+			return false;
+		}
+		if (daysBetweenStartAction < 21) {
+			view.setWarningEnrollmentPeriodStart2("Should begin at least 3 weeks before formative action");
+			return false;
+		}
+		if (daysBetweenEndAction <= 0) {
+			view.setWarningEnrollmentPeriodEnd2("Should end before formative action begins");
+			return false;
+		}
+		if (daysBetweenStartEnd <= 0) {
+			view.setWarningEnrollmentPeriodEnd2("Not enough time between start and end of enrollment period");
+			return false;
+		}
+		
+		return true; 
+	}
 
+
+	/**
+	 * Compute the difference between 2 Dates in days 
+	 */
+	public int daysBetween(Date d1, Date d2){
+        return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+	}
 }

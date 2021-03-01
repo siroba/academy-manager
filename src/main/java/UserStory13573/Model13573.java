@@ -8,14 +8,12 @@ import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayListHandler;
 
+import Entities.FormativeActionEntity;
 import Utils.Database;
 import Utils.UnexpectedException;
 
 
 /**
-* Access to course data, 
-* used as a model for the swing example and for unit and user interface testing.
-* 
 <br/>In the methods of this example all the business logic is performed by a single sql query, so we always use the utility methods in the Database class that are used in the example.
 <br/>The utility methods in the Database class that use apache commons-dbutils and control the connection are always used. 
 * In case different queries are performed in the same method, the connection should be controlled from this class. 
@@ -29,7 +27,7 @@ public class Model13573 {
 	private Database db=new Database();
 	
 	/**
-	 * Gets the list of active races in object form for a given registration date.
+	 * Insert a new formative action into the formativeActions table 
 	 */
 
 	public void setFormativeAction(FormativeActionEntity fA) {
@@ -38,10 +36,4 @@ public class Model13573 {
 				 + "	(?, ?, ?, ?, ?, ?, ?, ?,  ?, ?, ?)";
 		db.executeUpdateQuery(sql, fA.getName(), fA.getObjectives(), fA.getMainContents(), fA.getTeacher(), fA.getRemuneration(), fA.getLocation(), fA.getDay(), fA.getNumberOfHours(), fA.getSpaces(), fA.getEnrollmentPeriodStart(), fA.getEnrollmentPeriodEnd());
 	}
-	
-	public static LocalDate dateToIsoString(String day) {
-		LocalDate date = LocalDate.parse("2018-09-16");
-		return date;
-	}
-
 }
