@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -61,6 +63,8 @@ public abstract class DbUtil {
 			DbUtils.closeQuietly(conn);
 		}
 	}
+	
+	
 	/**
 	 * Execute a sql query with the specified parameters mapping the result into a list of object arrays;
 	 * Uses apache commons-dbutils to perform the mapping and the handling of the other aspects of jdbc
@@ -79,6 +83,32 @@ public abstract class DbUtil {
 			DbUtils.closeQuietly(conn);
 		}
 	}
+	
+	/**
+	 * Execute a sql update query with the specified parameters
+	 */
+	public void executeUpdateQuery(String sql, Object... params) {
+		Connection conn=null;
+		try {
+			conn=this.getConnection();
+			//As there is no class specified to perform the mapping, it uses the ArrayListHandler
+			PreparedStatement pstmt=conn.prepareStatement(sql);
+			for (int i = 0; i < params.length; ++i) {
+				if (params[i] instanceof String){
+					pstmt.setString(i+1, String.valueOf(params[i]));
+				}
+				else if (Integer.class.isInstance(params[i])) {
+					pstmt.setInt(i+1, (int) params[i]);
+				}
+			}
+			pstmt.executeUpdate();			
+		} catch (SQLException e) {
+			throw new UnexpectedException(e);
+		} finally {
+			DbUtils.closeQuietly(conn);
+		}
+	}
+	
 	public List<Map<String,Object>> executeQueryMap(String sql, Object... params) {
 		Connection conn=null;
 		try {

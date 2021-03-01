@@ -6,6 +6,11 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import UserStory13573.Controller13573;
+import UserStory13573.Model13573;
+import UserStory13573.View13573;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -109,12 +114,12 @@ public class SwingMain {
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
 		
 		JButton btnPlanFormativeAction = new JButton("Plan formative action");
-//		btnExecuteBaseExample.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-//			public void actionPerformed(ActionEvent e) {
-//				CourseController controller=new CourseController(new CourseModel(), new CourseView());
-//				controller.initController();
-//			}
-//		});
+		btnPlanFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Controller13573 controller13573=new Controller13573(new Model13573(), new View13573());
+				controller13573.initController();
+			}
+		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
 
