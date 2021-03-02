@@ -1,16 +1,24 @@
 package PL53.SI2020_PL53;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Random;
 
 public class Date extends java.util.Date{
 	// Auto-generated serial ID
 	private static final long serialVersionUID = -6185333649323730247L;
 	
-	private int day, month, year;
+	protected int day;
+
+	protected int month;
+
+	protected int year;
 
 	public Date(int day, int month, int year) {
 		this.day = day;
@@ -67,6 +75,16 @@ public class Date extends java.util.Date{
 
 	}
 
+	public Instant toInstant() {
+		String parsed = this.year + "-" + this.month + "-" + this.day;
+		
+		return LocalDateTime.parse(parsed).atZone(ZoneId.of( "Europe/Madrid" )).toInstant();
+	}
+
+	public Timestamp toTimestamp() {
+		return Timestamp.from(toInstant());
+	}
+
 	public void setRandom() {
 		RandomDate rd = new RandomDate();
 		this.setDate(rd.nextDate());
@@ -101,9 +119,9 @@ public class Date extends java.util.Date{
 	
 	@Override
 	public String toString() {
-		return this.day + "/" + this.month + "/" + this.year;
+		return this.day + "-" + this.month + "-" + this.year;
 	}
-
+	
 	public static class RandomDate {
 		private final LocalDate minDate;
 		private final LocalDate maxDate;
