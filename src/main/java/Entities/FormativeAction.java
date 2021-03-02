@@ -11,21 +11,15 @@ import PL53.SI2020_PL53.Date;
  * also these same criteria in the names of tables and fields of the DB.
  */
 public class FormativeAction {
-	private String name;
-	private String objectives;
-	private String mainContents;
-	private String teacher;
-	private int remuneration;
-	private String location;
-	private String day;
-	private int numberOfHours;
-	private int spaces;
-	private String enrollmentPeriodStart;
-	private String enrollmentPeriodEnd;
+	private String name, objectives, mainContents, location, day;
+	private Teacher teacher;
+	private int numberOfHours, spaces;
+	float remuneration;
+	private Date enrollmentPeriodStart, enrollmentPeriodEnd; //TODO: Is this correct?
 
-	public FormativeAction(String name, String objectives, String mainContents, String teacher, int remuneration,
-			String location, String day, int numberOfHours, int spaces, String enrollmentPeriodStart,
-			String enrollmentPeriodEnd) {
+	public FormativeAction(String name, String objectives, String mainContents, Teacher teacher, float remuneration,
+			String location, String day, int numberOfHours, int spaces, 
+			Date enrollmentPeriodStart, Date enrollmentPeriodEnd) {
 
 		this.name = name;
 		this.objectives = objectives;
@@ -53,11 +47,11 @@ public class FormativeAction {
 		return this.mainContents;
 	}
 
-	public String getTeacher() {
+	public Teacher getTeacher() {
 		return this.teacher;
 	}
 
-	public int getRemuneration() {
+	public float getRemuneration() {
 		return this.remuneration;
 	}
 
@@ -77,11 +71,11 @@ public class FormativeAction {
 		return this.spaces;
 	}
 
-	public String getEnrollmentPeriodStart() {
+	public Date getEnrollmentPeriodStart() {
 		return this.enrollmentPeriodStart;
 	}
 
-	public String getEnrollmentPeriodEnd() {
+	public Date getEnrollmentPeriodEnd() {
 		return this.enrollmentPeriodEnd;
 	}
 
@@ -98,11 +92,11 @@ public class FormativeAction {
 		this.mainContents = value;
 	}
 
-	public void setTeacher(String value) {
+	public void setTeacher(Teacher value) {
 		this.teacher = value;
 	}
 
-	public void setRemuneration(int value) {
+	public void setRemuneration(float value) {
 		this.remuneration = value;
 	}
 
@@ -122,11 +116,11 @@ public class FormativeAction {
 		this.spaces = value;
 	}
 
-	public void setEnrollmentPeriodStart(String value) {
+	public void setEnrollmentPeriodStart(Date value) {
 		this.enrollmentPeriodStart = value;
 	}
 
-	public void setEnrollmentPeriodEnd(String value) {
+	public void setEnrollmentPeriodEnd(Date value) {
 		this.enrollmentPeriodEnd = value;
 	}
 
@@ -141,6 +135,6 @@ public class FormativeAction {
 	}
 
 	public Date getDate() {
-		return Date.random(); // TODO: Change this placeholder!
+		return this.enrollmentPeriodEnd; // TODO: Is this correct?
 	}
 }
