@@ -21,7 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
 
-public class View13573 {
+public class View {
 
 	private JFrame frame;
 	private JTextField TFName;
@@ -51,7 +51,7 @@ public class View13573 {
 	/**
 	 * Create the application.
 	 */
-	public View13573() {
+	public View() {
 		initialize();
 	}
 

@@ -14,16 +14,16 @@ import java.time.Duration;
 
 import javax.swing.table.TableModel;
 
-import Entities.FormativeActionEntity;
+import Entities.FormativeAction;
 import Utils.SwingUtil;
 import Utils.Util;
 
-public class Controller13573 {
-	private Model13573 model;
-	private View13573 view;
+public class Controller {
+	private Model model;
+	private View view;
 	private String lastSelectedKey=""; //remembers the last selected row to restore it when changing the race table
 	
-	public Controller13573(Model13573 m, View13573 v) {
+	public Controller(Model m, View v) {
 		this.model = m;
 		this.view = v;
 		//no model-specific initialization, only view-specific initialization
@@ -77,7 +77,7 @@ public class Controller13573 {
 		}
 		
 		// Create new formative action and add it to DB 
-		FormativeActionEntity formativeAction = new FormativeActionEntity(view.getName(), view.getObjectives(), view.getMainContents(), view.getTeacher(), Integer.parseInt(view.getRemuneration()), view.getLocation(), Util.dateToIsoString(dateFormativeAction), Integer.parseInt(view.getNumberOfHours()), Integer.parseInt(view.getSpaces()), Util.dateToIsoString(dateEnrollStart), Util.dateToIsoString(dateEnrollEnd));
+		FormativeAction formativeAction = new FormativeAction(view.getName(), view.getObjectives(), view.getMainContents(), view.getTeacher(), Integer.parseInt(view.getRemuneration()), view.getLocation(), Util.dateToIsoString(dateFormativeAction), Integer.parseInt(view.getNumberOfHours()), Integer.parseInt(view.getSpaces()), Util.dateToIsoString(dateEnrollStart), Util.dateToIsoString(dateEnrollEnd));
 		model.setFormativeAction(formativeAction);
 		view.getFrame().setVisible(false); 
 		

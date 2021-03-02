@@ -10,7 +10,7 @@ package Entities;
  * Follow also these same criteria in the names of tables and fields of the DB.
  */
 
-public class FormativeActionEntity {
+public class FormativeAction {
 	private String name; 
 	private String objectives; 
 	private String mainContents; 
@@ -24,7 +24,7 @@ public class FormativeActionEntity {
 	private String enrollmentPeriodEnd;
 	
 	
-	public FormativeActionEntity(String name, String objectives, String mainContents, String teacher, int remuneration,
+	public FormativeAction(String name, String objectives, String mainContents, String teacher, int remuneration,
 			String location, String day, int numberOfHours, int spaces, String enrollmentPeriodStart,
 			String enrollmentPeriodEnd) {
 		

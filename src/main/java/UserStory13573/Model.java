@@ -8,7 +8,7 @@ import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayListHandler;
 
-import Entities.FormativeActionEntity;
+import Entities.FormativeAction;
 import Utils.Database;
 import Utils.UnexpectedException;
 
@@ -22,7 +22,7 @@ import Utils.UnexpectedException;
 <br/>If you use any other framework to manage persistence, the functionality provided by this class would be the one assigned to the Services, Repositories, Repositories, and Services, Repositories, and Services.
 <br/>If you use some other framework to handle persistence, the functionality provided by this class would be the one assigned to Services, Repositories and DAOs.
 */
-public class Model13573 {
+public class Model {
 
 	private Database db=new Database();
 	
@@ -30,7 +30,7 @@ public class Model13573 {
 	 * Insert a new formative action into the formativeActions table 
 	 */
 
-	public void setFormativeAction(FormativeActionEntity fA) {
+	public void setFormativeAction(FormativeAction fA) {
 		String sql=
 				 "insert into formativeActions(name, objectives, mainContents, teacher, remuneration, location, spaces, day, numberOfHours, enrollmentPeriodStart, enrollmentPeriodEnd) values \r\n"
 				 + "	(?, ?, ?, ?, ?, ?, ?, ?,  ?, ?, ?)";
