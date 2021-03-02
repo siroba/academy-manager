@@ -1,6 +1,7 @@
 package Entities;
 
 import BaseProject.Database;
+import PL53.SI2020_PL53.Date;
 
 public class FormativeAction {
 
@@ -13,5 +14,8 @@ public class FormativeAction {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public Date getDate() {
+		return Date.random(); //TODO: Change this placeholder!
+	}
 }
