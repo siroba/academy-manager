@@ -6,7 +6,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Random;
 
-public class Date {
+public class Date extends java.util.Date{
+	// Auto-generated serial ID
+	private static final long serialVersionUID = -6185333649323730247L;
+	
 	private int day, month, year;
 
 	public Date(int day, int month, int year) {
@@ -137,6 +140,17 @@ public class Date {
 		public String toString() {
 			return "RandomDate{" + "maxDate=" + maxDate + ", minDate=" + minDate + '}';
 		}
+	}
+
+	public static int daysSince(Date d) {
+		return daysSince(Date.now(), d);
+	}
+
+	public static int daysSince(Date date1, Date date2) {
+		long difference = date1.getTime() - date2.getTime();
+	    int daysBetween = Math.round(difference / (1000.0f*60.0f*60.0f*24.0f));
+	    
+	    return daysBetween;
 	}
 
 }
