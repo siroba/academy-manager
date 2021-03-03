@@ -99,6 +99,11 @@ public abstract class DbUtil {
 				}
 				else if (Integer.class.isInstance(params[i])) {
 					pstmt.setInt(i+1, (int) params[i]);
+
+				}
+				else if (Float.class.isInstance(params[i])) {
+					pstmt.setFloat(i+1, (float) params[i]);
+
 				}
 			}
 			pstmt.executeUpdate();			

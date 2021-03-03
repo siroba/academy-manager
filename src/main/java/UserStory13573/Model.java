@@ -1,14 +1,12 @@
 package UserStory13573;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.*;
-
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ArrayListHandler;
 
 import Entities.FormativeAction;
+import Entities.Teacher;
 import Utils.Database;
 import Utils.UnexpectedException;
 
@@ -29,11 +27,51 @@ public class Model {
 	/**
 	 * Insert a new formative action into the formativeActions table 
 	 */
-
 	public void setFormativeAction(FormativeAction fA) {
+		// Query 
 		String sql=
-				 "insert into formativeActions(name, objectives, mainContents, teacher, remuneration, location, spaces, day, numberOfHours, enrollmentPeriodStart, enrollmentPeriodEnd) values \r\n"
-				 + "	(?, ?, ?, ?, ?, ?, ?, ?,  ?, ?, ?)";
-		db.executeUpdateQuery(sql, fA.getName(), fA.getObjectives(), fA.getMainContents(), fA.getTeacher(), fA.getRemuneration(), fA.getLocation(), fA.getDay(), fA.getNumberOfHours(), fA.getSpaces(), fA.getEnrollmentPeriodStart(), fA.getEnrollmentPeriodEnd());
+				 "insert into formativeAction(id ,name, objectives, mainContents, teacher, manager, remuneration, location, spaces, day, numberOfHours, enrollmentPeriodStart, enrollmentPeriodEnd, fee) values \r\n"
+				 + "	(?, ?, ?, ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?)";
+		
+		// Execute update query 
+		db.executeUpdateQuery(sql, fA.getID(), fA.getName(), fA.getObjectives(), fA.getMainContents(), fA.getTeacher().getID(), "exampleManager", fA.getRemuneration(), fA.getLocation(), fA.getDate().toString(), fA.getNumberOfHours(), fA.getSpaces(), fA.getEnrollmentPeriodStart().toString(), fA.getEnrollmentPeriodEnd().toString(), fA.getFee());
+		// TODO: Include manager
+	}
+	
+	
+	/**
+	 * Get the teacher instance that equals teacherName 
+	 */
+	public Teacher getTeacher(String teacherName) {
+		
+		// Query 
+		String sql = "Select * from Teacher where name = ?";
+		
+		try {
+			// Set up connection
+			Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); //NOSONAR
+			
+			//Statement object
+			PreparedStatement st = cn.prepareStatement(sql);
+			st.setString(1, teacherName);
+			
+			// Execute Query 
+			ResultSet rs=st.executeQuery();
+			
+			// Create new teacher object with the selected data 
+			Teacher teacher = new Teacher(
+					rs.getInt("ID"),
+					rs.getInt("salary"),
+					rs.getString("name"));
+	
+			// Close connection
+			rs.close();
+			st.close();
+			cn.close();
+			return teacher; 
+			
+		} catch (SQLException e) { 
+			throw new UnexpectedException(e);
+		}
 	}
 }

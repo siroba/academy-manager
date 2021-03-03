@@ -47,6 +47,8 @@ public class View {
 	private JComboBox comboBoxEnrollEndMonth;
 	private JComboBox comboBoxEnrollEndYear;
 	private JLabel LabelWarningDay;
+	private JLabel LabelFee;
+	private JTextField TFFee;
 
 	/**
 	 * Create the application.
@@ -63,9 +65,9 @@ public class View {
 		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 11));
 		frame.setTitle("Courses");
 		frame.setName("Courses");
-		frame.setBounds(0, 0, 492, 422);
+		frame.setBounds(0, 0, 492, 480);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow][][][][][][][][][][][][][][grow]"));
+		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow][][][][][][][][][][][][][][][grow]"));
 		
 		// Heading 
 		JLabel lblNewLabel = new JLabel("Plan a formative action");
@@ -85,7 +87,7 @@ public class View {
 		// Objectives 
 		LabelObjectives = new JLabel("Objectives:");
 		LabelObjectives.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelObjectives, "flowx,cell 0 2,gapx 20,aligny bottom");
+		frame.getContentPane().add(LabelObjectives, "flowx,cell 0 2,gapx 20,aligny center");
 		
 		TFObjectives = new JTextField();
 		TFObjectives.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -236,12 +238,19 @@ public class View {
 		LabelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		frame.getContentPane().add(LabelWarningEndEnroll, "cell 0 13,gapx 155");
 		
+		// Fee
+		LabelFee = new JLabel("Fee:");
+		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		frame.getContentPane().add(LabelFee, "flowx,cell 0 14, gapx 20");
+		
+		TFFee = new JTextField();
+		frame.getContentPane().add(TFFee, "cell 0 14");
+		TFFee.setColumns(10);
+		
 		// Create Button 
 		BTNCreate = new JButton("Create formative action");
 		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 11));
-		frame.getContentPane().add(BTNCreate, "cell 0 14,alignx center");
-
-		
+		frame.getContentPane().add(BTNCreate, "cell 0 15,alignx center");
 	}
 
 	//Getters and Setters to access from the controller (compact representation)
@@ -264,6 +273,7 @@ public class View {
 	public String getEnrollEndDay() {return String.valueOf(this.comboBoxEnrollEndDay.getSelectedItem());}
 	public String getEnrollEndMonth() {return String.valueOf(this.comboBoxEnrollEndMonth.getSelectedItem());}
 	public String getEnrollEndYear() {return String.valueOf(this.comboBoxEnrollEndYear.getSelectedItem());}
+	public String getFee() {return String.valueOf(this.TFFee.getText());}
 	public void setWarningDay(String warning)  { this.LabelWarningDay.setText(warning); }
 	public void setWarningEnrollmentPeriodStart(String warning)  { this.LabelWarningStartEnroll.setText(warning); }
 	public void setWarningEnrollmentPeriodStart2(String warning)  { this.LabelWarningStartEnroll.setText(warning); }
