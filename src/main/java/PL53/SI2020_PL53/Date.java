@@ -1,13 +1,24 @@
 package PL53.SI2020_PL53;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Random;
 
-public class Date {
-	private int day, month, year;
+public class Date extends java.util.Date{
+	// Auto-generated serial ID
+	private static final long serialVersionUID = -6185333649323730247L;
+	
+	protected int day;
+
+	protected int month;
+
+	protected int year;
 
 	public Date(int day, int month, int year) {
 		this.day = day;
@@ -64,6 +75,22 @@ public class Date {
 
 	}
 
+	public Instant toInstant() {
+		String parsed = this.year + "-" + this.month + "-" + this.day;
+		
+		return LocalDateTime.parse(parsed).atZone(ZoneId.of( "Europe/Madrid" )).toInstant();
+	}
+
+	public Timestamp toTimestamp() {
+		return Timestamp.from(toInstant());
+	}
+	
+	public void setDate(int day, int month, int year) {
+		this.day = day;
+		this.month = month;
+		this.year = year;
+	}
+
 	public void setRandom() {
 		RandomDate rd = new RandomDate();
 		this.setDate(rd.nextDate());
@@ -96,11 +123,22 @@ public class Date {
 		return new Date(d.getDayOfMonth(), d.getMonthValue(), d.getYear());
 	}
 	
+	/**
+	 * The input date must be in format "yyyy-MM-dd"
+	 * @param date
+	 * @return
+	 */
+	public static Date parseString(String date) {
+		String tmp [] = date.split("-");
+		
+		return new Date(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]), Integer.parseInt(tmp[0]));
+	}
+	
 	@Override
 	public String toString() {
-		return this.day + "/" + this.month + "/" + this.year;
+		return this.day + "-" + this.month + "-" + this.year;
 	}
-
+	
 	public static class RandomDate {
 		private final LocalDate minDate;
 		private final LocalDate maxDate;
@@ -137,6 +175,17 @@ public class Date {
 		public String toString() {
 			return "RandomDate{" + "maxDate=" + maxDate + ", minDate=" + minDate + '}';
 		}
+	}
+
+	public static int daysSince(Date d) {
+		return daysSince(Date.now(), d);
+	}
+
+	public static int daysSince(Date date1, Date date2) {
+		long difference = date1.getTime() - date2.getTime();
+	    int daysBetween = Math.round(difference / (1000.0f*60.0f*60.0f*24.0f));
+	    
+	    return daysBetween;
 	}
 
 }
