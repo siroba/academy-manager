@@ -70,22 +70,15 @@ public class Controller {
 		view.setWarningEnrollmentPeriodEnd2("");
 		
 		// Get dates
-		Date dateFormativeAction = Date.parseString(view.getDayYear() + "-"+ view.getDayMonth() + "-" + view.getDayDay());
-		Date dateEnrollStart = Date.parseString(view.getEnrollStartYear() + "-"+ view.getEnrollStartMonth() + "-" + view.getEnrollStartDay());
-		Date dateEnrollEnd = Date.parseString(view.getEnrollEndYear() + "-"+ view.getEnrollEndMonth() + "-" + view.getEnrollEndDay());
+		Date dateFormativeAction = new Date(Integer.parseInt(view.getDayDay()), Integer.parseInt(view.getDayMonth()), Integer.parseInt(view.getDayYear()));
+		Date dateEnrollStart = new Date(Integer.parseInt(view.getEnrollStartDay()), Integer.parseInt(view.getEnrollStartMonth()), Integer.parseInt(view.getEnrollStartYear()));
+		Date dateEnrollEnd = new Date(Integer.parseInt(view.getEnrollEndDay()), Integer.parseInt(view.getEnrollEndMonth()), Integer.parseInt(view.getEnrollEndYear()));
 		
-		// TODO: Fix date validation bug resulting from custom date class 
-//		// Validate dates  
-//		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)==false) {
-//			return;
-//		}
-//		System.out.println(dateFormativeAction);
-//		System.out.println(dateEnrollStart);
-//		System.out.println(dateEnrollEnd);
-//		System.out.println(dateFormativeAction.getTime());
-//		System.out.println(dateEnrollStart.getTime());
-//		System.out.println(dateEnrollEnd.getTime());
-		
+		// Validate dates  
+		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)==false) {
+			return;
+		}
+
 		// Get Teacher
 		Teacher teacher = model.getTeacher(view.getTeacher());
 		
@@ -101,21 +94,21 @@ public class Controller {
 	 */
 	public boolean validateDates(Date formativeAction,Date enrollStart, Date enrollEnd) {
 		Date now = Date.now();
-		long daysBetweenStartAction = daysBetween(enrollStart, formativeAction);
-		long daysBetweenEndAction = daysBetween(enrollEnd, formativeAction);
-		long daysBetweenStartEnd = daysBetween(enrollStart, enrollEnd);
-		long daysBetweenNowStart = daysBetween(now, enrollStart);
-		long daysBetweenNowEnd = daysBetween(now, enrollEnd);
-		long daysBetweenNowAction = daysBetween(now, formativeAction);
-		if (daysBetweenNowAction <= 0) {
+		long daysBetweenStartAction = Date.daysSince(formativeAction, enrollStart);
+		long daysBetweenEndAction = Date.daysSince(formativeAction, enrollEnd);
+		long daysBetweenStartEnd = Date.daysSince(enrollEnd, enrollStart);
+		long daysBetweenNowStart = Date.daysSince(enrollStart, now);
+		long daysBetweenNowEnd = Date.daysSince(enrollEnd, now);
+		long daysBetweenNowAction = Date.daysSince(formativeAction, now);
+		if (daysBetweenNowAction < 0) {
 			view.setWarningDay("Can't take place in the past");
 			return false;
 		}
-		if (daysBetweenNowStart <= 0) {
+		if (daysBetweenNowStart < 0) {
 			view.setWarningEnrollmentPeriodStart2("Can't start in the past");
 			return false;
 		}
-		if (daysBetweenNowEnd <= 0) {
+		if (daysBetweenNowEnd < 0) {
 			view.setWarningEnrollmentPeriodEnd2("Can't end in the past");
 			return false;
 		}
