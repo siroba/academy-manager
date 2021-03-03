@@ -6,13 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import BaseProject.Database;
-import Entities.Enrollment.Status;
 import PL53.SI2020_PL53.Date;
-import PL53.SI2020_PL53.DateTime;
 
 /**
  * Domain model data for the courses IMPORTANT: When using the Apache Commons
