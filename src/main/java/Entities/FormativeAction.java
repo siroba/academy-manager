@@ -6,13 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import BaseProject.Database;
-import Entities.Enrollment.Status;
 import PL53.SI2020_PL53.Date;
-import PL53.SI2020_PL53.DateTime;
 
 /**
  * Domain model data for the courses IMPORTANT: When using the Apache Commons
@@ -23,15 +19,15 @@ import PL53.SI2020_PL53.DateTime;
  */
 public class FormativeAction {
 	private int ID = -1;
-	private String name, objectives, mainContents, location, day;
+	private String name, objectives, mainContents, location, status;
 	private Teacher teacher;
 	private TrainingManager manager;
 	private int numberOfHours, spaces;
 	private float remuneration;
-	private Date enrollmentPeriodStart, enrollmentPeriodEnd; //TODO: Is this correct?
+	private Date enrollmentPeriodStart, enrollmentPeriodEnd, day; //TODO: Is this correct?
 
 	public FormativeAction(String name, String objectives, String mainContents, Teacher teacher, TrainingManager manager, float remuneration,
-			String location, String day, int numberOfHours, int spaces, 
+			String location, Date day, String status, int numberOfHours, int spaces, 
 			Date enrollmentPeriodStart, Date enrollmentPeriodEnd) {
 
 		this.name = name;
@@ -42,6 +38,7 @@ public class FormativeAction {
 		this.remuneration = remuneration;
 		this.location = location;
 		this.day = day;
+		this.status = status;
 		this.numberOfHours = numberOfHours;
 		this.spaces = spaces;
 		this.enrollmentPeriodStart = enrollmentPeriodStart;
@@ -77,8 +74,12 @@ public class FormativeAction {
 		return this.location;
 	}
 
-	public String getDay() {
+	public Date getDay() {
 		return this.day;
+	}
+	
+	public String getStatus() {
+		return this.status;
 	}
 
 	public int getNumberOfHours() {
@@ -127,8 +128,12 @@ public class FormativeAction {
 		this.location = value;
 	}
 
-	public void setDay(String value) {
+	public void setDay(Date value) {
 		this.day = value;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public void setNumberOfHours(int value) {
@@ -169,8 +174,8 @@ public class FormativeAction {
 			
 			rs.next();
 			/*
-			 * name, objectives, mainContents, teacher, remuneration,
-			 location,  day, numberOfHours, spaces, 
+			 * name, objectives, mainContents, teacher, renumeration,
+			 location,  day, status, numberOfHours, spaces, 
 			enrollmentPeriodStart, enrollmentPeriodEnd*/
 			FormativeAction fa = new FormativeAction(
 					rs.getString("name"), 
@@ -180,7 +185,8 @@ public class FormativeAction {
 					TrainingManager.obtain(rs.getInt("ID_trainingManager")),
 					rs.getFloat("remuneration"),
 					rs.getString("location"),
-					"??", // TODO: what is "day"?
+					Date.parse(rs.getDate("day")), // TODO: what is "day"?
+					rs.getString("status"),
 					rs.getInt("duration"),
 					rs.getInt("places"),
 					Date.random(),
