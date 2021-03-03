@@ -116,8 +116,9 @@ public class Enrollment {
 	 * 
 	 * @return
 	 * @throws SQLException
+	 * @throws ParseException 
 	 */
-	public static List<Enrollment> obtainAll(Database db) throws SQLException {
+	public static List<Enrollment> obtainAll(Database db) throws SQLException, ParseException {
 		// Creation of the SQL query
 		String query = "SELECT * FROM " + tableName();
 
@@ -129,15 +130,13 @@ public class Enrollment {
 
 		List<Enrollment> enrollments = new ArrayList<>();
 		
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		
 		while (rs.next()) {
 			Enrollment e = new Enrollment(
 					rs.getString("name"), 
 					Status.valueOf(rs.getString("status")),
 					rs.getInt("ID_fa"), 
 					rs.getInt("ID_professional"), 
-					DateTime.parseString(df.format(rs.getDate("dateEn"))),
+					DateTime.parse(rs.getTimestamp("dateEn")),
 					db);
 
 			enrollments.add(e);
