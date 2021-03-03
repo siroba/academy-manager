@@ -84,6 +84,12 @@ public class Date extends java.util.Date{
 	public Timestamp toTimestamp() {
 		return Timestamp.from(toInstant());
 	}
+	
+	public void setDate(int day, int month, int year) {
+		this.day = day;
+		this.month = month;
+		this.year = year;
+	}
 
 	public void setRandom() {
 		RandomDate rd = new RandomDate();
@@ -115,6 +121,17 @@ public class Date extends java.util.Date{
 		LocalDate d = date.toLocalDate();
 		
 		return new Date(d.getDayOfMonth(), d.getMonthValue(), d.getYear());
+	}
+	
+	/**
+	 * The input date must be in format "yyyy-MM-dd"
+	 * @param date
+	 * @return
+	 */
+	public static Date parseString(String date) {
+		String tmp [] = date.split("-");
+		
+		return new Date(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]), Integer.parseInt(tmp[0]));
 	}
 	
 	@Override
