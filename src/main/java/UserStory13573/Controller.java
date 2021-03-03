@@ -2,28 +2,14 @@ package UserStory13573;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-//import java.util.Date;
-import java.util.List;
-import java.time.Duration;
-
-import javax.swing.table.TableModel;
-
 import Entities.FormativeAction;
 import Entities.Teacher;
 import PL53.SI2020_PL53.Date;
 import Utils.SwingUtil;
-import Utils.Util;
 
 public class Controller {
 	private Model model;
 	private View view;
-	private String lastSelectedKey=""; //remembers the last selected row to restore it when changing the race table
 	
 	public Controller(Model m, View v) {
 		this.model = m;
@@ -100,6 +86,14 @@ public class Controller {
 		long daysBetweenNowStart = Date.daysSince(enrollStart, now);
 		long daysBetweenNowEnd = Date.daysSince(enrollEnd, now);
 		long daysBetweenNowAction = Date.daysSince(formativeAction, now);
+		
+		System.out.println(daysBetweenStartAction);
+		System.out.println(daysBetweenEndAction);
+		System.out.println(daysBetweenStartEnd);
+		System.out.println(daysBetweenNowStart);
+		System.out.println(daysBetweenNowEnd);
+		System.out.println(daysBetweenNowAction);
+		
 		if (daysBetweenNowAction < 0) {
 			view.setWarningDay("Can't take place in the past");
 			return false;
