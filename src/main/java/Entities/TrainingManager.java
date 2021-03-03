@@ -24,4 +24,10 @@ public class TrainingManager {
 	public int getID() {
 		return ID;
 	}
+
+	public static TrainingManager obtain(int id) {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
 }

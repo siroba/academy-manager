@@ -40,4 +40,10 @@ public class Teacher {
 		this.name = name;
 	}
 
+	public static Teacher obtain(int id) {
+		// TODO Auto-generated method stub
+
+		return null;
+	}
+
 }

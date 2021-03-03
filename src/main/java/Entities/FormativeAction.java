@@ -1,7 +1,18 @@
 package Entities;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import BaseProject.Database;
+import Entities.Enrollment.Status;
 import PL53.SI2020_PL53.Date;
+import PL53.SI2020_PL53.DateTime;
 
 /**
  * Domain model data for the courses IMPORTANT: When using the Apache Commons
@@ -11,13 +22,15 @@ import PL53.SI2020_PL53.Date;
  * also these same criteria in the names of tables and fields of the DB.
  */
 public class FormativeAction {
+	private int ID = -1;
 	private String name, objectives, mainContents, location, day;
 	private Teacher teacher;
+	private TrainingManager manager;
 	private int numberOfHours, spaces;
-	float remuneration;
+	private float remuneration;
 	private Date enrollmentPeriodStart, enrollmentPeriodEnd; //TODO: Is this correct?
 
-	public FormativeAction(String name, String objectives, String mainContents, Teacher teacher, float remuneration,
+	public FormativeAction(String name, String objectives, String mainContents, Teacher teacher, TrainingManager manager, float remuneration,
 			String location, String day, int numberOfHours, int spaces, 
 			Date enrollmentPeriodStart, Date enrollmentPeriodEnd) {
 
@@ -25,6 +38,7 @@ public class FormativeAction {
 		this.objectives = objectives;
 		this.mainContents = mainContents;
 		this.teacher = teacher;
+		this.manager = manager;
 		this.remuneration = remuneration;
 		this.location = location;
 		this.day = day;
@@ -35,6 +49,10 @@ public class FormativeAction {
 	}
 
 	// Getter
+	public int getID() {
+		return ID;
+	}
+	
 	public String getName() {
 		return this.name;
 	}
@@ -78,6 +96,11 @@ public class FormativeAction {
 	public Date getEnrollmentPeriodEnd() {
 		return this.enrollmentPeriodEnd;
 	}
+
+	public TrainingManager getManager() {
+		return manager;
+	}
+
 
 	// Setter
 	public void setName(String value) {
@@ -123,15 +146,53 @@ public class FormativeAction {
 	public void setEnrollmentPeriodEnd(Date value) {
 		this.enrollmentPeriodEnd = value;
 	}
-
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
+	
+	public void setManager(TrainingManager manager) {
+		this.manager = manager;
+	}
+	
+	public static String tableName() {
+		return "FormativeAction";
 	}
 
-	public static FormativeAction obtain(int formativeActionID, Database database) {
-		// TODO Auto-generated method stub
-		return null;
+	public static FormativeAction obtain(int formativeActionID, Database db) throws SQLException {
+		// Creation of the SQL query
+			String query = "SELECT * FROM " + tableName();
+
+			Connection conn = db.getConnection();
+			// Statement object needed to send statements to the database
+			Statement st = conn.createStatement();
+			// executeQuery will return a resultSet
+			ResultSet rs = st.executeQuery(query.toString());
+			
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			
+			rs.next();
+			/*
+			 * name, objectives, mainContents, teacher, remuneration,
+			 location,  day, numberOfHours, spaces, 
+			enrollmentPeriodStart, enrollmentPeriodEnd*/
+			FormativeAction fa = new FormativeAction(
+					rs.getString("name"), 
+					rs.getString("objectives"),
+					rs.getString("mainContent"),
+					Teacher.obtain(rs.getInt("ID_teacher")),
+					TrainingManager.obtain(rs.getInt("ID_trainingManager")),
+					rs.getFloat("remuneration"),
+					rs.getString("location"),
+					"??", // TODO: what is "day"?
+					rs.getInt("duration"),
+					rs.getInt("places"),
+					Date.random(),
+					Date.random());
+
+
+			// Very important to always close all the objects related to the database
+			rs.close();
+			st.close();
+			conn.close();
+
+			return fa;
 	}
 
 	public Date getDate() {

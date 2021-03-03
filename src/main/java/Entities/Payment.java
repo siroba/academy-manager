@@ -8,6 +8,10 @@ public class Payment {
 	private Date payDate;
 	private String sender, receiver, fiscalNumber, address;
 	private boolean paid;
+	
+	/**
+	 * This reference is needed for the {@link Entities.Refund#percentage() refund_percentage} function.
+	 */
 	private Enrollment enrollment;
 
 	public Payment(Enrollment enrollment, float amount, Date payDate, String sender, String receiver, String fiscalNumber, String address,

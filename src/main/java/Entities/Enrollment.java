@@ -5,33 +5,34 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import BaseProject.Database;
 import PL53.SI2020_PL53.Date;
+import PL53.SI2020_PL53.DateTime;
 
 public class Enrollment {
-	private boolean isCancelled;
-	private Date date;
+	private DateTime date;
 	private String name;
 	private FormativeAction formativeAction;
 	private Professional professional;
 	private Status status;
 
 	/**
-	 * Enrollment default constructor. "isCancelled" is assumed to be false and the
-	 * date is assumed to be today.
+	 * Enrollment default constructor. The date and time are assumed to be today and now.
 	 * 
 	 * @param name
+	 * @param status
 	 * @param formativeAction
-	 * @param date
+	 * @param professional
 	 */
 	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional) {
-		this.isCancelled = false;
 		this.status = status;
-		this.date = Date.now();
+		this.date = new DateTime(0, 0, Date.now());
 		this.name = name;
 		this.formativeAction = formativeAction;
 		this.professional = professional;
@@ -41,107 +42,38 @@ public class Enrollment {
 	 * Enrollment constructor.
 	 * 
 	 * @param name
+	 * @param status
 	 * @param formativeAction
+	 * @param professional
 	 * @param date
-	 * @param isCancelled
 	 */
-	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional, Date date,
-			boolean isCancelled) {
-		this.isCancelled = isCancelled;
+	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional, DateTime date) {
 		this.status = status;
-		this.date = new Date(date);
+		this.date = new DateTime(date);
 		this.name = name;
 		this.formativeAction = formativeAction;
 		this.professional = professional;
 	}
 
 	/**
-	 * Enrollment default constructor, but it takes care of creating the date
-	 * object. "isCancelled" is assumed to be false.
+	 * Enrollment constructor, but it takes only the ID of the Formative Action and the Professional object (it does a query from the database).
 	 * 
 	 * @param name
-	 * @param formativeAction
-	 * @param day
-	 * @param month
-	 * @param year
-	 */
-	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional, int day,
-			int month, int year) {
-		this.isCancelled = false;
-		this.status = status;
-		this.date = new Date(day, month, year);
-		this.name = name;
-		this.formativeAction = formativeAction;
-		this.professional = professional;
-	}
-
-	/**
-	 * Enrollment default constructor, but it takes care of creating the date
-	 * object.
-	 * 
-	 * @param name
-	 * @param formativeAction
-	 * @param day
-	 * @param month
-	 * @param year
-	 * @param isCancelled
-	 */
-	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional, int day,
-			int month, int year, boolean isCancelled) {
-		this.isCancelled = isCancelled;
-		this.status = status;
-		this.date = new Date(day, month, year);
-		this.name = name;
-		this.formativeAction = formativeAction;
-		this.professional = professional;
-	}
-
-	/**
-	 * Enrollment constructor, but it takes care of creating the date and it takes
-	 * only the ID of the Formative Action and the Professional object.
-	 * 
-	 * @param name
+	 * @param status
 	 * @param formativeActionID
 	 * @param professionalID
-	 * @param day
-	 * @param month
-	 * @param year
-	 * @param isCancelled
+	 * @param date
+	 * @param db
 	 * @throws SQLException
 	 */
-	public Enrollment(String name, Status status, int formativeActionID, int professionalID, int day, int month,
-			int year, boolean isCancelled) throws SQLException {
-		this.isCancelled = isCancelled;
+	public Enrollment(String name, Status status, int formativeActionID, int professionalID,  DateTime date, Database db) throws SQLException {
 		this.status = status;
-		this.date = new Date(day, month, year);
+		this.date = new DateTime(date);
 		this.name = name;
-		this.formativeAction = FormativeAction.obtain(formativeActionID, new Database()); // TODO: change this!
-		this.professional = Professional.obtain(professionalID, new Database()); // TODO: change this!
+		this.formativeAction = FormativeAction.obtain(formativeActionID, db);
+		this.professional = Professional.obtain(professionalID, db);
 	}
-
-	/**
-	 * Enrollment constructor, but it takes only the ID of the Formative Action and
-	 * the Professional object.
-	 * 
-	 * @param name
-	 * @param formativeActionID
-	 * @param professionalID
-	 * @param day
-	 * @param month
-	 * @param year
-	 * @param isCancelled
-	 * @throws SQLException
-	 */
-	public Enrollment(String name, Status status, int formativeActionID, int professionalID, Date date,
-			boolean isCancelled) throws SQLException {
-		this.isCancelled = isCancelled;
-		this.status = status;
-		this.date = date;
-		this.name = name;
-		this.formativeAction = FormativeAction.obtain(formativeActionID, new Database()); // TODO: change this!
-		this.professional = Professional.obtain(professionalID, new Database()); // TODO: change this!
-	}
-
+	
 	public static String tableName() {
 		return "Enrollment";
 	}
@@ -196,11 +128,17 @@ public class Enrollment {
 		ResultSet rs = st.executeQuery(query.toString());
 
 		List<Enrollment> enrollments = new ArrayList<>();
-
+		
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
 		while (rs.next()) {
-			Enrollment e = new Enrollment(rs.getString("name"), Status.valueOf(rs.getString("status")),
-					rs.getInt("ID_fa"), rs.getInt("ID_professional"), Date.parse(rs.getDate("dateEn")),
-					rs.getBoolean("isCancelled"));
+			Enrollment e = new Enrollment(
+					rs.getString("name"), 
+					Status.valueOf(rs.getString("status")),
+					rs.getInt("ID_fa"), 
+					rs.getInt("ID_professional"), 
+					DateTime.parseString(df.format(rs.getDate("dateEn"))),
+					db);
 
 			enrollments.add(e);
 		}
@@ -261,26 +199,22 @@ public class Enrollment {
 		conn.close();
 	}
 
-	public boolean isCancelled() {
-		return isCancelled;
-	}
-
-	public void setCancelled(boolean isCancelled) {
-		this.isCancelled = isCancelled;
-	}
-
-	public Date getDate() {
+	public DateTime getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDateTime(DateTime date) {
 		this.date = date;
 	}
 
 	public void setDate(int day, int month, int year) {
-		this.date = new Date(day, month, year);
+		this.date.setDate(day, month, year);
 	}
-
+	
+	public void setTime(int hour, int minute) {
+		this.date.setTime(hour, minute);
+	}
+	
 	public String getName() {
 		return name;
 	}
