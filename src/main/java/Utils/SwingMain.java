@@ -7,9 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import UserStory13573.Controller;
-import UserStory13573.Model;
-import UserStory13573.View;
+import UserStory13579.Controller;
+import UserStory13579.Model;
+import UserStory13579.View;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -114,14 +114,14 @@ public class SwingMain {
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
 		
 		JButton btnPlanFormativeAction = new JButton("Plan formative action");
-		btnPlanFormativeAction.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Controller controller13573=new Controller(new Model(), new View());
-				controller13573.initController();
-			}
-		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
+		btnCheckFinancialBalance.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Controller controller=new Controller(new Model(), new View());
+				controller.initController();
+			}
+		});
 
 		// Empty grid elements 
 		JLabel labelEmpty1 = new JLabel("");
