@@ -13,7 +13,7 @@ import javax.swing.table.TableModel;
 import org.apache.commons.beanutils.PropertyUtils;
 
 /**
- * Utility methods for user interfaces with swing (populating tables from a POJO object that has been obtained from the database, exception handling for POJO methods).
+  * Utility methods for user interfaces with swing (populating tables from a POJO object that has been obtained from the database, exception handling for POJO methods).
  * that has been obtained from the database, exception handling for controller methods, auto-sizing of columns, etc.). 
  * controller methods, auto-sizing of columns, etc.)
  */
@@ -34,7 +34,7 @@ public class SwingUtil {
 			consumer.run();
 		} catch (ApplicationException e) { //controlled exception from which the application can be retrieved
 			showMessage(e.getMessage(), "Informacion",JOptionPane.INFORMATION_MESSAGE);
-		} catch (RuntimeException e) { //rest of exceptions, in addition to the info window shows the stack trace
+		} catch (RuntimeException e) { //restof exceptions, in addition to the info window shows the stacktrace
 			e.printStackTrace(); //NOSONAR
 			showMessage(e.toString(), "Excepcion no controlada",JOptionPane.ERROR_MESSAGE);
 		}

@@ -7,9 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import UserStory13579.Controller;
-import UserStory13579.Model;
-import UserStory13579.View;
+import UserStory13573.Controller;
+import UserStory13573.Model;
+import UserStory13573.View;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -59,6 +59,16 @@ public class SwingMain {
 		frame.setBounds(0, 0, 800,250);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(6, 4, 10, 10));
+				
+//		JButton btnExecuteBaseExample = new JButton("Execute the base project");
+//		btnExecuteBaseExample.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+//			public void actionPerformed(ActionEvent e) {
+//				CourseController controller=new CourseController(new CourseModel(), new CourseView());
+//				controller.initController();
+//			}
+//		});
+//		
+//		frame.getContentPane().add(btnExecuteBaseExample);
 		
 		// DB operations 
 		JLabel labelDB = new JLabel("Database operations", SwingConstants.CENTER);
@@ -104,14 +114,14 @@ public class SwingMain {
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
 		
 		JButton btnPlanFormativeAction = new JButton("Plan formative action");
-		
-		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
-		btnCheckFinancialBalance.addActionListener(new ActionListener() {
+		btnPlanFormativeAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Controller controller=new Controller(new Model(), new View());
-				controller.initController();
+				Controller controller13573=new Controller(new Model(), new View());
+				controller13573.initController();
 			}
 		});
+		
+		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
 
 		// Empty grid elements 
 		JLabel labelEmpty1 = new JLabel("");

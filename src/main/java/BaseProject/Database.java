@@ -12,9 +12,9 @@ import org.apache.commons.dbutils.DbUtils;
  */
 public class Database extends DbUtil {
 	//Location of configuration and database loading files
-	private static final String APP_PROPERTIES = "src/main/resources/application.properties";
-	private static final String SQL_SCHEMA = "src/main/resources/schema.sql";
-	private static final String SQL_LOAD = "src/main/resources/data.sql";
+	private static final String APP_PROPERTIES = "src/main/resources/applicationBaseProject.properties";
+	private static final String SQL_SCHEMA = "src/main/resources/schemaBaseProject.sql";
+	private static final String SQL_LOAD = "src/main/resources/dataBaseProject.sql";
 	//database parameters read from application.properties (local database without user/password)
 	private String driver;
 	private String url;
