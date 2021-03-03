@@ -79,6 +79,12 @@ public class Controller {
 //		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)==false) {
 //			return;
 //		}
+//		System.out.println(dateFormativeAction);
+//		System.out.println(dateEnrollStart);
+//		System.out.println(dateEnrollEnd);
+//		System.out.println(dateFormativeAction.getTime());
+//		System.out.println(dateEnrollStart.getTime());
+//		System.out.println(dateEnrollEnd.getTime());
 		
 		// Get Teacher
 		Teacher teacher = model.getTeacher(view.getTeacher());

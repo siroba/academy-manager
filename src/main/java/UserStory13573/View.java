@@ -141,7 +141,7 @@ public class View {
 		
 		comboBoxDayDay = new JComboBox();
 		comboBoxDayDay.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxDayDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01 ", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		comboBoxDayDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		comboBoxDayDay.setMaximumSize(new Dimension(60, 16));
 		frame.getContentPane().add(comboBoxDayDay, "cell 0 7,gapx 10");
 		
@@ -189,7 +189,7 @@ public class View {
 		
 		comboBoxEnrollStartDay = new JComboBox();
 		comboBoxEnrollStartDay.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxEnrollStartDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01 ", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		comboBoxEnrollStartDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		comboBoxEnrollStartDay.setMaximumSize(new Dimension(60, 16));
 		frame.getContentPane().add(comboBoxEnrollStartDay, "cell 0 10,gapx 10");
 		
@@ -217,7 +217,7 @@ public class View {
 		
 		comboBoxEnrollEndDay = new JComboBox();
 		comboBoxEnrollEndDay.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxEnrollEndDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01 ", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+		comboBoxEnrollEndDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		comboBoxEnrollEndDay.setMaximumSize(new Dimension(60, 16));
 		frame.getContentPane().add(comboBoxEnrollEndDay, "cell 0 12,gapx 10");
 		

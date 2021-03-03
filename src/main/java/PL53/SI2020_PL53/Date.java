@@ -132,7 +132,6 @@ public class Date extends java.util.Date{
 	 */
 	public static Date parseString(String date) {
 		String tmp [] = date.split("-");
-		
 		return new Date(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]), Integer.parseInt(tmp[0]));
 	}
 	
