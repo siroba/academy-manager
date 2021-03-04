@@ -12,6 +12,7 @@ import org.apache.commons.dbutils.handlers.ArrayListHandler;
 
 import BaseProject.Database;
 import BaseProject.UnexpectedException;
+import Entities.Payment;
 //import Entities.FormativeAction;
 
 
@@ -42,4 +43,12 @@ public class Model {
 		Connection conn = db.getConnection();
 		PreparedStatement p;
 	}*/
+	
+	public void getActivePayments(Payment pa) throws SQLException{
+		String sql= "SELECT * FROM Payment"
+				+ "WHERE paid IS 0 ";
+		
+		Connection conn = db.getConnection();
+		PreparedStatement p;
+	}
 }

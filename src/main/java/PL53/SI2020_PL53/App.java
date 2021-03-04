@@ -8,6 +8,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+    	UserStory13575.Controller c = new UserStory13575.Controller();
+    	c.initController();
     }
 }

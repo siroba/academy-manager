@@ -11,12 +11,13 @@ import java.util.List;
 
 import BaseProject.Database;
 import PL53.SI2020_PL53.Date;
+import PL53.SI2020_PL53.DateTime;
 import PL53.SI2020_PL53.Random;
 
 public class Payment {
 	private int ID = -1;
 	private float amount;
-	private Date payDate;
+	private DateTime payDate;
 	private String sender, receiver, fiscalNumber, address;
 	
 	
@@ -25,7 +26,7 @@ public class Payment {
 	 */
 	private Enrollment enrollment;
 
-	public Payment(Enrollment enrollment, float amount, Date payDate, String sender, String receiver, String fiscalNumber, String address) {
+	public Payment(Enrollment enrollment, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber, String address) {
 		this.enrollment = enrollment;
 		this.amount = amount;
 		this.payDate = payDate;
@@ -36,7 +37,7 @@ public class Payment {
 
 	}
 
-	public Payment(int ID, Enrollment enrollment, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
+	public Payment(int ID, Enrollment enrollment, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
 			String address) {
 		this.ID = ID;
 		this.enrollment = enrollment;
@@ -117,7 +118,7 @@ public class Payment {
 					rs.getInt("ID_payment"),
 					null, //TODO enrollment
 					rs.getFloat("amount"),
-					Date.parse(rs.getDate("dataPay")),
+					new DateTime (0,0,Date.parse(rs.getDate("datePay"))), //TODO Change for dateTime parse
 					rs.getString("receiver"),
 					rs.getString("sender"),
 					//rs.getString("ID_invoice"),
@@ -157,7 +158,7 @@ public class Payment {
 						rs.getInt("ID_payment"),
 						null, //TODO enrollment
 						rs.getFloat("amount"),
-						Date.parse(rs.getDate("dataPay")),
+						new DateTime (0,0,Date.parse(rs.getDate("datePay"))), //TODO Change for dateTime parse
 						rs.getString("receiver"),
 						rs.getString("sender"),
 						//rs.getString("ID_invoice"),
@@ -189,10 +190,10 @@ public class Payment {
 			
 			String receiver, sender, fiscalNumber,address;
 			boolean paid;
-			Date payDate;
+			DateTime payDate;
 			for (int i = 0; i < numberElements; i++) {
 				amount= (float) Math.random();
-				payDate=Date.random();
+				payDate=(DateTime) Date.random();
 				receiver = random.name(3, 10);
 				sender = random.name(5, 12);
 				fiscalNumber = random.name(10, 10);
@@ -271,7 +272,7 @@ public class Payment {
 		return payDate;
 	}
 
-	public void setPayDate(Date payDate) {
+	public void setPayDate(DateTime payDate) {
 		this.payDate = payDate;
 	}
 
