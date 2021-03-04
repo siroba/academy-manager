@@ -17,6 +17,10 @@ import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
+import java.awt.FlowLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JScrollPane;
 
 public class View extends JFrame {
 	// Auto-generated serial ID
@@ -30,28 +34,26 @@ public class View extends JFrame {
 	 * Create the frame.
 	 */
 	public View() {
+		setTitle("Enroll in a Formative Action");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		JLabel lblEnr = new JLabel("Enroll in a Formative Action");
-		lblEnr.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblEnr, BorderLayout.NORTH);
+		btnEnroll = new JButton("Enroll");
+		btnEnroll.setBounds(5, 226, 430, 25);
+		contentPane.setLayout(null);
+		contentPane.add(btnEnroll);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(5, 5, 433, 214);
+		contentPane.add(scrollPane);
 		
 		faList = new JList<String>();
+		scrollPane.setViewportView(faList);
 		faList.setValueIsAdjusting(true);
 		faList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		contentPane.add(faList, BorderLayout.CENTER);
-		
-		btnEnroll = new JButton("Enroll");
-		contentPane.add(btnEnroll, BorderLayout.SOUTH);
-	}
-
-	public Window getFrame() {
-		return this.getFrame();
 	}
 	
 	public JButton getEnrollBtn() {
