@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import BaseProject.Database;
 import PL53.SI2020_PL53.Date;
+import PL53.SI2020_PL53.Random;
 
 /**
  * Domain model data for the courses IMPORTANT: When using the Apache Commons
@@ -26,6 +27,25 @@ public class FormativeAction {
 	private float remuneration;
 	private Date enrollmentPeriodStart, enrollmentPeriodEnd; //TODO: Is this correct?
 
+	/**
+	 * Constructor that assigns random values
+	 */
+	public FormativeAction() {
+		Random r = new Random();
+		this.name = r.name(3, 10);
+		this.objectives = r.name(3, 10);
+		this.mainContents = r.name(3, 10);
+		this.teacher = new Teacher();
+		this.manager = new TrainingManager();
+		this.remuneration = r.nextFloat()*100f;
+		this.location = r.name(5, 15);
+		this.day = r.name(3, 10);
+		this.numberOfHours = r.nextInt(12);
+		this.spaces = r.nextInt(50);
+		this.enrollmentPeriodStart = Date.random();
+		this.enrollmentPeriodEnd = Date.random();
+	}
+	
 	public FormativeAction(String name, String objectives, String mainContents, Teacher teacher, TrainingManager manager, float remuneration,
 			String location, String day, int numberOfHours, int spaces, 
 			Date enrollmentPeriodStart, Date enrollmentPeriodEnd) {
@@ -147,6 +167,15 @@ public class FormativeAction {
 		this.manager = manager;
 	}
 	
+	public static List<FormativeAction> create(int n){
+		List<FormativeAction> faList = new ArrayList<FormativeAction>();
+		
+		for(int i = 0; i<n; i++)
+			faList.add(new FormativeAction());
+		
+		return faList;
+	}
+	
 	public static String tableName() {
 		return "FormativeAction";
 	}
@@ -160,8 +189,6 @@ public class FormativeAction {
 			Statement st = conn.createStatement();
 			// executeQuery will return a resultSet
 			ResultSet rs = st.executeQuery(query.toString());
-			
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			
 			rs.next();
 			/*

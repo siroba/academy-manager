@@ -1,5 +1,7 @@
 package Entities;
 
+import PL53.SI2020_PL53.Random;
+
 public class Teacher {
 	private int ID = -1;
 	private float salary;
@@ -14,6 +16,12 @@ public class Teacher {
 	public Teacher(float salary, String name) {
 		this.salary = salary;
 		this.name = name;
+	}
+	
+	public Teacher() {
+		Random r = new Random();
+		this.salary = r.nextFloat()*2000f;
+		this.name = r.name(3, 10);
 	}
 
 	public int getID() {

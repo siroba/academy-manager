@@ -2,15 +2,19 @@ package UserStory13574;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Window;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Entities.FormativeAction;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JList;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 
@@ -19,22 +23,8 @@ public class View extends JFrame {
 	private static final long serialVersionUID = -70145237442153458L;
 	
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					View frame = new View();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JButton btnEnroll;
+	private JList<String> faList; 
 
 	/**
 	 * Create the frame.
@@ -51,18 +41,33 @@ public class View extends JFrame {
 		lblEnr.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblEnr, BorderLayout.NORTH);
 		
-		JList<String> list = new JList<String>();
-		list.setValueIsAdjusting(true);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				
-			}
-		});
-		contentPane.add(list, BorderLayout.CENTER);
+		faList = new JList<String>();
+		faList.setValueIsAdjusting(true);
+		faList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		contentPane.add(faList, BorderLayout.CENTER);
 		
-		JButton btnEnroll = new JButton("Enroll");
+		btnEnroll = new JButton("Enroll");
 		contentPane.add(btnEnroll, BorderLayout.SOUTH);
 	}
 
+	public Window getFrame() {
+		return this.getFrame();
+	}
+	
+	public JButton getEnrollBtn() {
+		return this.btnEnroll;
+	}
+	
+	public void setFAList(List<FormativeAction> list) {
+		DefaultListModel<String> listModel = new DefaultListModel<String>();		
+		
+		for(FormativeAction fa: list)
+			listModel.addElement(fa.getName());
+		
+		this.faList.setModel(listModel);
+	}
+	
+	public JList<String> getFAList(){
+		return this.faList;
+	}
 }
