@@ -3,6 +3,7 @@ package PL53.SI2020_PL53;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
@@ -140,6 +141,12 @@ public class DateTime extends Date {
 		return LocalDateTime.of(year, month, day, hour, minute);
 	}
 
+	public static DateTime now() {
+		LocalDateTime d = LocalDateTime.now();
+
+		return new DateTime(d.getMinute(), d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
+	}
+	
 	/**
 	 * The returned string is formatted according to Spanish standards (dd/MM/yy HH:MM)
 	 */

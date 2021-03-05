@@ -5,6 +5,6 @@ public class InvalidFieldValue extends Error {
 	private static final long serialVersionUID = 3313658448532576366L;
 
 	public InvalidFieldValue(String fieldName, String value) {
-		super("The field \"" + fieldName + "\" with value \"" + value + "\"was not valid.");
+		super("The field \"" + fieldName + "\" with value \"" + value + "\" was not valid.");
 	}
 }

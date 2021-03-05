@@ -84,9 +84,11 @@ public class Professional {
 	 * @param FormativeAction
 	 * @param EnrollmentName
 	 */
-	public void enroll(FormativeAction fA, Professional p, Status status, DateTime date) {
+	public Enrollment enroll(FormativeAction fA, Professional p, Status status, DateTime date) {
 		Enrollment e = new Enrollment(fA.getID(), p.getID(), status, date);
 		enrollments.add(e);
+		
+		return e;
 	}
 	
 	/**
@@ -97,7 +99,7 @@ public class Professional {
 	 */
 	public static boolean checkPhone(String phone) {
 		// Regex pattern that matches a phone number
-		String pattern = "^\\+(?:[0-9] ?){6,14}[0-9]$";
+		String pattern = "^(\\(?\\+[1-9]{2}\\)?)? ?([0-9] ?){6,14}$";
 
 		return phone.matches(pattern);
 	}
