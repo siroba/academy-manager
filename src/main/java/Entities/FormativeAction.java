@@ -9,7 +9,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import BaseProject.Database;
+import BaseProject.DbUtil;
+import Utils.Database;
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
 import PL53.SI2020_PL53.Random;
@@ -174,8 +175,9 @@ public class FormativeAction {
 	 * @param db
 	 * @return
 	 * @throws SQLException
+	 * @throws ParseException 
 	 */
-	public static List<FormativeAction> get(String query, Database db) throws SQLException {
+	public static List<FormativeAction> get(String query, Database db) throws SQLException, ParseException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -185,14 +187,20 @@ public class FormativeAction {
 		List<FormativeAction> fa = new ArrayList<FormativeAction>();
 
 		while (rs.next()) {
-			FormativeAction f = new FormativeAction(rs.getString("nameFa"), rs.getFloat("duration"),
-					rs.getString("location"), rs.getFloat("remuneration"), rs.getFloat("fee"), rs.getInt("totalPlaces"),
-					rs.getString("objectives"), rs.getString("mainContent"), rs.getString("teacherName"),
-					Status.valueOf(rs.getString("status")), new DateTime(Date.parse(rs.getDate("enrollmentStart"))), // TODO:
-																														// Fix
-																														// parsing
-					new DateTime(Date.parse(rs.getDate("enrollmentEnd"))),
-					new DateTime(Date.parse(rs.getDate("dateFA"))));
+			FormativeAction f = new FormativeAction(
+					rs.getString("nameFa"),
+					rs.getFloat("duration"),
+					rs.getString("location"),
+					rs.getFloat("remuneration"),
+					rs.getFloat("fee"),
+					rs.getInt("totalPlaces"),
+					rs.getString("objectives"),
+					rs.getString("mainContent"), 
+					rs.getString("teacherName"),
+					Status.valueOf(rs.getString("status").toUpperCase()),
+					DateTime.parseString(rs.getString("enrollmentStart")), // TODO: Fix parsing
+					DateTime.parseString(rs.getString("enrollmentEnd")),
+					DateTime.parseString(rs.getString("dateFA")));
 
 			fa.add(f);
 		}
@@ -212,21 +220,29 @@ public class FormativeAction {
 	 * @param db
 	 * @return
 	 * @throws SQLException
+	 * @throws ParseException 
 	 */
-	public static FormativeAction getOne(String query, Database db) throws SQLException {
+	public static FormativeAction getOne(String query, Database db) throws SQLException, ParseException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
-		FormativeAction fa = new FormativeAction(rs.getString("nameFa"), rs.getFloat("duration"),
-				rs.getString("location"), rs.getFloat("remuneration"), rs.getFloat("fee"), rs.getInt("totalPlaces"),
-				rs.getString("objectives"), rs.getString("mainContent"), rs.getString("teacherName"),
-				Status.valueOf(rs.getString("status")), new DateTime(Date.parse(rs.getDate("enrollmentStart"))), // TODO:
-																													// Fix
-																													// parsing
-				new DateTime(Date.parse(rs.getDate("enrollmentEnd"))), new DateTime(Date.parse(rs.getDate("dateFA"))));
+		FormativeAction fa = new FormativeAction(
+				rs.getString("nameFa"),
+				rs.getFloat("duration"),
+				rs.getString("location"),
+				rs.getFloat("remuneration"),
+				rs.getFloat("fee"),
+				rs.getInt("totalPlaces"),
+				rs.getString("objectives"),
+				rs.getString("mainContent"),
+				rs.getString("teacherName"),
+				Status.valueOf(rs.getString("status").toUpperCase()),
+				DateTime.parseString(rs.getString("enrollmentStart")), // TODO: Fix parsing
+				DateTime.parseString(rs.getString("enrollmentEnd")),
+				DateTime.parseString(rs.getString("dateFA")));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
