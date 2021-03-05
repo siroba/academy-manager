@@ -21,7 +21,15 @@ public class Controller {
 
 	public Controller() {
 		this.model = new Model();
-		model.loadFormativeActions(20);
+		
+		try {
+			model.loadFormativeActions();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		this.view = new View();
 		//no model-specific initialization, only view-specific initialization

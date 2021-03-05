@@ -30,20 +30,8 @@ public class Model {
 	private Database db = new Database();
 	private List<FormativeAction> formativeActions;
 
-	/**
-	 * Gets the list of active races in object form for a given registration date.
-	 * @throws SQLException
-	 */
-
-	public void setFormativeAction(FormativeAction fA) throws SQLException {
-		String sql= "";
-
-		Connection conn = db.getConnection();
-		PreparedStatement p;
-	}
-
-	public void loadFormativeActions(int n) {
-		this.formativeActions = FormativeAction.create(n); // TODO: Do a query to the database
+	public void loadFormativeActions() throws SQLException, ParseException {
+		this.formativeActions = FormativeAction.get("SELECT * FROM FormativeAction;", db);
 	}
 
 	public List<FormativeAction> getFormativeActions(){
