@@ -1,16 +1,16 @@
+DROP TABLE Enrollment;
 CREATE TABLE IF NOT EXISTS Enrollment(
     ID_fa           integer NOT NULL,
     ID_professional integer NOT NULL,
     status          text NOT NULL,
     timeEn          datetime NOT NULL,
     CONSTRAINT PK_Enrollment PRIMARY KEY ( ID_fa, ID_professional ),
-    CONSTRAINT AK1_Enrollment UNIQUE ( ID_fa ),
-    CONSTRAINT AK2_Enrollment UNIQUE ( ID_professional ),
     CONSTRAINT FK_Enrollment_Professional FOREIGN KEY ( ID_professional ) REFERENCES Professional ( ID_professional ),
     CONSTRAINT FK_FormativeAction_Enrollment FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa ),
     CHECK ( status IN('received','confirmed','cancelled') )
 );
 
+DROP TABLE FormativeAction;
 CREATE TABLE IF NOT EXISTS FormativeAction(
     ID_fa           integer NOT NULL,
     nameFa          text NOT NULL,
@@ -20,19 +20,20 @@ CREATE TABLE IF NOT EXISTS FormativeAction(
     remuneration    real NOT NULL,
     fee             real NOT NULL,
     totalPlaces     integer NOT NULL,
-    objetives       text NOT NULL,
+    objectives       text NOT NULL,
     mainContent     text NULL,
     teacherName     text NULL,
     status          text NOT NULL,
     enrollmentStart datetime NOT NULL,
     enrollmentEnd   datetime NOT NULL,
-    ID_invoice      integer NOT NULL,
+    ID_invoice      integer,
     CONSTRAINT PK_FormativeAction PRIMARY KEY ( ID_fa ),
     CONSTRAINT FK_142 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice ( ID_invoice ),
     CHECK ( duration >0 ),
     CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('active', 'executed', 'cancelled') )
 );
 
+DROP TABLE Payment;
 CREATE TABLE IF NOT EXISTS Payment(
     ID_payment      integer NOT NULL,
     amount          real NOT NULL,
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS Payment(
     CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
 );
 
+DROP TABLE Professional;
 CREATE TABLE IF NOT EXISTS Professional(
     ID_professional integer NOT NULL,
     name            text NOT NULL,
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS Professional(
     CONSTRAINT PK_Professional PRIMARY KEY ( ID_professional )
 );
 
+DROP TABLE Teacher;
 CREATE TABLE IF NOT EXISTS Teacher(
     ID_teacher integer NOT NULL,
     salary     real NOT NULL,
