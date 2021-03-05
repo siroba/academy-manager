@@ -97,6 +97,21 @@ public class FormativeAction {
 	public static String tableName() {
 		return "FormativeAction";
 	}
+	
+	/**
+	 * Method to delete all the elements from the table
+	 * 
+	 * @throws SQLException
+	 */
+	public static void deleteAll(Database db) throws SQLException {
+		String SQL = "DELETE FROM " + tableName();
+
+		Connection conn = db.getConnection();
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+
+		pstmt.executeUpdate();
+		conn.close();
+	}
 
 	/**
 	 * Inserts all the given Formative Actions into the given database
