@@ -121,9 +121,9 @@ public class FormativeAction {
 	 * @throws SQLException
 	 * @throws ParseException 
 	 */
-	public static void insert(List<Enrollment> enrollments, Database db) throws SQLException, ParseException {
-		for (Enrollment e : enrollments)
-			e.insert(db);
+	public static void insert(List<FormativeAction> formativeActions, Database db) throws SQLException, ParseException {
+		for (FormativeAction fa : formativeActions)
+			fa.insert(db);
 	}
 
 	/**
