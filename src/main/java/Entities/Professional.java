@@ -23,8 +23,8 @@ import Exceptions.InvalidFieldValue;
  */
 
 public class Professional {
-	private String name, surname, phone, email;
 	private int id = -1;
+	private String name, surname, phone, email;
 	private ArrayList<Enrollment> enrollments;
 
 	public Professional(String name, String surname, String phone, String email) {

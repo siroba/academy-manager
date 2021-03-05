@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import BaseProject.Database;
+import Entities.FormativeAction.Status;
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
+import PL53.SI2020_PL53.Random;
 
 public class Enrollment {
-	private DateTime date;
-	private String name;
-	private FormativeAction formativeAction;
-	private Professional professional;
+	private int ID_fa, ID_professional;
 	private Status status;
+	private DateTime timeEn;
 
 	/**
 	 * Enrollment default constructor. The date and time are assumed to be today and now.
@@ -28,48 +28,28 @@ public class Enrollment {
 	 * @param formativeAction
 	 * @param professional
 	 */
-	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional) {
+	public Enrollment(int ID_fa, int ID_professional, Status status, DateTime timeEn) {
 		this.status = status;
-		this.date = new DateTime(0, 0, Date.now());
-		this.name = name;
-		this.formativeAction = formativeAction;
-		this.professional = professional;
+		this.timeEn = timeEn;
+		this.ID_fa = ID_fa;
+		this.ID_professional = ID_professional;
 	}
-
+	
 	/**
-	 * Enrollment constructor.
+	 * Enrollment random constructor
 	 * 
 	 * @param name
 	 * @param status
 	 * @param formativeAction
 	 * @param professional
-	 * @param date
 	 */
-	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional, DateTime date) {
-		this.status = status;
-		this.date = new DateTime(date);
-		this.name = name;
-		this.formativeAction = formativeAction;
-		this.professional = professional;
-	}
-
-	/**
-	 * Enrollment constructor, but it takes only the ID of the Formative Action and the Professional object (it does a query from the database).
-	 * 
-	 * @param name
-	 * @param status
-	 * @param formativeActionID
-	 * @param professionalID
-	 * @param date
-	 * @param db
-	 * @throws SQLException
-	 */
-	public Enrollment(String name, Status status, int formativeActionID, int professionalID,  DateTime date, Database db) throws SQLException {
-		this.status = status;
-		this.date = new DateTime(date);
-		this.name = name;
-		this.formativeAction = FormativeAction.obtain(formativeActionID, db);
-		this.professional = Professional.obtain(professionalID, db);
+	public Enrollment() {
+		Random r = new Random();
+		
+		this.status = Status.values()[r.nextInt(Status.values().length)];
+		this.timeEn = new DateTime(Date.random());
+		this.ID_fa = -1;
+		this.ID_professional = -1;
 	}
 	
 	public static String tableName() {
@@ -90,36 +70,16 @@ public class Enrollment {
 		pstmt.executeUpdate();
 		conn.close();
 	}
-
+	
 	/**
-	 * Method to delete the element matching the given id from the table.
+	 * Does the query you specify and returns a list with all the results
 	 * 
-	 * @throws SQLException
-	 */
-	public void delete(Database db) throws SQLException {
-		String SQL = "DELETE FROM " + tableName() + " WHERE ID_fa=? AND ID_professional=?";
-
-		Connection conn = db.getConnection();
-		PreparedStatement pstmt = conn.prepareStatement(SQL);
-
-		pstmt.setInt(1, this.formativeAction.getID());
-		pstmt.setInt(2, this.professional.getID());
-
-		pstmt.executeUpdate();
-		conn.close();
-	}
-
-	/**
-	 * Method to obtain all the elements from the table.
-	 * 
+	 * @param query
+	 * @param db
 	 * @return
 	 * @throws SQLException
-	 * @throws ParseException 
 	 */
-	public static List<Enrollment> obtainAll(Database db) throws SQLException, ParseException {
-		// Creation of the SQL query
-		String query = "SELECT * FROM " + tableName();
-
+	public static List<Enrollment> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -130,12 +90,10 @@ public class Enrollment {
 		
 		while (rs.next()) {
 			Enrollment e = new Enrollment(
-					rs.getString("name"), 
-					Status.valueOf(rs.getString("status")),
 					rs.getInt("ID_fa"), 
-					rs.getInt("ID_professional"), 
-					DateTime.parse(rs.getTimestamp("dateEn")),
-					db);
+					rs.getInt("ID_professional"),
+					Status.valueOf(rs.getString("status")),
+					new DateTime(Date.parse(rs.getTimestamp("dateEn")))); // TODO: Fix parse
 
 			enrollments.add(e);
 		}
@@ -147,9 +105,39 @@ public class Enrollment {
 
 		return enrollments;
 	}
+	
+	/**
+	 * Does the query you specify and returns the first result
+	 * 
+	 * @param query
+	 * @param db
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Enrollment getOne(String query, Database db) throws SQLException {
+		Connection conn = db.getConnection();
+		// Statement object needed to send statements to the database
+		Statement st = conn.createStatement();
+		// executeQuery will return a resultSet
+		ResultSet rs = st.executeQuery(query.toString());
+		rs.next();
+		
+		Enrollment e = new Enrollment(
+					rs.getInt("ID_fa"), 
+					rs.getInt("ID_professional"),
+					Status.valueOf(rs.getString("status")),
+					new DateTime(Date.parse(rs.getTimestamp("dateEn")))); // TODO: Fix parse
+
+		// Very important to always close all the objects related to the database
+		rs.close();
+		st.close();
+		conn.close();
+
+		return e;
+	}
 
 	/**
-	 * Inserts all the given professionals into the given database
+	 * Inserts all the given enrollments into the given database
 	 * 
 	 * @param professionals
 	 * @param db
@@ -165,75 +153,56 @@ public class Enrollment {
 	 * 
 	 * @param db
 	 * @throws SQLException
+	 * @throws ParseException 
 	 */
-	public void insert(Database db) throws SQLException {
+	public void insert(Database db) throws SQLException, ParseException {
 		/*
 		 * status TEXT NOT NULL CHECK( status IN('received','confirmed','cancelled')),
 		 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
 		 * ID_student INTEGER NOT NULL UNIQUE,
 		 */
 
-		String SQL = "INSERT INTO " + tableName() + "(status, dateEn, name, ID_fa, ID_student) VALUES(?,?,?,?,?)";
+		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_student, status, timeEn) VALUES(?,?,?,?)";
 
 		Connection conn = db.getConnection(); // Obtain the connection
 		// Prepared Statement initialized with the INSERT statement
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 		// Sets of the parameters of the prepared statement
 
-		pstmt.setString(1, this.getName());
+		pstmt.setInt(1, this.getID_fa());
+		pstmt.setInt(2, this.getID_professional());
+		pstmt.setString(3, this.getStatus().toString());
+		pstmt.setDate(4, this.getTimeEn().toSQL());
 
-		try {
-			pstmt.setDate(2, this.getDate().toSQL());
-		} catch (ParseException e) {
-			System.err.println("Couldn't parse the date " + this.getDate());
-		}
-
-		pstmt.setString(3, this.getName());
-		pstmt.setInt(4, this.getFormativeAction().getID());
-		pstmt.setInt(5, this.getProfessional().getID());
 		pstmt.executeUpdate(); // statement execution
 
 		conn.close();
 	}
 
-	public DateTime getDate() {
-		return date;
-	}
-
-	public void setDateTime(DateTime date) {
-		this.date = date;
-	}
-
-	public void setDate(int day, int month, int year) {
-		this.date.setDate(day, month, year);
-	}
 	
-	public void setTime(int hour, int minute) {
-		this.date.setTime(hour, minute);
-	}
-	
-	public String getName() {
-		return name;
+
+	public int getID_fa() {
+		return ID_fa;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setID_fa(int iD_fa) {
+		ID_fa = iD_fa;
 	}
 
-	public FormativeAction getFormativeAction() {
-		return formativeAction;
+	public int getID_professional() {
+		return ID_professional;
 	}
 
-	public void setFormativeAction(FormativeAction formativeAction) {
-		this.formativeAction = formativeAction;
+	public void setID_professional(int iD_professional) {
+		ID_professional = iD_professional;
 	}
 
-	public Professional getProfessional() {
-		return professional;
+	public DateTime getTimeEn() {
+		return timeEn;
 	}
 
-	public void setProfessional(Professional professional) {
-		this.professional = professional;
+	public void setTimeEn(DateTime timeEn) {
+		this.timeEn = timeEn;
 	}
 
 	public Status getStatus() {

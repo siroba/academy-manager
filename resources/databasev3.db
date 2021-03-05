@@ -1,18 +1,15 @@
-CREATE TABLE IF NOT EXISTS Enrollment(
+CREATE TABLE Enrollment(
     ID_fa           integer NOT NULL,
     ID_professional integer NOT NULL,
     status          text NOT NULL,
     timeEn          datetime NOT NULL,
-    orderArrival    integer NOT NULL,
     CONSTRAINT PK_Enrollment PRIMARY KEY ( ID_fa, ID_professional ),
-    CONSTRAINT AK1_Enrollment UNIQUE ( ID_fa ),
-    CONSTRAINT AK2_Enrollment UNIQUE ( ID_professional ),
     CONSTRAINT FK_Enrollment_Professional FOREIGN KEY ( ID_professional ) REFERENCES Professional ( ID_professional ),
     CONSTRAINT FK_FormativeAction_Enrollment FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa ),
     CHECK ( status IN('received','confirmed','cancelled') )
 );
 
-CREATE TABLE IF NOT EXISTS FormativeAction(
+CREATE TABLE FormativeAction(
     ID_fa           integer NOT NULL,
     nameFa          text NOT NULL,
     dateFA          datetime NOT NULL,
@@ -34,10 +31,10 @@ CREATE TABLE IF NOT EXISTS FormativeAction(
     CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('active', 'executed', 'cancelled') )
 );
 
-CREATE TABLE IF NOT EXISTS Payment(
+CREATE TABLE Payment(
     ID_payment      integer NOT NULL,
     amount          real NOT NULL,
-    datePay         date NOT NULL,
+    datePay         datetime NOT NULL,
     sender          text NOT NULL,
     receiver        text NOT NULL,
     address         text NOT NULL,
@@ -49,7 +46,7 @@ CREATE TABLE IF NOT EXISTS Payment(
     CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
 );
 
-CREATE TABLE IF NOT EXISTS Professional(
+CREATE TABLE Professional(
     ID_professional integer NOT NULL,
     name            text NOT NULL,
     surname         text NOT NULL,
@@ -58,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Professional(
     CONSTRAINT PK_Professional PRIMARY KEY ( ID_professional )
 );
 
-CREATE TABLE IF NOT EXISTS Teacher(
+CREATE TABLE Teacher(
     ID_teacher integer NOT NULL,
     salary     real NOT NULL,
     name       text NOT NULL,
