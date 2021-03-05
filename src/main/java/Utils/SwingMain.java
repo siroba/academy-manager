@@ -86,6 +86,13 @@ public class SwingMain {
 			}
 		});
 		
+		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13574.Controller controller = new UserStory13574.Controller();
+				controller.initController();
+			}
+		});
+		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
 
 		// Empty grid elements 
