@@ -14,13 +14,13 @@ public class TrainingManager {
 		this.ID = ID;
 		this.name = name;
 	}
-	
+
 	/**
 	 * Constructor that assigns random values
 	 */
 	public TrainingManager() {
 		Random r = new Random();
-		
+
 		this.name = r.name(3, 15);
 	}
 
@@ -38,7 +38,7 @@ public class TrainingManager {
 
 	public static TrainingManager obtain(int id) {
 		// TODO Auto-generated method stub
-		
+
 		return null;
 	}
 }

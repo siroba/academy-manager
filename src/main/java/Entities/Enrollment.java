@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class Enrollment {
 
 	/**
 	 * Enrollment default constructor. The date and time are assumed to be today and now.
-	 * 
+	 *
 	 * @param name
 	 * @param status
 	 * @param formativeAction
@@ -34,10 +36,10 @@ public class Enrollment {
 		this.ID_fa = ID_fa;
 		this.ID_professional = ID_professional;
 	}
-	
+
 	/**
 	 * Enrollment random constructor
-	 * 
+	 *
 	 * @param name
 	 * @param status
 	 * @param formativeAction
@@ -45,20 +47,20 @@ public class Enrollment {
 	 */
 	public Enrollment() {
 		Random r = new Random();
-		
+
 		this.status = Status.values()[r.nextInt(Status.values().length)];
 		this.timeEn = new DateTime(Date.random());
 		this.ID_fa = -1;
 		this.ID_professional = -1;
 	}
-	
+
 	public static String tableName() {
 		return "Enrollment";
 	}
 
 	/**
 	 * Method to delete all the elements from the table
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	public static void deleteAll(Database db) throws SQLException {
@@ -70,10 +72,10 @@ public class Enrollment {
 		pstmt.executeUpdate();
 		conn.close();
 	}
-	
+
 	/**
 	 * Does the query you specify and returns a list with all the results
-	 * 
+	 *
 	 * @param query
 	 * @param db
 	 * @return
@@ -87,10 +89,10 @@ public class Enrollment {
 		ResultSet rs = st.executeQuery(query.toString());
 
 		List<Enrollment> enrollments = new ArrayList<>();
-		
+
 		while (rs.next()) {
 			Enrollment e = new Enrollment(
-					rs.getInt("ID_fa"), 
+					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					Status.valueOf(rs.getString("status")),
 					new DateTime(Date.parse(rs.getTimestamp("dateEn")))); // TODO: Fix parse
@@ -105,10 +107,10 @@ public class Enrollment {
 
 		return enrollments;
 	}
-	
+
 	/**
 	 * Does the query you specify and returns the first result
-	 * 
+	 *
 	 * @param query
 	 * @param db
 	 * @return
@@ -121,9 +123,9 @@ public class Enrollment {
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
-		
+
 		Enrollment e = new Enrollment(
-					rs.getInt("ID_fa"), 
+					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					Status.valueOf(rs.getString("status")),
 					new DateTime(Date.parse(rs.getTimestamp("dateEn")))); // TODO: Fix parse
@@ -138,7 +140,7 @@ public class Enrollment {
 
 	/**
 	 * Inserts all the given enrollments into the given database
-	 * 
+	 *
 	 * @param professionals
 	 * @param db
 	 * @throws SQLException
@@ -150,10 +152,10 @@ public class Enrollment {
 
 	/**
 	 * Inserts itself into the given database
-	 * 
+	 *
 	 * @param db
 	 * @throws SQLException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public void insert(Database db) throws SQLException, ParseException {
 		/*
@@ -179,7 +181,7 @@ public class Enrollment {
 		conn.close();
 	}
 
-	
+
 
 	public int getID_fa() {
 		return ID_fa;

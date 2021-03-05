@@ -32,14 +32,14 @@ public class Payment {
 		this.address = address;
 		this.confirmed = confirmed;
 	}
-	
+
 	public static String tableName() {
 		return "Payment";
 	}
 
 	/**
 	 * Method to delete all the elements from the table
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	public static void deleteAll(Database db) throws SQLException {
@@ -51,10 +51,10 @@ public class Payment {
 		pstmt.executeUpdate();
 		conn.close();
 	}
-	
+
 	/**
 	 * Does the query you specify and returns a list with all the results
-	 * 
+	 *
 	 * @param query
 	 * @param db
 	 * @return
@@ -68,10 +68,10 @@ public class Payment {
 		ResultSet rs = st.executeQuery(query.toString());
 
 		List<Payment> enrollments = new ArrayList<>();
-		
+
 		while (rs.next()) {
 			Payment e = new Payment(
-					rs.getInt("ID_fa"), 
+					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					rs.getFloat("amount"),
 					new DateTime(Date.parse(rs.getDate("datePay"))),
@@ -91,10 +91,10 @@ public class Payment {
 
 		return enrollments;
 	}
-	
+
 	/**
 	 * Does the query you specify and returns the first result
-	 * 
+	 *
 	 * @param query
 	 * @param db
 	 * @return
@@ -107,9 +107,9 @@ public class Payment {
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
-		
+
 		Payment e = new Payment(
-				rs.getInt("ID_fa"), 
+				rs.getInt("ID_fa"),
 				rs.getInt("ID_professional"),
 				rs.getFloat("amount"),
 				new DateTime(Date.parse(rs.getDate("datePay"))),
@@ -129,7 +129,7 @@ public class Payment {
 
 	/**
 	 * Inserts all the given professionals into the given database
-	 * 
+	 *
 	 * @param professionals
 	 * @param db
 	 * @throws SQLException
@@ -141,10 +141,10 @@ public class Payment {
 
 	/**
 	 * Inserts itself into the given database
-	 * 
+	 *
 	 * @param db
 	 * @throws SQLException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public void insert(Database db) throws SQLException, ParseException {
 		/*
@@ -170,15 +170,15 @@ public class Payment {
 		pstmt.setString(7, this.getFiscalNumber());
 		pstmt.setString(8, this.getAddress());
 		pstmt.setBoolean(9, this.isConfirmed());
-		
+
 
 		pstmt.executeUpdate(); // statement execution
 
 		conn.close();
 	}
 
-	
-	
+
+
 	public float getAmount() {
 		return amount;
 	}

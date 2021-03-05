@@ -20,7 +20,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @param day
 	 * @param month
 	 * @param year
@@ -33,7 +33,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Copy constructor
-	 * 
+	 *
 	 * @param other
 	 */
 	public Date(Date other) {
@@ -51,7 +51,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Parses from the sql.Timestamp class (discards the time)
-	 * 
+	 *
 	 * @param datetime
 	 * @return Date
 	 */
@@ -61,7 +61,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Parses from the sql.Date class (discards the time)
-	 * 
+	 *
 	 * @param date
 	 * @return Date
 	 */
@@ -73,7 +73,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Calculates the Date from the milliseconds passed since 1/1/1990 00:00:00.0
-	 * 
+	 *
 	 * @param millis
 	 * @return Date
 	 */
@@ -88,7 +88,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Generates a sql.Date object
-	 * 
+	 *
 	 * @return sql.Date
 	 * @throws ParseException
 	 */
@@ -102,7 +102,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Parses this object to an LocalDateTime object (assumes the time to be 00:00)
-	 * 
+	 *
 	 * @return LocalDate
 	 */
 	public LocalDateTime toLocalDateTime() {
@@ -112,7 +112,7 @@ public class Date extends java.util.Date {
 	/**
 	 * Uses the function {@link #toLocalDateTime()} and the constructor
 	 * {@link Timestamp#valueOf(LocalDateTime)} to generate the Timestamp
-	 * 
+	 *
 	 * @return
 	 */
 	public Timestamp toTimestamp() {
@@ -125,7 +125,7 @@ public class Date extends java.util.Date {
 	 * the epoch seconds with the function
 	 * {@link LocalDateTime#toEpochSecond(ZoneOffset)} and then, the seconds are
 	 * multiplied by 1000
-	 * 
+	 *
 	 * @return
 	 */
 	public long toMillis() {
@@ -151,7 +151,7 @@ public class Date extends java.util.Date {
 	/**
 	 * Gives the days passed between the two dates
 	 * Uses the function {@link #daysSince(Date, Date)} and assumes the other date to be today (uses the function {@link #now()})
-	 * 
+	 *
 	 * @param date
 	 * @return days passed
 	 */
@@ -161,7 +161,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Gives the days passed between the two given dates
-	 * 
+	 *
 	 * @param date1
 	 * @param date2
 	 * @return days passed
@@ -199,7 +199,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Copies the parameters from the given date
-	 * 
+	 *
 	 * @param other
 	 */
 	public void setDate(Date d) {
@@ -216,10 +216,16 @@ public class Date extends java.util.Date {
 		return this.day + "/" + this.month + "/" + this.year;
 	}
 
+	public static Date parseString(String date) {
+		String tmp [] = date.split("-");
+
+		return new Date(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]), Integer.parseInt(tmp[0]));
+	}
+
 	/**
 	 * Generates a random date with a bounded year. <br/>
 	 * Uses the constructor {@link RandomDate#RandomDate(int, int)}
-	 * 
+	 *
 	 * @param min_year
 	 * @param max_year
 	 * @return
@@ -231,7 +237,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Generates a random date (the year can be between 2000 and 2050). <br/>
-	 * 
+	 *
 	 * @return
 	 */
 	public static Date random() {
@@ -241,7 +247,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Gets today's date using {@link LocalDate#now()} and then parsing it to a {@link Date} object.
-	 * 
+	 *
 	 * @return
 	 */
 	public static Date now() {

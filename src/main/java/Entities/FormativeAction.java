@@ -51,7 +51,7 @@ public class FormativeAction {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param name
 	 * @param duration
 	 * @param location
@@ -97,10 +97,10 @@ public class FormativeAction {
 	public static String tableName() {
 		return "FormativeAction";
 	}
-	
+
 	/**
 	 * Method to delete all the elements from the table
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	public static void deleteAll(Database db) throws SQLException {
@@ -115,11 +115,11 @@ public class FormativeAction {
 
 	/**
 	 * Inserts all the given Formative Actions into the given database
-	 * 
+	 *
 	 * @param professionals
 	 * @param db
 	 * @throws SQLException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public static void insert(List<FormativeAction> formativeActions, Database db) throws SQLException, ParseException {
 		for (FormativeAction fa : formativeActions)
@@ -128,7 +128,7 @@ public class FormativeAction {
 
 	/**
 	 * Inserts itself into the given database
-	 * 
+	 *
 	 * @param db
 	 * @throws SQLException
 	 * @throws ParseException
@@ -169,7 +169,7 @@ public class FormativeAction {
 
 	/**
 	 * Does the query you specify and returns a list with all the results
-	 * 
+	 *
 	 * @param query
 	 * @param db
 	 * @return
@@ -207,7 +207,7 @@ public class FormativeAction {
 
 	/**
 	 * Does the query you specify and returns the first result
-	 * 
+	 *
 	 * @param query
 	 * @param db
 	 * @return

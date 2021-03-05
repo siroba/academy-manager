@@ -12,12 +12,12 @@ public class Teacher {
 		this.salary = salary;
 		this.name = name;
 	}
-	
+
 	public Teacher(float salary, String name) {
 		this.salary = salary;
 		this.name = name;
 	}
-	
+
 	public Teacher() {
 		Random r = new Random();
 		this.salary = r.nextFloat()*2000f;

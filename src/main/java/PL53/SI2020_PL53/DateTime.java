@@ -17,7 +17,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Default constructor
-	 * 
+	 *
 	 * @param minute
 	 * @param hour
 	 * @param day
@@ -33,7 +33,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Copies the date from the given object
-	 * 
+	 *
 	 * @param minute
 	 * @param hour
 	 * @param date
@@ -47,7 +47,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Copy constructor
-	 * 
+	 *
 	 * @param other
 	 */
 	public DateTime(DateTime other) {
@@ -59,7 +59,7 @@ public class DateTime extends Date {
 
 	/**
 	 * This constructor takes a Date and assumes the time to be 00:00
-	 * 
+	 *
 	 * @param other
 	 */
 	public DateTime(Date other) {
@@ -68,11 +68,11 @@ public class DateTime extends Date {
 		this.hour = 0;
 		this.minute = 0;
 	}
-	
+
 	/**
 	 * Parses a String containing the date and time to an object The input date must
 	 * be in format "yyyy-MM-dd HH:mm"
-	 * 
+	 *
 	 * @param datetime
 	 * @return
 	 */
@@ -89,7 +89,7 @@ public class DateTime extends Date {
 	/**
 	 * Parses a String containing the date and time to an object. It takes care of
 	 * the formatting.
-	 * 
+	 *
 	 * @param datetime
 	 * @return
 	 */
@@ -106,7 +106,7 @@ public class DateTime extends Date {
 	/**
 	 * Parses a {@link java.sql.Timestamp} to a {@link DateTime} object by using
 	 * {@link java.sql.Timestamp#getTime()}.
-	 * 
+	 *
 	 * @param datetime
 	 * @return DateTime
 	 */
@@ -118,7 +118,7 @@ public class DateTime extends Date {
 	 * Parses milliseconds to a {@link DateTime} object. <br/>
 	 * Uses the {@link Calendar#setTimeInMillis(long)} to then parse it with the
 	 * {@link DateTime#DateTime(int, int, int, int, int)} constructor.
-	 * 
+	 *
 	 * @param millis
 	 * @return
 	 */
@@ -134,7 +134,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Parses this object to an LocalDateTime object
-	 * 
+	 *
 	 * @return LocalDate
 	 */
 	public LocalDateTime toLocalDateTime() {
@@ -146,7 +146,7 @@ public class DateTime extends Date {
 
 		return new DateTime(d.getMinute(), d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
 	}
-	
+
 	/**
 	 * The returned string is formatted according to Spanish standards (dd/MM/yy HH:MM)
 	 */
