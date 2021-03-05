@@ -3,7 +3,6 @@ package PL53.SI2020_PL53;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
@@ -76,7 +75,7 @@ public class DateTime extends Date {
 	 * @param datetime
 	 * @return
 	 */
-	public static DateTime parseString(String datetime) throws ParseException {
+	public static DateTime parseString(String datetime) {
 		String tmp[] = datetime.split(" ");
 
 		String time[] = tmp[0].split(":");

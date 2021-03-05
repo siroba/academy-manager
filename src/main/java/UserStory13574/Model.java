@@ -4,20 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.*;
 
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ArrayListHandler;
-
-import BaseProject.Database;
-import BaseProject.SwingUtil;
-import BaseProject.UnexpectedException;
 import Entities.Enrollment;
 import Entities.FormativeAction;
 import Entities.Professional;
 import Exceptions.InvalidFieldValue;
+import Utils.Database;
 
 
 /**
