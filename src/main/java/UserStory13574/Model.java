@@ -29,7 +29,8 @@ import Entities.FormativeAction;
 */
 public class Model {
 
-	private Database db=new Database();
+	private Database db = new Database();
+	private List<FormativeAction> formativeActions;
 	
 	/**
 	 * Gets the list of active races in object form for a given registration date.
@@ -41,6 +42,18 @@ public class Model {
 		
 		Connection conn = db.getConnection();
 		PreparedStatement p;
+	}
+	
+	public void loadFormativeActions(int n) {
+		this.formativeActions = FormativeAction.create(n); // TODO: Do a query to the database
+	}
+	
+	public List<FormativeAction> getFormativeActions(){
+		return this.formativeActions;
+	}
+	
+	public FormativeAction getFormativeAction(int n) {
+		return this.formativeActions.get(n);
 	}
 }
 	
