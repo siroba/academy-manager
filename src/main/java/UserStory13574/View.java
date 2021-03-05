@@ -36,9 +36,10 @@ public class View extends JFrame {
 	private JTextPane textSelectedFA;
 	private JTextField profName;
 	private JButton backButton;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField textSurname;
+	private JTextField textPhone;
+	private JTextField textEmail;
+	private JButton btnConfirmAndEnroll;
 
 	/**
 	 * Create the frame.
@@ -52,7 +53,7 @@ public class View extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		/*selectionPanel = new JPanel();
+		selectionPanel = new JPanel();
 		selectionPanel.setBounds(12, -11, 428, 262);
 		contentPane.add(selectionPanel);
 		selectionPanel.setLayout(null);
@@ -73,8 +74,9 @@ public class View extends JFrame {
 		JLabel lblSelectTheFormative = new JLabel("Select the Formative Action you want to enroll in:");
 		lblSelectTheFormative.setBounds(12, 15, 389, 27);
 		selectionPanel.add(lblSelectTheFormative);
-		*/
+		
 		registrationPanel = new JPanel();
+		registrationPanel.setVisible(false);
 		registrationPanel.setBounds(12, -6, 426, 264);
 		contentPane.add(registrationPanel);
 		registrationPanel.setLayout(null);
@@ -109,28 +111,32 @@ public class View extends JFrame {
 		lblSurname.setBounds(212, 71, 70, 15);
 		registrationPanel.add(lblSurname);
 		
-		textField = new JTextField();
-		textField.setBounds(287, 69, 114, 19);
-		registrationPanel.add(textField);
-		textField.setColumns(10);
+		textSurname = new JTextField();
+		textSurname.setBounds(287, 69, 114, 19);
+		registrationPanel.add(textSurname);
+		textSurname.setColumns(10);
 		
 		JLabel lblPhone = new JLabel("Phone:");
 		lblPhone.setBounds(12, 129, 70, 15);
 		registrationPanel.add(lblPhone);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(67, 127, 114, 19);
-		registrationPanel.add(textField_1);
-		textField_1.setColumns(10);
+		textPhone = new JTextField();
+		textPhone.setBounds(67, 127, 114, 19);
+		registrationPanel.add(textPhone);
+		textPhone.setColumns(10);
 		
 		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setBounds(212, 129, 70, 15);
 		registrationPanel.add(lblEmail);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(266, 127, 135, 19);
-		registrationPanel.add(textField_2);
-		textField_2.setColumns(10);
+		textEmail = new JTextField();
+		textEmail.setBounds(266, 127, 135, 19);
+		registrationPanel.add(textEmail);
+		textEmail.setColumns(10);
+		
+		btnConfirmAndEnroll = new JButton("Confirm and enroll");
+		btnConfirmAndEnroll.setBounds(243, 239, 171, 25);
+		registrationPanel.add(btnConfirmAndEnroll);
 	}
 	
 	public JButton getEnrollBtn() {
@@ -165,5 +171,20 @@ public class View extends JFrame {
 	}
 	public JButton getBackButton() {
 		return backButton;
+	}
+	public JButton getBtnConfirmAndEnroll() {
+		return btnConfirmAndEnroll;
+	}
+	public String getProfName() {
+		return profName.getText();
+	}
+	public String getTextSurname() {
+		return textSurname.getText();
+	}
+	public String getTextPhone() {
+		return textPhone.getText();
+	}
+	public String getTextEmail() {
+		return textEmail.getText();
 	}
 }

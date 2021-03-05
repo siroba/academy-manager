@@ -3,6 +3,7 @@ package UserStory13574;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -11,8 +12,12 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayListHandler;
 
 import BaseProject.Database;
+import BaseProject.SwingUtil;
 import BaseProject.UnexpectedException;
+import Entities.Enrollment;
 import Entities.FormativeAction;
+import Entities.Professional;
+import Exceptions.InvalidFieldValue;
 
 
 /**
@@ -54,6 +59,20 @@ public class Model {
 	
 	public FormativeAction getFormativeAction(int n) {
 		return this.formativeActions.get(n);
+	}
+
+	public Professional createProfessional(String name, String surname, String phone, String email) throws SQLException, InvalidFieldValue {
+		if(!Professional.checkEmail(email)) throw new InvalidFieldValue("Email", email);
+		else if(!Professional.checkPhone(phone)) throw new InvalidFieldValue("Phone", phone);
+		
+		Professional p = new Professional(name, surname, phone, email);
+		
+		return p;
+	}
+
+	public void doEnrollment(Professional p, Enrollment en) throws SQLException, ParseException {
+		p.insert(db);
+		en.insert(db);
 	}
 }
 	
