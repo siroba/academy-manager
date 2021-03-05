@@ -1,5 +1,7 @@
 package Entities;
 
+import PL53.SI2020_PL53.Random;
+
 public class TrainingManager {
 	private int ID = -1;
 	private String name;
@@ -11,6 +13,15 @@ public class TrainingManager {
 	public TrainingManager(int ID, String name) {
 		this.ID = ID;
 		this.name = name;
+	}
+
+	/**
+	 * Constructor that assigns random values
+	 */
+	public TrainingManager() {
+		Random r = new Random();
+
+		this.name = r.name(3, 15);
 	}
 
 	public String getName() {
@@ -27,7 +38,7 @@ public class TrainingManager {
 
 	public static TrainingManager obtain(int id) {
 		// TODO Auto-generated method stub
-		
+
 		return null;
 	}
 }
