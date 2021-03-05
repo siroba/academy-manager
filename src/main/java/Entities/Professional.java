@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import PL53.SI2020_PL53.DateTime;
 import PL53.SI2020_PL53.Random;
 
 import BaseProject.Database;
@@ -68,8 +70,8 @@ public class Professional {
 	 * @param FormativeAction
 	 * @param EnrollmentName
 	 */
-	public void enroll(FormativeAction fA, String name, Status status) {
-		Enrollment e = new Enrollment(name, status, fA, this);
+	public void enroll(FormativeAction fA, Professional p, Status status, DateTime date) {
+		Enrollment e = new Enrollment(fA.getID(), p.getID(), status, date);
 		enrollments.add(e);
 	}
 	

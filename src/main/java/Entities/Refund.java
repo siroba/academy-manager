@@ -26,7 +26,8 @@ porcentageRefund REAL NOT NULL,*/
 			If he resigns with between 3 calendar days and 6 calendar days missing, 50% of the amount of the course will be returned. 
 			If he resigns with less than 3 calendar days left, the amount of the course will not be refunded.
 		 * */
-		int days = Date.daysSince(this.payment.getEnrollment().getFormativeAction().getDate(), this.payment.getPayDate());
+		//Date.daysSince(this.payment.getEnrollment().getFormativeAction().getEnrollmentEnd(), this.payment.getPayDate());
+		int days = 1; //TODO: Get days between the request and the end of the enrollment period
 		
 		if(days > 7) return 1f;
 		else if (days <= 6 && days >=3) return 0.5f;

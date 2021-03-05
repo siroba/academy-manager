@@ -104,8 +104,9 @@ public class FormativeAction {
 	 * @param professionals
 	 * @param db
 	 * @throws SQLException
+	 * @throws ParseException 
 	 */
-	public static void insert(List<Enrollment> enrollments, Database db) throws SQLException {
+	public static void insert(List<Enrollment> enrollments, Database db) throws SQLException, ParseException {
 		for (Enrollment e : enrollments)
 			e.insert(db);
 	}
