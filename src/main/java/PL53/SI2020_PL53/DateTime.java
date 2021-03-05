@@ -57,6 +57,18 @@ public class DateTime extends Date {
 	}
 
 	/**
+	 * This constructor takes a Date and assumes the time to be 00:00
+	 * 
+	 * @param other
+	 */
+	public DateTime(Date other) {
+		super(other.getDay(), other.getMonth(), other.getYear());
+
+		this.hour = 0;
+		this.minute = 0;
+	}
+	
+	/**
 	 * Parses a String containing the date and time to an object The input date must
 	 * be in format "yyyy-MM-dd HH:mm"
 	 * 
