@@ -31,7 +31,9 @@ public class Model {
 	private List<FormativeAction> formativeActions;
 
 	public void loadFormativeActions() throws SQLException, ParseException {
-		this.formativeActions = FormativeAction.get("SELECT * FROM FormativeAction;", db);
+		String query = "SELECT * FROM FormativeAction WHERE enrollmentEnd>datetime('now','localtime');";
+		
+		this.formativeActions = FormativeAction.get(query, db);
 	}
 
 	public List<FormativeAction> getFormativeActions(){
