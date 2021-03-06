@@ -197,10 +197,9 @@ public class FormativeAction {
 			pstmt.setString(8, this.getObjectives());
 			pstmt.setString(9, this.getMainContents());
 			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString());
-			pstmt.setDate(12, this.getEnrollmentStart().toSQL());
-			pstmt.setDate(13, this.getEnrollmentEnd().toSQL());
-			pstmt.setDate(14, this.getFaStart().toSQL());
+			pstmt.setString(11, this.getStatus().toString().toLowerCase());
+			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
+			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
 		} else {
 			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -210,7 +209,7 @@ public class FormativeAction {
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setString(1, this.getName());
-			pstmt.setDate(2, this.getFaStart().toSQL());
+			pstmt.setTimestamp(2, this.getFaStart().toTimestamp());
 			pstmt.setFloat(3, this.getDuration());
 			pstmt.setString(4, this.getLocation());
 			pstmt.setFloat(5, this.getRemuneration());
@@ -220,8 +219,8 @@ public class FormativeAction {
 			pstmt.setString(9, this.getMainContents());
 			pstmt.setString(10, this.getTeacherName());
 			pstmt.setString(11, this.getStatus().toString().toLowerCase());
-			pstmt.setDate(12, this.getEnrollmentStart().toSQL());
-			pstmt.setDate(13, this.getEnrollmentEnd().toSQL());
+			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
+			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -263,9 +262,9 @@ public class FormativeAction {
 					rs.getString("mainContent"),
 					rs.getString("teacherName"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					DateTime.parseString(rs.getString("enrollmentStart")), // TODO: Fix parsing
-					DateTime.parseString(rs.getString("enrollmentEnd")),
-					DateTime.parseString(rs.getString("dateFA")));
+					DateTime.fromMillis(rs.getLong("enrollmentStart")), // TODO: Fix parsing
+					DateTime.fromMillis(rs.getLong("enrollmentEnd")),
+					DateTime.fromMillis(rs.getLong("dateFA")));
 
 			fa.add(f);
 		}
@@ -296,12 +295,21 @@ public class FormativeAction {
 
 		rs.next();
 
-		FormativeAction fa = new FormativeAction(rs.getInt("ID_fa"), rs.getString("nameFa"), rs.getFloat("duration"),
-				rs.getString("location"), rs.getFloat("remuneration"), rs.getFloat("fee"), rs.getInt("totalPlaces"),
-				rs.getString("objectives"), rs.getString("mainContent"), rs.getString("teacherName"),
+		FormativeAction fa = new FormativeAction(
+				rs.getInt("ID_fa"),
+				rs.getString("nameFa"),
+				rs.getFloat("duration"),
+				rs.getString("location"),
+				rs.getFloat("remuneration"),
+				rs.getFloat("fee"),
+				rs.getInt("totalPlaces"),
+				rs.getString("objectives"),
+				rs.getString("mainContent"),
+				rs.getString("teacherName"),
 				Status.valueOf(rs.getString("status").toUpperCase()),
-				DateTime.parseString(rs.getString("enrollmentStart")), // TODO: Fix parsing
-				DateTime.parseString(rs.getString("enrollmentEnd")), DateTime.parseString(rs.getString("dateFA")));
+				DateTime.fromMillis(rs.getLong("enrollmentStart")), // TODO: Fix parsing
+				DateTime.fromMillis(rs.getLong("enrollmentEnd")),
+				DateTime.fromMillis(rs.getLong("dateFA")));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
