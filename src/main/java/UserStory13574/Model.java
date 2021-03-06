@@ -1,7 +1,5 @@
 package UserStory13574;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
@@ -35,7 +33,7 @@ public class Model {
 					+ "WHERE enrollmentEnd>datetime('now','localtime') "
 					+ "GROUP BY FormativeAction.nameFa "
 					+ "HAVING (SELECT COUNT(Enrollment.ID_fa) FROM Enrollment WHERE Enrollment.ID_fa=FormativeAction.ID_fa)<totalPlaces;";
-				
+
 		this.formativeActions = FormativeAction.get(query, db);
 	}
 
@@ -58,6 +56,8 @@ public class Model {
 
 	public void doEnrollment(Professional p, Enrollment en) throws SQLException, ParseException {
 		p.insert(db);
+
+		en.setID_professional(p.getID());
 		en.insert(db);
 	}
 }

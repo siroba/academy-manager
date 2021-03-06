@@ -32,10 +32,10 @@ public class Payment {
 		this.address = address;
 		this.confirmed = confirmed;
 	}
-	
+
 	/**
 	 * Constructor with the ID of the payment
-	 * 
+	 *
 	 * @param ID_payment
 	 * @param ID_fa
 	 * @param ID_professional
@@ -187,11 +187,11 @@ public class Payment {
 		if(this.getID() != -1) {
 			String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_fa, ID_professional, amount, payDate, sender, receiver, fiscalNumber,"
 					+ " address, confirmed) VALUES(?,?,?,?,?,?,?,?,?,?)";
-	
+
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
-	
+
 			pstmt.setInt(1, this.getID());
 			pstmt.setInt(2, this.getID_fa());
 			pstmt.setInt(3, this.getID_professional());
@@ -205,7 +205,7 @@ public class Payment {
 			pstmt.executeUpdate(); // statement execution
 		}else {
 			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?,?)";
-	
+
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
@@ -225,7 +225,7 @@ public class Payment {
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
 		}
-		
+
 		conn.close();
 	}
 
@@ -290,7 +290,7 @@ public class Payment {
 	public int getID() {
 		return ID;
 	}
-	
+
 	public int getID_fa() {
 		return ID_fa;
 	}

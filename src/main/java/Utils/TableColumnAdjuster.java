@@ -159,7 +159,7 @@ public class TableColumnAdjuster implements PropertyChangeListener, TableModelLi
 			width = Math.max(width, tableColumn.getPreferredWidth());
 		}
 
-		columnSizes.put(tableColumn, new Integer(tableColumn.getWidth()));
+		columnSizes.put(tableColumn, tableColumn.getWidth());
 
 		table.getTableHeader().setResizingColumn(tableColumn);
 		tableColumn.setWidth(width);
@@ -351,8 +351,10 @@ public class TableColumnAdjuster implements PropertyChangeListener, TableModelLi
 	/*
 	 *  Action to adjust or restore the width of a single column or all columns
 	 */
-	class ColumnAction extends AbstractAction
-	{
+	class ColumnAction extends AbstractAction{
+		// Auto-generated serial ID
+		private static final long serialVersionUID = 8122912510259885310L;
+
 		private boolean isSelectedColumn;
 		private boolean isAdjust;
 
@@ -393,8 +395,10 @@ public class TableColumnAdjuster implements PropertyChangeListener, TableModelLi
 	 *  Toggle properties of the TableColumnAdjuster so the user can
 	 *  customize the functionality to their preferences
 	 */
-	class ToggleAction extends AbstractAction
-	{
+	class ToggleAction extends AbstractAction {
+		// Auto-generated serial ID
+		private static final long serialVersionUID = 4977426473494964228L;
+
 		private boolean isToggleDynamic;
 		private boolean isToggleLarger;
 
@@ -405,16 +409,13 @@ public class TableColumnAdjuster implements PropertyChangeListener, TableModelLi
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			if (isToggleDynamic)
-			{
+		public void actionPerformed(ActionEvent e) {
+			if (isToggleDynamic) {
 				setDynamicAdjustment(! isDynamicAdjustment);
 				return;
 			}
 
-			if (isToggleLarger)
-			{
+			if (isToggleLarger) {
 				setOnlyAdjustLarger(! isOnlyAdjustLarger);
 				return;
 			}

@@ -69,6 +69,16 @@ public class DateTime extends Date {
 	}
 
 	/**
+	 * Returns a {@link java.sql.Timestamp} object.
+	 * The {@link Date#toSQL()} returns a {@link java.sql.Date} object, which ignores the time
+	 *
+	 * @return Timestamp
+	 */
+	public java.sql.Timestamp toTimestamp() {
+		return new java.sql.Timestamp(this.toMillis());
+	}
+
+	/**
 	 * Parses a String containing the date and time to an object The input date must
 	 * be in format "yyyy-MM-dd HH:mm"
 	 *
@@ -76,13 +86,14 @@ public class DateTime extends Date {
 	 * @return
 	 */
 	public static DateTime parseString(String datetime) {
+		System.out.println(datetime);
 		String tmp[] = datetime.split(" ");
 
 		String time[] = tmp[1].split(":");
 		String date[] = tmp[0].split("-");
-		
+
 		System.out.println("Hour: " + time[0]);
-		
+
 		return new DateTime(Integer.parseInt(time[1]), Integer.parseInt(time[0]), Integer.parseInt(date[2]),
 				Integer.parseInt(date[1]), Integer.parseInt(date[0]));
 	}
@@ -99,7 +110,7 @@ public class DateTime extends Date {
 
 		String time[] = tmp[0].split(":");
 		String date[] = tmp[1].split("-");
-		
+
 		return new DateTime(Integer.parseInt(time[1]), Integer.parseInt(time[0]), Integer.parseInt(date[2]),
 				Integer.parseInt(date[1]), Integer.parseInt(date[0]));
 	}
@@ -153,7 +164,9 @@ public class DateTime extends Date {
 	 */
 	@Override
 	public String toString() {
-		return this.day + "/" + this.month + "/" + this.year + " " + this.hour + ":" + this.minute;
+		String h = (this.hour<10?"0":"") + this.hour;
+		String m = (this.minute<10?"0":"") + this.minute;
+		return this.day + "/" + this.month + "/" + this.year + " " + h + ":" + m;
 	}
 
 	public void setTime(int minute, int hour) {

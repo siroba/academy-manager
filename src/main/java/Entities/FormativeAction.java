@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import BaseProject.DbUtil;
 import Utils.Database;
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
@@ -229,7 +228,7 @@ public class FormativeAction {
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
 		}
-		
+
 		conn.close();
 	}
 
@@ -252,12 +251,21 @@ public class FormativeAction {
 		List<FormativeAction> fa = new ArrayList<FormativeAction>();
 
 		while (rs.next()) {
-			FormativeAction f = new FormativeAction(rs.getInt("ID_fa"), rs.getString("nameFa"), rs.getFloat("duration"),
-					rs.getString("location"), rs.getFloat("remuneration"), rs.getFloat("fee"), rs.getInt("totalPlaces"),
-					rs.getString("objectives"), rs.getString("mainContent"), rs.getString("teacherName"),
+			FormativeAction f = new FormativeAction(
+					rs.getInt("ID_fa"),
+					rs.getString("nameFa"),
+					rs.getFloat("duration"),
+					rs.getString("location"),
+					rs.getFloat("remuneration"),
+					rs.getFloat("fee"),
+					rs.getInt("totalPlaces"),
+					rs.getString("objectives"),
+					rs.getString("mainContent"),
+					rs.getString("teacherName"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
 					DateTime.parseString(rs.getString("enrollmentStart")), // TODO: Fix parsing
-					DateTime.parseString(rs.getString("enrollmentEnd")), DateTime.parseString(rs.getString("dateFA")));
+					DateTime.parseString(rs.getString("enrollmentEnd")),
+					DateTime.parseString(rs.getString("dateFA")));
 
 			fa.add(f);
 		}

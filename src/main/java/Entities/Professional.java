@@ -183,7 +183,7 @@ public class Professional {
 		Statement st = conn.createStatement();
 		//executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query);
-		
+
 		rs.next();
 		Professional p = new Professional(
 				rs.getInt("ID_profesional"),
@@ -237,14 +237,14 @@ public class Professional {
 	 */
 	public void insert(Database db) throws SQLException{
 		Connection conn = db.getConnection(); // Obtain the connection
-		
+
 		if(this.getID() != -1) {
 			String SQL = "INSERT INTO " + tableName() + "(ID_professional, name, surname, phone, email) VALUES(?,?,?,?,?)";
-			
+
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
-	
+
 			pstmt.setInt(1, this.getID());
 			pstmt.setString(2, this.getName());
 			pstmt.setString(3, this.getSurname());
@@ -253,22 +253,22 @@ public class Professional {
 			pstmt.executeUpdate(); // statement execution
 		}else {
 			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
-	
+
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
-	
+
 			pstmt.setString(1, this.getName());
 			pstmt.setString(2, this.getSurname());
 			pstmt.setString(3, this.getPhone());
 			pstmt.setString(4, this.getEmail());
 			pstmt.executeUpdate(); // statement execution
-	
+
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.id = tableKeys.getInt(1);
 		}
-		
+
 		conn.close();
 	}
 
