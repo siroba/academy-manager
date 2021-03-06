@@ -156,7 +156,7 @@ public class Date extends java.util.Date {
 	 * @return days passed
 	 */
 	public static int daysSince(Date d) {
-		return daysSince(Date.now(), d);
+		return daysSince(d, Date.now());
 	}
 
 	/**

@@ -92,7 +92,7 @@ public abstract class DbUtil {
 			conn=this.getConnection();
 			//As there is no class specified to perform the mapping, it uses the ArrayListHandler
 			PreparedStatement pstmt=conn.prepareStatement(sql);
-			for (int i = 0; i < params.length; ++i) {
+			for (int i = 0; i < params.length; i++) {
 				if (params[i] instanceof String){
 					pstmt.setString(i+1, String.valueOf(params[i]));
 				}

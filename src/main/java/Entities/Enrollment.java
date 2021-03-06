@@ -91,8 +91,8 @@ public class Enrollment {
 			Enrollment e = new Enrollment(
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
-					Status.valueOf(rs.getString("status")),
-					new DateTime(Date.parse(rs.getTimestamp("dateEn")))); // TODO: Fix parse
+					Status.valueOf(rs.getString("status").toUpperCase()),
+					DateTime.parseString(rs.getString("timeEn"))); // TODO: Fix parse
 
 			enrollments.add(e);
 		}
@@ -124,8 +124,8 @@ public class Enrollment {
 		Enrollment e = new Enrollment(
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
-					Status.valueOf(rs.getString("status")),
-					new DateTime(Date.parse(rs.getTimestamp("dateEn")))); // TODO: Fix parse
+					Status.valueOf(rs.getString("status").toUpperCase()),
+					DateTime.parseString(rs.getString("dateEn"))); // TODO: Fix parse
 
 		// Very important to always close all the objects related to the database
 		rs.close();

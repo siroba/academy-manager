@@ -81,8 +81,6 @@ public class DateTime extends Date {
 		String time[] = tmp[1].split(":");
 		String date[] = tmp[0].split("-");
 		
-		System.out.println("Hour: " + time[0]);
-		
 		return new DateTime(Integer.parseInt(time[1]), Integer.parseInt(time[0]), Integer.parseInt(date[2]),
 				Integer.parseInt(date[1]), Integer.parseInt(date[0]));
 	}
