@@ -216,6 +216,12 @@ public class Date extends java.util.Date {
 		return this.day + "/" + this.month + "/" + this.year;
 	}
 
+	public static Date parseString(String date) {
+		String tmp [] = date.split("-");
+
+		return new Date(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]), Integer.parseInt(tmp[0]));
+	}
+
 	/**
 	 * Generates a random date with a bounded year. <br/>
 	 * Uses the constructor {@link RandomDate#RandomDate(int, int)}

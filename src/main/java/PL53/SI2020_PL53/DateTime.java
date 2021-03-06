@@ -78,8 +78,10 @@ public class DateTime extends Date {
 	public static DateTime parseString(String datetime) throws ParseException {
 		String tmp[] = datetime.split(" ");
 
-		String time[] = tmp[0].split(":");
-		String date[] = tmp[1].split("-");
+		String time[] = tmp[1].split(":");
+		String date[] = tmp[0].split("-");
+
+		System.out.println("Hour: " + time[0]);
 
 		return new DateTime(Integer.parseInt(time[1]), Integer.parseInt(time[0]), Integer.parseInt(date[2]),
 				Integer.parseInt(date[1]), Integer.parseInt(date[0]));
@@ -138,6 +140,12 @@ public class DateTime extends Date {
 	 */
 	public LocalDateTime toLocalDateTime() {
 		return LocalDateTime.of(year, month, day, hour, minute);
+	}
+
+	public static DateTime now() {
+		LocalDateTime d = LocalDateTime.now();
+
+		return new DateTime(d.getMinute(), d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
 	}
 
 	/**

@@ -9,8 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import BaseProject.Database;
-import Entities.FormativeAction.Status;
+import Utils.Database;
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
 import PL53.SI2020_PL53.Random;
@@ -162,7 +161,7 @@ public class Enrollment {
 		 * ID_student INTEGER NOT NULL UNIQUE,
 		 */
 
-		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_student, status, timeEn) VALUES(?,?,?,?)";
+		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_professional, status, timeEn) VALUES(?,?,?,?)";
 
 		Connection conn = db.getConnection(); // Obtain the connection
 		// Prepared Statement initialized with the INSERT statement
@@ -171,7 +170,7 @@ public class Enrollment {
 
 		pstmt.setInt(1, this.getID_fa());
 		pstmt.setInt(2, this.getID_professional());
-		pstmt.setString(3, this.getStatus().toString());
+		pstmt.setString(3, this.getStatus().toString().toLowerCase());
 		pstmt.setDate(4, this.getTimeEn().toSQL());
 
 		pstmt.executeUpdate(); // statement execution
