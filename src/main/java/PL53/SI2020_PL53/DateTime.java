@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 
 public class DateTime extends Date {
@@ -123,6 +124,11 @@ public class DateTime extends Date {
 		return fromMillis(datetime.getTime());
 	}
 
+	@Override
+	public long toMillis() {
+		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1))*1000l;
+	}
+	
 	/**
 	 * Parses milliseconds to a {@link DateTime} object. <br/>
 	 * Uses the {@link Calendar#setTimeInMillis(long)} to then parse it with the
@@ -132,13 +138,9 @@ public class DateTime extends Date {
 	 * @return
 	 */
 	public static DateTime fromMillis(long millis) {
-		// long total = (millis+(offset*3600000L))/86400000L + 25569L;
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(millis);
-
-		return new DateTime(calendar.get(Calendar.MINUTE), calendar.get(Calendar.HOUR),
-				calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis/1000L, 0, ZoneOffset.ofHours(1));
+		
+		return new DateTime(ldt.getMinute(), ldt.getHour(), ldt.getDayOfMonth(), ldt.getMonthValue(), ldt.getYear());
 	}
 
 	/**
@@ -154,6 +156,17 @@ public class DateTime extends Date {
 		LocalDateTime d = LocalDateTime.now();
 
 		return new DateTime(d.getMinute(), d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
+	}
+	
+	public static int minutesSince(DateTime d) {
+		return minutesSince(d, DateTime.now());
+	}
+	
+	public static int minutesSince(DateTime date1, DateTime date2) {
+		long difference = date1.toMillis() - date2.toMillis();
+		int hBetween = Math.round(difference / (1000.0f * 60.0f));
+
+		return hBetween;
 	}
 
 	/**
