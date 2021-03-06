@@ -103,7 +103,7 @@ public class Payment {
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					rs.getFloat("amount"),
-					new DateTime(Date.parse(rs.getDate("datePay"))),
+					 DateTime.fromMillis(rs.getLong("datePay")),
 					rs.getString("sender"),
 					rs.getString("receiver"),
 					rs.getString("fiscalNumber"),
