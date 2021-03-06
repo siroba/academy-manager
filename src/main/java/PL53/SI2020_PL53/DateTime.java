@@ -11,6 +11,9 @@ public class DateTime extends Date {
 	// Auto-generated serial ID
 	private static final long serialVersionUID = 2169788639882609776L;
 
+	/**
+	 * {@link DateFormat} variable to format the dates 
+	 */
 	public static final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	private int hour, minute;
@@ -124,6 +127,9 @@ public class DateTime extends Date {
 		return fromMillis(datetime.getTime());
 	}
 
+	/**
+	 * Uses the {@link #toLocalDateTime()} function combined with the {@link LocalDateTime#toEpochSecond(ZoneOffset)} (assumes UTC+1) * 1000L
+	 */
 	@Override
 	public long toMillis() {
 		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1))*1000l;
@@ -152,16 +158,34 @@ public class DateTime extends Date {
 		return LocalDateTime.of(year, month, day, hour, minute);
 	}
 
+	/**
+	 * Uses {@link LocalDateTime#now()} to generate the values
+	 * 
+	 * @return
+	 */
 	public static DateTime now() {
 		LocalDateTime d = LocalDateTime.now();
 
 		return new DateTime(d.getMinute(), d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
 	}
 	
+	/**
+	 * Same as {@link Date#daysSince(Date)}, but with minutes
+	 * 
+	 * @param d
+	 * @return
+	 */
 	public static int minutesSince(DateTime d) {
 		return minutesSince(d, DateTime.now());
 	}
 	
+	/**
+	 * Same as {@link Date#daysSince(Date, Date)}, but with minutes
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
 	public static int minutesSince(DateTime date1, DateTime date2) {
 		long difference = date1.toMillis() - date2.toMillis();
 		int hBetween = Math.round(difference / (1000.0f * 60.0f));
