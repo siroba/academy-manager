@@ -71,7 +71,17 @@ public class DateTime extends Date {
 		this.hour = 0;
 		this.minute = 0;
 	}
-
+	
+	/**
+	 * Returns a {@link java.sql.Timestamp} object. 
+	 * The {@link Date#toSQL()} returns a {@link java.sql.Date} object, which ignores the time 
+	 * 
+	 * @return Timestamp
+	 */
+	public java.sql.Timestamp toTimestamp() {
+		return new java.sql.Timestamp(this.toMillis());
+	}
+	
 	/**
 	 * Returns a {@link java.sql.Timestamp} object.
 	 * The {@link Date#toSQL()} returns a {@link java.sql.Date} object, which ignores the time
@@ -90,11 +100,13 @@ public class DateTime extends Date {
 	 * @return
 	 */
 	public static DateTime parseString(String datetime) {
+		System.out.println(datetime);
 		String tmp[] = datetime.split(" ");
 
+		System.out.println(tmp);
 		String time[] = tmp[1].split(":");
 		String date[] = tmp[0].split("-");
-
+    
 		return new DateTime(Integer.parseInt(time[1]), Integer.parseInt(time[0]), Integer.parseInt(date[2]),
 				Integer.parseInt(date[1]), Integer.parseInt(date[0]));
 	}

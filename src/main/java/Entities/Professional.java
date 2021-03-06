@@ -185,6 +185,7 @@ public class Professional {
 		ResultSet rs = st.executeQuery(query);
 
 		rs.next();
+		
 		Professional p = new Professional(
 				rs.getInt("ID_professional"),
 				rs.getString("name"),

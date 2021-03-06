@@ -39,7 +39,6 @@ public class View extends JFrame {
 	 */
 	public View() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
 		setTitle("Enroll in a Formative Action");
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
