@@ -186,7 +186,7 @@ public class Professional {
 
 		rs.next();
 		Professional p = new Professional(
-				rs.getInt("ID_profesional"),
+				rs.getInt("ID_professional"),
 				rs.getString("name"),
 				rs.getString("surname"),
 				rs.getString("phone"),
