@@ -5,82 +5,57 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import BaseProject.Database;
+import Utils.Database;
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
+import PL53.SI2020_PL53.Random;
 
 public class Enrollment {
-	private DateTime date;
-	private String name;
-	private FormativeAction formativeAction;
-	private Professional professional;
+	private int ID_fa, ID_professional;
 	private Status status;
+	private DateTime timeEn;
 
 	/**
 	 * Enrollment default constructor. The date and time are assumed to be today and now.
-	 * 
-	 * @param name
+	 *
+	 * @param ID_fa
+	 * @param ID_professional
 	 * @param status
-	 * @param formativeAction
-	 * @param professional
+	 * @param timeEn
 	 */
-	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional) {
+	public Enrollment(int ID_fa, int ID_professional, Status status, DateTime timeEn) {
 		this.status = status;
-		this.date = new DateTime(0, 0, Date.now());
-		this.name = name;
-		this.formativeAction = formativeAction;
-		this.professional = professional;
+		this.timeEn = timeEn;
+		this.ID_fa = ID_fa;
+		this.ID_professional = ID_professional;
 	}
 
 	/**
-	 * Enrollment constructor.
-	 * 
-	 * @param name
-	 * @param status
-	 * @param formativeAction
-	 * @param professional
-	 * @param date
+	 * Enrollment random constructor
 	 */
-	public Enrollment(String name, Status status, FormativeAction formativeAction, Professional professional, DateTime date) {
-		this.status = status;
-		this.date = new DateTime(date);
-		this.name = name;
-		this.formativeAction = formativeAction;
-		this.professional = professional;
+	public Enrollment() {
+		Random r = new Random();
+
+		this.status = Status.values()[r.nextInt(Status.values().length)];
+		this.timeEn = new DateTime(Date.random());
+		this.ID_fa = -1;
+		this.ID_professional = -1;
 	}
 
 	/**
-	 * Enrollment constructor, but it takes only the ID of the Formative Action and the Professional object (it does a query from the database).
-	 * 
-	 * @param name
-	 * @param status
-	 * @param formativeActionID
-	 * @param professionalID
-	 * @param date
-	 * @param db
-	 * @throws SQLException
+	 * @return Name of the table in the database
 	 */
-	public Enrollment(String name, Status status, int formativeActionID, int professionalID,  DateTime date, Database db) throws SQLException {
-		this.status = status;
-		this.date = new DateTime(date);
-		this.name = name;
-		this.formativeAction = FormativeAction.obtain(formativeActionID, db);
-		this.professional = Professional.obtain(professionalID, db);
-	}
-	
 	public static String tableName() {
 		return "Enrollment";
 	}
 
 	/**
 	 * Method to delete all the elements from the table
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	public static void deleteAll(Database db) throws SQLException {
@@ -94,33 +69,14 @@ public class Enrollment {
 	}
 
 	/**
-	 * Method to delete the element matching the given id from the table.
-	 * 
-	 * @throws SQLException
-	 */
-	public void delete(Database db) throws SQLException {
-		String SQL = "DELETE FROM " + tableName() + " WHERE ID_fa=? AND ID_professional=?";
-
-		Connection conn = db.getConnection();
-		PreparedStatement pstmt = conn.prepareStatement(SQL);
-
-		pstmt.setInt(1, this.formativeAction.getID());
-		pstmt.setInt(2, this.professional.getID());
-
-		pstmt.executeUpdate();
-		conn.close();
-	}
-
-	/**
-	 * Method to obtain all the elements from the table.
-	 * 
+	 * Does the query you specify and returns a list with all the results
+	 *
+	 * @param query
+	 * @param db
 	 * @return
 	 * @throws SQLException
 	 */
-	public static List<Enrollment> obtainAll(Database db) throws SQLException {
-		// Creation of the SQL query
-		String query = "SELECT * FROM " + tableName();
-
+	public static List<Enrollment> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -128,17 +84,13 @@ public class Enrollment {
 		ResultSet rs = st.executeQuery(query.toString());
 
 		List<Enrollment> enrollments = new ArrayList<>();
-		
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		
+
 		while (rs.next()) {
 			Enrollment e = new Enrollment(
-					rs.getString("name"), 
-					Status.valueOf(rs.getString("status")),
-					rs.getInt("ID_fa"), 
-					rs.getInt("ID_professional"), 
-					DateTime.parseString(df.format(rs.getDate("dateEn"))),
-					db);
+					rs.getInt("ID_fa"),
+					rs.getInt("ID_professional"),
+					Status.valueOf(rs.getString("status").toUpperCase()),
+					DateTime.fromMillis(rs.getLong("timeEn"))); // TODO: Fix parse
 
 			enrollments.add(e);
 		}
@@ -152,8 +104,38 @@ public class Enrollment {
 	}
 
 	/**
-	 * Inserts all the given professionals into the given database
-	 * 
+	 * Does the query you specify and returns the first result
+	 *
+	 * @param query
+	 * @param db
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Enrollment getOne(String query, Database db) throws SQLException {
+		Connection conn = db.getConnection();
+		// Statement object needed to send statements to the database
+		Statement st = conn.createStatement();
+		// executeQuery will return a resultSet
+		ResultSet rs = st.executeQuery(query.toString());
+		rs.next();
+
+		Enrollment e = new Enrollment(
+					rs.getInt("ID_fa"),
+					rs.getInt("ID_professional"),
+					Status.valueOf(rs.getString("status").toUpperCase()),
+					DateTime.fromMillis(rs.getLong("timeEn"))); // TODO: Fix parse
+
+		// Very important to always close all the objects related to the database
+		rs.close();
+		st.close();
+		conn.close();
+
+		return e;
+	}
+
+	/**
+	 * Inserts all the given enrollments into the given database
+	 *
 	 * @param professionals
 	 * @param db
 	 * @throws SQLException
@@ -165,78 +147,59 @@ public class Enrollment {
 
 	/**
 	 * Inserts itself into the given database
-	 * 
+	 *
 	 * @param db
 	 * @throws SQLException
+	 * @throws ParseException
 	 */
-	public void insert(Database db) throws SQLException {
+	public void insert(Database db) throws SQLException, ParseException {
 		/*
 		 * status TEXT NOT NULL CHECK( status IN('received','confirmed','cancelled')),
 		 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
 		 * ID_student INTEGER NOT NULL UNIQUE,
 		 */
 
-		String SQL = "INSERT INTO " + tableName() + "(status, dateEn, name, ID_fa, ID_student) VALUES(?,?,?,?,?)";
+		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_professional, status, timeEn) VALUES(?,?,?,?)";
 
 		Connection conn = db.getConnection(); // Obtain the connection
 		// Prepared Statement initialized with the INSERT statement
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 		// Sets of the parameters of the prepared statement
 
-		pstmt.setString(1, this.getName());
+		pstmt.setInt(1, this.getID_fa());
+		pstmt.setInt(2, this.getID_professional());
+		pstmt.setString(3, this.getStatus().toString().toLowerCase());
+		pstmt.setTimestamp(4, this.getTimeEn().toTimestamp());
 
-		try {
-			pstmt.setDate(2, this.getDate().toSQL());
-		} catch (ParseException e) {
-			System.err.println("Couldn't parse the date " + this.getDate());
-		}
-
-		pstmt.setString(3, this.getName());
-		pstmt.setInt(4, this.getFormativeAction().getID());
-		pstmt.setInt(5, this.getProfessional().getID());
 		pstmt.executeUpdate(); // statement execution
 
 		conn.close();
 	}
 
-	public DateTime getDate() {
-		return date;
+
+
+	public int getID_fa() {
+		return ID_fa;
 	}
 
-	public void setDateTime(DateTime date) {
-		this.date = date;
+	public void setID_fa(int iD_fa) {
+		ID_fa = iD_fa;
 	}
 
-	public void setDate(int day, int month, int year) {
-		this.date.setDate(day, month, year);
-	}
-	
-	public void setTime(int hour, int minute) {
-		this.date.setTime(hour, minute);
-	}
-	
-	public String getName() {
-		return name;
+	public int getID_professional() {
+		return ID_professional;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setID_professional(int iD_professional) {
+		ID_professional = iD_professional;
 	}
 
-	public FormativeAction getFormativeAction() {
-		return formativeAction;
+	public DateTime getTimeEn() {
+		return timeEn;
 	}
 
-	public void setFormativeAction(FormativeAction formativeAction) {
-		this.formativeAction = formativeAction;
-	}
-
-	public Professional getProfessional() {
-		return professional;
-	}
-
-	public void setProfessional(Professional professional) {
-		this.professional = professional;
+	public void setTimeEn(DateTime timeEn) {
+		this.timeEn = timeEn;
 	}
 
 	public Status getStatus() {

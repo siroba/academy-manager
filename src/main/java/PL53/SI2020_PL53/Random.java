@@ -4,6 +4,13 @@ public class Random extends java.util.Random{
 	// Serial ID assigned by eclipse
 	private static final long serialVersionUID = 2663648093962058538L;
 	
+	/**
+	 * Generates a random name with the specified length constraints.
+	 * 
+	 * @param minLength
+	 * @param maxLength
+	 * @return name
+	 */
 	public String name(int minLength, int maxLength) {
 		String name = "";
 		char vocals[] = new char[] { 'a', 'e', 'i', 'o', 'u' };
@@ -32,6 +39,11 @@ public class Random extends java.util.Random{
 		return name;
 	}
 	
+	/**
+	 * Generates a random phone number (starting with 6 or 7, Spanish prefixes)
+	 * 
+	 * @return
+	 */
 	public String phone() {
 		String phone = Math.random()>0.5?"6":"7";
 		
