@@ -63,7 +63,12 @@ public class SwingMain {
 		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
 
 		JButton btnRegisterPayments = new JButton("Register Payments");
-
+		btnRegisterPayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13575.Controller controller = new UserStory13575.Controller();
+				controller.initController();
+			}
+		});
 		JButton btnListFormativeActions = new JButton("List formative actions");
 
 		JButton btnStatusOfFormativeActions = new JButton("Status of formative actions");
