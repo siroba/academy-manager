@@ -1,26 +1,13 @@
 package UserStory13578;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.lang.reflect.InvocationTargetException;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-
-import org.apache.commons.beanutils.PropertyUtils;
-
-import BaseProject.SwingUtil;
-import BaseProject.UnexpectedException;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import java.awt.Dimension;
 import javax.swing.DebugGraphics;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 
 public class View extends JFrame {
@@ -35,7 +22,7 @@ public class View extends JFrame {
 	 * Create the frame.
 	 */
 	public View() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 867, 337);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
