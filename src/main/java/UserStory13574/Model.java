@@ -1,7 +1,5 @@
 package UserStory13574;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
@@ -58,6 +56,7 @@ public class Model {
 
 	public void doEnrollment(Professional p, Enrollment en) throws SQLException, ParseException {
 		p.insert(db);
+		en.setID_professional(p.getID());
 		en.insert(db);
 	}
 

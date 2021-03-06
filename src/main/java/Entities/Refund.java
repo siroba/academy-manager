@@ -1,7 +1,5 @@
 package Entities;
 
-import PL53.SI2020_PL53.Date;
-
 public class Refund {
 /*
  * ID_refund INTEGER PRIMARY KEY,

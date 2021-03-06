@@ -1,8 +1,5 @@
 package UserStory13574;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Window;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -12,14 +9,10 @@ import javax.swing.border.EmptyBorder;
 import Entities.FormativeAction;
 
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
-import java.awt.FlowLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JSeparator;
@@ -45,6 +38,7 @@ public class View extends JFrame {
 	 * Create the frame.
 	 */
 	public View() {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Enroll in a Formative Action");
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
