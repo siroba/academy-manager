@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -71,7 +72,7 @@ public class Controller {
 				} catch (SQLException | ParseException e1) {
 					e1.printStackTrace();
 				} catch (InvalidFieldValue e2) {
-					e2.printStackTrace(); // TODO: error handling
+					JOptionPane.showMessageDialog(null, e2.toString());
 				}
 			}
 		});

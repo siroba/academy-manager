@@ -56,6 +56,8 @@ public class Model {
 
 	public void doEnrollment(Professional p, Enrollment en) throws SQLException, ParseException {
 		p.insert(db);
+		
+		en.setID_professional(p.getID());
 		en.insert(db);
 	}
 }

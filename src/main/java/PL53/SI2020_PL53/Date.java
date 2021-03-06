@@ -93,11 +93,7 @@ public class Date extends java.util.Date {
 	 * @throws ParseException
 	 */
 	public java.sql.Date toSQL() throws ParseException {
-		java.util.Date date;
-
-		date = dateformat.parse(Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day));
-
-		return new java.sql.Date(date.getTime());
+		return new java.sql.Date(this.toMillis());
 	}
 
 	/**
