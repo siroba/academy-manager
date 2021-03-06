@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import BaseProject.DbUtil;
 import Utils.Database;
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
@@ -71,6 +70,45 @@ public class FormativeAction {
 			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd, DateTime faStart) {
 
+		this.name = name;
+		this.duration = duration;
+		this.location = location;
+		this.remuneration = remuneration;
+		this.fee = fee;
+		this.totalPlaces = totalPlaces;
+		this.objectives = objectives;
+		this.mainContents = mainContents;
+		this.teacherName = teacherName;
+		this.status = status;
+		this.enrollmentStart = enrollmentStart;
+		this.enrollmentEnd = enrollmentEnd;
+		this.faStart = faStart;
+	}
+	
+
+	/**
+	 * Constructor with ID
+	 *
+	 * @param ID_fa
+	 * @param name
+	 * @param duration
+	 * @param location
+	 * @param remuneration
+	 * @param fee
+	 * @param totalPlaces
+	 * @param objectives
+	 * @param mainContents
+	 * @param teacherName
+	 * @param status
+	 * @param enrollmentStart
+	 * @param enrollmentEnd
+	 * @param faStart
+	 */
+	public FormativeAction(int ID_fa, String name, float duration, String location, float remuneration, float fee, int totalPlaces,
+			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
+			DateTime enrollmentEnd, DateTime faStart) {
+
+		this.ID = ID_fa;
 		this.name = name;
 		this.duration = duration;
 		this.location = location;
@@ -188,6 +226,7 @@ public class FormativeAction {
 
 		while (rs.next()) {
 			FormativeAction f = new FormativeAction(
+					rs.getInt("ID_fa"),
 					rs.getString("nameFa"),
 					rs.getFloat("duration"),
 					rs.getString("location"),
@@ -230,6 +269,7 @@ public class FormativeAction {
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
 		FormativeAction fa = new FormativeAction(
+				rs.getInt("ID_fa"),
 				rs.getString("nameFa"),
 				rs.getFloat("duration"),
 				rs.getString("location"),
@@ -252,6 +292,19 @@ public class FormativeAction {
 		return fa;
 	}
 
+
+	public float refund() {
+		return this.refundPercentage()*this.getFee();
+	}
+	
+	public float refundPercentage() {
+		int days = Date.daysSince(enrollmentEnd);
+
+		if(days > 7) return 1f;
+		else if (days <= 6 && days >=3) return 0.5f;
+		else return 0f;
+	}
+	
 	public DateTime getFaStart() {
 		return faStart;
 	}
