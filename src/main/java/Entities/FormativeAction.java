@@ -86,6 +86,44 @@ public class FormativeAction {
 		this.faStart = faStart;
 	}
 
+	/**
+	 * Constructor with ID
+	 *
+	 * @param ID_fa
+	 * @param name
+	 * @param duration
+	 * @param location
+	 * @param remuneration
+	 * @param fee
+	 * @param totalPlaces
+	 * @param objectives
+	 * @param mainContents
+	 * @param teacherName
+	 * @param status
+	 * @param enrollmentStart
+	 * @param enrollmentEnd
+	 * @param faStart
+	 */
+	public FormativeAction(int ID_fa, String name, float duration, String location, float remuneration, float fee,
+			int totalPlaces, String objectives, String mainContents, String teacherName, Status status,
+			DateTime enrollmentStart, DateTime enrollmentEnd, DateTime faStart) {
+
+		this.ID = ID_fa;
+		this.name = name;
+		this.duration = duration;
+		this.location = location;
+		this.remuneration = remuneration;
+		this.fee = fee;
+		this.totalPlaces = totalPlaces;
+		this.objectives = objectives;
+		this.mainContents = mainContents;
+		this.teacherName = teacherName;
+		this.status = status;
+		this.enrollmentStart = enrollmentStart;
+		this.enrollmentEnd = enrollmentEnd;
+		this.faStart = faStart;
+	}
+
 	public static List<FormativeAction> create(int n) {
 		List<FormativeAction> faList = new ArrayList<FormativeAction>();
 
@@ -140,31 +178,58 @@ public class FormativeAction {
 		 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
 		 * ID_student INTEGER NOT NULL UNIQUE,
 		 */
-
-		String SQL = "INSERT INTO " + tableName() + "(nameFa, duration, location, remuneration, fee, totalPlaces,"
-				+ "objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd, dateFa) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
 		Connection conn = db.getConnection(); // Obtain the connection
-		// Prepared Statement initialized with the INSERT statement
-		PreparedStatement pstmt = conn.prepareStatement(SQL);
-		// Sets of the parameters of the prepared statement
 
-		pstmt.setString(1, this.getName());
-		pstmt.setFloat(2, this.getDuration());
-		pstmt.setString(3, this.getLocation());
-		pstmt.setFloat(4, this.getRemuneration());
-		pstmt.setFloat(5, this.getFee());
-		pstmt.setInt(6, this.getTotalPlaces());
-		pstmt.setString(7, this.getObjectives());
-		pstmt.setString(8, this.getMainContents());
-		pstmt.setString(10, this.getTeacherName());
-		pstmt.setString(11, this.getStatus().toString());
-		pstmt.setDate(12, this.getEnrollmentStart().toSQL());
-		pstmt.setDate(13, this.getEnrollmentEnd().toSQL());
-		pstmt.setDate(14, this.getFaStart().toSQL());
+		if (this.getID() != -1) {
+			String SQL = "INSERT INTO " + tableName() + "(ID_fa, nameFa, duration, location, remuneration, fee, totalPlaces,"
+					+ "objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd, dateFa) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-		pstmt.executeUpdate(); // statement execution
+			// Prepared Statement initialized with the INSERT statement
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			// Sets of the parameters of the prepared statement
 
+			pstmt.setInt(1, this.getID());
+			pstmt.setString(2, this.getName());
+			pstmt.setFloat(3, this.getDuration());
+			pstmt.setString(4, this.getLocation());
+			pstmt.setFloat(5, this.getRemuneration());
+			pstmt.setFloat(6, this.getFee());
+			pstmt.setInt(7, this.getTotalPlaces());
+			pstmt.setString(8, this.getObjectives());
+			pstmt.setString(9, this.getMainContents());
+			pstmt.setString(10, this.getTeacherName());
+			pstmt.setString(11, this.getStatus().toString());
+			pstmt.setDate(12, this.getEnrollmentStart().toSQL());
+			pstmt.setDate(13, this.getEnrollmentEnd().toSQL());
+			pstmt.setDate(14, this.getFaStart().toSQL());
+			pstmt.executeUpdate(); // statement execution
+		} else {
+			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+			// Prepared Statement initialized with the INSERT statement
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			// Sets of the parameters of the prepared statement
+
+			pstmt.setString(1, this.getName());
+			pstmt.setDate(2, this.getFaStart().toSQL());
+			pstmt.setFloat(3, this.getDuration());
+			pstmt.setString(4, this.getLocation());
+			pstmt.setFloat(5, this.getRemuneration());
+			pstmt.setFloat(6, this.getFee());
+			pstmt.setInt(7, this.getTotalPlaces());
+			pstmt.setString(8, this.getObjectives());
+			pstmt.setString(9, this.getMainContents());
+			pstmt.setString(10, this.getTeacherName());
+			pstmt.setString(11, this.getStatus().toString().toLowerCase());
+			pstmt.setDate(12, this.getEnrollmentStart().toSQL());
+			pstmt.setDate(13, this.getEnrollmentEnd().toSQL());
+			pstmt.executeUpdate(); // statement execution
+
+			ResultSet tableKeys = pstmt.getGeneratedKeys();
+			tableKeys.next();
+			this.ID = tableKeys.getInt(1);
+		}
+		
 		conn.close();
 	}
 
@@ -175,7 +240,7 @@ public class FormativeAction {
 	 * @param db
 	 * @return
 	 * @throws SQLException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public static List<FormativeAction> get(String query, Database db) throws SQLException, ParseException {
 		Connection conn = db.getConnection();
@@ -187,20 +252,12 @@ public class FormativeAction {
 		List<FormativeAction> fa = new ArrayList<FormativeAction>();
 
 		while (rs.next()) {
-			FormativeAction f = new FormativeAction(
-					rs.getString("nameFa"),
-					rs.getFloat("duration"),
-					rs.getString("location"),
-					rs.getFloat("remuneration"),
-					rs.getFloat("fee"),
-					rs.getInt("totalPlaces"),
-					rs.getString("objectives"),
-					rs.getString("mainContent"), 
-					rs.getString("teacherName"),
+			FormativeAction f = new FormativeAction(rs.getInt("ID_fa"), rs.getString("nameFa"), rs.getFloat("duration"),
+					rs.getString("location"), rs.getFloat("remuneration"), rs.getFloat("fee"), rs.getInt("totalPlaces"),
+					rs.getString("objectives"), rs.getString("mainContent"), rs.getString("teacherName"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
 					DateTime.parseString(rs.getString("enrollmentStart")), // TODO: Fix parsing
-					DateTime.parseString(rs.getString("enrollmentEnd")),
-					DateTime.parseString(rs.getString("dateFA")));
+					DateTime.parseString(rs.getString("enrollmentEnd")), DateTime.parseString(rs.getString("dateFA")));
 
 			fa.add(f);
 		}
@@ -220,7 +277,7 @@ public class FormativeAction {
 	 * @param db
 	 * @return
 	 * @throws SQLException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public static FormativeAction getOne(String query, Database db) throws SQLException, ParseException {
 		Connection conn = db.getConnection();
@@ -228,21 +285,15 @@ public class FormativeAction {
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
+
 		rs.next();
-		FormativeAction fa = new FormativeAction(
-				rs.getString("nameFa"),
-				rs.getFloat("duration"),
-				rs.getString("location"),
-				rs.getFloat("remuneration"),
-				rs.getFloat("fee"),
-				rs.getInt("totalPlaces"),
-				rs.getString("objectives"),
-				rs.getString("mainContent"),
-				rs.getString("teacherName"),
+
+		FormativeAction fa = new FormativeAction(rs.getInt("ID_fa"), rs.getString("nameFa"), rs.getFloat("duration"),
+				rs.getString("location"), rs.getFloat("remuneration"), rs.getFloat("fee"), rs.getInt("totalPlaces"),
+				rs.getString("objectives"), rs.getString("mainContent"), rs.getString("teacherName"),
 				Status.valueOf(rs.getString("status").toUpperCase()),
 				DateTime.parseString(rs.getString("enrollmentStart")), // TODO: Fix parsing
-				DateTime.parseString(rs.getString("enrollmentEnd")),
-				DateTime.parseString(rs.getString("dateFA")));
+				DateTime.parseString(rs.getString("enrollmentEnd")), DateTime.parseString(rs.getString("dateFA")));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -250,6 +301,20 @@ public class FormativeAction {
 		conn.close();
 
 		return fa;
+	}
+	public float refund() {
+		return this.refundPercentage() * this.getFee();
+	}
+
+	public float refundPercentage() {
+		int days = Date.daysSince(enrollmentEnd);
+
+		if (days > 7)
+			return 1f;
+		else if (days <= 6 && days >= 3)
+			return 0.5f;
+		else
+			return 0f;
 	}
 
 	public DateTime getFaStart() {
