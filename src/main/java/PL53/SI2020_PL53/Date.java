@@ -72,6 +72,18 @@ public class Date extends java.util.Date {
 	}
 
 	/**
+	 * The string has to be in the format "yyyy-MM-dd"
+	 *
+	 * @param date
+	 * @return
+	 */
+	public static Date parseString(String date) throws ParseException {
+		java.util.Date d = dateformat.parse(date);
+
+		return DateTime.fromMillis(d.getTime());
+	}
+
+	/**
 	 * Calculates the Date from the milliseconds passed since 1/1/1990 00:00:00.0
 	 *
 	 * @param millis
@@ -210,12 +222,6 @@ public class Date extends java.util.Date {
 	@Override
 	public String toString() {
 		return this.day + "/" + this.month + "/" + this.year;
-	}
-
-	public static Date parseString(String date) {
-		String tmp [] = date.split("-");
-
-		return new Date(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]), Integer.parseInt(tmp[0]));
 	}
 
 	/**

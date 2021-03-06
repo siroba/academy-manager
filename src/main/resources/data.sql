@@ -1,10 +1,10 @@
 --Data for the initialization of the database 
 
 insert into FormativeAction(ID_fa, nameFa, dateFa, duration, location, remuneration, fee, totalPlaces, objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd) values
-	(1000, 'Initiation to scrum',	'2021-02-03 15:00:00', 2, 'online', 50, 15, 6,	'some objctives', 'some main content', 'Jose Garcia Fanjul',				'executed', '2021-01-01 00:00:00',	'2021-02-01 00:00:00'),
+	(1000, 'Initiation to scrum',	'2021-02-03 09:00:00', 2, 'online', 50, 15, 6,	'some objctives', 'some main content', 'Jose Garcia Fanjul',				'executed', '2021-01-01 00:00:00',	'2021-02-01 00:00:00'),
 	(1001, 'Initiation to agile',	'2021-02-10 15:00:00', 3, 'online', 60, 10, 10, 'some objctives', 'some main content', 'Jose Garcia Fanjul',				'executed', '2021-01-01 00:00:00',	'2021-02-08 00:00:00'),
-	(1002, 'JDBC',  				'2021-04-10 12:00:00', 3, 'online', 100, 30, 4, 'some objctives', 'some main content', 'Maria Teresa Gonzales Aparicio',	'active', '2021-03-01 00:00:00',	'2021-04-08 00:00:00'),
-	(1003, 'Java programming',		'2021-05-01 10:00:00', 4, 'online', 80, 20, 5,	'some objctives', 'some main content', 'Victor Manuel Alvarez Garcia',		'active', '2021-04-01 00:00:00',	'2021-04-28 00:00:00');
+	(1002, 'JDBC',  				'2021-04-10 13:00:00', 3, 'online', 100, 30, 4, 'some objctives', 'some main content', 'Maria Teresa Gonzales Aparicio',	'active', '2021-03-01 00:00:00',	'2021-04-08 00:00:00'),
+	(1003, 'Java programming',		'2021-05-01 20:00:00', 4, 'online', 80, 20, 5,	'some objctives', 'some main content', 'Victor Manuel Alvarez Garcia',		'active', '2021-04-01 00:00:00',	'2021-04-28 00:00:00');
 
 
 insert into Professional(ID_professional, name, surname, phone, email) values
