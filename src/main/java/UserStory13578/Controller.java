@@ -9,8 +9,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import Entities.Enrollment;
-
 /*
 [x] The system must show a list of the registrations that can be cancelled:
 		* Name of the formative action

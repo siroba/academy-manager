@@ -1,7 +1,5 @@
 package UserStory13578;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.*;
@@ -9,7 +7,6 @@ import java.util.*;
 import Entities.Enrollment;
 import Entities.FormativeAction;
 import Entities.Professional;
-import Exceptions.InvalidFieldValue;
 import Utils.Database;
 
 /**
