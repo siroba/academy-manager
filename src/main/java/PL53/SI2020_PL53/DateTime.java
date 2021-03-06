@@ -73,16 +73,6 @@ public class DateTime extends Date {
 	}
 	
 	/**
-	 * Returns a {@link java.sql.Timestamp} object. 
-	 * The {@link Date#toSQL()} returns a {@link java.sql.Date} object, which ignores the time 
-	 * 
-	 * @return Timestamp
-	 */
-	public java.sql.Timestamp toTimestamp() {
-		return new java.sql.Timestamp(this.toMillis());
-	}
-	
-	/**
 	 * Returns a {@link java.sql.Timestamp} object.
 	 * The {@link Date#toSQL()} returns a {@link java.sql.Date} object, which ignores the time
 	 *
