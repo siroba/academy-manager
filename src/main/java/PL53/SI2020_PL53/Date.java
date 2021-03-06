@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Calendar;
 import java.util.Random;
 
 public class Date extends java.util.Date {
@@ -90,12 +89,9 @@ public class Date extends java.util.Date {
 	 * @return Date
 	 */
 	public static Date fromMillis(long millis) {
-		// long total = (millis+(offset*3600000L))/86400000L + 25569L;
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(1));
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(millis);
-
-		return new Date(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+		return new Date(ldt.getDayOfMonth(), ldt.getMonthValue(), ldt.getYear());
 	}
 
 	/**
