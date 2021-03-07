@@ -103,9 +103,15 @@ public class Controller {
 
 		for (int i = 0; i < data.length; i++) {
 			Data d = data[i];
-			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getEmail(),
-					Float.toString(d.formativeAction.getFee()), d.formativeAction.getFaStart().toString(),
+			body[i] = new String[] {
+					d.formativeAction.getName(),
+					d.professional.getName(),
+					d.professional.getEmail(),
+					Float.toString(d.formativeAction.getFee()),
+					d.formativeAction.getFaStart().toString(),
 					d.enrollment.getStatus().toString() };
+			
+			System.out.println(d.formativeAction.getName());
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
