@@ -14,7 +14,7 @@ import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
 
 public class Payment {
-	private int ID_fa, ID_professional;
+	private int ID = -1, ID_fa, ID_professional;
 	private float amount;
 	private Date payDate;
 	private String sender, receiver, fiscalNumber, address;
@@ -22,6 +22,34 @@ public class Payment {
 
 	public Payment(int ID_fa, int ID_professional, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
 			String address, boolean confirmed) {
+		this.ID_fa = ID_fa;
+		this.ID_professional = ID_professional;
+		this.amount = amount;
+		this.payDate = payDate;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.fiscalNumber = fiscalNumber;
+		this.address = address;
+		this.confirmed = confirmed;
+	}
+
+	/**
+	 * Constructor with the ID of the payment
+	 *
+	 * @param ID_payment
+	 * @param ID_fa
+	 * @param ID_professional
+	 * @param amount
+	 * @param payDate
+	 * @param sender
+	 * @param receiver
+	 * @param fiscalNumber
+	 * @param address
+	 * @param confirmed
+	 */
+	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
+			String address, boolean confirmed) {
+		this.ID = ID_payment;
 		this.ID_fa = ID_fa;
 		this.ID_professional = ID_professional;
 		this.amount = amount;
@@ -71,6 +99,7 @@ public class Payment {
 
 		while (rs.next()) {
 			Payment e = new Payment(
+					rs.getInt("ID_payment"),
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					rs.getFloat("amount"),
@@ -109,6 +138,7 @@ public class Payment {
 		rs.next();
 
 		Payment e = new Payment(
+				rs.getInt("ID_payment"),
 				rs.getInt("ID_fa"),
 				rs.getInt("ID_professional"),
 				rs.getFloat("amount"),
@@ -152,27 +182,49 @@ public class Payment {
 		 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
 		 * ID_student INTEGER NOT NULL UNIQUE,
 		 */
-
-		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_professional, amount, payDate, sender, receiver, fiscalNumber,"
-				+ " address, confirmed) VALUES(?,?,?,?,?,?,?,?,?)";
-
 		Connection conn = db.getConnection(); // Obtain the connection
-		// Prepared Statement initialized with the INSERT statement
-		PreparedStatement pstmt = conn.prepareStatement(SQL);
-		// Sets of the parameters of the prepared statement
 
-		pstmt.setInt(1, this.getID_fa());
-		pstmt.setInt(2, this.getID_professional());
-		pstmt.setFloat(3, this.getAmount());
-		pstmt.setDate(4, this.getPayDate().toSQL());
-		pstmt.setString(5,this.getSender());
-		pstmt.setString(6, this.getReceiver());
-		pstmt.setString(7, this.getFiscalNumber());
-		pstmt.setString(8, this.getAddress());
-		pstmt.setBoolean(9, this.isConfirmed());
+		if(this.getID() != -1) {
+			String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_fa, ID_professional, amount, payDate, sender, receiver, fiscalNumber,"
+					+ " address, confirmed) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
+			// Prepared Statement initialized with the INSERT statement
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			// Sets of the parameters of the prepared statement
 
-		pstmt.executeUpdate(); // statement execution
+			pstmt.setInt(1, this.getID());
+			pstmt.setInt(2, this.getID_fa());
+			pstmt.setInt(3, this.getID_professional());
+			pstmt.setFloat(4, this.getAmount());
+			pstmt.setDate(5, this.getPayDate().toSQL());
+			pstmt.setString(6,this.getSender());
+			pstmt.setString(7, this.getReceiver());
+			pstmt.setString(8, this.getFiscalNumber());
+			pstmt.setString(9, this.getAddress());
+			pstmt.setBoolean(10, this.isConfirmed());
+			pstmt.executeUpdate(); // statement execution
+		}else {
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?,?)";
+
+			// Prepared Statement initialized with the INSERT statement
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			// Sets of the parameters of the prepared statement
+
+			pstmt.setFloat(1, this.getAmount());
+			pstmt.setDate(2, this.getPayDate().toSQL());
+			pstmt.setString(3,this.getSender());
+			pstmt.setString(4, this.getReceiver());
+			pstmt.setString(5, this.getAddress());
+			pstmt.setString(6, this.getFiscalNumber());
+			pstmt.setBoolean(7, this.isConfirmed());
+			pstmt.setInt(8, this.getID_fa());
+			pstmt.setInt(9, this.getID_professional());
+			pstmt.executeUpdate(); // statement execution
+
+			ResultSet tableKeys = pstmt.getGeneratedKeys();
+			tableKeys.next();
+			this.ID = tableKeys.getInt(1);
+		}
 
 		conn.close();
 	}
@@ -233,6 +285,10 @@ public class Payment {
 
 	public void setConfirmed(boolean paid) {
 		this.confirmed = paid;
+	}
+
+	public int getID() {
+		return ID;
 	}
 
 	public int getID_fa() {

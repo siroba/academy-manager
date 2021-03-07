@@ -14,7 +14,7 @@ public class DateTest {
 	long lDNow, lDtNow;
 	DateTime dtNow;
 	Date dNow;
-
+  
 	@Before
 	public void initTest() {
 		LocalDateTime ldt = LocalDateTime.now();
@@ -30,7 +30,7 @@ public class DateTest {
 	public void testDateTimeMillis() {
 		assertEquals(lDtNow, dtNow.toMillis());
 	}
-
+  
 	@Test
 	public void testDateMillis() {
 		assertEquals(lDNow, dNow.toMillis());

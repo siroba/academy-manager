@@ -22,10 +22,10 @@ public class Enrollment {
 	/**
 	 * Enrollment default constructor. The date and time are assumed to be today and now.
 	 *
-	 * @param name
+	 * @param ID_fa
+	 * @param ID_professional
 	 * @param status
-	 * @param formativeAction
-	 * @param professional
+	 * @param timeEn
 	 */
 	public Enrollment(int ID_fa, int ID_professional, Status status, DateTime timeEn) {
 		this.status = status;
@@ -36,11 +36,6 @@ public class Enrollment {
 
 	/**
 	 * Enrollment random constructor
-	 *
-	 * @param name
-	 * @param status
-	 * @param formativeAction
-	 * @param professional
 	 */
 	public Enrollment() {
 		Random r = new Random();
@@ -51,6 +46,9 @@ public class Enrollment {
 		this.ID_professional = -1;
 	}
 
+	/**
+	 * @return Name of the table in the database
+	 */
 	public static String tableName() {
 		return "Enrollment";
 	}
@@ -185,7 +183,7 @@ public class Enrollment {
 		pstmt.setInt(1, this.getID_fa());
 		pstmt.setInt(2, this.getID_professional());
 		pstmt.setString(3, this.getStatus().toString().toLowerCase());
-		pstmt.setDate(4, this.getTimeEn().toSQL());
+		pstmt.setTimestamp(4, this.getTimeEn().toTimestamp());
 
 		pstmt.executeUpdate(); // statement execution
 

@@ -12,7 +12,7 @@ public class InvalidFieldValue extends Error {
 		this.fieldName = fieldName;
 		this.value = value;
 	}
-	
+  
 	@Override
 	public String toString() {
 		return "The field \"" + fieldName + "\" with value \"" + value + "\" was not valid.";

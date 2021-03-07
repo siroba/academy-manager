@@ -22,7 +22,7 @@ public class Controller {
 
 	public Controller() {
 		this.model = new Model();
-		
+
 		try {
 			model.loadFormativeActions();
 		} catch (SQLException e) {

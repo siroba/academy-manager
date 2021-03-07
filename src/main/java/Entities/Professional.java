@@ -154,7 +154,7 @@ public class Professional {
 
 		while(rs.next()) {
 			Professional p = new Professional(
-					rs.getInt("ID_profesional"),
+					rs.getInt("ID_professional"),
 					rs.getString("name"),
 					rs.getString("surname"),
 					rs.getString("phone"),
@@ -237,22 +237,38 @@ public class Professional {
 	 * @throws SQLException
 	 */
 	public void insert(Database db) throws SQLException{
-		String SQL = "INSERT INTO " + tableName() + "(name, surname, phone, email) VALUES(?,?,?,?)";
-
 		Connection conn = db.getConnection(); // Obtain the connection
-		// Prepared Statement initialized with the INSERT statement
-		PreparedStatement pstmt = conn.prepareStatement(SQL);
-		// Sets of the parameters of the prepared statement
 
-		pstmt.setString(1, this.getName());
-		pstmt.setString(2, this.getSurname());
-		pstmt.setString(3, this.getPhone());
-		pstmt.setString(4, this.getEmail());
-		pstmt.executeUpdate(); // statement execution
+		if(this.getID() != -1) {
+			String SQL = "INSERT INTO " + tableName() + "(ID_professional, name, surname, phone, email) VALUES(?,?,?,?,?)";
 
-		ResultSet tableKeys = pstmt.getGeneratedKeys();
-		tableKeys.next();
-		this.id = tableKeys.getInt(1);
+			// Prepared Statement initialized with the INSERT statement
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			// Sets of the parameters of the prepared statement
+
+			pstmt.setInt(1, this.getID());
+			pstmt.setString(2, this.getName());
+			pstmt.setString(3, this.getSurname());
+			pstmt.setString(4, this.getPhone());
+			pstmt.setString(5, this.getEmail());
+			pstmt.executeUpdate(); // statement execution
+		}else {
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
+
+			// Prepared Statement initialized with the INSERT statement
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			// Sets of the parameters of the prepared statement
+
+			pstmt.setString(1, this.getName());
+			pstmt.setString(2, this.getSurname());
+			pstmt.setString(3, this.getPhone());
+			pstmt.setString(4, this.getEmail());
+			pstmt.executeUpdate(); // statement execution
+
+			ResultSet tableKeys = pstmt.getGeneratedKeys();
+			tableKeys.next();
+			this.id = tableKeys.getInt(1);
+		}
 
 		conn.close();
 	}

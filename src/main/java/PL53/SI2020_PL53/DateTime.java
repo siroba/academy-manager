@@ -71,7 +71,17 @@ public class DateTime extends Date {
 		this.hour = 0;
 		this.minute = 0;
 	}
-
+	
+	/**
+	 * Returns a {@link java.sql.Timestamp} object. 
+	 * The {@link Date#toSQL()} returns a {@link java.sql.Date} object, which ignores the time 
+	 * 
+	 * @return Timestamp
+	 */
+	public java.sql.Timestamp toTimestamp() {
+		return new java.sql.Timestamp(this.toMillis());
+	}
+	
 	/**
 	 * Returns a {@link java.sql.Timestamp} object. The {@link Date#toSQL()} returns
 	 * a {@link java.sql.Date} object, which ignores the time
@@ -115,7 +125,7 @@ public class DateTime extends Date {
 	public long toMillis() {
 		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1)) * 1000l;
 	}
-
+  
 	/**
 	 * Parses milliseconds to a {@link DateTime} object. <br/>
 	 * Uses the {@link Calendar#setTimeInMillis(long)} to then parse it with the
@@ -139,10 +149,39 @@ public class DateTime extends Date {
 		return LocalDateTime.of(year, month, day, hour, minute);
 	}
 
+	/**
+	 * Uses {@link LocalDateTime#now()} to generate the values
+	 * 
+	 * @return
+	 */
 	public static DateTime now() {
 		LocalDateTime d = LocalDateTime.now();
 
 		return new DateTime(d.getMinute(), d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
+	}
+	
+	/**
+	 * Same as {@link Date#daysSince(Date)}, but with minutes
+	 * 
+	 * @param d
+	 * @return
+	 */
+	public static int minutesSince(DateTime d) {
+		return minutesSince(d, DateTime.now());
+	}
+	
+	/**
+	 * Same as {@link Date#daysSince(Date, Date)}, but with minutes
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
+	public static int minutesSince(DateTime date1, DateTime date2) {
+		long difference = date1.toMillis() - date2.toMillis();
+		int hBetween = Math.round(difference / (1000.0f * 60.0f));
+
+		return hBetween;
 	}
 
 	/**
@@ -175,7 +214,6 @@ public class DateTime extends Date {
 	 */
 	@Override
 	public String toString() {
-
 		String h = (this.hour < 10 ? "0" : "") + this.hour;
 		String m = (this.minute < 10 ? "0" : "") + this.minute;
 		return this.day + "/" + this.month + "/" + this.year + " " + h + ":" + m;

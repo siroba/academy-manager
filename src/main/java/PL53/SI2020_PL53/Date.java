@@ -13,6 +13,9 @@ public class Date extends java.util.Date {
 	// Auto-generated serial ID
 	private static final long serialVersionUID = -6185333649323730247L;
 
+	/**
+	 * {@link DateFormat} variable to format the dates 
+	 */
 	public static final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
 	protected int day, month, year;
@@ -84,6 +87,8 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Calculates the Date from the milliseconds passed since 1/1/1990 00:00:00.0
+	 * using the {@link LocalDateTime#ofEpochSecond(long, int, ZoneOffset)} (it
+	 * assumes UTC+1)
 	 *
 	 * @param millis
 	 * @return Date
@@ -125,10 +130,9 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Assumes we are in UTC+1.<br/>
-	 * Uses the function {@link #toLocalDateTime()} to get
-	 * the epoch seconds with the function
-	 * {@link LocalDateTime#toEpochSecond(ZoneOffset)} and then, the seconds are
-	 * multiplied by 1000
+	 * Uses the function {@link #toLocalDateTime()} to get the epoch seconds with
+	 * the function {@link LocalDateTime#toEpochSecond(ZoneOffset)} and then, the
+	 * seconds are multiplied by 1000. Assumes UTC+1.
 	 *
 	 * @return
 	 */
@@ -142,19 +146,29 @@ public class Date extends java.util.Date {
 		this.year = year;
 	}
 
+	/**
+	 * Assigns a {@link RandomDate#RandomDate()} to this object
+	 */
 	public void setRandom() {
 		RandomDate rd = new RandomDate();
 		this.setDate(rd.nextDate());
 	}
 
+	/**
+	 * Assigns a {@link RandomDate#RandomDate(int, int))} to this object, with the given year constraints.
+	 * 
+	 * @param min_year
+	 * @param max_year
+	 */
 	public void setRandom(int min_year, int max_year) {
 		RandomDate rd = new RandomDate(min_year, max_year);
 		this.setDate(rd.nextDate());
 	}
 
 	/**
-	 * Gives the days passed between the two dates
-	 * Uses the function {@link #daysSince(Date, Date)} and assumes the other date to be today (uses the function {@link #now()})
+	 * Gives the days passed between the two dates Uses the function
+	 * {@link #daysSince(Date, Date)} and assumes the other date to be today (uses
+	 * the function {@link #now()})
 	 *
 	 * @param date
 	 * @return days passed
@@ -244,7 +258,8 @@ public class Date extends java.util.Date {
 	}
 
 	/**
-	 * Gets today's date using {@link LocalDate#now()} and then parsing it to a {@link Date} object.
+	 * Gets today's date using {@link LocalDate#now()} and then parsing it to a
+	 * {@link Date} object.
 	 *
 	 * @return
 	 */
@@ -257,7 +272,7 @@ public class Date extends java.util.Date {
 	/**
 	 * @author marcos
 	 *
-	 * Random date generator.
+	 *         Random date generator.
 	 */
 	public static class RandomDate {
 		private final LocalDate minDate;
