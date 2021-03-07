@@ -83,16 +83,6 @@ public class DateTime extends Date {
 	}
 	
 	/**
-	 * Returns a {@link java.sql.Timestamp} object. The {@link Date#toSQL()} returns
-	 * a {@link java.sql.Date} object, which ignores the time
-	 *
-	 * @return Timestamp
-	 */
-	public java.sql.Timestamp toTimestamp() {
-		return new java.sql.Timestamp(this.toMillis());
-	}
-
-	/**
 	 * Parses a String containing the date and time to an object The input date must
 	 * be in format "yyyy-MM-dd HH:mm"
 	 *
@@ -183,31 +173,7 @@ public class DateTime extends Date {
 
 		return hBetween;
 	}
-
-	/**
-	 * Same as {@link Date#daysSince(Date)}, but with minutes
-	 *
-	 * @param d
-	 * @return
-	 */
-	public static int minutesSince(DateTime d) {
-		return minutesSince(d, DateTime.now());
-	}
-
-	/**
-	 * Same as {@link Date#daysSince(Date, Date)}, but with minutes
-	 *
-	 * @param date1
-	 * @param date2
-	 * @return
-	 */
-	public static int minutesSince(DateTime date1, DateTime date2) {
-		long difference = date1.toMillis() - date2.toMillis();
-		int hBetween = Math.round(difference / (1000.0f * 60.0f));
-
-		return hBetween;
-	}
-
+	
 	/**
 	 * The returned string is formatted according to Spanish standards (dd/MM/yy
 	 * HH:MM)
