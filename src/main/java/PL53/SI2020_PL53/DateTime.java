@@ -176,30 +176,7 @@ public class DateTime extends Date {
 		return hBetween;
 	}
 
-	/**
-	 * Same as {@link Date#daysSince(Date)}, but with minutes
-	 *
-	 * @param d
-	 * @return
-	 */
-	public static int minutesSince(DateTime d) {
-		return minutesSince(d, DateTime.now());
-	}
-
-	/**
-	 * Same as {@link Date#daysSince(Date, Date)}, but with minutes
-	 *
-	 * @param date1
-	 * @param date2
-	 * @return
-	 */
-	public static int minutesSince(DateTime date1, DateTime date2) {
-		long difference = date1.toMillis() - date2.toMillis();
-		int hBetween = Math.round(difference / (1000.0f * 60.0f));
-
-		return hBetween;
-	}
-
+	
 	/**
 	 * The returned string is formatted according to Spanish standards (dd/MM/yy
 	 * HH:MM)
