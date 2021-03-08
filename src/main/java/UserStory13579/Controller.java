@@ -12,8 +12,6 @@ import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
 import Entities.Professional;
-import PL53.SI2020_PL53.FinancialBalance;
-import PL53.SI2020_PL53.TotalBalance;
 import Utils.DbUtil;
 import Utils.SwingUtil;
 import Utils.Util;
@@ -39,17 +37,6 @@ public class Controller {
 		//ActionListener defines only one actionPerformed() method, it is a functional interface that can be invoked as follows:
 		//view.getBtnTablaCarreras().addActionListener(e -> getListaCarreras());
 		//then I invoke the method that responds to the listener in the exceptionWrapper to take care of the exceptions.
-//		view.getFilterStartDay().addItemListener(new ItemListener() {
-//			public void itemStateChanged(ItemEvent e) {
-////				SwingUtil.exceptionWrapper(() -> filterStartDate());
-//			}
-//		});
-		
-//		view.getFilterEndDay().addItemListener(new ItemListener() {
-//			public void itemStateChanged(ItemEvent e) {
-////				SwingUtil.exceptionWrapper(() -> filterEndDate());
-//			}
-//		});
 	}
 	
 	public void initView() {

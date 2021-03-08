@@ -11,16 +11,13 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import Utils.Database;
+
 /**
-<<<<<<< HEAD
- * Main entry point including database initialization actions and buttons for the execution of the screens. 
- * It does not follow MVC because it is only temporary so that during the development it is possible to perform initialization actions.
-=======
  * Main entry point including database initialization actions and buttons for
  * the execution of the screens. It does not follow MVC because it is only
  * temporary so that during the development it is possible to perform
  * initialization actions.
->>>>>>> main
  */
 public class SwingMain {
 
@@ -87,6 +84,8 @@ public class SwingMain {
 		// Professional
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
 		
+		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
+		
 		// Training manager
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
 
@@ -100,6 +99,13 @@ public class SwingMain {
 		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
+		btnCheckFinancialBalance.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
+						new UserStory13579.View());
+				controller.initController();
+			}
+		});
 
 		// Empty grid elements
 		JLabel labelEmpty1 = new JLabel("");
