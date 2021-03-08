@@ -30,11 +30,11 @@ public class Model {
 	public void setFormativeAction(FormativeAction fA) {
 		// Query 
 		String sql=
-				 "insert into formativeAction(id ,name, objectives, mainContents, teacher, manager, remuneration, location, spaces, day, numberOfHours, enrollmentPeriodStart, enrollmentPeriodEnd, fee) values \r\n"
+				 "insert into formativeAction(ID_fa, nameFa, dateFa, duration, location, remuneration, fee, totalPlaces, objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd) values \r\n"
 				 + "	(?, ?, ?, ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?)";
 		
 		// Execute update query 
-		db.executeUpdateQuery(sql, fA.getID(), fA.getName(), fA.getObjectives(), fA.getMainContents(), fA.getTeacher().getID(), "exampleManager", fA.getRemuneration(), fA.getLocation(), fA.getDate().toString(), fA.getNumberOfHours(), fA.getSpaces(), fA.getEnrollmentPeriodStart().toString(), fA.getEnrollmentPeriodEnd().toString(), fA.getFee());
+		db.executeUpdateQuery(sql, fA.getID(), fA.getName(), fA.getFaStart(), fA.getDuration(), fA.getLocation(), fA.getRemuneration(), fA.getTotalPlaces(), fA.getObjectives(), fA.getMainContents(), fA.getTeacherName(), fA.getStatus(), fA.getEnrollmentStart(), fA.getEnrollmentEnd());
 
 	}
 	

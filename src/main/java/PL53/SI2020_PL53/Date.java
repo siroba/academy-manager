@@ -7,20 +7,22 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Calendar;
 import java.util.Random;
 
 public class Date extends java.util.Date {
 	// Auto-generated serial ID
 	private static final long serialVersionUID = -6185333649323730247L;
 
+	/**
+	 * {@link DateFormat} variable to format the dates 
+	 */
 	public static final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
 	protected int day, month, year;
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @param day
 	 * @param month
 	 * @param year
@@ -33,7 +35,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Copy constructor
-	 * 
+	 *
 	 * @param other
 	 */
 	public Date(Date other) {
@@ -51,7 +53,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Parses from the sql.Timestamp class (discards the time)
-	 * 
+	 *
 	 * @param datetime
 	 * @return Date
 	 */
@@ -61,7 +63,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Parses from the sql.Date class (discards the time)
-	 * 
+	 *
 	 * @param date
 	 * @return Date
 	 */
@@ -73,36 +75,31 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Calculates the Date from the milliseconds passed since 1/1/1990 00:00:00.0
-	 * 
+	 * using the {@link LocalDateTime#ofEpochSecond(long, int, ZoneOffset)} (it
+	 * assumes UTC+1)
+	 *
 	 * @param millis
 	 * @return Date
 	 */
 	public static Date fromMillis(long millis) {
-		// long total = (millis+(offset*3600000L))/86400000L + 25569L;
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(1));
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(millis);
-
-		return new Date(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+		return new Date(ldt.getDayOfMonth(), ldt.getMonthValue(), ldt.getYear());
 	}
 
 	/**
 	 * Generates a sql.Date object
-	 * 
+	 *
 	 * @return sql.Date
 	 * @throws ParseException
 	 */
 	public java.sql.Date toSQL() throws ParseException {
-		java.util.Date date;
-
-		date = dateformat.parse(Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day));
-
-		return new java.sql.Date(date.getTime());
+		return new java.sql.Date(this.toMillis());
 	}
 
 	/**
 	 * Parses this object to an LocalDateTime object (assumes the time to be 00:00)
-	 * 
+	 *
 	 * @return LocalDate
 	 */
 	public LocalDateTime toLocalDateTime() {
@@ -112,7 +109,7 @@ public class Date extends java.util.Date {
 	/**
 	 * Uses the function {@link #toLocalDateTime()} and the constructor
 	 * {@link Timestamp#valueOf(LocalDateTime)} to generate the Timestamp
-	 * 
+	 *
 	 * @return
 	 */
 	public Timestamp toTimestamp() {
@@ -121,11 +118,10 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Assumes we are in UTC+1.<br/>
-	 * Uses the function {@link #toLocalDateTime()} to get
-	 * the epoch seconds with the function
-	 * {@link LocalDateTime#toEpochSecond(ZoneOffset)} and then, the seconds are
-	 * multiplied by 1000
-	 * 
+	 * Uses the function {@link #toLocalDateTime()} to get the epoch seconds with
+	 * the function {@link LocalDateTime#toEpochSecond(ZoneOffset)} and then, the
+	 * seconds are multiplied by 1000. Assumes UTC+1.
+	 *
 	 * @return
 	 */
 	public long toMillis() {
@@ -138,30 +134,40 @@ public class Date extends java.util.Date {
 		this.year = year;
 	}
 
+	/**
+	 * Assigns a {@link RandomDate#RandomDate()} to this object
+	 */
 	public void setRandom() {
 		RandomDate rd = new RandomDate();
 		this.setDate(rd.nextDate());
 	}
 
+	/**
+	 * Assigns a {@link RandomDate#RandomDate(int, int))} to this object, with the given year constraints.
+	 * 
+	 * @param min_year
+	 * @param max_year
+	 */
 	public void setRandom(int min_year, int max_year) {
 		RandomDate rd = new RandomDate(min_year, max_year);
 		this.setDate(rd.nextDate());
 	}
 
 	/**
-	 * Gives the days passed between the two dates
-	 * Uses the function {@link #daysSince(Date, Date)} and assumes the other date to be today (uses the function {@link #now()})
-	 * 
+	 * Gives the days passed between the two dates Uses the function
+	 * {@link #daysSince(Date, Date)} and assumes the other date to be today (uses
+	 * the function {@link #now()})
+	 *
 	 * @param date
 	 * @return days passed
 	 */
 	public static int daysSince(Date d) {
-		return daysSince(Date.now(), d);
+		return daysSince(d, Date.now());
 	}
 
 	/**
 	 * Gives the days passed between the two given dates
-	 * 
+	 *
 	 * @param date1
 	 * @param date2
 	 * @return days passed
@@ -199,7 +205,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Copies the parameters from the given date
-	 * 
+	 *
 	 * @param other
 	 */
 	public void setDate(Date d) {
@@ -215,17 +221,23 @@ public class Date extends java.util.Date {
 	public String toString() {
 		return this.day + "/" + this.month + "/" + this.year;
 	}
-	
+
+	/**
+	 * The string has to be in the format "yyyy-MM-dd"
+	 * 
+	 * @param date
+	 * @return
+	 */
 	public static Date parseString(String date) {
-		String tmp [] = date.split("-");
-		
+		String tmp[] = date.split("-");
+
 		return new Date(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]), Integer.parseInt(tmp[0]));
 	}
 
 	/**
 	 * Generates a random date with a bounded year. <br/>
 	 * Uses the constructor {@link RandomDate#RandomDate(int, int)}
-	 * 
+	 *
 	 * @param min_year
 	 * @param max_year
 	 * @return
@@ -237,7 +249,7 @@ public class Date extends java.util.Date {
 
 	/**
 	 * Generates a random date (the year can be between 2000 and 2050). <br/>
-	 * 
+	 *
 	 * @return
 	 */
 	public static Date random() {
@@ -246,8 +258,9 @@ public class Date extends java.util.Date {
 	}
 
 	/**
-	 * Gets today's date using {@link LocalDate#now()} and then parsing it to a {@link Date} object.
-	 * 
+	 * Gets today's date using {@link LocalDate#now()} and then parsing it to a
+	 * {@link Date} object.
+	 *
 	 * @return
 	 */
 	public static Date now() {
@@ -259,7 +272,7 @@ public class Date extends java.util.Date {
 	/**
 	 * @author marcos
 	 *
-	 * Random date generator.
+	 *         Random date generator.
 	 */
 	public static class RandomDate {
 		private final LocalDate minDate;
