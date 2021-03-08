@@ -72,7 +72,17 @@ public class DateTime extends Date {
 		this.minute = 0;
 	}
 
-	
+
+
+	/**
+	 * Returns a {@link java.sql.Timestamp} object. The {@link Date#toSQL()} returns
+	 * a {@link java.sql.Date} object, which ignores the time
+	 *
+	 * @return Timestamp
+	 */
+	public java.sql.Timestamp toTimestamp() {
+		return new java.sql.Timestamp(this.toMillis());
+	}
 
 	/**
 	 * Parses a String containing the date and time to an object The input date must
@@ -80,34 +90,12 @@ public class DateTime extends Date {
 	 *
 	 * @param datetime
 	 * @return
+	 * @throws ParseException
 	 */
-	public static DateTime parseString(String datetime) {
-		System.out.println(datetime);
-		String tmp[] = datetime.split(" ");
+	public static DateTime parseString(String datetime) throws ParseException {
+		java.util.Date d = dateformat.parse(datetime);
 
-		System.out.println(tmp);
-		String time[] = tmp[1].split(":");
-		String date[] = tmp[0].split("-");
-
-		return new DateTime(Integer.parseInt(time[1]), Integer.parseInt(time[0]), Integer.parseInt(date[2]),
-				Integer.parseInt(date[1]), Integer.parseInt(date[0]));
-	}
-
-	/**
-	 * Parses a String containing the date and time to an object. It takes care of
-	 * the formatting.
-	 *
-	 * @param datetime
-	 * @return
-	 */
-	public static DateTime parseUnformattedString(String datetime) throws ParseException {
-		String tmp[] = dateformat.format(datetime).split(" ");
-
-		String time[] = tmp[0].split(":");
-		String date[] = tmp[1].split("-");
-
-		return new DateTime(Integer.parseInt(time[1]), Integer.parseInt(time[0]), Integer.parseInt(date[2]),
-				Integer.parseInt(date[1]), Integer.parseInt(date[0]));
+		return DateTime.fromMillis(d.getTime());
 	}
 
 	/**
@@ -122,11 +110,12 @@ public class DateTime extends Date {
 	}
 
 	/**
-	 * Uses the {@link #toLocalDateTime()} function combined with the {@link LocalDateTime#toEpochSecond(ZoneOffset)} (assumes UTC+1) * 1000L
+	 * Uses the {@link #toLocalDateTime()} function combined with the
+	 * {@link LocalDateTime#toEpochSecond(ZoneOffset)} (assumes UTC+1) * 1000L
 	 */
 	@Override
 	public long toMillis() {
-		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1))*1000l;
+		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1)) * 1000l;
 	}
 
 	/**
@@ -138,7 +127,7 @@ public class DateTime extends Date {
 	 * @return
 	 */
 	public static DateTime fromMillis(long millis) {
-		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis/1000L, 0, ZoneOffset.ofHours(1));
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(1));
 
 		return new DateTime(ldt.getMinute(), ldt.getHour(), ldt.getDayOfMonth(), ldt.getMonthValue(), ldt.getYear());
 	}
@@ -188,12 +177,37 @@ public class DateTime extends Date {
 	}
 
 	/**
-	 * The returned string is formatted according to Spanish standards (dd/MM/yy HH:MM)
+	 * Same as {@link Date#daysSince(Date)}, but with minutes
+	 *
+	 * @param d
+	 * @return
+	 */
+	public static int minutesSince(DateTime d) {
+		return minutesSince(d, DateTime.now());
+	}
+
+	/**
+	 * Same as {@link Date#daysSince(Date, Date)}, but with minutes
+	 *
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
+	public static int minutesSince(DateTime date1, DateTime date2) {
+		long difference = date1.toMillis() - date2.toMillis();
+		int hBetween = Math.round(difference / (1000.0f * 60.0f));
+
+		return hBetween;
+	}
+
+	/**
+	 * The returned string is formatted according to Spanish standards (dd/MM/yy
+	 * HH:MM)
 	 */
 	@Override
 	public String toString() {
-		String h = (this.hour<10?"0":"") + this.hour;
-		String m = (this.minute<10?"0":"") + this.minute;
+		String h = (this.hour < 10 ? "0" : "") + this.hour;
+		String m = (this.minute < 10 ? "0" : "") + this.minute;
 		return this.day + "/" + this.month + "/" + this.year + " " + h + ":" + m;
 	}
 

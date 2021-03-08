@@ -86,11 +86,18 @@ public class Enrollment {
 		List<Enrollment> enrollments = new ArrayList<>();
 
 		while (rs.next()) {
+			DateTime d;
+			try {
+				d = DateTime.parseString(rs.getString("timeEn"));
+			} catch (ParseException e) {
+				d = DateTime.fromMillis(rs.getLong("timeEn"));
+			}
+
 			Enrollment e = new Enrollment(
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					DateTime.fromMillis(rs.getLong("timeEn"))); // TODO: Fix parse
+					d); // TODO: Fix parse
 
 			enrollments.add(e);
 		}
@@ -119,11 +126,18 @@ public class Enrollment {
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
 
+		DateTime d;
+		try {
+			d = DateTime.parseString(rs.getString("timeEn"));
+		} catch (ParseException e) {
+			d = DateTime.fromMillis(rs.getLong("timeEn"));
+		}
+
 		Enrollment e = new Enrollment(
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					DateTime.fromMillis(rs.getLong("timeEn"))); // TODO: Fix parse
+					d); // TODO: Fix parse
 
 		// Very important to always close all the objects related to the database
 		rs.close();
