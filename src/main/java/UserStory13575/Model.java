@@ -44,60 +44,93 @@ import UserStory13575.Data;
 public class Model {
 
 	private Database db = new Database();
+	private Data[] data;
 
-	private List<Data> payments;
+	public void initModel() throws SQLException, ParseException {
+		data = initData();
+	}
 
-	/**
-	 * Gets the list of active races in object form for a given registration date.
-	 * 
-	 * @throws SQLException
-	 * @throws ParseException 
-	 */
+	public Data getData(int i) {
+		return this.data[i];
+	}
 
-	/*
-	 * public void setFormativeAction(FormativeAction fA) throws SQLException {
-	 * String sql= "";
-	 * 
-	 * Connection conn = db.getConnection(); PreparedStatement p; }
-	 */
+	public Data[] getAllData() {
+		return this.data;
+	}
 
-	public List<Data> getActivePayments() throws SQLException, ParseException {
-
-		List<Payment> pendingpayments = new ArrayList<Payment>();
+	private Data[] initData() throws SQLException, ParseException {
 		String sql = "SELECT DISTINCT Payment.* FROM Payment "
 				+ "INNER JOIN  Enrollment  on  Enrollment.ID_fa=Payment.ID_fa "
 				+ "INNER JOIN FormativeAction on FormativeAction.ID_fa=Enrollment.ID_fa "
-				+ "WHERE  FormativeAction.status = 'active'; ";//AND Payment.confirmed = 0;
+				+ "WHERE  FormativeAction.status = 'active'; ";// AND Payment.confirmed = 0;
 
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
-		pendingpayments  = Payment.get(sql, db);
+
+		List<Payment> pendingPayments = Payment.get(sql, db);
 		List<Data> data = new ArrayList<Data>();
 
-		for (Payment p : pendingpayments) {
+		for (Payment p : pendingPayments) {
 			Data d = new Data();
 
-			d.payment=p;
+			d.payment = p;
 			d.formativeAction = FormativeAction.getOne(queryFa + p.getID_fa() + ";", db);
 			d.professional = Professional.getOne(queryProf + p.getID_professional() + ";", db);
-			d.enrollment= Enrollment.getOne(queryEnroll(d.formativeAction.getID(), d.professional.getID()), db);
+			d.enrollment = Enrollment.getOne(queryEnroll(d.formativeAction.getID(), d.professional.getID()), db);
 			data.add(d);
 		}
-		return data; //TODO
-		
+
+		Data data2[] = new Data[data.size()];
+		return data.toArray(data2);
 	}
 
-	public void initModel() throws SQLException, ParseException {
-		payments = getActivePayments();
-
-	}
-
-	public Data getPayment(int index) {
-		return payments.get(index);
-	}
-	
 	private String queryEnroll(int ID_fa, int ID_prof) {
-		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" +ID_prof;
-
+		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
 	}
+
+	
+
+	
+
+	/*
+	 * private List<Data> payments;
+	 * 
+	 * 
+	 * public List<Data> getActivePayments() throws SQLException, ParseException {
+	 * 
+	 * List<Payment> pendingpayments = new ArrayList<Payment>(); String sql =
+	 * "SELECT DISTINCT Payment.* FROM Payment " +
+	 * "INNER JOIN  Enrollment  on  Enrollment.ID_fa=Payment.ID_fa " +
+	 * "INNER JOIN FormativeAction on FormativeAction.ID_fa=Enrollment.ID_fa " +
+	 * "WHERE  FormativeAction.status = 'active'; ";//AND Payment.confirmed = 0;
+	 * 
+	 * String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa="; String
+	 * queryProf = "SELECT * FROM Professional WHERE ID_professional=";
+	 * pendingpayments = Payment.get(sql, db); List<Data> data = new
+	 * ArrayList<Data>();
+	 * 
+	 * for (Payment p : pendingpayments) { Data d = new Data();
+	 * 
+	 * d.payment=p; d.formativeAction = FormativeAction.getOne(queryFa +
+	 * p.getID_fa() + ";", db); d.professional = Professional.getOne(queryProf +
+	 * p.getID_professional() + ";", db); d.enrollment=
+	 * Enrollment.getOne(queryEnroll(d.formativeAction.getID(),
+	 * d.professional.getID()), db); data.add(d); } return data; //TODO
+	 * 
+	 * }
+	 * 
+	 * public void initModel() throws SQLException, ParseException { payments =
+	 * getActivePayments();
+	 * 
+	 * }
+	 * 
+	 * public Data getPayment(int index) { return payments.get(index); }
+	 * 
+	 * private String queryEnroll(int ID_fa, int ID_prof) { return
+	 * "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional="
+	 * +ID_prof;
+	 * 
+	 * }
+	 */
+
 }

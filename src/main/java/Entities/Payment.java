@@ -16,11 +16,11 @@ import PL53.SI2020_PL53.DateTime;
 public class Payment {
 	private int ID = -1, ID_fa, ID_professional;
 	private float amount;
-	private Date payDate;
+	private DateTime payDate;
 	private String sender, receiver, fiscalNumber, address;
 	private boolean confirmed;
 
-	public Payment(int ID_fa, int ID_professional, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
+	public Payment(int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
 			String address, boolean confirmed) {
 		this.ID_fa = ID_fa;
 		this.ID_professional = ID_professional;
@@ -47,7 +47,7 @@ public class Payment {
 	 * @param address
 	 * @param confirmed
 	 */
-	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
+	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
 			String address, boolean confirmed) {
 		this.ID = ID_payment;
 		this.ID_fa = ID_fa;
@@ -239,11 +239,11 @@ public class Payment {
 		this.amount = amount;
 	}
 
-	public Date getPayDate() {
+	public DateTime getPayDate() {
 		return payDate;
 	}
 
-	public void setPayDate(Date payDate) {
+	public void setPayDate(DateTime payDate) {
 		this.payDate = payDate;
 	}
 

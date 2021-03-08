@@ -1,44 +1,35 @@
 package UserStory13575;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Entities.FormativeAction;
-import Entities.Payment;
+
 import PL53.SI2020_PL53.DateTime;
 
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Window;
 
-import javax.swing.DefaultListModel;
+
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.JSpinner;
-import javax.swing.JSeparator;
-import javax.swing.JComboBox;
-import javax.swing.JSplitPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.JList;
+
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-import javax.swing.BoxLayout;
-import javax.swing.JTextField;
+
 import javax.swing.JTextPane;
-import javax.swing.table.DefaultTableModel;
-import java.awt.Color;
-import javax.swing.AbstractListModel;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
+
+import javax.swing.table.TableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+
 
 
 public class View extends JFrame {
@@ -61,12 +52,11 @@ public class View extends JFrame {
 	private JTextPane dateTextPane;
 	private JButton confirmButton;
 	private JTextPane amountPaidTextPane;
-	private JList<String> list;
-	private JScrollPane scrollPane_1;
+	private JTable table;
+	private JScrollPane scrollPane;
 	
 	public View() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 485, 581);
+		setBounds(100, 100, 739, 581);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -76,7 +66,7 @@ public class View extends JFrame {
 		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel.setBounds(88, 29, 254, 20);
+		lblNewLabel.setBounds(225, 28, 254, 20);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Pending Payments");
@@ -96,30 +86,30 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel_4 = new JLabel("Date");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_4.setBounds(34, 406, 45, 13);
+		lblNewLabel_4.setBounds(334, 359, 45, 13);
 		contentPane.add(lblNewLabel_4);
 		
 		dateTextPane = new JTextPane();
-		dateTextPane.setBounds(147, 406, 99, 19);
+		dateTextPane.setBounds(413, 353, 200, 19);
 		contentPane.add(dateTextPane);
 		
 		 confirmButton = new JButton("Confirm");
+		
 		 
 		 
-		confirmButton.setBounds(157, 469, 149, 21);
+		confirmButton.setBounds(266, 438, 149, 21);
 		contentPane.add(confirmButton);
 		
 		amountPaidTextPane = new JTextPane();
 		amountPaidTextPane.setBounds(147, 353, 99, 19);
 		contentPane.add(amountPaidTextPane);
-		 
-		 scrollPane_1 = new JScrollPane();
-		 scrollPane_1.setBounds(34, 92, 407, 205);
-		 contentPane.add(scrollPane_1);
-		 
-		 list = new JList();
-		 scrollPane_1.setViewportView(list);
-		 list.setBackground(Color.WHITE);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 92, 690, 224);
+		contentPane.add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
 	}
 
 	public Window getFrame() {
@@ -148,7 +138,7 @@ public class View extends JFrame {
 		this.dateTextPane.setText(datetime.toString());
 	}
 	
-	//TODO complete things for the list
+/*	//TODO complete things for the list
 	public void setList(List<Data> list2) {
 DefaultListModel<String> listModel = new DefaultListModel<String>();        
         
@@ -159,6 +149,17 @@ DefaultListModel<String> listModel = new DefaultListModel<String>();
 	}
 	public JList<String> getList() {
 		return this.list;
+	}*/
+	
+	public JTable getTable() {
+		return table;
 	}
 	
+	public void setTable(TableModel tm) {
+		this.table.setModel(tm);
+	}
+	
+	public int getSelected() {
+		return this.table.getSelectedRow();
+	}
 }
