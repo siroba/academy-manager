@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Enrollment(
     CONSTRAINT PK_Enrollment PRIMARY KEY ( ID_fa, ID_professional ),
     CONSTRAINT FK_Enrollment_Professional FOREIGN KEY ( ID_professional ) REFERENCES Professional ( ID_professional ),
     CONSTRAINT FK_FormativeAction_Enrollment FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa ),
-    CHECK ( status IN('received','confirmed','cancelled') )
+    CHECK ( status IN('RECIEVED','CONFIRMED','CANCELLED') )
 );
 
 DROP TABLE FormativeAction;
@@ -26,10 +26,8 @@ CREATE TABLE IF NOT EXISTS FormativeAction(
     status          text NOT NULL,
     enrollmentStart datetime NOT NULL,
     enrollmentEnd   datetime NOT NULL,
-    ID_invoice      integer,
-    CONSTRAINT FK_142 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice ( ID_invoice ),
     CHECK ( duration >0 ),
-    CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('active', 'executed', 'cancelled') )
+    CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('ACTIVE', 'EXECUTED', 'CANCELLED') )
 );
 
 DROP TABLE Payment;
@@ -46,6 +44,7 @@ CREATE TABLE IF NOT EXISTS Payment(
     ID_professional integer NOT NULL,
     CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
 );
+
 
 DROP TABLE Professional;
 CREATE TABLE IF NOT EXISTS Professional(

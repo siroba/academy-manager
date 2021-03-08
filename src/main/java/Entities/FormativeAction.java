@@ -102,6 +102,7 @@ public class FormativeAction {
 	 * @param enrollmentEnd
 	 * @param faStart
 	 */
+
 	public FormativeAction(int ID_fa, String name, float duration, String location, float remuneration, float fee, int totalPlaces,
 			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd, DateTime faStart) {
@@ -357,21 +358,6 @@ public class FormativeAction {
 
 		return fa;
 	}
-	public float refund() {
-		return this.refundPercentage() * this.getFee();
-	}
-
-	public float refundPercentage() {
-		int days = Date.daysSince(enrollmentEnd);
-
-		if (days > 7)
-			return 1f;
-		else if (days <= 6 && days >= 3)
-			return 0.5f;
-		else
-			return 0f;
-	}
-
 
 	public float refund() {
 		return this.refundPercentage()*this.getFee();
