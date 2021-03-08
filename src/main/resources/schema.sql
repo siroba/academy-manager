@@ -1,100 +1,64 @@
-drop table TrainingManager;
-drop table Aux_Enrollment_Payment;
-drop table Professional;
-drop table Payment;
-drop table Enrollment;
-drop table Teacher;
-drop table Seminar;
-drop table Course;
-drop table FormativeAction;
-
-
-CREATE TABLE FormativeAction (
- ID_fa              integer NOT NULL,
- ID_teacher         integer NULL,
- nameFa             text NOT NULL,
- dateFA             date NOT NULL,
- duration           real NOT NULL,
- location           text NOT NULL,
- renumeration       real NOT NULL,
- fee                real NOT NULL,
- status		    text NOT NULL,
- placesAvailable    integer NOT NULL,
- objectives	    text NOT NULL,
- mainContent        text NULL,
- ID_trainingManager integer NOT NULL,
- CONSTRAINT PK_FormativeAction PRIMARY KEY ( ID_fa ),
- CONSTRAINT FK_FORMATIVEACTION_TEACHER FOREIGN KEY ( ID_teacher ) REFERENCES Teacher ( ID_teacher ),
- CONSTRAINT FK_101 FOREIGN KEY ( ID_trainingManager ) REFERENCES TrainingManager ( ID_trainingManager ),
- CHECK ( duration >0 )
+DROP TABLE Enrollment;
+CREATE TABLE IF NOT EXISTS Enrollment(
+    ID_fa           integer NOT NULL,
+    ID_professional integer NOT NULL,
+    status          text NOT NULL,
+    timeEn          datetime NOT NULL,
+    CONSTRAINT PK_Enrollment PRIMARY KEY ( ID_fa, ID_professional ),
+    CONSTRAINT FK_Enrollment_Professional FOREIGN KEY ( ID_professional ) REFERENCES Professional ( ID_professional ),
+    CONSTRAINT FK_FormativeAction_Enrollment FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa ),
+    CHECK ( status IN('received','confirmed','cancelled') )
 );
 
-CREATE TABLE Course (
- ID_fa integer NOT NULL,
- CONSTRAINT PK_Course PRIMARY KEY ( ID_fa )
+DROP TABLE FormativeAction;
+CREATE TABLE IF NOT EXISTS FormativeAction(
+    ID_fa           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    nameFa          text NOT NULL,
+    dateFA          datetime NOT NULL,
+    duration        real NOT NULL,
+    location        text NOT NULL,
+    remuneration    real NOT NULL,
+    fee             real NOT NULL,
+    totalPlaces     integer NOT NULL,
+    objectives       text NOT NULL,
+    mainContent     text NULL,
+    teacherName     text NULL,
+    status          text NOT NULL,
+    enrollmentStart datetime NOT NULL,
+    enrollmentEnd   datetime NOT NULL,
+    ID_invoice      integer,
+    CONSTRAINT FK_142 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice ( ID_invoice ),
+    CHECK ( duration >0 ),
+    CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('active', 'executed', 'cancelled') )
 );
 
-CREATE TABLE Seminar (
- ID_fa integer NOT NULL,
- CONSTRAINT PK_Seminar PRIMARY KEY ( ID_fa )
+DROP TABLE Payment;
+CREATE TABLE IF NOT EXISTS Payment(
+    ID_payment      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    amount          real NOT NULL,
+    datePay         datetime NOT NULL,
+    sender          text NOT NULL,
+    receiver        text NOT NULL,
+    address         text NOT NULL,
+    fiscalNumber    text NOT NULL,
+    confirmed       boolean NOT NULL,
+    ID_fa           integer NOT NULL,
+    ID_professional integer NOT NULL,
+    CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
 );
 
-CREATE TABLE Teacher (
- ID_teacher integer NOT NULL,
- salary     real NOT NULL,
- name       text NOT NULL,
- CONSTRAINT PK_Teacher PRIMARY KEY ( ID_teacher )
+DROP TABLE Professional;
+CREATE TABLE IF NOT EXISTS Professional(
+    ID_professional INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name            text NOT NULL,
+    surname         text NOT NULL,
+    phone           text NOT NULL,
+    email           text NOT NULL
 );
 
-CREATE TABLE Enrollment (
- ID_fa           integer NOT NULL,
- ID_professional integer NOT NULL,
- status          text NOT NULL,
- timeEn          datetime NOT NULL,
- name            text NOT NULL,
- CONSTRAINT PK_Enrollment PRIMARY KEY ( ID_fa, ID_professional ),
- CONSTRAINT AK1_Enrollment UNIQUE ( ID_fa ),
- CONSTRAINT AK2_Enrollment UNIQUE ( ID_professional ),
- CONSTRAINT FK_Enrollment_Professional FOREIGN KEY ( ID_professional ) REFERENCES Professional ( ID_professional ),
- CONSTRAINT FK_FormativeAction_Enrollment FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa ),
- CHECK ( status IN('received','confirmed','cancelled') )
+DROP TABLE Teacher;
+CREATE TABLE IF NOT EXISTS Teacher(
+    ID_teacher INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    salary     real NOT NULL,
+    name       text NOT NULL
 );
-
-CREATE TABLE Payment (
- ID_payment   integer NOT NULL,
- amount       real NOT NULL,
- datePay      date NOT NULL,
- receiver     text NOT NULL,
- sender       text NOT NULL,
- ID_invoice   text NOT NULL,
- fiscalNumber text NOT NULL,
- address      text NOT NULL,
- paid         boolean NOT NULL,
- CONSTRAINT PK_Payment PRIMARY KEY ( ID_payment )
-);
-
-CREATE TABLE Professional (
- ID_professional integer NOT NULL,
- name            text NOT NULL,
- surname         text NOT NULL,
- phone           text NOT NULL,
- email           text NOT NULL,
- CONSTRAINT PK_Professional PRIMARY KEY ( ID_professional )
-);
-
-CREATE TABLE Aux_Enrollment_Payment (
- ID_payment      integer NOT NULL,
- ID_fa           integer NOT NULL,
- ID_professional integer NOT NULL,
- CONSTRAINT PK_Aux_Enrollment_Payment PRIMARY KEY ( ID_payment, ID_fa, ID_professional ),
- CONSTRAINT FK_91 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional ),
- CONSTRAINT FK_95 FOREIGN KEY ( ID_payment ) REFERENCES Payment ( ID_payment )
-);
-
-CREATE TABLE TrainingManager (
- ID_trainingManager integer NOT NULL,
- name               text NOT NULL,
- CONSTRAINT PK_TrainingManager PRIMARY KEY ( ID_trainingManager )
-);
-
-

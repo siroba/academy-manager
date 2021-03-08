@@ -1,5 +1,8 @@
 package UserStory13576;
 
+/**
+ * Helper class
+ */
 public class FormativeActionDetails {
 	private String objectives;
 	private String mainContents;

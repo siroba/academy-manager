@@ -5,59 +5,55 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import Entities.FormativeAction;
-import Entities.Teacher;
-import Entities.TrainingManager;
 import PL53.SI2020_PL53.Date;
 import Utils.UnexpectedException;
 
 public class Model {
 	
-	
-	// TODO add filter
 	/**
-	 * Gets the list formative actions in object form
+	 * Gets the list formative actions in object formquery.append("SELECT * FROM FormativeAction where status='" + filterStatus + "' and dateFa between '" + filterDateBegin + "' and '" + filterDateEnd + "';");
+
 	 */
-	public List<FormativeAction> getListFormativeActions() {
+	public List<FormativeActionList> getListFormativeAction(String filterStatus, String filterDateBegin, String filterDateEnd) {
 		try {
 			Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); 
-			Statement stmt=cn.createStatement(); 
 			StringBuilder query = new StringBuilder();
-			query.append("SELECT * FROM FormativeAction;");
-			ResultSet rs=stmt.executeQuery(query.toString());
+			query.append("SELECT fa.objectives, fa.mainContent, fa.location, t.name "); 
+			query.append("from FormativeAction fa, Teacher t ");
+			query.append("where fa.nameFa=? and fa.ID_teacher=t.ID_teacher;");
+			PreparedStatement ps = cn.prepareStatement("SELECT * FROM FormativeAction where status=? and date(dateFa) BETWEEN ? and ?;");
+			ps.setString(1, filterStatus);
+			ps.setString(2, filterDateBegin);
+			ps.setString(3, filterDateEnd);
+			ResultSet rs=ps.executeQuery();
 			
-			List<FormativeAction> formativeActions = new ArrayList<>();
 			
-			while(rs.next()) {
-				FormativeAction fA = new FormativeAction(
-						rs.getString("nameFa"), 		// name of the action
-						rs.getString("objectives"), 	// objectives
-						rs.getString("mainContent"),	//main content
-						new Teacher(1, "teacher1"), 	//rs.getString("teacher"), 
-						new TrainingManager("trainer1"),//rs.getString("manager"), 
-						rs.getInt("renumeration"),		//renumeration
-						rs.getString("location"),  		//location
-						Date.parseString("2021-10-10"),//Date.parse(rs.getDate("dateFa")),	//date of action
-						rs.getString("status"), 		//status
-						0, 								//number of hours
-						0, 								//slots
-						Date.random(), 					//Enrollment start
-						Date.random());					//Enrollment end
-				formativeActions.add(fA);
+			List<FormativeActionList> formativeActionList = new ArrayList<>();
+			
+			while (rs.next()) {
+				FormativeActionList fs = new FormativeActionList(
+						rs.getString("nameFa"), 
+						rs.getString("status"), 
+						rs.getString("enrollmentStart"), 
+						rs.getString("enrollmentEnd"), 
+						rs.getInt("totalPlaces"), 
+						rs.getInt("totalPlaces"), 
+						new Date(Date.parse(rs.getDate("dateFA"))));
+				formativeActionList.add(fs);
 			}
 			rs.close();
-			stmt.close();
+			ps.close();
 			cn.close();
-			return formativeActions;
+			return formativeActionList;
 		}
 		catch (SQLException e) {
 			throw new UnexpectedException(e);
 		}
 	}
+
 	
 	/**
 	 * Method to get detailed information about a course. 
@@ -69,11 +65,10 @@ public class Model {
 	public FormativeActionDetails getFormativeActionDetails(String lastSelectedKey) {
 		try {
 			Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); 
-			Statement stmt=cn.createStatement(); 
 			StringBuilder query = new StringBuilder();
-			query.append("SELECT fa.objectives, fa.mainContent, fa.location, t.name ");
-			query.append("from FormativeAction fa, Teacher t ");
-			query.append("where fa.nameFa=? and fa.ID_teacher=t.ID_teacher;");
+			query.append("SELECT objectives, mainContent, location, teacherName ");
+			query.append("from FormativeAction ");
+			query.append("where nameFa=?;");
 			PreparedStatement ps = cn.prepareStatement(query.toString());
 			ps.setString(1, lastSelectedKey);
 			ResultSet rs=ps.executeQuery();
@@ -86,11 +81,11 @@ public class Model {
 					rs.getString("objectives"),
 					rs.getString("mainContent"), 
 					rs.getString("location"), 
-					rs.getString("name"));
+					rs.getString("teacherName"));
 			formativeActionDetails.add(fs);
 			
 			rs.close();
-			stmt.close();
+			ps.close();
 			cn.close();
 			return fs;
 		}
