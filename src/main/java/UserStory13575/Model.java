@@ -62,7 +62,7 @@ public class Model {
 		String sql = "SELECT DISTINCT Payment.* FROM Payment "
 				+ "INNER JOIN  Enrollment  on  Enrollment.ID_fa=Payment.ID_fa "
 				+ "INNER JOIN FormativeAction on FormativeAction.ID_fa=Enrollment.ID_fa "
-				+ "WHERE  FormativeAction.status = 'active'; ";// AND Payment.confirmed = 0;
+				+ "WHERE   Enrollment.status='RECEIVED' AND FormativeAction.status = 'ACTIVE' AND Payment.confirmed=0 ; ";
 
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
@@ -88,49 +88,10 @@ public class Model {
 		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
 	}
 
-	
-
-	
-
-	/*
-	 * private List<Data> payments;
-	 * 
-	 * 
-	 * public List<Data> getActivePayments() throws SQLException, ParseException {
-	 * 
-	 * List<Payment> pendingpayments = new ArrayList<Payment>(); String sql =
-	 * "SELECT DISTINCT Payment.* FROM Payment " +
-	 * "INNER JOIN  Enrollment  on  Enrollment.ID_fa=Payment.ID_fa " +
-	 * "INNER JOIN FormativeAction on FormativeAction.ID_fa=Enrollment.ID_fa " +
-	 * "WHERE  FormativeAction.status = 'active'; ";//AND Payment.confirmed = 0;
-	 * 
-	 * String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa="; String
-	 * queryProf = "SELECT * FROM Professional WHERE ID_professional=";
-	 * pendingpayments = Payment.get(sql, db); List<Data> data = new
-	 * ArrayList<Data>();
-	 * 
-	 * for (Payment p : pendingpayments) { Data d = new Data();
-	 * 
-	 * d.payment=p; d.formativeAction = FormativeAction.getOne(queryFa +
-	 * p.getID_fa() + ";", db); d.professional = Professional.getOne(queryProf +
-	 * p.getID_professional() + ";", db); d.enrollment=
-	 * Enrollment.getOne(queryEnroll(d.formativeAction.getID(),
-	 * d.professional.getID()), db); data.add(d); } return data; //TODO
-	 * 
-	 * }
-	 * 
-	 * public void initModel() throws SQLException, ParseException { payments =
-	 * getActivePayments();
-	 * 
-	 * }
-	 * 
-	 * public Data getPayment(int index) { return payments.get(index); }
-	 * 
-	 * private String queryEnroll(int ID_fa, int ID_prof) { return
-	 * "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional="
-	 * +ID_prof;
-	 * 
-	 * }
-	 */
-
+	void updateStatus(int id_pay ,int id_fa, int id_professional) {
+		String query = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?"; 
+		String quer= "UPDATE Payment SET confirmed= true WHERE ID_payment=? "; 
+		db.executeUpdateQuery(query, id_fa, id_professional);
+		db.executeUpdate(quer, id_pay);
+	}
 }

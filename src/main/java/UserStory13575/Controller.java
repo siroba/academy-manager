@@ -26,6 +26,7 @@ public class Controller {
 	private View view;
 	private String lastSelectedKey = ""; // remembers the last selected row to restore it when changing the race table
 	private Data selectedRow;
+	
 
 	public Controller() {
 		this.model = new Model();
@@ -52,30 +53,14 @@ public class Controller {
 	 * display popup windows when a problem or exception occurs. popup windows when
 	 * a problem or controlled exception occurs.
 	 */
-	/*
-	 * public void initController() {
-	 * 
-	 * view.getConfirmButton().addActionListener(new ActionListener() { public void
-	 * actionPerformed(ActionEvent e) {
-	 * 
-	 * } });
-	 * 
-	 * view.getList().addListSelectionListener(new ListSelectionListener() { public
-	 * void valueChanged(ListSelectionEvent e) { if (!e.getValueIsAdjusting()) {
-	 * Data p = model.getPayment(view.getList().getSelectedIndex());
-	 * System.out.println(p.payment.getReceiver()); } }
-	 * 
-	 * });
-	 * 
-	 * }
-	 */
 
 	public void initController() {
 
 		view.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				UserStory13575.Data d = model.getData(view.getTable().getSelectedRowCount());
+				
+				UserStory13575.Data d = model.getData(view.getSelected());
 				selectedRow = d;
 				view.getAmountPaidTextPane().setText(Float.toString(d.payment.getAmount()));
 				view.getDateTextPane().setText(d.payment.getPayDate().toString());
@@ -84,14 +69,33 @@ public class Controller {
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
 			public void actionPerformed(ActionEvent e) {
-				if (selectedRow == null || selectedRow.payment.getAmount() != selectedRow.formativeAction.getFee()
-						|| (DateTime.minutesSince(selectedRow.enrollment.getTimeEn(),
-								selectedRow.payment.getPayDate()) > 2880)) {
+				
+			
+		
+				if (selectedRow == null) {
+					JOptionPane.showMessageDialog(null, "You have to select one payment");
+				} else if (selectedRow.payment.getAmount() != selectedRow.formativeAction.getFee()) {
+					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
+					
+				} else if (Math.abs(DateTime.minutesSince(selectedRow.enrollment.getTimeEn(),
+						selectedRow.payment.getPayDate())) > 2880) {
 					// 2880 -> 48 * 60 conversion from 48 h to minutes
-					JOptionPane.showMessageDialog(null, "ERROR");
+					JOptionPane.showMessageDialog(null,
+							"The payment must be done with a margin of 48 hours before the enrollmet");
+				}
 
-				} else {
-					selectedRow.payment.setConfirmed(true);
+				else {
+					model.updateStatus(selectedRow.payment.getID(), selectedRow.enrollment.getID_fa(), selectedRow.enrollment.getID_professional());
+					try {
+						model.initModel();
+						view.setTable(getTableModel(model.getAllData()));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 
 			}

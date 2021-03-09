@@ -56,7 +56,7 @@ public class View extends JFrame {
 	private JScrollPane scrollPane;
 	
 	public View() {
-		setBounds(100, 100, 739, 581);
+		setBounds(100, 100, 822, 581);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -105,7 +105,7 @@ public class View extends JFrame {
 		contentPane.add(amountPaidTextPane);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 92, 690, 224);
+		scrollPane.setBounds(10, 92, 788, 224);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -138,19 +138,7 @@ public class View extends JFrame {
 		this.dateTextPane.setText(datetime.toString());
 	}
 	
-/*	//TODO complete things for the list
-	public void setList(List<Data> list2) {
-DefaultListModel<String> listModel = new DefaultListModel<String>();        
-        
-        for(Data pa: list2) 
-            listModel.addElement(pa.payment.getReceiver());
-        
-        this.list.setModel(listModel);
-	}
-	public JList<String> getList() {
-		return this.list;
-	}*/
-	
+
 	public JTable getTable() {
 		return table;
 	}
