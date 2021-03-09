@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Enrollment(
     CONSTRAINT PK_Enrollment PRIMARY KEY ( ID_fa, ID_professional ),
     CONSTRAINT FK_Enrollment_Professional FOREIGN KEY ( ID_professional ) REFERENCES Professional ( ID_professional ),
     CONSTRAINT FK_FormativeAction_Enrollment FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa ),
-    CHECK ( status IN('received','confirmed','cancelled') )
+    CHECK ( status IN('RECEIVED','CONFIRMED','CANCELLED') )
 );
 
 DROP TABLE FormativeAction;

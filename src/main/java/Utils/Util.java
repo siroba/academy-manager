@@ -14,7 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Utilidades varias con metodos generales de serializacion, conversion a csv y conversion de fechas
+ * Various utilities with general serialization methods, csv conversion and date conversion.
  */
 public class Util {
 	private Util() {
@@ -22,13 +22,13 @@ public class Util {
 	}
 
 	/**
-	 * Serializa una lista de objetos a formato json insertando saltos de linea entre cada elemento 
-	 * para facilitar la comparacion de resultados en las pruebas utilizando jackson-databind
-	 * (opcionalmente permite obtene una representacion similar a csv).
-	 * @param pojoList Lista de objetos a serializar
-	 * @param asArray si es true codifica los diferentes campos del objeto como un array 
-	 * y elimina comillas para facilitar la comparacion, si es false devuelve el json completo
-	 * @return el string que representa la lista serializada
+	 * Serialize a list of objects to json format by inserting line breaks between each element. 
+	 * to facilitate the comparison of test results using jackson-databind
+	 * (optionally allows to get a csv-like representation).
+	 * @param pojoList List of objects to serialize.
+	 * @param asArray if true encodes the different fields of the object as an array 
+	 * and removes quotes for easy comparison, if false returns the complete json.
+	 * @return the string representing the serialized list
 	 */
 	public static String serializeToJson(Class<?> pojoClass, List<?> pojoList, boolean asArray) {
 		try {
@@ -36,10 +36,10 @@ public class Util {
 			if (asArray) {
 		        mapper.configOverride(pojoClass).setFormat(JsonFormat.Value.forShape(JsonFormat.Shape.ARRAY));
 		        String value=mapper.writeValueAsString(pojoList);
-		    	return value.replace("],", "],\n").replace("\"", ""); //con saltos de linea y sin comillas
-				//otra alternativa es utilizar las clases especificas para csv que suministra Jackson (jackson-dataformat-csv)
+		    	return value.replace("],", "],\n").replace("\"", ""); //with line breaks and without quotes
+				//another alternative is to use the csv specific classes provided by Jackson (jackson-dataformat-csv)
 			} else {
-				return mapper.writeValueAsString(pojoList).replaceAll("},", "},\n"); //con saltos de linea
+				return mapper.writeValueAsString(pojoList).replaceAll("},", "},\n"); //with line breaks
 			}
 		} catch (JsonProcessingException e) {
 			throw new ApplicationException(e);
@@ -47,23 +47,23 @@ public class Util {
 	}
 	
 	/**
-	 * Convierte una lista de objetos a formato csv
-	 * @param pojoList Lista de objetos a serializar
-	 * @param fields campos de cada objeto a incluir en el csv
+	 * Convert a list of objects to csv format.
+	 * @param pojoList List of objects to serialize
+	 * @param fields fields of each object to be included in the csv
 	 */
 	public static String pojosToCsv(List<?> pojoList, String[] fields) {
 		return pojosToCsv(pojoList,fields,false,",","","","");
 	}
 	/**
-	 * Convierte una lista de objetos a formato csv con varios parametros para personalizar el aspecto
-	 * @param pojoList Lista de objetos a serializar
-	 * @param fields campos de cada objeto a incluir en el csv
-	 * @param headers si es true incluye una primera fila con las cabeceras
-	 * @param separator caracter que separa cada columna
-	 * @param begin caracter a incluir al principio de cada linea
-	 * @param end caracter a incluir al final de cada linea
-	 * @param nullAs Texto que se incluira cuando el valor es null
-	 * @return el string que representa la lista serializada en csv
+	 * Convert a list of objects to csv format with various parameters to customize the look and feel.
+	 * @param pojoList List of objects to serialize
+	 * @param fields fields of each object to be included in the csv
+	 * @param headers if true includes a first row with headers
+	 * @param separator character separating each column
+	 * @param begin character to include at the beginning of each line
+	 * @param end character to be included at the end of each line
+	 * @param nullAs Text to be included when the value is null
+	 * @return the string that represents the serialized list in csv
 	 */
 	public static String pojosToCsv(List<?> pojoList, String[] fields, boolean headers, String separator, String begin, String end, String nullAs) {
 		StringBuilder sb=new StringBuilder();
@@ -71,7 +71,7 @@ public class Util {
 			addPojoLineToCsv(sb,null,fields,separator,begin,end,nullAs);
 		for (int i=0; i<pojoList.size(); i++) {
 			try {
-				//utiliza Apache commons BeanUtils para obtener los atributos del objeto en un map
+				//use Apache commons BeanUtils to get the attributes of the object on a map
 				Map<String, String> objectAsMap = BeanUtils.describe(pojoList.get(i));
 				addPojoLineToCsv(sb,objectAsMap,fields,separator,begin,end,nullAs);
 			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -84,9 +84,9 @@ public class Util {
 		sb.append(begin);
 		for (int j=0; j<fields.length; j++) {
 			String value;
-			if (objectAsMap==null) //nombre del campo si no hay map
+			if (objectAsMap==null) //field name if no map
 				value = fields[j];
-			else //valor del campo o el especificado para null
+			else //value of the field or the one specified for null
 				value = objectAsMap.get(fields[j])==null ? nullAs : objectAsMap.get(fields[j]);
 			sb.append((j==0 ? "" : separator) + value);
 		}
@@ -94,14 +94,14 @@ public class Util {
 	}
 
 	/**
-	 * Convierte un array bidimensional de strings a csv (usado para comparaciones del ui con AssertJ Swing)
+	 * Convert a two-dimensional array of strings to csv (used for ui comparisons with AssertJ Swing)
 	 */
 	public static String arraysToCsv(String[][] arrays) {
 		return arraysToCsv(arrays,null,",","","");
 	}
 	/**
-	 * Convierte un array bidimensional de strings a csv permitiendo parametrizacion
-	 * (usado para comparaciones del ui con AssertJ Swing y JBehave)
+	 * Convert a two dimensional array of strings to csv allowing parameterization.
+	 * (used for ui comparisons with AssertJ Swing and JBehave)
 	 */
 	public static String arraysToCsv(String[][] arrays, String[] fields, String separator, String begin, String end) {
 		StringBuilder sb=new StringBuilder();
@@ -120,17 +120,17 @@ public class Util {
 	}
 	
 	/** 
-	 * Convierte fecha repesentada como un string iso a fecha java (para conversion de entradas de tipo fecha)
+	 * Convert date repesented as an iso string to java date (for conversion of date type entries)
 	 */
 	public static Date isoStringToDate(String isoDateString) {
 		try {
 		return new SimpleDateFormat("yyyy-MM-dd").parse(isoDateString);
 		} catch (ParseException e) {
-			throw new ApplicationException("Formato ISO incorrecto para fecha: "+isoDateString);
+			throw new ApplicationException("Incorrect ISO format for date: "+isoDateString);
 		}
 	}
 	/** 
-	 * Convierte fecha java a un string formato iso (para display o uso en sql) 
+	 * Convert java date to an iso format string (for display or sql use) 
 	 */
 	public static String dateToIsoString(Date javaDate) {
 		Format formatter = new SimpleDateFormat("yyyy-MM-dd");

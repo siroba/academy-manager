@@ -16,11 +16,7 @@ import PL53.SI2020_PL53.DateTime;
 import PL53.SI2020_PL53.Random;
 
 /**
- * Domain model data for the courses IMPORTANT: When using the Apache Commons
- * DbUtils components you must Strictly adhere to the Java capitalization
- * convention: - Capitalize all the words that form an identifier except the
- * first letter of method and variable names. - Do not use underscores Follow
- * also these same criteria in the names of tables and fields of the DB.
+ * 
  */
 public class FormativeAction {
 	private int ID = -1;
@@ -85,7 +81,7 @@ public class FormativeAction {
 		this.enrollmentEnd = enrollmentEnd;
 		this.faStart = faStart;
 	}
-	
+
 	/**
 	 * Constructor with ID
 	 * @param name
@@ -102,6 +98,7 @@ public class FormativeAction {
 	 * @param enrollmentEnd
 	 * @param faStart
 	 */
+
 	public FormativeAction(int ID_fa, String name, float duration, String location, float remuneration, float fee, int totalPlaces,
 			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd, DateTime faStart) {
@@ -196,7 +193,7 @@ public class FormativeAction {
 			pstmt.setString(8, this.getObjectives());
 			pstmt.setString(9, this.getMainContents());
 			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString().toLowerCase());
+			pstmt.setString(11, this.getStatus().toString());
 			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
 			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
@@ -217,7 +214,7 @@ public class FormativeAction {
 			pstmt.setString(8, this.getObjectives());
 			pstmt.setString(9, this.getMainContents());
 			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString().toLowerCase());
+			pstmt.setString(11, this.getStatus().toString());
 			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
 			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
@@ -239,7 +236,7 @@ public class FormativeAction {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<FormativeAction> get(String query, Database db) throws SQLException, ParseException {
+	public static List<FormativeAction> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -253,19 +250,19 @@ public class FormativeAction {
 
 			try {
 				dstart = DateTime.parseString(rs.getString("enrollmentStart"));
-			} catch (DateTimeParseException e) {
+			} catch (ParseException e) {
 				dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
 			}
 
 			try {
 				dend = DateTime.parseString(rs.getString("enrollmentEnd"));
-			} catch (DateTimeParseException e) {
+			} catch (ParseException e) {
 				dend = DateTime.fromMillis(rs.getLong("enrollmentEnd"));
 			}
 
 			try {
 				dfa = DateTime.parseString(rs.getString("dateFA"));
-			} catch (DateTimeParseException e) {
+			} catch (ParseException e) {
 				dfa = DateTime.fromMillis(rs.getLong("dateFA"));
 			}
 
@@ -318,22 +315,22 @@ public class FormativeAction {
 
 		try {
 			dstart = DateTime.parseString(rs.getString("enrollmentStart"));
-		} catch (DateTimeParseException e) {
+		} catch (ParseException e) {
 			dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
 		}
 
 		try {
 			dend = DateTime.parseString(rs.getString("enrollmentEnd"));
-		} catch (DateTimeParseException e) {
+		} catch (ParseException e) {
 			dend = DateTime.fromMillis(rs.getLong("enrollmentEnd"));
 		}
 
 		try {
 			dfa = DateTime.parseString(rs.getString("dateFA"));
-		} catch (DateTimeParseException e) {
+		} catch (ParseException e) {
 			dfa = DateTime.fromMillis(rs.getLong("dateFA"));
 		}
-    
+
 		FormativeAction fa = new FormativeAction(
 				rs.getInt("ID_fa"),
 				rs.getString("nameFa"),
@@ -357,21 +354,19 @@ public class FormativeAction {
 
 		return fa;
 	}
+
 	public float refund() {
-		return this.refundPercentage() * this.getFee();
-	}
-
-	public float refundPercentage() {
-		int days = Date.daysSince(enrollmentEnd);
-
-		if (days > 7)
-			return 1f;
-		else if (days <= 6 && days >= 3)
-			return 0.5f;
-		else
-			return 0f;
-	}
+        return this.refundPercentage()*this.getFee();
+    }
   
+    public float refundPercentage() {
+        int days = Date.daysSince(enrollmentEnd);
+
+        if(days > 7) return 1f;
+        else if (days <= 6 && days >=3) return 0.5f;
+        else return 0f;
+    }
+
 	public DateTime getFaStart() {
 		return faStart;
 	}

@@ -65,29 +65,23 @@ public class SwingMain {
 		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
 
 		JButton btnRegisterPayments = new JButton("Register Payments");
-//		btnRegisterPayments.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				UserStory13575.Controller controller = new UserStory13575.Controller();
-//				controller.initController();
-//			}
-//		});
-		JButton btnListFormativeActions = new JButton("List formative actions");
-		btnListFormativeActions.addActionListener(new ActionListener() {
+		btnRegisterPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13576.Controller controller13576=new UserStory13576.Controller(new UserStory13576.Model(), new UserStory13576.View());
-				controller13576.initController();
+				UserStory13575.Controller controller = new UserStory13575.Controller();
+				controller.initController();
 			}
 		});
+		JButton btnListFormativeActions = new JButton("List formative actions");
 
 		JButton btnStatusOfFormativeActions = new JButton("Status of formative actions");
 
 		JButton btnRegisterCancellations = new JButton("Register cancellations");
-//		btnRegisterCancellations.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				UserStory13578.Controller controller = new UserStory13578.Controller();
-//				controller.initController();
-//			}
-//		});
+		btnRegisterCancellations.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13578.Controller controller = new UserStory13578.Controller();
+				controller.initController();
+			}
+		});
 
 		JButton btnRecordPayments = new JButton("Record payments");
 
@@ -106,23 +100,23 @@ public class SwingMain {
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
 
 		JButton btnPlanFormativeAction = new JButton("Plan formative action");
-//		btnPlanFormativeAction.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				UserStory13573.Controller controller = new UserStory13573.Controller(new UserStory13573.Model(),
-//						new UserStory13573.View());
-//				controller.initController();
-//			}
-//		});
+		btnPlanFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13573.Controller controller = new UserStory13573.Controller(new UserStory13573.Model(),
+						new UserStory13573.View());
+				controller.initController();
+			}
+		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
 
-//		btnCheckFinancialBalance.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
-//						new UserStory13579.View());
-//				controller.initController();
-//			}
-//		});
+		btnCheckFinancialBalance.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
+						new UserStory13579.View());
+				controller.initController();
+			}
+		});
 
 		// Empty grid elements
 		JLabel labelEmpty1 = new JLabel("");

@@ -12,6 +12,7 @@
 **/.settings/
 **/.loadpath
 **/.recommenders
+**/doc/
 
 # External tool builders
 **/.externalToolBuilders/
@@ -139,3 +140,16 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+<<<<<<< HEAD
+# Data base 
+**/*.db
+=======
+<<<<<<< HEAD
+# Database 
+**/*.db
+=======
+# Data base 
+**/*.db
+>>>>>>> main
+>>>>>>> main

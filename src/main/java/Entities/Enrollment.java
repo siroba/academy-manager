@@ -9,8 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import BaseProject.Database;
-import Entities.FormativeAction.Status;
+import Utils.Database;
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
 import PL53.SI2020_PL53.Random;
@@ -22,11 +21,11 @@ public class Enrollment {
 
 	/**
 	 * Enrollment default constructor. The date and time are assumed to be today and now.
-	 * 
-	 * @param name
+	 *
+	 * @param ID_fa
+	 * @param ID_professional
 	 * @param status
-	 * @param formativeAction
-	 * @param professional
+	 * @param timeEn
 	 */
 	public Enrollment(int ID_fa, int ID_professional, Status status, DateTime timeEn) {
 		this.status = status;
@@ -34,31 +33,29 @@ public class Enrollment {
 		this.ID_fa = ID_fa;
 		this.ID_professional = ID_professional;
 	}
-	
+
 	/**
 	 * Enrollment random constructor
-	 * 
-	 * @param name
-	 * @param status
-	 * @param formativeAction
-	 * @param professional
 	 */
 	public Enrollment() {
 		Random r = new Random();
-		
+
 		this.status = Status.values()[r.nextInt(Status.values().length)];
 		this.timeEn = new DateTime(Date.random());
 		this.ID_fa = -1;
 		this.ID_professional = -1;
 	}
-	
+
+	/**
+	 * @return Name of the table in the database
+	 */
 	public static String tableName() {
 		return "Enrollment";
 	}
 
 	/**
 	 * Method to delete all the elements from the table
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	public static void deleteAll(Database db) throws SQLException {
@@ -70,10 +67,10 @@ public class Enrollment {
 		pstmt.executeUpdate();
 		conn.close();
 	}
-	
+
 	/**
 	 * Does the query you specify and returns a list with all the results
-	 * 
+	 *
 	 * @param query
 	 * @param db
 	 * @return
@@ -87,13 +84,20 @@ public class Enrollment {
 		ResultSet rs = st.executeQuery(query.toString());
 
 		List<Enrollment> enrollments = new ArrayList<>();
-		
+
 		while (rs.next()) {
+			DateTime d;
+			try {
+				d = DateTime.parseString(rs.getString("timeEn"));
+			} catch (ParseException e) {
+				d = DateTime.fromMillis(rs.getLong("timeEn"));
+			}
+
 			Enrollment e = new Enrollment(
-					rs.getInt("ID_fa"), 
+					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
-					Status.valueOf(rs.getString("status")),
-					new DateTime(Date.parse(rs.getTimestamp("dateEn")))); // TODO: Fix parse
+					Status.valueOf(rs.getString("status").toUpperCase()),
+					d); // TODO: Fix parse
 
 			enrollments.add(e);
 		}
@@ -105,10 +109,10 @@ public class Enrollment {
 
 		return enrollments;
 	}
-	
+
 	/**
 	 * Does the query you specify and returns the first result
-	 * 
+	 *
 	 * @param query
 	 * @param db
 	 * @return
@@ -121,12 +125,19 @@ public class Enrollment {
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
-		
+
+		DateTime d;
+		try {
+			d = DateTime.parseString(rs.getString("timeEn"));
+		} catch (ParseException e) {
+			d = DateTime.fromMillis(rs.getLong("timeEn"));
+		}
+
 		Enrollment e = new Enrollment(
-					rs.getInt("ID_fa"), 
+					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
-					Status.valueOf(rs.getString("status")),
-					new DateTime(Date.parse(rs.getTimestamp("dateEn")))); // TODO: Fix parse
+					Status.valueOf(rs.getString("status").toUpperCase()),
+					d); // TODO: Fix parse
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -138,7 +149,7 @@ public class Enrollment {
 
 	/**
 	 * Inserts all the given enrollments into the given database
-	 * 
+	 *
 	 * @param professionals
 	 * @param db
 	 * @throws SQLException
@@ -150,10 +161,10 @@ public class Enrollment {
 
 	/**
 	 * Inserts itself into the given database
-	 * 
+	 *
 	 * @param db
 	 * @throws SQLException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public void insert(Database db) throws SQLException, ParseException {
 		/*
@@ -162,7 +173,7 @@ public class Enrollment {
 		 * ID_student INTEGER NOT NULL UNIQUE,
 		 */
 
-		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_student, status, timeEn) VALUES(?,?,?,?)";
+		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_professional, status, timeEn) VALUES(?,?,?,?)";
 
 		Connection conn = db.getConnection(); // Obtain the connection
 		// Prepared Statement initialized with the INSERT statement
@@ -171,15 +182,15 @@ public class Enrollment {
 
 		pstmt.setInt(1, this.getID_fa());
 		pstmt.setInt(2, this.getID_professional());
-		pstmt.setString(3, this.getStatus().toString());
-		pstmt.setDate(4, this.getTimeEn().toSQL());
+		pstmt.setString(3, this.getStatus().toString().toUpperCase());
+		pstmt.setTimestamp(4, this.getTimeEn().toTimestamp());
 
 		pstmt.executeUpdate(); // statement execution
 
 		conn.close();
 	}
 
-	
+
 
 	public int getID_fa() {
 		return ID_fa;
