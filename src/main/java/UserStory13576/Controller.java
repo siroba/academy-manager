@@ -33,8 +33,6 @@ public class Controller {
 		view.getTableFormativeActions().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				//does not use mouseClicked because when setting single selection in the race table
-				//the user could drag the mouse over several rows and only the last one is of interest.
 				SwingUtil.exceptionWrapper(() -> showDetails());
 			}
 		});
@@ -52,7 +50,7 @@ public class Controller {
 					String start = formatter.format(startDate);
 					String end = formatter.format(endDate);
 					
-					getListFormativeActionList(view.getComboBoxStatusSelection().getSelectedItem().toString().toLowerCase(), start, end);
+					getListFormativeActionList(view.getComboBoxStatusSelection().getSelectedItem().toString(), start, end);
 				} catch (ParseException e1) {
 					JOptionPane.showMessageDialog(null, "Wrong pattern for date please use yyyy-MM-dd", "Error parsing date", JOptionPane.ERROR_MESSAGE);
 				}
@@ -68,7 +66,7 @@ public class Controller {
 	 */
 	public void initView() {
 		//Updates the view date
-		this.getListFormativeActionList("active", "2021-01-01", "2030-11-14");
+		this.getListFormativeActionList("ACTIVE", "2021-01-01", "2030-11-14");
 		
 		view.getFrame().setVisible(true); 
 	}

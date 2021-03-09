@@ -65,8 +65,6 @@ public class View {
 		tabFormativeActionsDetails.setDefaultEditor(Object.class, null); //readonly
 		tabFormativeActionsDetails.setBackground(SystemColor.control);
 		JScrollPane tableDetailPanel = new JScrollPane(tabFormativeActionsDetails);
-//		tableDetailPanel.setMinimumSize(new Dimension(350,150));
-//		tableDetailPanel.setPreferredSize(new Dimension(500,250));
 		frame.getContentPane().add(tableDetailPanel, "cell 0 3, grow");
 	}
 	

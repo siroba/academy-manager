@@ -11,25 +11,17 @@ import java.util.List;
 import PL53.SI2020_PL53.Date;
 import Utils.UnexpectedException;
 
-/**
- * btnListFormativeActions.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Controller controller13576=new Controller(new Model(), new View());
-				controller13576.initController();
-			}
-		});
- */
-
 public class Model {
 	
-	/**
-	 * Gets the list formative actions in object formquery.append("SELECT * FROM FormativeAction where status='" + filterStatus + "' and dateFa between '" + filterDateBegin + "' and '" + filterDateEnd + "';");
-
-	 */
 	public List<FormativeActionList> getListFormativeAction(String filterStatus, String filterDateBegin, String filterDateEnd) {
 		try {
 			Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); 
-			PreparedStatement ps = cn.prepareStatement("SELECT * FROM FormativeAction where status=? and date(dateFa) BETWEEN ? and ?;");
+			PreparedStatement ps = cn.prepareStatement("SELECT fa.nameFa, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces, (fa.totalPlaces - count(e.ID_fa)) as leftPlaces, fa.dateFA "
+					+ "FROM FormativeAction fa "
+					+ "LEFT JOIN Enrollment e ON e.ID_fa=fa.ID_fa "
+					+ "WHERE fa.status = ? "
+					+ "AND date(fa.dateFa) BETWEEN ? AND ?"
+					+ "GROUP BY fa.ID_fa;");
 			ps.setString(1, filterStatus);
 			ps.setString(2, filterDateBegin);
 			ps.setString(3, filterDateEnd);
@@ -45,7 +37,7 @@ public class Model {
 						rs.getString("enrollmentStart"), 
 						rs.getString("enrollmentEnd"), 
 						rs.getInt("totalPlaces"), 
-						rs.getInt("totalPlaces"), 
+						rs.getInt("leftPlaces"), 
 						new Date(Date.parse(rs.getDate("dateFA"))));
 				formativeActionList.add(fs);
 			}
@@ -62,10 +54,10 @@ public class Model {
 	
 	/**
 	 * Method to get detailed information about a course. 
-	 * Objectives of the formative action
-	 * Main Content of the formative action
-	 * Location of the formative action
-	 * Name of the teacher
+	 * 		Objectives of the formative action
+	 * 		Main Content of the formative action
+	 * 		Location of the formative action
+	 * 		Name of the teacher
 	 * */
 	public FormativeActionDetails getFormativeActionDetails(String lastSelectedKey) {
 		try {
