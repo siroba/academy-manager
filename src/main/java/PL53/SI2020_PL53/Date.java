@@ -9,12 +9,25 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Random;
 
+/**
+ * @author Marcos
+ * 
+ * Wrapper class for the {@link java.util.Date} and {@link java.sql.Date}
+ * classes.<br/>
+ * The {@link java.util.Date} has most of its functionality deprecated (that's
+ * why I don't use the {@link java.util.Date#Date(int, int, int)} in this class'
+ * constructors), but they would be useful for us. <br/>
+ * Also, the {@link java.sql.Date} class is mostly obsolete. Its only good use
+ * is to read/write from/to SQL databases. That's why the functions
+ * {@link #toSQL()} and {@link #from(java.time.Instant)} (in combination with
+ * {@link java.sql.Date#toInstant()} exist.
+ */
 public class Date extends java.util.Date {
 	// Auto-generated serial ID
 	private static final long serialVersionUID = -6185333649323730247L;
 
 	/**
-	 * {@link DateFormat} variable to format the dates 
+	 * {@link DateFormat} variable to format the dates
 	 */
 	public static final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -48,7 +61,8 @@ public class Date extends java.util.Date {
 	 * Generates a random date (unbounded)
 	 */
 	public Date() {
-		this.setRandom();
+		this.setRandom(); 
+		 
 	}
 
 	/**
@@ -102,7 +116,7 @@ public class Date extends java.util.Date {
 	/**
 	 * Generates a sql.Date object
 	 *
-	 * @return sql.Date
+	 * @return sql.Date 
 	 * @throws ParseException
 	 */
 	public java.sql.Date toSQL() throws ParseException {
@@ -155,7 +169,8 @@ public class Date extends java.util.Date {
 	}
 
 	/**
-	 * Assigns a {@link RandomDate#RandomDate(int, int))} to this object, with the given year constraints.
+	 * Assigns a {@link RandomDate#RandomDate(int, int))} to this object, with the
+	 * given year constraints.
 	 * 
 	 * @param min_year
 	 * @param max_year

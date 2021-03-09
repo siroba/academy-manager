@@ -6,21 +6,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import Utils.Database;
-import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
 
 public class Payment {
 	private int ID = -1, ID_fa, ID_professional;
 	private float amount;
-	private Date payDate;
+	private DateTime payDate;
 	private String sender, receiver, fiscalNumber, address;
 	private boolean confirmed;
 
-	public Payment(int ID_fa, int ID_professional, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
+	public Payment(int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
 			String address, boolean confirmed) {
 		this.ID_fa = ID_fa;
 		this.ID_professional = ID_professional;
@@ -47,7 +47,7 @@ public class Payment {
 	 * @param address
 	 * @param confirmed
 	 */
-	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
+	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
 			String address, boolean confirmed) {
 		this.ID = ID_payment;
 		this.ID_fa = ID_fa;
@@ -87,6 +87,7 @@ public class Payment {
 	 * @param db
 	 * @return
 	 * @throws SQLException
+	 * @throws ParseException 
 	 */
 	public static List<Payment> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
@@ -98,12 +99,19 @@ public class Payment {
 		List<Payment> enrollments = new ArrayList<>();
 
 		while (rs.next()) {
+			DateTime datepay;
+			try {
+				datepay = DateTime.parseString(rs.getString("datePay"));
+			} catch (ParseException e) {
+				datepay = DateTime.fromMillis(rs.getLong("datePay"));
+			}
+			
 			Payment e = new Payment(
 					rs.getInt("ID_payment"),
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					rs.getFloat("amount"),
-					new DateTime(Date.parse(rs.getDate("datePay"))),
+					datepay,
 					rs.getString("sender"),
 					rs.getString("receiver"),
 					rs.getString("fiscalNumber"),
@@ -128,6 +136,7 @@ public class Payment {
 	 * @param db
 	 * @return
 	 * @throws SQLException
+	 * @throws ParseException 
 	 */
 	public static Payment getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
@@ -137,12 +146,19 @@ public class Payment {
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
 
+		DateTime datepay;
+		try {
+			datepay = DateTime.parseString(rs.getString("datePay"));
+		} catch (ParseException e) {
+			datepay = DateTime.fromMillis(rs.getLong("datePay"));
+		}
+		
 		Payment e = new Payment(
 				rs.getInt("ID_payment"),
 				rs.getInt("ID_fa"),
 				rs.getInt("ID_professional"),
 				rs.getFloat("amount"),
-				new DateTime(Date.parse(rs.getDate("datePay"))),
+				datepay,
 				rs.getString("sender"),
 				rs.getString("receiver"),
 				rs.getString("fiscalNumber"),
@@ -176,7 +192,7 @@ public class Payment {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public void insert(Database db) throws SQLException, ParseException {
+	public void insert(Database db) throws SQLException {
 		/*
 		 * status TEXT NOT NULL CHECK( status IN('received','confirmed','cancelled')),
 		 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
@@ -196,7 +212,7 @@ public class Payment {
 			pstmt.setInt(2, this.getID_fa());
 			pstmt.setInt(3, this.getID_professional());
 			pstmt.setFloat(4, this.getAmount());
-			pstmt.setDate(5, this.getPayDate().toSQL());
+			pstmt.setTimestamp(5, this.getPayDate().toTimestamp());
 			pstmt.setString(6,this.getSender());
 			pstmt.setString(7, this.getReceiver());
 			pstmt.setString(8, this.getFiscalNumber());
@@ -211,7 +227,7 @@ public class Payment {
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setFloat(1, this.getAmount());
-			pstmt.setDate(2, this.getPayDate().toSQL());
+			pstmt.setTimestamp(2, this.getPayDate().toTimestamp());
 			pstmt.setString(3,this.getSender());
 			pstmt.setString(4, this.getReceiver());
 			pstmt.setString(5, this.getAddress());
@@ -239,11 +255,11 @@ public class Payment {
 		this.amount = amount;
 	}
 
-	public Date getPayDate() {
+	public DateTime getPayDate() {
 		return payDate;
 	}
 
-	public void setPayDate(Date payDate) {
+	public void setPayDate(DateTime payDate) {
 		this.payDate = payDate;
 	}
 
