@@ -41,9 +41,7 @@ public class Model {
 		return this.formativeActions;
 	}
 
-	public FormativeAction getFormativeAction(int n) {
-		return this.formativeActions.get(n);
-	}
+
 
 	public Professional createProfessional(String name, String surname, String phone, String email) throws SQLException, InvalidFieldValue {
 		if(!Professional.checkEmail(email)) throw new InvalidFieldValue("Email", email);

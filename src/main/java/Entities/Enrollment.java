@@ -182,7 +182,7 @@ public class Enrollment {
 
 		pstmt.setInt(1, this.getID_fa());
 		pstmt.setInt(2, this.getID_professional());
-		pstmt.setString(3, this.getStatus().toString().toLowerCase());
+		pstmt.setString(3, this.getStatus().toString().toUpperCase());
 		pstmt.setTimestamp(4, this.getTimeEn().toTimestamp());
 
 		pstmt.executeUpdate(); // statement execution

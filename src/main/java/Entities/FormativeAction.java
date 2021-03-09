@@ -81,7 +81,7 @@ public class FormativeAction {
 		this.enrollmentEnd = enrollmentEnd;
 		this.faStart = faStart;
 	}
-	
+
 	/**
 	 * Constructor with ID
 	 * @param name
@@ -330,7 +330,7 @@ public class FormativeAction {
 		} catch (ParseException e) {
 			dfa = DateTime.fromMillis(rs.getLong("dateFA"));
 		}
-    
+
 		FormativeAction fa = new FormativeAction(
 				rs.getInt("ID_fa"),
 				rs.getString("nameFa"),
@@ -355,18 +355,8 @@ public class FormativeAction {
 		return fa;
 	}
 
-	public float refund() {
-		return this.refundPercentage()*this.getFee();
-	}
-  
-	public float refundPercentage() {
-		int days = Date.daysSince(enrollmentEnd);
+	
 
-		if(days > 7) return 1f;
-		else if (days <= 6 && days >=3) return 0.5f;
-		else return 0f;
-	}
-  
 	public DateTime getFaStart() {
 		return faStart;
 	}

@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 /**
  * @author Marcos
- * 
+ *
  * Wrapper class for the {@link java.util.Date} and
  * {@link java.sql.Timestamp} classes.<br/>
  * The {@link java.util.Date} has most of its functionality deprecated
@@ -89,7 +89,7 @@ public class DateTime extends Date {
 	/**
 	 * Returns a {@link java.sql.Timestamp} object. The {@link Date#toSQL()} returns
 	 * a {@link java.sql.Date} object, which ignores the time
-	 * 
+	 *
 	 * @return Timestamp
 	 */
 	public java.sql.Timestamp toTimestamp() {
@@ -155,7 +155,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Uses {@link LocalDateTime#now()} to generate the values
-	 * 
+	 *
 	 * @return
 	 */
 	public static DateTime now() {
@@ -166,7 +166,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Same as {@link Date#daysSince(Date)}, but with minutes
-	 * 
+	 *
 	 * @param d
 	 * @return
 	 */
@@ -176,7 +176,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Same as {@link Date#daysSince(Date, Date)}, but with minutes
-	 * 
+	 *
 	 * @param date1
 	 * @param date2
 	 * @return
@@ -187,6 +187,7 @@ public class DateTime extends Date {
 
 		return hBetween;
 	}
+
 
 	/**
 	 * The returned string is formatted according to Spanish standards (dd/MM/yy
