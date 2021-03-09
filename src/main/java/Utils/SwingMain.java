@@ -72,6 +72,15 @@ public class SwingMain {
 			}
 		});
 		JButton btnListFormativeActions = new JButton("List formative actions");
+		btnListFormativeActions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UserStory13576.Controller controller = new UserStory13576.Controller(new UserStory13576.Model(), new UserStory13576.View());
+				controller.initController();
+				
+			}
+		});
 
 		JButton btnStatusOfFormativeActions = new JButton("Status of formative actions");
 

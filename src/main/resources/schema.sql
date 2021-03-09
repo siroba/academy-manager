@@ -14,7 +14,7 @@ DROP TABLE FormativeAction;
 CREATE TABLE IF NOT EXISTS FormativeAction(
     ID_fa           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     nameFa          text NOT NULL,
-    dateFA          datetime NOT NULL,
+    dateFA          timestamp NOT NULL,
     duration        real NOT NULL,
     location        text NOT NULL,
     remuneration    real NOT NULL,
@@ -26,10 +26,8 @@ CREATE TABLE IF NOT EXISTS FormativeAction(
     status          text NOT NULL,
     enrollmentStart datetime NOT NULL,
     enrollmentEnd   datetime NOT NULL,
-    ID_invoice      integer,
-    CONSTRAINT FK_142 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice ( ID_invoice ),
     CHECK ( duration >0 ),
-    CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('active', 'executed', 'cancelled') )
+    CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('ACTIVE', 'EXECUTED', 'CANCELLED') )
 );
 
 DROP TABLE Payment;
@@ -47,6 +45,7 @@ CREATE TABLE IF NOT EXISTS Payment(
     CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
 );
 
+
 DROP TABLE Professional;
 CREATE TABLE IF NOT EXISTS Professional(
     ID_professional INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -54,11 +53,4 @@ CREATE TABLE IF NOT EXISTS Professional(
     surname         text NOT NULL,
     phone           text NOT NULL,
     email           text NOT NULL
-);
-
-DROP TABLE Teacher;
-CREATE TABLE IF NOT EXISTS Teacher(
-    ID_teacher INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    salary     real NOT NULL,
-    name       text NOT NULL
 );
