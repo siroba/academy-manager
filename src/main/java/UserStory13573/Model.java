@@ -1,14 +1,7 @@
 package UserStory13573;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import Entities.FormativeAction;
-import Entities.Teacher;
 import Utils.Database;
-import Utils.UnexpectedException;
 
 
 /**
