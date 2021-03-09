@@ -52,6 +52,7 @@ public class View {
 	private JComboBox comboBoxDayHour;
 	private JComboBox comboBoxDayMinute;
 
+
 	/**
 	 * Create the application.
 	 */

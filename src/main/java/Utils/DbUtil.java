@@ -6,9 +6,10 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,20 +25,30 @@ import PL53.SI2020_PL53.DateTime;
 
 
 /**
+<<<<<<< HEAD
  * Utility methods to simplify the queries performed in the classes. 
+=======
+ * Utility methods to simplify the queries performed in the classes.
+>>>>>>> main
  * that implement the business logic:
  * It is implemented as an abstract class so that the derived class implements the details * related to the connection and to the database structure to be created, and at the same time
  * The derived class implements the details related to the connection and to the database structure to be created, and at the same time
  * can use the methods defined here.
+<<<<<<< HEAD
  * 
  <br>Most of the utility methods use apache commons-dbutils which handles all the handling of the resultsets, their mapping, and their * mapping.
  <br>Most of the utility methods use apache commons-dbutils which handles all the handling of resultsets, their mapping to objects and exceptions allowing a much cleaner code. 
+=======
+ *
+ <br>Most of the utility methods use apache commons-dbutils which handles all the handling of the resultsets, their mapping, and their * mapping.
+ <br>Most of the utility methods use apache commons-dbutils which handles all the handling of resultsets, their mapping to objects and exceptions allowing a much cleaner code.
+>>>>>>> main
  * in the business layer classes and DAOs.
  */
 public abstract class DbUtil {
 	/** Obtaining the connection url to be implemented in the subclass */
 	public abstract String getUrl();
-	
+
 	/** Obtains a connection object for this database */
 	public Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(getUrl());
@@ -48,7 +59,7 @@ public abstract class DbUtil {
 	//https://commons.apache.org/proper/commons-dbutils/examples.html
 	
 	/**
-	 Executes a sql query with the specified parameters mapping the result to a list of objects of the class specified in pojoClass; /** * Runs a sql query with the specified parameters mapping the result into a list of objects 
+	 Executes a sql query with the specified parameters mapping the result to a list of objects of the class specified in pojoClass; /** * Runs a sql query with the specified parameters mapping the result into a list of objects
 	 * of the class specified in pojoClass;
 	 * Uses apache commons-dbutils to perform the mapping and the handling of the other aspects of jdbc
 	 */
@@ -65,8 +76,8 @@ public abstract class DbUtil {
 			DbUtils.closeQuietly(conn);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Execute a sql query with the specified parameters mapping the result into a list of object arrays;
 	 * Uses apache commons-dbutils to perform the mapping and the handling of the other aspects of jdbc
@@ -85,6 +96,7 @@ public abstract class DbUtil {
 			DbUtils.closeQuietly(conn);
 		}
 	}
+
 	
 	/**
 	 * Execute a sql update query with the specified parameters
@@ -95,30 +107,28 @@ public abstract class DbUtil {
 			conn=this.getConnection();
 			//As there is no class specified to perform the mapping, it uses the ArrayListHandler
 			PreparedStatement pstmt=conn.prepareStatement(sql);
-			for (int i = 0; i < params.length; ++i) {
+			for (int i = 0; i < params.length; i++) {
 				if (params[i] instanceof String){
 					pstmt.setString(i+1, String.valueOf(params[i]));
 				}
 				else if (Integer.class.isInstance(params[i])) {
 					pstmt.setInt(i+1, (int) params[i]);
-
 				}
 				else if (Float.class.isInstance(params[i])) {
 					pstmt.setFloat(i+1, (float) params[i]);
-
 				}
 				else {
-					pstmt.setTimestamp(2, ((DateTime)params[i]).toTimestamp());
+					pstmt.setTimestamp(i+1,((Timestamp) params[i]));
 				}
 			}
-			pstmt.executeUpdate();			
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new UnexpectedException(e);
 		} finally {
 			DbUtils.closeQuietly(conn);
 		}
 	}
-	
+
 	public List<Map<String,Object>> executeQueryMap(String sql, Object... params) {
 		Connection conn=null;
 		try {
@@ -148,12 +158,16 @@ public abstract class DbUtil {
 			DbUtils.closeQuietly(conn);
 		}
 	}
-	
+
 	/**
 	 * Simple method to execute all sql statements found in a file, taking into account:
 	 * <br/>- Each statement MUST end in ; and may occupy several lines.
 	 <br/>- Line comments (--) are allowed.
+<<<<<<< HEAD
 	 <br/>- All drop statements are executed at the beginning, 
+=======
+	 <br/>- All drop statements are executed at the beginning,
+>>>>>>> main
 	 <br/>- Failures are ignored in case the table does not exist (only for drop).
 	 */
 	public void executeScript(String fileName) {
@@ -228,7 +242,7 @@ public abstract class DbUtil {
 			stmt.executeUpdate(sql);
 		} catch (SQLException e) {
 			//does not intentionally cause exception
-		}		
+		}
 	}
 
 }

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import Entities.FormativeAction;
 import Entities.Teacher;
 import Entities.FormativeAction.Status;
+
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
 import Utils.SwingUtil;
@@ -56,7 +57,7 @@ public class Controller {
 		view.setWarningEnrollmentPeriodEnd("");
 		view.setWarningEnrollmentPeriodStart2("");
 		view.setWarningEnrollmentPeriodEnd2("");
-		
+
 		// Get dates
 		DateTime dateFormativeAction = new DateTime(Integer.parseInt(view.getDayMinute()), Integer.parseInt(view.getDayHour()), Integer.parseInt(view.getDayDay()), Integer.parseInt(view.getDayMonth()), Integer.parseInt(view.getDayYear()));
 		DateTime dateEnrollStart = new DateTime(0, 0, Integer.parseInt(view.getEnrollStartDay()), Integer.parseInt(view.getEnrollStartMonth()), Integer.parseInt(view.getEnrollStartYear()));
@@ -69,7 +70,8 @@ public class Controller {
 
 		// Create new formative action and add it to DB 
 		FormativeAction formativeAction = new FormativeAction(view.getName(), Float.parseFloat(view.getNumberOfHours()), view.getLocation(), Float.parseFloat(view.getRemuneration()), Float.parseFloat(view.getFee()), Integer.parseInt(view.getSpaces()), 
-																view.getObjectives(), view.getMainContents(), view.getTeacher(), FormativeAction.Status.ACTIVE, dateFormativeAction, dateEnrollStart, dateEnrollEnd);
+																view.getObjectives(), view.getMainContents(), view.getTeacher(), FormativeAction.Status.ACTIVE, dateEnrollStart, dateEnrollEnd, dateFormativeAction);
+
 		model.setFormativeAction(formativeAction);
 		view.getFrame().setVisible(false); 
 		
@@ -78,7 +80,7 @@ public class Controller {
 	/**
 	 * Check if the provided dates for the formative action, the start & end of the enrollment period are valid 
 	 */
-	public boolean validateDates(Date formativeAction,Date enrollStart, Date enrollEnd) {
+	public boolean validateDates(DateTime formativeAction,DateTime enrollStart, DateTime enrollEnd) {
 		DateTime now = DateTime.now();
 		long daysBetweenStartAction = DateTime.daysSince(formativeAction, enrollStart);
 		long daysBetweenEndAction = DateTime.daysSince(formativeAction, enrollEnd);
@@ -86,13 +88,6 @@ public class Controller {
 		long daysBetweenNowStart = DateTime.daysSince(enrollStart, now);
 		long daysBetweenNowEnd = DateTime.daysSince(enrollEnd, now);
 		long daysBetweenNowAction = DateTime.daysSince(formativeAction, now);
-		
-		System.out.println(daysBetweenStartAction);
-		System.out.println(daysBetweenEndAction);
-		System.out.println(daysBetweenStartEnd);
-		System.out.println(daysBetweenNowStart);
-		System.out.println(daysBetweenNowEnd);
-		System.out.println(daysBetweenNowAction);
 		
 		if (daysBetweenNowAction < 0) {
 			view.setWarningDay("Can't take place in the past");

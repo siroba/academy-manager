@@ -30,16 +30,15 @@ public class Model {
 	public void setFormativeAction(FormativeAction fA) {
 		// Query 
 		String sql=
-				 "insert into formativeAction(ID_fa, nameFa, dateFa, duration, location, remuneration, fee, totalPlaces, objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd) values \r\n"
-				 + "	(?, ?, ?, ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?)";
+				 "insert into formativeAction(nameFa, dateFa, duration, location, remuneration, fee, totalPlaces, objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd) values \r\n"
+				 + "	(?, ?, ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?)";
 		
 		// Execute update query 
-		db.executeUpdateQuery(sql, fA.getID(), fA.getName(), fA.getFaStart(), fA.getDuration(), fA.getLocation(), fA.getRemuneration(), fA.getTotalPlaces(), fA.getObjectives(), fA.getMainContents(), fA.getTeacherName(), fA.getStatus(), fA.getEnrollmentStart(), fA.getEnrollmentEnd());
-
+		db.executeUpdateQuery(sql, fA.getName(), fA.getFaStart().toTimestamp(), fA.getDuration(), fA.getLocation(), fA.getRemuneration(), fA.getFee(), fA.getTotalPlaces(), fA.getObjectives(), fA.getMainContents(), fA.getTeacherName(), fA.getStatus().toString(), fA.getEnrollmentStart().toTimestamp(), fA.getEnrollmentEnd().toTimestamp());
 	}
 	
 	
-//	/**
+//	/** // TODO: Reuse for later sprints
 //	 * Get the teacher instance that equals teacherName 
 //	 */
 //	public Teacher getTeacher(String teacherName) {
