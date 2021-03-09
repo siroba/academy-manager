@@ -19,6 +19,8 @@ import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
+import PL53.SI2020_PL53.DateTime;
+
 
 /**
  * Utility methods to simplify the queries performed in the classes.
@@ -103,6 +105,9 @@ public abstract class DbUtil {
 				else if (Float.class.isInstance(params[i])) {
 					pstmt.setFloat(i+1, (float) params[i]);
 
+				}
+				else {
+					pstmt.setTimestamp(i+1,((DateTime) params[i]).toTimestamp());
 				}
 			}
 			pstmt.executeUpdate();
