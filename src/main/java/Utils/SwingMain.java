@@ -85,6 +85,12 @@ public class SwingMain {
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
 		
 		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
+		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13574.Controller controller = new UserStory13574.Controller();
+				controller.initController();
+			}
+		});
 		
 		// Training manager
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
