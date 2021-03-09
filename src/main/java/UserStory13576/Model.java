@@ -61,7 +61,7 @@ public class Model {
 	 * */
 	public FormativeActionDetails getFormativeActionDetails(String lastSelectedKey) {
 		try {
-			Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); 
+			Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); 
 			StringBuilder query = new StringBuilder();
 			query.append("SELECT objectives, mainContent, location, teacherName ");
 			query.append("from FormativeAction ");
