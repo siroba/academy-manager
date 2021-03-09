@@ -65,10 +65,33 @@ public class SwingMain {
 		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
 
 		JButton btnRegisterPayments = new JButton("Register Payments");
-
+		btnRegisterPayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13575.Controller controller = new UserStory13575.Controller();
+				controller.initController();
+			}
+		});
 		JButton btnListFormativeActions = new JButton("List formative actions");
+		btnListFormativeActions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UserStory13576.Controller controller = new UserStory13576.Controller(new UserStory13576.Model(), new UserStory13576.View());
+				controller.initController();
+				
+			}
+		});
 
 		JButton btnStatusOfFormativeActions = new JButton("Status of formative actions");
+		btnStatusOfFormativeActions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UserStory13577.Controller controller = new UserStory13577.Controller();
+				controller.initController();
+				
+			}
+		});
 
 		JButton btnRegisterCancellations = new JButton("Register cancellations");
 		btnRegisterCancellations.addActionListener(new ActionListener() {
@@ -84,6 +107,12 @@ public class SwingMain {
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
 		
 		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
+		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13574.Controller controller = new UserStory13574.Controller();
+				controller.initController();
+			}
+		});
 		
 		// Training manager
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
