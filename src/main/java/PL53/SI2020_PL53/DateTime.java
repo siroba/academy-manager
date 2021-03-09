@@ -7,6 +7,20 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Calendar;
 
+/**
+ * @author Marcos
+ *
+ * Wrapper class for the {@link java.util.Date} and
+ * {@link java.sql.Timestamp} classes.<br/>
+ * The {@link java.util.Date} has most of its functionality deprecated
+ * (that's why I don't use the
+ * {@link java.util.Date#Date(int, int, int, int, int, int)} in this
+ * class' constructors), but they would be useful for us. <br/>
+ * Also, the {@link java.sql.Timestamp} class is mostly obsolete. Its
+ * only good use is to read/write from/to SQL databases. That's why the
+ * functions {@link #toTimestamp()} and {@link #parseString(String)}
+ * (Timestamps are stored as longs in the database) exist.
+ */
 public class DateTime extends Date {
 	// Auto-generated serial ID
 	private static final long serialVersionUID = 2169788639882609776L;
@@ -71,8 +85,6 @@ public class DateTime extends Date {
 		this.hour = 0;
 		this.minute = 0;
 	}
-
-
 
 	/**
 	 * Returns a {@link java.sql.Timestamp} object. The {@link Date#toSQL()} returns
@@ -176,7 +188,7 @@ public class DateTime extends Date {
 		return hBetween;
 	}
 
-	
+
 	/**
 	 * The returned string is formatted according to Spanish standards (dd/MM/yy
 	 * HH:MM)
