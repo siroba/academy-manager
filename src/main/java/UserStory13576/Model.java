@@ -30,11 +30,7 @@ public class Model {
 	 */
 	public List<FormativeActionList> getListFormativeAction(String filterStatus, String filterDateBegin, String filterDateEnd) {
 		try {
-			Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); 
-			StringBuilder query = new StringBuilder();
-			query.append("SELECT fa.objectives, fa.mainContent, fa.location, t.name "); 
-			query.append("from FormativeAction fa, Teacher t ");
-			query.append("where fa.nameFa=? and fa.ID_teacher=t.ID_teacher;");
+			Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); 
 			PreparedStatement ps = cn.prepareStatement("SELECT * FROM FormativeAction where status=? and date(dateFa) BETWEEN ? and ?;");
 			ps.setString(1, filterStatus);
 			ps.setString(2, filterDateBegin);
