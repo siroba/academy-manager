@@ -65,7 +65,12 @@ public class SwingMain {
 		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
 
 		JButton btnRegisterPayments = new JButton("Register Payments");
-
+		btnRegisterPayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13575.Controller controller = new UserStory13575.Controller();
+				controller.initController();
+			}
+		});
 		JButton btnListFormativeActions = new JButton("List formative actions");
 
 		JButton btnStatusOfFormativeActions = new JButton("Status of formative actions");
@@ -84,6 +89,12 @@ public class SwingMain {
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
 		
 		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
+		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13574.Controller controller = new UserStory13574.Controller();
+				controller.initController();
+			}
+		});
 		
 		// Training manager
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
