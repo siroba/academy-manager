@@ -14,7 +14,7 @@ DROP TABLE FormativeAction;
 CREATE TABLE IF NOT EXISTS FormativeAction(
     ID_fa           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     nameFa          text NOT NULL,
-    dateFA          datetime NOT NULL,
+    dateFA          timestamp NOT NULL,
     duration        real NOT NULL,
     location        text NOT NULL,
     remuneration    real NOT NULL,
@@ -53,11 +53,4 @@ CREATE TABLE IF NOT EXISTS Professional(
     surname         text NOT NULL,
     phone           text NOT NULL,
     email           text NOT NULL
-);
-
-DROP TABLE Teacher;
-CREATE TABLE IF NOT EXISTS Teacher(
-    ID_teacher INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    salary     real NOT NULL,
-    name       text NOT NULL
 );

@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import PL53.SI2020_PL53.DateTime;
 import Utils.ApplicationException;
 import Utils.Database;
 import Utils.UnexpectedException;
@@ -19,7 +20,7 @@ public class Model {
 	public List<FinancialBalance> getListFinancialBalanceNoFilter() {
 		//Query all rows from the result of a SQL query
 		try {
-		Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); //NOSONAR
+		Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); //NOSONAR
 		Statement stmt=cn.createStatement(); //NOSONAR
 		StringBuilder query = new StringBuilder();
 		// Query misses: fA with no enrollments and year check
@@ -53,7 +54,7 @@ public class Model {
 		
 		while(rs.next()) {
 			FinancialBalance fB = new FinancialBalance(
-					rs.getString("dateFa"),
+					DateTime.parse(rs.getTimestamp("dateFa")),
 					rs.getString("nameFa"),
 					rs.getString("status"),
 					rs.getInt("income_confirmed"),
@@ -81,7 +82,7 @@ public class Model {
 	public List<TotalBalance> getListTotalBalanceNoFilter() {
 		//Query all rows from the result of a SQL query
 		try {
-		Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); //NOSONAR
+		Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); //NOSONAR
 		Statement stmt=cn.createStatement(); //NOSONAR
 		StringBuilder query = new StringBuilder();
 		// Query misses: fA with no enrollments and year check

@@ -197,7 +197,7 @@ public class FormativeAction {
 			pstmt.setString(8, this.getObjectives());
 			pstmt.setString(9, this.getMainContents());
 			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString().toLowerCase());
+			pstmt.setString(11, this.getStatus().toString());
 			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
 			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
@@ -218,7 +218,7 @@ public class FormativeAction {
 			pstmt.setString(8, this.getObjectives());
 			pstmt.setString(9, this.getMainContents());
 			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString().toLowerCase());
+			pstmt.setString(11, this.getStatus().toString());
 			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
 			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution

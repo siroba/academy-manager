@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import Utils.Database;
 
 /**
  * Main entry point including database initialization actions and buttons for
@@ -99,6 +98,7 @@ public class SwingMain {
 		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
+
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
@@ -143,9 +143,7 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty7);
 	}
 
-
 	public JFrame getFrame() {
 		return this.frame;
 	}
-
 }
