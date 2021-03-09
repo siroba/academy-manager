@@ -2,6 +2,7 @@ package PL53.SI2020_PL53;
 
 import static org.junit.Assert.assertEquals;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -10,10 +11,14 @@ import java.time.temporal.ChronoUnit;
 import org.junit.Before;
 import org.junit.Test;
 
+import Entities.Payment;
+import Utils.Database;
+
 public class DateTest {
 	long lDNow, lDtNow;
 	DateTime dtNow;
 	Date dNow;
+	Database db = new Database();
   
 	@Before
 	public void initTest() {
@@ -86,5 +91,33 @@ public class DateTest {
 	@Test(expected = ParseException.class)
 	public void testStringParseException() throws ParseException {
 		DateTime.parseString("1615067820000");
+	}
+	
+	@Test
+	public void testDbInsertion() {
+		//String sql = "INSERT INTO Payment VALUES(null,?,?,?,?,?,?,?,?,?)";
+		
+		Random r = new Random();
+		
+		DateTime insert = new DateTime(Date.random());
+		System.out.println(insert);
+		
+		Payment p = new Payment(1000, 2000, r.nextFloat()*100f, insert, r.name(3, 10),r.name(3, 10),r.name(3, 10),r.name(3, 10), false);
+		try {
+			p.insert(db);
+			
+			Payment p2 = Payment.getOne("SELECT * FROM Payment WHERE ID_payment=" + p.getID(), db);
+			
+			DateTime read = p2.getPayDate();
+			System.out.println(read);
+			
+			assertEquals(insert.toString(), read.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void testDbExtraction() {
+		
 	}
 }
