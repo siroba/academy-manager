@@ -1,5 +1,7 @@
 package UserStory13576;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,6 +12,15 @@ import java.util.List;
 
 import PL53.SI2020_PL53.Date;
 import Utils.UnexpectedException;
+
+/**
+ * btnListFormativeActions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Controller controller13576=new Controller(new Model(), new View());
+				controller13576.initController();
+			}
+		});
+ */
 
 public class Model {
 	

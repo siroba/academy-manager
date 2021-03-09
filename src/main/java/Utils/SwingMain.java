@@ -7,20 +7,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import UserStory13576.Controller;
-import UserStory13576.Model;
-import UserStory13576.View;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+
 /**
- * Main entry point including buttons for the execution of the screens. 
- * of the sample applications
- * and database initialization actions.
- * It does not follow MVC because it is only temporary so that during the development it is possible to perform initialization actions.
- * to perform initialization actions
+ * Main entry point including database initialization actions and buttons for
+ * the execution of the screens. It does not follow MVC because it is only
+ * temporary so that during the development it is possible to perform
+ * initialization actions.
  */
 public class SwingMain {
 
@@ -50,79 +46,85 @@ public class SwingMain {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the database and contents of the frame.
 	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Main");
-		frame.setBounds(0, 0, 800,250);
+
+		frame.setBounds(0, 0, 800, 250);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(6, 4, 10, 10));
-				
-//		JButton btnExecuteBaseExample = new JButton("Execute the base project");
-//		btnExecuteBaseExample.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+		frame.getContentPane().setLayout(new GridLayout(6, 3, 10, 10));
+
+		// Initialize the DB and fill it with data
+		Database db = new Database();
+		db.createDatabase(false);
+		db.loadDatabase();
+
+		// Secretary
+		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
+
+		JButton btnRegisterPayments = new JButton("Register Payments");
+//		btnRegisterPayments.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent e) {
-//				CourseController controller=new CourseController(new CourseModel(), new CourseView());
+//				UserStory13575.Controller controller = new UserStory13575.Controller();
 //				controller.initController();
 //			}
 //		});
-//		
-//		frame.getContentPane().add(btnExecuteBaseExample);
-		
-		// DB operations 
-		JLabel labelDB = new JLabel("Database operations", SwingConstants.CENTER);
-		
-		JButton btnInitializeEmptyDatabase = new JButton("Initialize empty data base");
-		btnInitializeEmptyDatabase.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				Database db=new Database();
-				db.createDatabase(false);
-			}
-		});
-		
-			
-		JButton btnLoadTestData = new JButton("Load initial test data");
-		btnLoadTestData.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				Database db=new Database();
-				db.createDatabase(false);
-				db.loadDatabase();
-			}
-		});
-		
-		
-		// Secretary
-		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
-		
-		JButton btnRegisterPayments = new JButton("Register Payments");
-		
 		JButton btnListFormativeActions = new JButton("List formative actions");
 		btnListFormativeActions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Controller controller13576=new Controller(new Model(), new View());
+				UserStory13576.Controller controller13576=new UserStory13576.Controller(new UserStory13576.Model(), new UserStory13576.View());
 				controller13576.initController();
 			}
 		});
-		
+
 		JButton btnStatusOfFormativeActions = new JButton("Status of formative actions");
-		
+
 		JButton btnRegisterCancellations = new JButton("Register cancellations");
-		
+//		btnRegisterCancellations.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				UserStory13578.Controller controller = new UserStory13578.Controller();
+//				controller.initController();
+//			}
+//		});
+
 		JButton btnRecordPayments = new JButton("Record payments");
-		
+
 		// Professional
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
 		
 		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
-
+		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13574.Controller controller = new UserStory13574.Controller();
+				controller.initController();
+			}
+		});
+		
 		// Training manager
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
-		
+
 		JButton btnPlanFormativeAction = new JButton("Plan formative action");
+//		btnPlanFormativeAction.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				UserStory13573.Controller controller = new UserStory13573.Controller(new UserStory13573.Model(),
+//						new UserStory13573.View());
+//				controller.initController();
+//			}
+//		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
 
-		// Empty grid elements 
+//		btnCheckFinancialBalance.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
+//						new UserStory13579.View());
+//				controller.initController();
+//			}
+//		});
+
+		// Empty grid elements
 		JLabel labelEmpty1 = new JLabel("");
 		JLabel labelEmpty2 = new JLabel("");
 		JLabel labelEmpty3 = new JLabel("");
@@ -130,45 +132,35 @@ public class SwingMain {
 		JLabel labelEmpty5 = new JLabel("");
 		JLabel labelEmpty6 = new JLabel("");
 		JLabel labelEmpty7 = new JLabel("");
-		JLabel labelEmpty8 = new JLabel("");
-		JLabel labelEmpty9 = new JLabel("");
-		JLabel labelEmpty10 = new JLabel("");
 		
-		// Add elements to frame/grid 
-		// Row 1 
-		frame.getContentPane().add(labelDB);
+		// Add elements to frame/grid
+		// Row 1
 		frame.getContentPane().add(labelSecretary);
 		frame.getContentPane().add(labelProfessional);
 		frame.getContentPane().add(labelTrainingManager);
-		// Row 2 
-		frame.getContentPane().add(btnInitializeEmptyDatabase);
+		// Row 2
 		frame.getContentPane().add(btnRegisterPayments);
 		frame.getContentPane().add(btnEnrollInFormativeAction);
 		frame.getContentPane().add(btnPlanFormativeAction);
-		// Row 3 
-		frame.getContentPane().add(btnLoadTestData);
+		// Row 3
 		frame.getContentPane().add(btnListFormativeActions);
 		frame.getContentPane().add(labelEmpty1);
 		frame.getContentPane().add(btnCheckFinancialBalance);
-		// Row 4 
-		frame.getContentPane().add(labelEmpty2);
+		// Row 4
 		frame.getContentPane().add(btnStatusOfFormativeActions);
+		frame.getContentPane().add(labelEmpty2);
 		frame.getContentPane().add(labelEmpty3);
-		frame.getContentPane().add(labelEmpty4);
-		// Row 5 
-		frame.getContentPane().add(labelEmpty5);
+		// Row 5
 		frame.getContentPane().add(btnRegisterCancellations);
+		frame.getContentPane().add(labelEmpty4);
+		frame.getContentPane().add(labelEmpty5);
+		// Row 6
+		frame.getContentPane().add(btnRecordPayments);
 		frame.getContentPane().add(labelEmpty6);
 		frame.getContentPane().add(labelEmpty7);
-		// Row 6 
-		frame.getContentPane().add(labelEmpty8);
-		frame.getContentPane().add(btnRecordPayments);
-		frame.getContentPane().add(labelEmpty9);
-		frame.getContentPane().add(labelEmpty10);
-		
-		
 	}
 
-	public JFrame getFrame() { return this.frame; }
-	
+	public JFrame getFrame() {
+		return this.frame;
+	}
 }

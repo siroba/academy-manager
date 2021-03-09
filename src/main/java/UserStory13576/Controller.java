@@ -54,7 +54,6 @@ public class Controller {
 					
 					getListFormativeActionList(view.getComboBoxStatusSelection().getSelectedItem().toString().toLowerCase(), start, end);
 				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, "Wrong pattern for date please use yyyy-MM-dd", "Error parsing date", JOptionPane.ERROR_MESSAGE);
 				}
 				

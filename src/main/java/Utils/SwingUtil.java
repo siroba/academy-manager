@@ -1,7 +1,17 @@
 package Utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -11,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.apache.commons.beanutils.PropertyUtils;
+
+import java.time.LocalDateTime;
 
 /**
   * Utility methods for user interfaces with swing (populating tables from a POJO object that has been obtained from the database, exception handling for POJO methods).
@@ -94,13 +106,24 @@ public class SwingUtil {
 	 * (each one must have the corresponding getter)
 	 */
 	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties) {
+		return getTableModelFromPojos(pojos, colProperties, colProperties, false);
+	}
+	
+	/**
+	 * Creates a tablemodel from a list of POJO objects with the columns indicated.
+	 * @param pojos List of objects whose attributes will be used to create the tablemodel.
+	 * (uses apache commons beanutils). If null only creates the tablemodel with the column headers.
+	 * @param colProperties The attribute names of the objects (sorted) that will be included in the tablemodel
+	 * (each one must have the corresponding getter)
+	 */
+	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties, String[] colNames, boolean dateTime) {
 		//Initial tablemodel creation and dimensioning
 		//note that in order for the table to display the columns it must be inside a JScrollPane
 		TableModel tm;
 		if (pojos==null) // only the columns (e.g. for initializations)
-			return new DefaultTableModel(colProperties,0);
+			return new DefaultTableModel(colNames,0);
 		else
-			tm=new DefaultTableModel(colProperties, pojos.size());
+			tm=new DefaultTableModel(colNames, pojos.size());
 		//loads each of the pojos values using PropertyUtils (from apache coommons beanutils)
 		for (int i=0; i<pojos.size(); i++) {
 			for (int j=0; j<colProperties.length; j++) {
