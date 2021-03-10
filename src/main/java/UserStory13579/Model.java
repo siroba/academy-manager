@@ -4,22 +4,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import Utils.ApplicationException;
-import Utils.Database;
 import Utils.UnexpectedException;
-
 
 public class Model {
 
-	private Database db=new Database();
-	
 	/**
 	 * Gets the list of active races in object form for a given registration date.
 	 */
 	public List<FinancialBalance> getListFinancialBalanceNoFilter() {
 		//Query all rows from the result of a SQL query
 		try {
-		Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); //NOSONAR
+		Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); //NOSONAR
 		Statement stmt=cn.createStatement(); //NOSONAR
 		StringBuilder query = new StringBuilder();
 		// Query misses: fA with no enrollments and year check
@@ -53,7 +48,7 @@ public class Model {
 		
 		while(rs.next()) {
 			FinancialBalance fB = new FinancialBalance(
-					rs.getString("dateFa"),
+					rs.getString("dateFa").substring(0, rs.getString("dateFa").length() - 5),
 					rs.getString("nameFa"),
 					rs.getString("status"),
 					rs.getInt("income_confirmed"),
@@ -81,7 +76,7 @@ public class Model {
 	public List<TotalBalance> getListTotalBalanceNoFilter() {
 		//Query all rows from the result of a SQL query
 		try {
-		Connection cn=DriverManager.getConnection("jdbc:sqlite:DemoDB.db"); //NOSONAR
+		Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); //NOSONAR
 		Statement stmt=cn.createStatement(); //NOSONAR
 		StringBuilder query = new StringBuilder();
 		// Query misses: fA with no enrollments and year check
@@ -116,11 +111,4 @@ public class Model {
 			throw new UnexpectedException(e);
 		}
 	}
-	
-	private void validateCondition(boolean condition, String message) {
-		if (!condition)
-			throw new ApplicationException(message);
-	}
-	
-
 }

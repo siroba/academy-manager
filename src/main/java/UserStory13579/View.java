@@ -58,7 +58,7 @@ public class View {
 		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 11));
 		frame.setTitle("FinancialBalance");
 		frame.setName("FinancialBalance");
-		frame.setBounds(0, 0, 999, 400);
+		frame.setBounds(0, 0, 1000, 400);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow 10][grow][][]"));
 //		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow 10][][][][][grow][][]"));

@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import Utils.Database;
 
 /**
  * Main entry point including database initialization actions and buttons for
@@ -73,8 +72,26 @@ public class SwingMain {
 			}
 		});
 		JButton btnListFormativeActions = new JButton("List formative actions");
+		btnListFormativeActions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UserStory13576.Controller controller = new UserStory13576.Controller(new UserStory13576.Model(), new UserStory13576.View());
+				controller.initController();
+				
+			}
+		});
 
 		JButton btnStatusOfFormativeActions = new JButton("Status of formative actions");
+		btnStatusOfFormativeActions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UserStory13577.Controller controller = new UserStory13577.Controller();
+				controller.initController();
+				
+			}
+		});
 
 		JButton btnRegisterCancellations = new JButton("Register cancellations");
 		btnRegisterCancellations.addActionListener(new ActionListener() {
@@ -110,6 +127,7 @@ public class SwingMain {
 		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
+
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
@@ -154,9 +172,7 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty7);
 	}
 
-
 	public JFrame getFrame() {
 		return this.frame;
 	}
-
 }

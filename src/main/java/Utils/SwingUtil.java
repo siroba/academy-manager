@@ -94,7 +94,7 @@ public class SwingUtil {
 	 * (each one must have the corresponding getter)
 	 */
 	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties) {
-		return getTableModelFromPojos(pojos, colProperties, colProperties);
+		return getTableModelFromPojos(pojos, colProperties, colProperties, false);
 	}
 	
 	/**
@@ -104,7 +104,7 @@ public class SwingUtil {
 	 * @param colProperties The attribute names of the objects (sorted) that will be included in the tablemodel
 	 * (each one must have the corresponding getter)
 	 */
-	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties, String[] colNames) {
+	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties, String[] colNames, boolean dateTime) {
 		//Initial tablemodel creation and dimensioning
 		//note that in order for the table to display the columns it must be inside a JScrollPane
 		TableModel tm;

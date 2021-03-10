@@ -54,10 +54,3 @@ CREATE TABLE IF NOT EXISTS Professional(
     phone           text NOT NULL,
     email           text NOT NULL
 );
-
-DROP TABLE Teacher;
-CREATE TABLE IF NOT EXISTS Teacher(
-    ID_teacher INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    salary     real NOT NULL,
-    name       text NOT NULL
-);
