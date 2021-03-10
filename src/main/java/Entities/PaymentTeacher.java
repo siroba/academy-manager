@@ -20,6 +20,15 @@ public class PaymentTeacher {
 		private String sender, receiver, fiscalNumber, address;
 		private boolean confirmed;
 
+		/** Default Constructor
+		 * @param amount
+		 * @param payDate
+		 * @param sender
+		 * @param receiver
+		 * @param fiscalNumber
+		 * @param address
+		 * @param confirmed
+		 */
 		public PaymentTeacher( float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
 				String address, boolean confirmed) {
 			
@@ -33,11 +42,10 @@ public class PaymentTeacher {
 		}
 
 		/**
-		 * Constructor with the ID of the payment
+		 * Constructor with the ID of the payment teacher
 		 *
 		 * @param ID_payment
 		 * @param ID_fa
-		 * @param ID_professional
 		 * @param amount
 		 * @param payDate
 		 * @param sender

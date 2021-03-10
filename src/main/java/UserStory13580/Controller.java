@@ -22,7 +22,7 @@ import UserStory13580.View;
 public class Controller {
 	private Model model;
 	private View view;
-	private String lastSelectedKey = ""; // remembers the last selected row to restore it when changing the race table
+	
 	private FormativeAction selectedRow;
 
 	public Controller() {
@@ -30,14 +30,14 @@ public class Controller {
 		try {
 			model.initModel();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		this.view = new View();
-		// no model-specific initialization, only view-specific initialization
+		
 		this.initView();
 	}
 
@@ -84,9 +84,9 @@ public class Controller {
 					String sender = "COIIPA";
 					String receiver = selectedRow.getTeacherName();
 					boolean confirmed = true;
-					DateTime datett = DateTime.parseString(view.getDateTextField());
+					DateTime dateInvoice = DateTime.parseString(view.getDateTextField());
 
-					Invoice invoice = new Invoice(ID_fa, datett);
+					Invoice invoice = new Invoice(ID_fa, dateInvoice);
 
 					PaymentTeacher paymentTeacher = new PaymentTeacher( amount, dateTransfer, sender,
 							receiver, fiscalNumber, address, confirmed);

@@ -16,12 +16,21 @@ public class Invoice {
 	private int ID = -1, ID_fa;
 	private DateTime dateIn;
 
+	/** Constructor with ID_invoice
+	 * @param ID_invoice
+	 * @param ID_fa
+	 * @param dateIn
+	 */
 	public Invoice(int ID_invoice,int ID_fa,  DateTime dateIn) {
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
 		this.dateIn=dateIn;
 		
 	}
+	/**Default Constructor
+	 * @param ID_fa
+	 * @param dateIn
+	 */
 	public Invoice(int ID_fa,  DateTime dateIn) {
 		this.ID_fa = ID_fa;
 		this.dateIn=dateIn;
