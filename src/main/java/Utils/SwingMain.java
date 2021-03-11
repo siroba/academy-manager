@@ -11,6 +11,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import Utils.Database;
+
 /**
  * Main entry point including database initialization actions and buttons for
  * the execution of the screens. It does not follow MVC because it is only
@@ -82,27 +84,33 @@ public class SwingMain {
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
 
 		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
-
-		// Training manager
-		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
-
-		JButton btnPlanFormativeAction = new JButton("Plan formative action");
-		btnPlanFormativeAction.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				UserStory13573.Controller controller13573 = new UserStory13573.Controller(new UserStory13573.Model(),
-						new UserStory13573.View());
-				controller13573.initController();
-			}
-		});
-
 		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13574.Controller controller = new UserStory13574.Controller();
 				controller.initController();
 			}
 		});
+		
+		// Training manager
+		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
 
+		JButton btnPlanFormativeAction = new JButton("Plan formative action");
+		btnPlanFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13573.Controller controller = new UserStory13573.Controller(new UserStory13573.Model(),
+						new UserStory13573.View());
+				controller.initController();
+			}
+		});
+		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
+		btnCheckFinancialBalance.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
+						new UserStory13579.View());
+				controller.initController();
+			}
+		});
 
 		// Empty grid elements
 		JLabel labelEmpty1 = new JLabel("");
@@ -112,7 +120,7 @@ public class SwingMain {
 		JLabel labelEmpty5 = new JLabel("");
 		JLabel labelEmpty6 = new JLabel("");
 		JLabel labelEmpty7 = new JLabel("");
-
+		
 		// Add elements to frame/grid
 		// Row 1
 		frame.getContentPane().add(labelSecretary);

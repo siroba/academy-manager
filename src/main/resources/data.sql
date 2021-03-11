@@ -1,10 +1,10 @@
 --Data for the initialization of the database 
 
 insert into FormativeAction(ID_fa, nameFa, dateFa, duration, location, remuneration, fee, totalPlaces, objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd) values
-	(1000, 'Initiation to scrum',	'2021-02-03 15:00:00', 2, 'online', 50, 15, 6,	'some objctives', 'some main content', 'Jose Garcia Fanjul',				'executed', '2021-01-01 00:00:00',	'2021-02-01 00:00:00'),
+	(1000, 'Initiation to scrum',	'2021-02-03 09:00:00', 2, 'online', 50, 15, 6,	'some objctives', 'some main content', 'Jose Garcia Fanjul',				'executed', '2021-01-01 00:00:00',	'2021-02-01 00:00:00'),
 	(1001, 'Initiation to agile',	'2021-02-10 15:00:00', 3, 'online', 60, 10, 10, 'some objctives', 'some main content', 'Jose Garcia Fanjul',				'executed', '2021-01-01 00:00:00',	'2021-02-08 00:00:00'),
-	(1002, 'JDBC',  				'2021-04-10 12:00:00', 3, 'online', 100, 30, 4, 'some objctives', 'some main content', 'Maria Teresa Gonzales Aparicio',	'active', '2021-03-01 00:00:00',	'2021-04-08 00:00:00'),
-	(1003, 'Java programming',		'2021-05-01 10:00:00', 4, 'online', 80, 20, 5,	'some objctives', 'some main content', 'Victor Manuel Alvarez Garcia',		'active', '2021-04-01 00:00:00',	'2021-04-28 00:00:00');
+	(1002, 'JDBC',  				'2021-04-10 13:00:00', 3, 'online', 100, 30, 4, 'some objctives', 'some main content', 'Maria Teresa Gonzales Aparicio',	'active', '2021-03-01 00:00:00',	'2021-04-08 00:00:00'),
+	(1003, 'Java programming',		'2021-05-01 20:00:00', 4, 'online', 80, 20, 5,	'some objctives', 'some main content', 'Victor Manuel Alvarez Garcia',		'active', '2021-04-01 00:00:00',	'2021-04-28 00:00:00');
 
 
 insert into Professional(ID_professional, name, surname, phone, email) values
@@ -16,19 +16,19 @@ insert into Professional(ID_professional, name, surname, phone, email) values
 	(2005, 'Paul', 		'Bauer', 		'+4917064578933', 	'paul.bauer@rub.de');
 
 insert into Enrollment(ID_fa, ID_professional, status, timeEn) values
-	(1000, 2000, 'confirmed', '2021-01-02 16:00:00'),
-	(1000, 2001, 'confirmed', '2021-01-04 17:00:00'),
-	(1000, 2002, 'confirmed', '2021-01-07 18:00:00'),
-	(1000, 2003, 'confirmed', '2021-01-10 19:00:00'),
-	(1000, 2004, 'confirmed', '2021-01-13 10:00:00'),
-	(1000, 2005, 'confirmed', '2021-01-16 13:00:00'),
-	(1001, 2000, 'confirmed', '2021-01-02 12:00:00'),
-	(1001, 2001, 'confirmed', '2021-01-13 14:00:00'),
-	(1001, 2002, 'confirmed', '2021-01-23 22:00:00'),
-	(1001, 2003, 'confirmed', '2021-02-03 20:00:00'),
-	(1001, 2004, 'confirmed', '2021-02-01 08:00:00'),
-	(1002, 2000, 'confirmed', '2021-03-02 12:00:00'),
-	(1002, 2001, 'confirmed', '2021-03-05 08:00:00');
+	(1000, 2000, 'CONFIRMED', '2021-01-02 16:00:00'),
+	(1000, 2001, 'CONFIRMED', '2021-01-04 17:00:00'),
+	(1000, 2002, 'CONFIRMED', '2021-01-07 18:00:00'),
+	(1000, 2003, 'CONFIRMED', '2021-01-10 19:00:00'),
+	(1000, 2004, 'CONFIRMED', '2021-01-13 10:00:00'),
+	(1000, 2005, 'CONFIRMED', '2021-01-16 13:00:00'),
+	(1001, 2000, 'CONFIRMED', '2021-01-02 12:00:00'),
+	(1001, 2001, 'CONFIRMED', '2021-01-13 14:00:00'),
+	(1001, 2002, 'CONFIRMED', '2021-01-23 22:00:00'),
+	(1001, 2003, 'CONFIRMED', '2021-02-03 20:00:00'),
+	(1001, 2004, 'CONFIRMED', '2021-02-01 08:00:00'),
+	(1002, 2000, 'CONFIRMED', '2021-03-02 12:00:00'),
+	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00');
 
 insert into Payment(ID_payment, amount, datePay, sender, receiver, address, fiscalNumber, confirmed, ID_fa, ID_professional) values
 	(3000, 15, '2021-01-02 17:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1000, 2000),

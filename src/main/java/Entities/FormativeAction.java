@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,7 @@ import PL53.SI2020_PL53.DateTime;
 import PL53.SI2020_PL53.Random;
 
 /**
- * Domain model data for the courses IMPORTANT: When using the Apache Commons
- * DbUtils components you must Strictly adhere to the Java capitalization
- * convention: - Capitalize all the words that form an identifier except the
- * first letter of method and variable names. - Do not use underscores Follow
- * also these same criteria in the names of tables and fields of the DB.
+ * 
  */
 public class FormativeAction {
 	private int ID = -1;
@@ -70,6 +67,43 @@ public class FormativeAction {
 			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd, DateTime faStart) {
 
+		this.name = name;
+		this.duration = duration;
+		this.location = location;
+		this.remuneration = remuneration;
+		this.fee = fee;
+		this.totalPlaces = totalPlaces;
+		this.objectives = objectives;
+		this.mainContents = mainContents;
+		this.teacherName = teacherName;
+		this.status = status;
+		this.enrollmentStart = enrollmentStart;
+		this.enrollmentEnd = enrollmentEnd;
+		this.faStart = faStart;
+	}
+	
+	/**
+	 * Constructor with ID
+	 * @param name
+	 * @param duration
+	 * @param location
+	 * @param remuneration
+	 * @param fee
+	 * @param totalPlaces
+	 * @param objectives
+	 * @param mainContents
+	 * @param teacherName
+	 * @param status
+	 * @param enrollmentStart
+	 * @param enrollmentEnd
+	 * @param faStart
+	 */
+
+	public FormativeAction(int ID_fa, String name, float duration, String location, float remuneration, float fee, int totalPlaces,
+			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
+			DateTime enrollmentEnd, DateTime faStart) {
+
+		this.ID = ID_fa;
 		this.name = name;
 		this.duration = duration;
 		this.location = location;
@@ -240,7 +274,7 @@ public class FormativeAction {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<FormativeAction> get(String query, Database db) throws SQLException, ParseException {
+	public static List<FormativeAction> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -250,6 +284,26 @@ public class FormativeAction {
 		List<FormativeAction> fa = new ArrayList<FormativeAction>();
 
 		while (rs.next()) {
+			DateTime dstart, dend, dfa;
+
+			try {
+				dstart = DateTime.parseString(rs.getString("enrollmentStart"));
+			} catch (ParseException e) {
+				dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
+			}
+
+			try {
+				dend = DateTime.parseString(rs.getString("enrollmentEnd"));
+			} catch (ParseException e) {
+				dend = DateTime.fromMillis(rs.getLong("enrollmentEnd"));
+			}
+
+			try {
+				dfa = DateTime.parseString(rs.getString("dateFA"));
+			} catch (ParseException e) {
+				dfa = DateTime.fromMillis(rs.getLong("dateFA"));
+			}
+
 			FormativeAction f = new FormativeAction(
 					rs.getInt("ID_fa"),
 					rs.getString("nameFa"),
@@ -262,9 +316,9 @@ public class FormativeAction {
 					rs.getString("mainContent"),
 					rs.getString("teacherName"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					DateTime.fromMillis(rs.getLong("enrollmentStart")), // TODO: Fix parsing
-					DateTime.fromMillis(rs.getLong("enrollmentEnd")),
-					DateTime.fromMillis(rs.getLong("dateFA")));
+					dstart, // TODO: Fix parsing
+					dend,
+					dfa);
 
 			fa.add(f);
 		}
@@ -295,6 +349,26 @@ public class FormativeAction {
 
 		rs.next();
 
+		DateTime dstart, dend, dfa;
+
+		try {
+			dstart = DateTime.parseString(rs.getString("enrollmentStart"));
+		} catch (ParseException e) {
+			dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
+		}
+
+		try {
+			dend = DateTime.parseString(rs.getString("enrollmentEnd"));
+		} catch (ParseException e) {
+			dend = DateTime.fromMillis(rs.getLong("enrollmentEnd"));
+		}
+
+		try {
+			dfa = DateTime.parseString(rs.getString("dateFA"));
+		} catch (ParseException e) {
+			dfa = DateTime.fromMillis(rs.getLong("dateFA"));
+		}
+    
 		FormativeAction fa = new FormativeAction(
 				rs.getInt("ID_fa"),
 				rs.getString("nameFa"),
@@ -307,9 +381,9 @@ public class FormativeAction {
 				rs.getString("mainContent"),
 				rs.getString("teacherName"),
 				Status.valueOf(rs.getString("status").toUpperCase()),
-				DateTime.fromMillis(rs.getLong("enrollmentStart")), // TODO: Fix parsing
-				DateTime.fromMillis(rs.getLong("enrollmentEnd")),
-				DateTime.fromMillis(rs.getLong("dateFA")));
+				dstart, // TODO: Fix parsing
+				dend,
+				dfa);
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -333,6 +407,18 @@ public class FormativeAction {
 			return 0f;
 	}
 
+	public float refund() {
+		return this.refundPercentage()*this.getFee();
+	}
+  
+	public float refundPercentage() {
+		int days = Date.daysSince(enrollmentEnd);
+
+		if(days > 7) return 1f;
+		else if (days <= 6 && days >=3) return 0.5f;
+		else return 0f;
+	}
+  
 	public DateTime getFaStart() {
 		return faStart;
 	}

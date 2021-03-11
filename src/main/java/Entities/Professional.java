@@ -16,12 +16,7 @@ import Entities.Enrollment.Status;
 import Exceptions.InvalidFieldValue;
 
 /**
- * Domain model data for the professionals IMPORTANT: When using the Apache
- * Commons DbUtils components you must Strictly adhere to the Java
- * capitalization convention: - Capitalize all the words that form an identifier
- * except the first letter of method and variable names. - Do not use
- * underscores Follow also these same criteria in the names of tables and fields
- * of the DB.
+ * 
  */
 
 public class Professional {
@@ -185,6 +180,7 @@ public class Professional {
 		ResultSet rs = st.executeQuery(query);
 
 		rs.next();
+		
 		Professional p = new Professional(
 				rs.getInt("ID_professional"),
 				rs.getString("name"),
