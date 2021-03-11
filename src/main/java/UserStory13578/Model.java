@@ -48,7 +48,7 @@ public class Model {
 	}
 
 	private Data[] initData() throws SQLException, ParseException {
-		String query = "SELECT * FROM Enrollment;"; // TODO: "WHERE status='received';"
+		String query = "SELECT * FROM Enrollment WHERE status='RECEIVED';"; // TODO: "WHERE status='received';"
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
 
