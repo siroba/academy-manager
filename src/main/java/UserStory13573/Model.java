@@ -1,7 +1,14 @@
 package UserStory13573;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import Entities.FormativeAction;
+import Entities.Teacher;
 import Utils.Database;
+import Utils.UnexpectedException;
 
 
 /**
@@ -27,7 +34,8 @@ public class Model {
 				 + "	(?, ?, ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?)";
 		
 		// Execute update query 
-		db.executeUpdateQuery(sql, fA.getName(), fA.getFaStart().toSQLiteString(), fA.getDuration(), fA.getLocation(), fA.getRemuneration(), fA.getFee(), fA.getTotalPlaces(), fA.getObjectives(), fA.getMainContents(), fA.getTeacherName(), fA.getStatus().toString(), fA.getEnrollmentStart().toSQLiteString(), fA.getEnrollmentEnd().toSQLiteString());	}
+		db.executeUpdateQuery(sql, fA.getName(), fA.getFaStart().toTimestamp(), fA.getDuration(), fA.getLocation(), fA.getRemuneration(), fA.getFee(), fA.getTotalPlaces(), fA.getObjectives(), fA.getMainContents(), fA.getTeacherName(), fA.getStatus().toString(), fA.getEnrollmentStart().toTimestamp(), fA.getEnrollmentEnd().toTimestamp());
+	}
 	
 	
 //	/** // TODO: Reuse for later sprints

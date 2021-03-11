@@ -46,3 +46,14 @@ insert into Payment(ID_payment, amount, datePay, sender, receiver, address, fisc
 	(3011, 30, '2021-03-22 13:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 1002, 2000),
 	(3012, 30, '2021-03-03 13:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 1002, 2005),
 	(3013, 30, '2021-03-05 10:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1002, 2001);
+	
+	
+insert into Invoice (Id_invoice , dateIn , ID_fa) values
+	(4000, '2021-01-02 17:00:00', 1000),
+	(4001, '2021-01-03 17:00:00', 1001),
+	(4002, '2021-01-04 17:00:00',  1002);
+
+insert into PaymentTeacher( ID_payment, amount, datePay, sender, receiver, address, fiscalNumber, confirmed, ID_invoice) values
+(3000, 15, '2021-01-02 17:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 4000),
+	(3001, 15, '2021-01-04 18:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 4001),
+	(3002, 15, '2021-01-07 20:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 4002);
