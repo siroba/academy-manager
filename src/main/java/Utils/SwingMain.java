@@ -87,8 +87,8 @@ public class SwingMain {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//UserStory13577.Controller controller = new UserStory13577.Controller();
-				//controller.initController();
+				UserStory13577.Controller controller = new UserStory13577.Controller();
+				controller.initController();
 				
 			}
 		});
