@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import Entities.FormativeAction;
 import Entities.Teacher;
+import Entities.FormativeAction.Status;
+
 import PL53.SI2020_PL53.Date;
 import PL53.SI2020_PL53.DateTime;
 import Utils.SwingUtil;
@@ -55,9 +57,9 @@ public class Controller {
 		view.setWarningEnrollmentPeriodEnd("");
 		view.setWarningEnrollmentPeriodStart2("");
 		view.setWarningEnrollmentPeriodEnd2("");
-		
-		// Get dates // TODO Add minute and hour 
-		DateTime dateFormativeAction = new DateTime(0, 0, Integer.parseInt(view.getDayDay()), Integer.parseInt(view.getDayMonth()), Integer.parseInt(view.getDayYear()));
+
+		// Get dates
+		DateTime dateFormativeAction = new DateTime(Integer.parseInt(view.getDayMinute()), Integer.parseInt(view.getDayHour()), Integer.parseInt(view.getDayDay()), Integer.parseInt(view.getDayMonth()), Integer.parseInt(view.getDayYear()));
 		DateTime dateEnrollStart = new DateTime(0, 0, Integer.parseInt(view.getEnrollStartDay()), Integer.parseInt(view.getEnrollStartMonth()), Integer.parseInt(view.getEnrollStartYear()));
 		DateTime dateEnrollEnd = new DateTime(0, 0, Integer.parseInt(view.getEnrollEndDay()), Integer.parseInt(view.getEnrollEndMonth()), Integer.parseInt(view.getEnrollEndYear()));
 		
@@ -65,9 +67,11 @@ public class Controller {
 		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)==false) {
 			return;
 		}
-		
+
 		// Create new formative action and add it to DB 
-		FormativeAction formativeAction = new FormativeAction(view.getName(), Float.parseFloat(view.getNumberOfHours()), view.getLocation(), Float.parseFloat(view.getRemuneration()), Float.parseFloat(view.getFee()), Integer.parseInt(view.getSpaces()), view.getObjectives(), view.getMainContents(),view.getTeacher(), FormativeAction.Status.ACTIVE, dateEnrollStart, dateEnrollEnd, dateFormativeAction);
+		FormativeAction formativeAction = new FormativeAction(view.getName(), Float.parseFloat(view.getNumberOfHours()), view.getLocation(), Float.parseFloat(view.getRemuneration()), Float.parseFloat(view.getFee()), Integer.parseInt(view.getSpaces()), 
+																view.getObjectives(), view.getMainContents(), view.getTeacher(), FormativeAction.Status.ACTIVE, dateEnrollStart, dateEnrollEnd, dateFormativeAction);
+
 		model.setFormativeAction(formativeAction);
 		view.getFrame().setVisible(false); 
 		

@@ -49,6 +49,9 @@ public class View {
 	private JLabel LabelWarningDay;
 	private JLabel LabelFee;
 	private JTextField TFFee;
+	private JComboBox comboBoxDayHour;
+	private JComboBox comboBoxDayMinute;
+
 
 	/**
 	 * Create the application.
@@ -156,6 +159,18 @@ public class View {
 		comboBoxDayYear.setModel(new DefaultComboBoxModel(new String[] {"Year", "2021", "2022", "2023", "2024", "2025", "2026"}));
 		comboBoxDayYear.setMaximumSize(new Dimension(60, 16));
 		frame.getContentPane().add(comboBoxDayYear, "cell 0 7,gapx 10");
+		
+		comboBoxDayHour = new JComboBox();
+		comboBoxDayHour.setModel(new DefaultComboBoxModel(new String[] {"Hour", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
+		comboBoxDayHour.setMaximumSize(new Dimension(60, 16));
+		comboBoxDayHour.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		frame.getContentPane().add(comboBoxDayHour, "cell 0 7,gapx 10");
+		
+		comboBoxDayMinute = new JComboBox();
+		comboBoxDayMinute.setModel(new DefaultComboBoxModel(new String[] {"Min ", "00", "05 ", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"}));
+		comboBoxDayMinute.setMaximumSize(new Dimension(60, 16));
+		comboBoxDayMinute.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		frame.getContentPane().add(comboBoxDayMinute, "cell 0 7,gapx 10");
 		
 		LabelWarningDay = new JLabel("  ");
 		LabelWarningDay.setForeground(Color.RED);
@@ -266,6 +281,8 @@ public class View {
 	public String getDayDay() {return String.valueOf(this.comboBoxDayDay.getSelectedItem());}
 	public String getDayMonth() {return String.valueOf(this.comboBoxDayMonth.getSelectedItem());}
 	public String getDayYear() {return String.valueOf(this.comboBoxDayYear.getSelectedItem());}
+	public String getDayHour() {return String.valueOf(this.comboBoxDayHour.getSelectedItem());}
+	public String getDayMinute() {return String.valueOf(this.comboBoxDayMinute.getSelectedItem());}
 	public String getNumberOfHours() {return this.TFHours.getText();}
 	public String getEnrollStartDay() {return String.valueOf(this.comboBoxEnrollStartDay.getSelectedItem());}
 	public String getEnrollStartMonth() {return String.valueOf(this.comboBoxEnrollStartMonth.getSelectedItem());}

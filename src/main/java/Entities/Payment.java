@@ -87,7 +87,7 @@ public class Payment {
 	 * @param db
 	 * @return
 	 * @throws SQLException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public static List<Payment> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
@@ -105,7 +105,7 @@ public class Payment {
 			} catch (ParseException e) {
 				datepay = DateTime.fromMillis(rs.getLong("datePay"));
 			}
-			
+
 			Payment e = new Payment(
 					rs.getInt("ID_payment"),
 					rs.getInt("ID_fa"),
@@ -136,7 +136,7 @@ public class Payment {
 	 * @param db
 	 * @return
 	 * @throws SQLException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public static Payment getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
@@ -152,7 +152,7 @@ public class Payment {
 		} catch (ParseException e) {
 			datepay = DateTime.fromMillis(rs.getLong("datePay"));
 		}
-		
+
 		Payment e = new Payment(
 				rs.getInt("ID_payment"),
 				rs.getInt("ID_fa"),

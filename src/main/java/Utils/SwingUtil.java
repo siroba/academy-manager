@@ -1,7 +1,17 @@
 package Utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -11,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.apache.commons.beanutils.PropertyUtils;
+
+import java.time.LocalDateTime;
 
 /**
   * Utility methods for user interfaces with swing (populating tables from a POJO object that has been obtained from the database, exception handling for POJO methods).
@@ -94,7 +106,7 @@ public class SwingUtil {
 	 * (each one must have the corresponding getter)
 	 */
 	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties) {
-		return getTableModelFromPojos(pojos, colProperties, colProperties);
+		return getTableModelFromPojos(pojos, colProperties, colProperties, false);
 	}
 	
 	/**
@@ -104,7 +116,7 @@ public class SwingUtil {
 	 * @param colProperties The attribute names of the objects (sorted) that will be included in the tablemodel
 	 * (each one must have the corresponding getter)
 	 */
-	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties, String[] colNames) {
+	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties, String[] colNames, boolean dateTime) {
 		//Initial tablemodel creation and dimensioning
 		//note that in order for the table to display the columns it must be inside a JScrollPane
 		TableModel tm;

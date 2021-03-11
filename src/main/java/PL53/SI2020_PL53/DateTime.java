@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 /**
  * @author Marcos
- * 
+ *
  * Wrapper class for the {@link java.util.Date} and
  * {@link java.sql.Timestamp} classes.<br/>
  * The {@link java.util.Date} has most of its functionality deprecated
@@ -89,7 +89,7 @@ public class DateTime extends Date {
 	/**
 	 * Returns a {@link java.sql.Timestamp} object. The {@link Date#toSQL()} returns
 	 * a {@link java.sql.Date} object, which ignores the time
-	 * 
+	 *
 	 * @return Timestamp
 	 */
 	public java.sql.Timestamp toTimestamp() {
@@ -121,11 +121,6 @@ public class DateTime extends Date {
 		return fromMillis(datetime.getTime());
 	}
 
-	@Override
-	public long toMillis() {
-		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1))*1000l;
-	}
-	
 	/**
 	 * Uses the {@link #toLocalDateTime()} function combined with the
 	 * {@link LocalDateTime#toEpochSecond(ZoneOffset)} (assumes UTC+1) * 1000L
@@ -160,7 +155,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Uses {@link LocalDateTime#now()} to generate the values
-	 * 
+	 *
 	 * @return
 	 */
 	public static DateTime now() {
@@ -168,21 +163,10 @@ public class DateTime extends Date {
 
 		return new DateTime(d.getMinute(), d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
 	}
-	
-	public static int minutesSince(DateTime d) {
-		return minutesSince(d, DateTime.now());
-	}
-	
-	public static int minutesSince(DateTime date1, DateTime date2) {
-		long difference = date1.toMillis() - date2.toMillis();
-		int hBetween = Math.round(difference / (1000.0f * 60.0f));
-
-		return hBetween;
-	}
 
 	/**
 	 * Same as {@link Date#daysSince(Date)}, but with minutes
-	 * 
+	 *
 	 * @param d
 	 * @return
 	 */
@@ -192,7 +176,7 @@ public class DateTime extends Date {
 
 	/**
 	 * Same as {@link Date#daysSince(Date, Date)}, but with minutes
-	 * 
+	 *
 	 * @param date1
 	 * @param date2
 	 * @return
@@ -203,6 +187,7 @@ public class DateTime extends Date {
 
 		return hBetween;
 	}
+
 
 	/**
 	 * The returned string is formatted according to Spanish standards (dd/MM/yy

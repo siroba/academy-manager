@@ -54,14 +54,14 @@ public class Controller {
 	 */
 	public void getListFormativeActions() {
 		List<FinancialBalance> financialBalances = model.getListFinancialBalanceNoFilter();
-		TableModel tmodel=SwingUtil.getTableModelFromPojos(financialBalances, new String[] {"date", "name", "status", "incomeConfirmed", "expensesConfirmed", "balanceConfirmed", "incomeEstimated", "expensesEstimated", "balanceEstimated"}, new String[] {"date", "name", "status", "income confirmed", "expenses confirmed", "balance confirmed", "income estimated", "expenses estimated", "balance estimated"});
+		TableModel tmodel=SwingUtil.getTableModelFromPojos(financialBalances, new String[] {"date", "name", "status", "incomeConfirmed", "expensesConfirmed", "balanceConfirmed", "incomeEstimated", "expensesEstimated", "balanceEstimated"}, new String[] {"date", "name", "status", "income confirmed", "expenses confirmed", "balance confirmed", "income estimated", "expenses estimated", "balance estimated"}, true);
 		view.getTableFormativeActionBalance().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTableFormativeActionBalance());
 	}
 	
 	public void getListTotalBalance() {
 		List<TotalBalance> totalBalance = model.getListTotalBalanceNoFilter();
-		TableModel tmodel=SwingUtil.getTableModelFromPojos(totalBalance, new String[] {"totalIncomeConfirmed", "totalExpensesConfirmed", "totalIncomeEstimated", "totalExpensesEstimated"}, new String[] {"total income confirmed", "total expenses confirmed", "total income estimated", "total expenses estimated"});
+		TableModel tmodel=SwingUtil.getTableModelFromPojos(totalBalance, new String[] {"totalIncomeConfirmed", "totalExpensesConfirmed", "totalIncomeEstimated", "totalExpensesEstimated"}, new String[] {"total income confirmed", "total expenses confirmed", "total income estimated", "total expenses estimated"}, false);
 		view.getTableTotalBalance().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTableTotalBalance());
 	}

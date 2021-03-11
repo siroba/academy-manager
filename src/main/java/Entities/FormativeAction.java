@@ -81,7 +81,7 @@ public class FormativeAction {
 		this.enrollmentEnd = enrollmentEnd;
 		this.faStart = faStart;
 	}
-	
+
 	/**
 	 * Constructor with ID
 	 * @param name
@@ -102,44 +102,6 @@ public class FormativeAction {
 	public FormativeAction(int ID_fa, String name, float duration, String location, float remuneration, float fee, int totalPlaces,
 			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd, DateTime faStart) {
-
-		this.ID = ID_fa;
-		this.name = name;
-		this.duration = duration;
-		this.location = location;
-		this.remuneration = remuneration;
-		this.fee = fee;
-		this.totalPlaces = totalPlaces;
-		this.objectives = objectives;
-		this.mainContents = mainContents;
-		this.teacherName = teacherName;
-		this.status = status;
-		this.enrollmentStart = enrollmentStart;
-		this.enrollmentEnd = enrollmentEnd;
-		this.faStart = faStart;
-	}
-
-	/**
-	 * Constructor with ID
-	 *
-	 * @param ID_fa
-	 * @param name
-	 * @param duration
-	 * @param location
-	 * @param remuneration
-	 * @param fee
-	 * @param totalPlaces
-	 * @param objectives
-	 * @param mainContents
-	 * @param teacherName
-	 * @param status
-	 * @param enrollmentStart
-	 * @param enrollmentEnd
-	 * @param faStart
-	 */
-	public FormativeAction(int ID_fa, String name, float duration, String location, float remuneration, float fee,
-			int totalPlaces, String objectives, String mainContents, String teacherName, Status status,
-			DateTime enrollmentStart, DateTime enrollmentEnd, DateTime faStart) {
 
 		this.ID = ID_fa;
 		this.name = name;
@@ -231,7 +193,7 @@ public class FormativeAction {
 			pstmt.setString(8, this.getObjectives());
 			pstmt.setString(9, this.getMainContents());
 			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString().toLowerCase());
+			pstmt.setString(11, this.getStatus().toString());
 			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
 			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
@@ -252,7 +214,7 @@ public class FormativeAction {
 			pstmt.setString(8, this.getObjectives());
 			pstmt.setString(9, this.getMainContents());
 			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString().toLowerCase());
+			pstmt.setString(11, this.getStatus().toString());
 			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
 			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
@@ -368,7 +330,7 @@ public class FormativeAction {
 		} catch (ParseException e) {
 			dfa = DateTime.fromMillis(rs.getLong("dateFA"));
 		}
-    
+
 		FormativeAction fa = new FormativeAction(
 				rs.getInt("ID_fa"),
 				rs.getString("nameFa"),
@@ -392,33 +354,19 @@ public class FormativeAction {
 
 		return fa;
 	}
-	public float refund() {
-		return this.refundPercentage() * this.getFee();
-	}
-
-	public float refundPercentage() {
-		int days = Date.daysSince(enrollmentEnd);
-
-		if (days > 7)
-			return 1f;
-		else if (days <= 6 && days >= 3)
-			return 0.5f;
-		else
-			return 0f;
-	}
 
 	public float refund() {
-		return this.refundPercentage()*this.getFee();
-	}
+        return this.refundPercentage()*this.getFee();
+    }
   
-	public float refundPercentage() {
-		int days = Date.daysSince(enrollmentEnd);
+    public float refundPercentage() {
+        int days = Date.daysSince(enrollmentEnd);
 
-		if(days > 7) return 1f;
-		else if (days <= 6 && days >=3) return 0.5f;
-		else return 0f;
-	}
-  
+        if(days > 7) return 1f;
+        else if (days <= 6 && days >=3) return 0.5f;
+        else return 0f;
+    }
+
 	public DateTime getFaStart() {
 		return faStart;
 	}
