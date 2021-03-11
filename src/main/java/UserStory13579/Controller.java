@@ -1,20 +1,9 @@
 package UserStory13579;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
-
-import javax.swing.ComboBoxModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import Entities.FormativeAction;
-import Entities.Professional;
-import Utils.DbUtil;
 import Utils.SwingUtil;
-import Utils.Util;
 
 public class Controller {
 

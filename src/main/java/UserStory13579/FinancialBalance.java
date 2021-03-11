@@ -3,7 +3,7 @@ package UserStory13579;
 import PL53.SI2020_PL53.DateTime;
 
 public class FinancialBalance {
-	private DateTime date;
+	private String date;
 	private String name;
 	private String status;
 	private float incomeConfirmed;
@@ -13,7 +13,7 @@ public class FinancialBalance {
 	private float expensesEstimated;
 	private float balanceEstimated;
 	
-	public FinancialBalance(DateTime date, String name, String status, float incomeConfirmed, float expensesConfirmed, float balanceConfirmed,
+	public FinancialBalance(String date, String name, String status, float incomeConfirmed, float expensesConfirmed, float balanceConfirmed,
 							float incomeEstimated, float expensesEstimated, float balanceEstimated) {
 	
 		this.date = date;
@@ -28,7 +28,7 @@ public class FinancialBalance {
 	}
 	
 	// Getter
-	public DateTime getDate() { return this.date; } 
+	public String getDate() { return this.date; } 
 	public String getName() { return this.name; } 
 	public String getStatus() { return this.status; } 
 	public float getIncomeConfirmed() { return this.incomeConfirmed; }
@@ -39,7 +39,7 @@ public class FinancialBalance {
 	public float getBalanceEstimated() { return this.balanceEstimated; }
 
 	// Setter 
-	public void setDate(DateTime value) { this.date=value; }
+	public void setDate(String value) { this.date=value; }
 	public void setName(String value) { this.name=value; }
 	public void setStatus(String value) { this.status=value; }
 	public void setIncomeConfirmed(float value) {this.incomeConfirmed=value; }

@@ -4,16 +4,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import PL53.SI2020_PL53.DateTime;
-import Utils.ApplicationException;
-import Utils.Database;
 import Utils.UnexpectedException;
-
 
 public class Model {
 
-	private Database db=new Database();
-	
 	/**
 	 * Gets the list of active races in object form for a given registration date.
 	 */
@@ -54,7 +48,7 @@ public class Model {
 		
 		while(rs.next()) {
 			FinancialBalance fB = new FinancialBalance(
-					DateTime.parse(rs.getTimestamp("dateFa")),
+					rs.getString("dateFa").substring(0, rs.getString("dateFa").length() - 5),
 					rs.getString("nameFa"),
 					rs.getString("status"),
 					rs.getInt("income_confirmed"),
@@ -117,11 +111,4 @@ public class Model {
 			throw new UnexpectedException(e);
 		}
 	}
-	
-	private void validateCondition(boolean condition, String message) {
-		if (!condition)
-			throw new ApplicationException(message);
-	}
-	
-
 }
