@@ -87,8 +87,8 @@ public class SwingMain {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				UserStory13577.Controller controller = new UserStory13577.Controller();
-				controller.initController();
+				//UserStory13577.Controller controller = new UserStory13577.Controller();
+				//controller.initController();
 				
 			}
 		});
@@ -102,6 +102,12 @@ public class SwingMain {
 		});
 
 		JButton btnRecordPayments = new JButton("Record payments");
+		btnRecordPayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13580.Controller controller = new UserStory13580.Controller();
+				controller.initController();
+			}
+		});
 
 		// Professional
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);

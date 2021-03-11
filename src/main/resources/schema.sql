@@ -10,11 +10,20 @@ CREATE TABLE IF NOT EXISTS Enrollment(
     CHECK ( status IN('RECEIVED','CONFIRMED','CANCELLED') )
 );
 
+DROP TABLE Invoice;
+CREATE TABLE Invoice
+(
+ ID_invoice INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+ dateIn     datetime NOT NULL,
+ ID_fa      integer NOT NULL,
+ CONSTRAINT FK_161 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa )
+);
+
 DROP TABLE FormativeAction;
 CREATE TABLE IF NOT EXISTS FormativeAction(
     ID_fa           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     nameFa          text NOT NULL,
-    dateFA          datetime NOT NULL,
+    dateFA          timestamp NOT NULL,
     duration        real NOT NULL,
     location        text NOT NULL,
     remuneration    real NOT NULL,
@@ -44,6 +53,22 @@ CREATE TABLE IF NOT EXISTS Payment(
     ID_professional integer NOT NULL,
     CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
 );
+
+DROP TABLE PaymentTeacher;
+CREATE TABLE PaymentTeacher
+(
+ ID_payment      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+ amount       real NOT NULL,
+ datePay      date NOT NULL,
+ sender       text NOT NULL,
+ receiver     text NOT NULL,
+ address      text NOT NULL,
+ fiscalNumber text NOT NULL,
+ confirmed    boolean NOT NULL,
+ ID_invoice   integer NOT NULL,
+ CONSTRAINT FK_158 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice ( ID_invoice )
+);
+
 
 
 DROP TABLE Professional;
