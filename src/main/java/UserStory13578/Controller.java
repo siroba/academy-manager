@@ -110,8 +110,6 @@ public class Controller {
 					Float.toString(d.formativeAction.getFee()),
 					d.formativeAction.getFaStart().toString(),
 					d.enrollment.getStatus().toString() };
-			
-			System.out.println(d.formativeAction.getName());
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
