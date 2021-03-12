@@ -152,17 +152,6 @@ public class DateTime extends Date {
 	public LocalDateTime toLocalDateTime() {
 		return LocalDateTime.of(year, month, day, hour, minute);
 	}
-	
-	/**
-	 * The returned string is formatted according to sqlite date return value (yyyy-MM-dd hh:mm:00.0)
-	 */
-	public String toSQLiteString() {
-        String h = (this.hour < 10 ? "0" : "") + this.hour;
-        String m = (this.minute < 10 ? "0" : "") + this.minute;
-        String d = (this.day < 10 ? "0" : "") + this.day;
-        String M = (this.month < 10 ? "0" : "") + this.month;
-        return this.year + "-" + M + "-" + d + " " + h + ":" + m + ":00.0";
-    }
 
 	/**
 	 * Uses {@link LocalDateTime#now()} to generate the values
