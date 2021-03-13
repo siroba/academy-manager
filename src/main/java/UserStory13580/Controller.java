@@ -14,7 +14,7 @@ import javax.swing.table.TableModel;
 import Entities.FormativeAction;
 import Entities.Invoice;
 import Entities.PaymentTeacher;
-import PL53.SI2020_PL53.DateTime;
+import PL53.util.DateTime;
 import UserStory13580.Data;
 import UserStory13580.Model;
 import UserStory13580.View;

@@ -10,8 +10,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import PL53.util.DateTime;
 import Utils.Database;
-import PL53.SI2020_PL53.DateTime;
 
 public class Payment {
 	private int ID = -1, ID_fa, ID_professional;

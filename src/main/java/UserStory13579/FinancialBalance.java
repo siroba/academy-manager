@@ -1,6 +1,6 @@
 package UserStory13579;
 
-import PL53.SI2020_PL53.DateTime;
+import PL53.util.DateTime;
 
 public class FinancialBalance {
 	private DateTime date;
