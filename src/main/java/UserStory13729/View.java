@@ -23,6 +23,8 @@ public class View extends JFrame {
 	
 	private JPanel contentPane;
 	private JTable table;
+	private JButton btnConfirm;
+	private DateTimeInput datetimeOffsetPanel;
 	
 	/**
 	 * Create the frame.
@@ -51,13 +53,13 @@ public class View extends JFrame {
 		lblDelay.setBounds(10, 215, 166, 15);
 		contentPane.add(lblDelay);
 		
-		DateTimeInput datetimeOffsetPanel = new DateTimeInput();
+		datetimeOffsetPanel = new DateTimeInput();
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		datetimeOffsetPanel.setBorder(blackline);
 		datetimeOffsetPanel.setBounds(32, 235, 408, 67);
 		contentPane.add(datetimeOffsetPanel);
 		
-		JButton btnConfirm = new JButton("Confirm");
+		btnConfirm = new JButton("Confirm");
 		btnConfirm.setBounds(139, 310, 195, 25);
 		contentPane.add(btnConfirm);
 	}
@@ -69,4 +71,16 @@ public class View extends JFrame {
 	public void setTable(TableModel tm) {
 		this.table.setModel(tm);
 	}
+	public JButton getBtnConfirm() {
+		return btnConfirm;
+	}
+	
+	public int getSelected() {
+		return table.getSelectedRow();
+	}
+	
+	public DateTimeInput getDateTimeInput() {
+		return datetimeOffsetPanel;
+	}
+	
 }
