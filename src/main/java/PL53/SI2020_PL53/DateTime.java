@@ -199,6 +199,17 @@ public class DateTime extends Date {
 		String m = (this.minute < 10 ? "0" : "") + this.minute;
 		return this.day + "/" + this.month + "/" + this.year + " " + h + ":" + m;
 	}
+	
+	/**
+	 * The returned string is formatted according to sqlite date return value (yyyy-MM-dd hh:mm:00.0)
+	 */
+	public String toSQLiteString() {
+        String h = (this.hour < 10 ? "0" : "") + this.hour;
+        String m = (this.minute < 10 ? "0" : "") + this.minute;
+        String d = (this.day < 10 ? "0" : "") + this.day;
+        String M = (this.month < 10 ? "0" : "") + this.month;
+        return this.year + "-" + M + "-" + d + " " + h + ":" + m + ":00.0";
+    }
 
 	public void setTime(int minute, int hour) {
 		this.minute = minute;

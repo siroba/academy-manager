@@ -167,7 +167,7 @@ public class View {
 		frame.getContentPane().add(comboBoxDayHour, "cell 0 7,gapx 10");
 		
 		comboBoxDayMinute = new JComboBox();
-		comboBoxDayMinute.setModel(new DefaultComboBoxModel(new String[] {"Min ", "00", "05 ", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"}));
+		comboBoxDayMinute.setModel(new DefaultComboBoxModel(new String[] {"Min ", "00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"}));
 		comboBoxDayMinute.setMaximumSize(new Dimension(60, 16));
 		comboBoxDayMinute.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		frame.getContentPane().add(comboBoxDayMinute, "cell 0 7,gapx 10");
