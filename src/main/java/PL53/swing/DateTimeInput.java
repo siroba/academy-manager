@@ -1,10 +1,10 @@
 package PL53.swing;
 
-import java.awt.GridLayout;
 import java.text.DecimalFormat;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import PL53.util.Date;
 import PL53.util.DateTime;
@@ -13,54 +13,52 @@ public class DateTimeInput extends JPanel {
 	/** Auto generated serial ID */
 	private static final long serialVersionUID = 1733893010805448139L;
 
-	/** The format for the hour and the minute, see {@link JNumberField#JNumberField(int, DecimalFormat)}. */
+	/**
+	 * The format for the hour and the minute, see
+	 * {@link JNumberField#JNumberField(int, DecimalFormat)}.
+	 */
 	public static final DecimalFormat format = new DecimalFormat("#0");
 	private JNumberField hoursTextField, minutesTextField;
 	private DateInput datePanel;
 
 	/**
-	 * Default constructor. Creates the panel, adds all the components and creates one {@link DateInput}.
+	 * Default constructor. Creates the panel, adds all the components and creates
+	 * one {@link DateInput}.
 	 */
 	public DateTimeInput() {
 		format.setMaximumIntegerDigits(2);
 
 		setLayout(null);
 		JPanel timePanel = new JPanel();
-		timePanel.setBounds(0, 0, 152, 46);
+		timePanel.setBounds(5, 9, 148, 57);
 		this.add(timePanel);
 		timePanel.setLayout(null);
 
-		JPanel hourPanel = new JPanel();
-		hourPanel.setBounds(0, 0, 61, 45);
-		timePanel.add(hourPanel);
-		hourPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-		JLabel lblHour = new JLabel("Hours:");
-		hourPanel.add(lblHour);
+		JLabel lblHour = new JLabel("hours : minutes");
+		lblHour.setBounds(17, 0, 120, 22);
+		timePanel.add(lblHour);
 
 		hoursTextField = new JNumberField(2, format);
+		hoursTextField.setBound(0, 23);
+		hoursTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		hoursTextField.setBounds(25, 20, 34, 22);
+		timePanel.add(hoursTextField);
 		hoursTextField.setText("0");
-		hourPanel.add(hoursTextField);
 
 		JLabel labelSep = new JLabel(":");
-		labelSep.setBounds(68, 23, 16, 15);
+		labelSep.setBounds(62, 23, 5, 15);
 		timePanel.add(labelSep);
 
-		JPanel minutePanel = new JPanel();
-		minutePanel.setBounds(79, 0, 70, 45);
-		timePanel.add(minutePanel);
-		minutePanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-		JLabel lblMinute = new JLabel("Minutes:");
-		minutePanel.add(lblMinute);
-
 		minutesTextField = new JNumberField(2, format);
+		minutesTextField.setBound(0, 59);
+		minutesTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		minutesTextField.setBounds(70, 20, 34, 22);
+		timePanel.add(minutesTextField);
 		minutesTextField.setText("0");
-		minutePanel.add(minutesTextField);
 
 		datePanel = new DateInput();
 		datePanel.setLayout(null);
-		datePanel.setBounds(160, 0, 241, 46);
+		datePanel.setBounds(165, 9, 208, 57);
 		this.add(datePanel);
 	}
 
@@ -95,7 +93,7 @@ public class DateTimeInput extends JPanel {
 	public JNumberField getMonthsTextField() {
 		return datePanel.getMonthsTextField();
 	}
-	
+
 	public JNumberField getHoursTextField() {
 		return hoursTextField;
 	}

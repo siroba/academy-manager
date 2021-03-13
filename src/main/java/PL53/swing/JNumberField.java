@@ -20,10 +20,14 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 	/** Auto generated Serial ID */
 	private static final long serialVersionUID = 374166271716319247L;
 
-	/**
-	 * The maximum length of the number
-	 */
+	/** The maximum length of the number */
 	private int maxLength;
+
+	/**
+	 * Bounds for the value of the field. By default, the bounds are infinity (no
+	 * bounds).
+	 */
+	private int maxValue = Integer.MAX_VALUE, minValue = Integer.MIN_VALUE;
 
 	/**
 	 * Default constructor
@@ -55,7 +59,9 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 
 	/**
 	 * Initializes the value to "0" and adds the listeners to allow only numbers and
-	 * delete the content on focus gained.
+	 * delete the content on focus gained. If the new value of the number is out of
+	 * the limits ({@link #maxValue} and {@link #minValue}), the value is set to the
+	 * closest bound.
 	 */
 	private void init() {
 		this.setText("0");
@@ -64,6 +70,12 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (!Character.isDigit(e.getKeyChar()) || getText().length() >= maxLength) {
+					e.consume();
+				} else if (Integer.parseInt(getValue().toString() + e.getKeyChar()) > maxValue) {
+					setText(Integer.toString(maxValue));
+					e.consume();
+				} else if (Integer.parseInt(getValue().toString() + e.getKeyChar()) < minValue) {
+					setText(Integer.toString(minValue));
 					e.consume();
 				}
 			}
@@ -78,7 +90,8 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 	}
 
 	/**
-	 * If the text field is empty, it returns 0. Otherwise, it parses the text ({@link #getText()}) to an integer.
+	 * If the text field is empty, it returns 0. Otherwise, it parses the text
+	 * ({@link #getText()}) to an integer.
 	 */
 	public Integer getValue() {
 		if (this.getText().length() > 0)
@@ -93,5 +106,16 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 
 	public void setMaxLength(int maxLength) {
 		this.maxLength = maxLength;
+	}
+	
+	/**
+	 * Set the bounds for the value of the field
+	 * 
+	 * @param min
+	 * @param max
+	 */
+	public void setBound(int min, int max) {
+		this.maxValue = max;
+		this.minValue = min;
 	}
 }

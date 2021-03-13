@@ -1,80 +1,70 @@
 package PL53.swing;
 
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.text.DecimalFormat;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import PL53.util.Date;
+import javax.swing.SwingConstants;
 
 public class DateInput extends JPanel {
 	/** Auto generated serial ID */
 	private static final long serialVersionUID = 1733893010805448139L;
 	private JNumberField daysTextField, yearsTextField, monthsTextField;
-	
-	/** The format for the day and month, see {@link JNumberField#JNumberField(int, DecimalFormat)}. */
+
+	/**
+	 * The format for the day and month, see
+	 * {@link JNumberField#JNumberField(int, DecimalFormat)}.
+	 */
 	public static final DecimalFormat format = new DecimalFormat("#0");
-	
-	/** The format for the year, see {@link JNumberField#JNumberField(int, DecimalFormat)}. */
+
+	/**
+	 * The format for the year, see
+	 * {@link JNumberField#JNumberField(int, DecimalFormat)}.
+	 */
 	public static final DecimalFormat yearFormat = new DecimalFormat("0000");
-	
+
 	/**
 	 * Default constructor. Creates the panel and adds all the components.
 	 */
 	public DateInput() {
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(241, 46));
+		this.setPreferredSize(new Dimension(203, 55));
 
-		JPanel datePanel = new JPanel();
-		datePanel.setLayout(null);
-		datePanel.setBounds(0, 0, 238, 45);
-		this.add(datePanel);
+		JLabel lblYear = new JLabel("days / months / years");
+		lblYear.setBounds(14, 0, 159, 22);
+		add(lblYear);
 
-		JPanel dayPanel = new JPanel();
-		dayPanel.setBounds(0, 0, 61, 45);
-		datePanel.add(dayPanel);
-		dayPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-		JLabel lblDay = new JLabel("Days:");
-		dayPanel.add(lblDay);
-		
 		daysTextField = new JNumberField(2, format);
+		daysTextField.setBound(0, 31);
+		daysTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		daysTextField.setBounds(9, 21, 34, 22);
+		add(daysTextField);
 		daysTextField.setText("0");
-		dayPanel.add(daysTextField);
 
 		JLabel labelSep1 = new JLabel("/");
-		labelSep1.setBounds(68, 23, 16, 15);
-		datePanel.add(labelSep1);
-
-		JPanel monthPanel = new JPanel();
-		monthPanel.setBounds(79, 0, 70, 45);
-		datePanel.add(monthPanel);
-		monthPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-		JLabel lblMonth = new JLabel("Months:");
-		monthPanel.add(lblMonth);
+		labelSep1.setBounds(52, 25, 5, 15);
+		add(labelSep1);
 
 		monthsTextField = new JNumberField(2, format);
+		monthsTextField.setBound(0, 12);
+		monthsTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		monthsTextField.setBounds(66, 21, 34, 22);
+		add(monthsTextField);
 		monthsTextField.setText("0");
-		monthPanel.add(monthsTextField);
 
 		JLabel labelSep2 = new JLabel("/");
-		labelSep2.setBounds(155, 23, 16, 15);
-		datePanel.add(labelSep2);
-
-		JPanel yearPanel = new JPanel();
-		yearPanel.setBounds(166, 0, 70, 45);
-		datePanel.add(yearPanel);
-		yearPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-		JLabel lblYear = new JLabel("Years:");
-		yearPanel.add(lblYear);
+		labelSep2.setBounds(109, 25, 5, 15);
+		add(labelSep2);
 
 		yearsTextField = new JNumberField(4, yearFormat);
+		yearsTextField.setBound(0, Integer.MAX_VALUE);
+		yearsTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		yearsTextField.setBounds(123, 21, 70, 22);
+		add(yearsTextField);
 		yearsTextField.setText("0");
-		yearPanel.add(yearsTextField);
 	}
 
 	public int getDay() {
@@ -100,7 +90,7 @@ public class DateInput extends JPanel {
 	public JNumberField getMonthsTextField() {
 		return monthsTextField;
 	}
-	
+
 	/**
 	 * Parses the values of the fields into a {@link Date} object.
 	 * 
