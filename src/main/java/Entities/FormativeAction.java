@@ -476,6 +476,6 @@ public class FormativeAction {
 	}
 
 	public enum Status {
-		ACTIVE, EXECUTED, CANCELLED;
+		ACTIVE, DELAYED, EXECUTED, CANCELLED;
 	}
 }
