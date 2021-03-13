@@ -14,12 +14,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
 
 public class View extends JFrame {
 	// Auto-generated serial ID

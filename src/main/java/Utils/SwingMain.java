@@ -52,9 +52,9 @@ public class SwingMain {
 		frame = new JFrame();
 		frame.setTitle("Main");
 
-		frame.setBounds(0, 0, 800, 250);
+		frame.setBounds(0, 0, 840, 323);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(6, 3, 10, 10));
+		frame.getContentPane().setLayout(new GridLayout(7, 3, 10, 10));
 
 		// Initialize the DB and fill it with data
 		Database db = new Database();
@@ -105,6 +105,14 @@ public class SwingMain {
 		btnPayTeacher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13580.Controller controller = new UserStory13580.Controller();
+				controller.initController();
+			}
+		});
+
+		JButton btnDelayFA = new JButton("Delay a Formative Action");
+		btnDelayFA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13729.Controller controller = new UserStory13729.Controller();
 				controller.initController();
 			}
 		});
@@ -176,6 +184,9 @@ public class SwingMain {
 		frame.getContentPane().add(btnPayTeacher);
 		frame.getContentPane().add(labelEmpty6);
 		frame.getContentPane().add(labelEmpty7);
+		
+		// Row 7
+		frame.getContentPane().add(btnDelayFA);
 	}
 
 	public JFrame getFrame() {
