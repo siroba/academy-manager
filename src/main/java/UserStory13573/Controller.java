@@ -9,7 +9,7 @@ import PL53.util.Date;
 import PL53.util.DateTime;
 import Utils.SwingUtil;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 	

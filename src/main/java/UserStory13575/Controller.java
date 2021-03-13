@@ -21,10 +21,9 @@ import PL53.util.DateTime;
 //import Entities.FormativeAction;
 import UserStory13575.Data;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
-	private String lastSelectedKey = ""; // remembers the last selected row to restore it when changing the race table
 	private Data selectedRow;
 	
 

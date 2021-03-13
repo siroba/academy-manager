@@ -19,7 +19,7 @@ import UserStory13580.Data;
 import UserStory13580.Model;
 import UserStory13580.View;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 	

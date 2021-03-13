@@ -22,7 +22,7 @@ import javax.swing.table.TableModel;
 [x] In this sprint we assume that refunds are correctly made for all registrations that are cancelled, at the time the cancellation is done.
 */
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 
