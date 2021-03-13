@@ -64,7 +64,7 @@ public class SwingMain {
 		// Secretary
 		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
 
-		JButton btnRegisterPayments = new JButton("Register Payments");
+		JButton btnRegisterPayments = new JButton("Register a Payment");
 		btnRegisterPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13575.Controller controller = new UserStory13575.Controller();
@@ -101,8 +101,8 @@ public class SwingMain {
 			}
 		});
 
-		JButton btnRecordPayments = new JButton("Record payments");
-		btnRecordPayments.addActionListener(new ActionListener() {
+		JButton btnPayTeacher = new JButton("Pay a teacher");
+		btnPayTeacher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13580.Controller controller = new UserStory13580.Controller();
 				controller.initController();
@@ -173,7 +173,7 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty4);
 		frame.getContentPane().add(labelEmpty5);
 		// Row 6
-		frame.getContentPane().add(btnRecordPayments);
+		frame.getContentPane().add(btnPayTeacher);
 		frame.getContentPane().add(labelEmpty6);
 		frame.getContentPane().add(labelEmpty7);
 	}
