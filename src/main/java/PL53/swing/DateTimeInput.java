@@ -93,7 +93,7 @@ public class DateTimeInput extends JPanel {
 	public JNumberField getMonthsTextField() {
 		return datePanel.getMonthsTextField();
 	}
-
+  
 	public JNumberField getHoursTextField() {
 		return hoursTextField;
 	}

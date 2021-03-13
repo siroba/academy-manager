@@ -13,7 +13,7 @@ public class DateInput extends JPanel {
 	/** Auto generated serial ID */
 	private static final long serialVersionUID = 1733893010805448139L;
 	private JNumberField daysTextField, yearsTextField, monthsTextField;
-
+  
 	/**
 	 * The format for the day and month, see
 	 * {@link JNumberField#JNumberField(int, DecimalFormat)}.
@@ -25,7 +25,7 @@ public class DateInput extends JPanel {
 	 * {@link JNumberField#JNumberField(int, DecimalFormat)}.
 	 */
 	public static final DecimalFormat yearFormat = new DecimalFormat("0000");
-
+  
 	/**
 	 * Default constructor. Creates the panel and adds all the components.
 	 */
@@ -90,7 +90,7 @@ public class DateInput extends JPanel {
 	public JNumberField getMonthsTextField() {
 		return monthsTextField;
 	}
-
+  
 	/**
 	 * Parses the values of the fields into a {@link Date} object.
 	 * 
