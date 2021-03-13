@@ -1,49 +1,71 @@
 package UserStory13727;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
 
-public class Controller implements PL53.util.Controller{
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
-	
+
 	public Controller() {
 		this.model = new Model();
-		
+
 		try {
 			this.model.initModel();
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		this.view = new View();
 		this.initView();
 	}
 
 	@Override
 	public void initController() {
-		// TODO Auto-generated method stub
-		
+		view.getBtnCancel().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int index = view.getSelected();
+				
+				double payments = model.getPayments(index);
+				double teachers = model.getInvoices(index);
+				
+				int option = JOptionPane.showConfirmDialog(null, 
+						payments + "€ will be refunded to Professionals and " + teachers + "€ will be returned from the teachers.",
+						"Are you sure you want to continue?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+				
+				if(option == 0) {
+					// TODO: do something
+				}
+				
+			}
+		});
 	}
 
 	@Override
 	public void initView() {
-		// TODO Auto-generated method stub
-		
+		view.setVisible(true);
+		view.setTable(getTableModel(model.getAllData()));
 	}
-	
+
 	public TableModel getTableModel(FormativeAction data[]) {
-		String header[] = { "Formative Action", "Date", "Teacher", "Total places"};
+		String header[] = { "Formative Action", "Date", "Teacher", "Total places" };
 
 		String body[][] = new String[data.length][header.length];
 
 		for (int i = 0; i < data.length; i++) {
 			FormativeAction d = data[i];
-			body[i] = new String[] { d.getName(), d.getFaStart().toString(), d.getTeacherName(), Integer.toString(d.getTotalPlaces())};
+			body[i] = new String[] { d.getName(), d.getFaStart().toString(), d.getTeacherName(),
+					Integer.toString(d.getTotalPlaces()) };
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
