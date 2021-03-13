@@ -1,6 +1,6 @@
 package UserStory13576;
 
-import PL53.SI2020_PL53.Date;
+import PL53.util.Date;
 
 public class FormativeActionList {
 	private String nameOfAction;
