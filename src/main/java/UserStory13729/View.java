@@ -2,6 +2,7 @@ package UserStory13729;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 
@@ -10,6 +11,10 @@ import PL53.swing.DateTimeInput;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 public class View extends JFrame {
@@ -25,14 +30,14 @@ public class View extends JFrame {
 	public View() {
 		setTitle("Delay a Formative Action");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 473, 365);
+		setBounds(100, 100, 473, 375);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 40, 441, 163);
+		scrollPane.setBounds(16, 40, 441, 163);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -47,11 +52,13 @@ public class View extends JFrame {
 		contentPane.add(lblDelay);
 		
 		DateTimeInput datetimeOffsetPanel = new DateTimeInput();
-		datetimeOffsetPanel.setBounds(10, 229, 441, 58);
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+		datetimeOffsetPanel.setBorder(blackline);
+		datetimeOffsetPanel.setBounds(32, 235, 408, 67);
 		contentPane.add(datetimeOffsetPanel);
 		
 		JButton btnConfirm = new JButton("Confirm");
-		btnConfirm.setBounds(139, 299, 195, 25);
+		btnConfirm.setBounds(139, 310, 195, 25);
 		contentPane.add(btnConfirm);
 	}
 
@@ -60,6 +67,6 @@ public class View extends JFrame {
 	}
 	
 	public void setTable(TableModel tm) {
-		
+		this.table.setModel(tm);
 	}
 }
