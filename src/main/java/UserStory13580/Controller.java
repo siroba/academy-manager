@@ -15,9 +15,6 @@ import Entities.FormativeAction;
 import Entities.Invoice;
 import Entities.PaymentTeacher;
 import PL53.util.DateTime;
-import UserStory13580.Data;
-import UserStory13580.Model;
-import UserStory13580.View;
 
 public class Controller {
 	private Model model;
@@ -78,13 +75,13 @@ public class Controller {
 					String name = view.getNameTextField();
 					String fiscalNumber = view.getFiscalNumberTextField();
 					String address = view.getAddressTextField();
-					DateTime dateTransfer = DateTime.parseString(view.getDateTransferTextField());
+					DateTime dateTransfer = view.getDateTransferTextField();
 					int ID_fa = selectedRow.getID();
 					float amount = selectedRow.getRemuneration();
 					String sender = "COIIPA";
 					String receiver = selectedRow.getTeacherName();
 					boolean confirmed = true;
-					DateTime dateInvoice = DateTime.parseString(view.getDateTextField());
+					DateTime dateInvoice = view.getDateTextField();
 
 					Invoice invoice = new Invoice(ID_fa, dateInvoice);
 
@@ -93,8 +90,6 @@ public class Controller {
 					model.insertInvoice(invoice , paymentTeacher);
 				} catch (NumberFormatException e2) {
 					JOptionPane.showMessageDialog(null, "The Invoice ID must be an integer");
-				} catch (ParseException e1) {
-					JOptionPane.showMessageDialog(null, "The Data must be a Data");
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Error creating the invoice");
 					e1.printStackTrace();
