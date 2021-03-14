@@ -8,6 +8,7 @@ import javax.swing.SwingConstants;
 
 import PL53.util.Date;
 import PL53.util.DateTime;
+import java.awt.Font;
 
 public class DateTimeInput extends JPanel {
 	/** Auto generated serial ID */
@@ -20,6 +21,7 @@ public class DateTimeInput extends JPanel {
 	public static final DecimalFormat format = new DecimalFormat("#0");
 	private JNumberField hoursTextField, minutesTextField;
 	private DateInput datePanel;
+	private JLabel lblHour, labelSep;
 
 	/**
 	 * Default constructor. Creates the panel, adds all the components and creates
@@ -34,8 +36,9 @@ public class DateTimeInput extends JPanel {
 		this.add(timePanel);
 		timePanel.setLayout(null);
 
-		JLabel lblHour = new JLabel("hours : minutes");
-		lblHour.setBounds(17, 0, 120, 22);
+		lblHour = new JLabel("hour : minute");
+		lblHour.setFont(new Font("Dialog", Font.BOLD, 11));
+		lblHour.setBounds(29, 0, 120, 22);
 		timePanel.add(lblHour);
 
 		hoursTextField = new JNumberField(2, format);
@@ -45,7 +48,7 @@ public class DateTimeInput extends JPanel {
 		timePanel.add(hoursTextField);
 		hoursTextField.setText("0");
 
-		JLabel labelSep = new JLabel(":");
+		labelSep = new JLabel(":");
 		labelSep.setBounds(62, 23, 5, 15);
 		timePanel.add(labelSep);
 
@@ -57,6 +60,9 @@ public class DateTimeInput extends JPanel {
 		minutesTextField.setText("0");
 
 		datePanel = new DateInput();
+		datePanel.getLblYear().setLocation(28, 0);
+		datePanel.getLblYear().setFont(new Font("Dialog", Font.BOLD, 11));
+		datePanel.getLblYear().setText("day / month / year");
 		datePanel.setLayout(null);
 		datePanel.setBounds(165, 9, 208, 57);
 		this.add(datePanel);
@@ -101,6 +107,26 @@ public class DateTimeInput extends JPanel {
 	public JNumberField getMinutesTextField() {
 		return minutesTextField;
 	}
+	
+	public JLabel getLblYear() {
+		return datePanel.getLblYear();
+	}
+
+	public JLabel getLabelSep1() {
+		return datePanel.getLabelSep1();
+	}
+
+	public JLabel getLabelSep2() {
+		return datePanel.getLabelSep2();
+	}	
+
+	public JLabel getLblHour() {
+		return lblHour;
+	}
+
+	public JLabel getLabelSep() {
+		return labelSep;
+	}
 
 	/**
 	 * See {@link DateInput#getDate()}.
@@ -121,4 +147,5 @@ public class DateTimeInput extends JPanel {
 				datePanel.getYear());
 	}
 
+	
 }

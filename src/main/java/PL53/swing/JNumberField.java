@@ -97,7 +97,7 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 		if (this.getText().length() > 0)
 			return Integer.parseInt(this.getText());
 		else
-			return 0;
+			return minValue;
 	}
 
 	public int getMaxLength() {
