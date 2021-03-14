@@ -73,8 +73,12 @@ public class Controller {
 					Professional p = model.createProfessional(name, surname, phone, email);
 					Enrollment en = p.enroll(selected, p, Enrollment.Status.RECEIVED, DateTime.now());
 
-					model.doEnrollment(p, en); 
+					model.doEnrollment(p, en);
+
+					model.loadFormativeActions();
+					view.setFAList(model.getFormativeActions());
 					
+
 					JOptionPane.showMessageDialog(null, "Enrollment confirmed");
 				} catch (SQLException | ParseException e1) {
 					e1.printStackTrace();
