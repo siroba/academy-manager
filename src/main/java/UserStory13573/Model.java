@@ -1,6 +1,9 @@
 package UserStory13573;
 
+import java.sql.SQLException;
+
 import Entities.FormativeAction;
+import Entities.Session;
 import Utils.Database;
 
 
@@ -19,16 +22,15 @@ public class Model {
 	
 	/**
 	 * Insert a new formative action into the formativeActions table 
+	 * @throws  
+	 * @throws SQLException 
 	 */
-	public void setFormativeAction(FormativeAction fA) {
-		// Query 
-		String sql=
-				 "insert into formativeAction(nameFa, dateFa, duration, location, remuneration, fee, totalPlaces, objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd) values \r\n"
-				 + "	(?, ?, ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?)";
-		
-		// Execute update query 
-		db.executeUpdateQuery(sql, fA.getName(), fA.getFaStart().toSQLiteString(), fA.getDuration(), fA.getLocation(), fA.getRemuneration(), fA.getFee(), fA.getTotalPlaces(), fA.getObjectives(), fA.getMainContents(), fA.getTeacherName(), fA.getStatus().toString(), fA.getEnrollmentStart().toSQLiteString(), fA.getEnrollmentEnd().toSQLiteString());	}
-	
+	public void setFormativeAction(FormativeAction fA) throws SQLException {
+		fA.insert(db);
+		for(Session s: fA.getSessions()) {
+			s.insert(db);
+		}
+	}
 	
 //	/** // TODO: Reuse for later sprints
 //	 * Get the teacher instance that equals teacherName 

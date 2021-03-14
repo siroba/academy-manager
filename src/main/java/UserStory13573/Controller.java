@@ -2,9 +2,13 @@ package UserStory13573;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
+
 import Entities.FormativeAction;
 import Entities.Teacher;
 import Entities.FormativeAction.Status;
+import Entities.Session;
 import PL53.util.Date;
 import PL53.util.DateTime;
 import Utils.SwingUtil;
@@ -12,6 +16,7 @@ import Utils.SwingUtil;
 public class Controller {
 	private Model model;
 	private View view;
+	private List<Session> sessions;
 	
 	public Controller(Model m, View v) {
 		this.model = m;
@@ -33,6 +38,18 @@ public class Controller {
 				//does not use mouseClicked because when setting single selection in the race table
 				//the user could drag the mouse over several rows and only the last one is of interest.
 				SwingUtil.exceptionWrapper(() -> createFormativeAction());
+			}
+		});
+		
+		view.getBtnAddSession().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sessions.add(new Session(
+						view.getLocation(),
+						view.getTeacher(),
+						view.getNumberOfHours(),
+						view.getRemuneration(),
+						view.getSessionDatetime()));
 			}
 		});
 	}
@@ -58,24 +75,39 @@ public class Controller {
 		view.setWarningEnrollmentPeriodEnd2("");
 
 		// Get dates
-		DateTime dateFormativeAction = new DateTime(Integer.parseInt(view.getDayMinute()), Integer.parseInt(view.getDayHour()), Integer.parseInt(view.getDayDay()), Integer.parseInt(view.getDayMonth()), Integer.parseInt(view.getDayYear()));
-		DateTime dateEnrollStart = new DateTime(0, 0, Integer.parseInt(view.getEnrollStartDay()), Integer.parseInt(view.getEnrollStartMonth()), Integer.parseInt(view.getEnrollStartYear()));
-		DateTime dateEnrollEnd = new DateTime(0, 0, Integer.parseInt(view.getEnrollEndDay()), Integer.parseInt(view.getEnrollEndMonth()), Integer.parseInt(view.getEnrollEndYear()));
+		DateTime dateFormativeAction = view.getSessionDatetime();
+		DateTime dateEnrollStart = view.getEnrollStart();
+		DateTime dateEnrollEnd = view.getEnrollEnd();
+		
+		List<Session> sessions = this.getSessions();
 		
 		// Validate dates  
-		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)==false) {
-			return;
+		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)) {
+			// Create new formative action and add it to DB 
+			FormativeAction formativeAction = new FormativeAction(
+					view.getName(), 
+					view.getFee(), 
+					view.getSpaces(), 
+					view.getObjectives(), 
+					view.getMainContents(),
+					FormativeAction.Status.ACTIVE, 
+					dateEnrollStart, 
+					dateEnrollEnd);
+			
+			formativeAction.setSessions(sessions);
+			
+			try {
+				model.setFormativeAction(formativeAction);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-
-		// Create new formative action and add it to DB 
-		FormativeAction formativeAction = new FormativeAction(view.getName(), Float.parseFloat(view.getNumberOfHours()), view.getLocation(), Float.parseFloat(view.getRemuneration()), Float.parseFloat(view.getFee()), Integer.parseInt(view.getSpaces()), 
-																view.getObjectives(), view.getMainContents(), view.getTeacher(), FormativeAction.Status.ACTIVE, dateEnrollStart, dateEnrollEnd, dateFormativeAction);
-
-		model.setFormativeAction(formativeAction);
-		view.getFrame().setVisible(false); 
-		
 	}
 	
+	private List<Session> getSessions() {
+		return sessions;
+	}
+
 	/**
 	 * Check if the provided dates for the formative action, the start & end of the enrollment period are valid 
 	 */

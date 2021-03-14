@@ -38,15 +38,14 @@ public class View {
 	private JTextArea TFObjectives, TFContents;
 	private JLabel LabelObjectives;
 	private JButton BTNCreate;
-	private JLabel LabelWarningStartEnroll;
-	private JLabel LabelWarningEndEnroll;
+	private JLabel LabelWarningStartEnroll, LabelWarningEndEnroll, LabelWarningDay;
 	private DateTimeInput enrollStart, enrollEnd, sessionStart;
 	private JLabel LabelFee;
 	private JPanel panel;
 	private JPanel sessionsPanel;
 	private JTable table;
 	private JTextField TFLocation;
-	private JLabel label;
+	private JButton btnAddSession;
 
 	/**
 	 * Create the application.
@@ -195,7 +194,7 @@ public class View {
 		LabelLocation.setBounds(12, 145, 51, 14);
 		sessionsPanel.add(LabelLocation);
 
-		JLabel LabelWarningDay = new JLabel("  ");
+		LabelWarningDay = new JLabel("  ");
 		LabelWarningDay.setForeground(Color.RED);
 		LabelWarningDay.setFont(new Font("Dialog", Font.PLAIN, 11));
 		LabelWarningDay.setBounds(12, 145, 8, 14);
@@ -230,7 +229,7 @@ public class View {
 		TFHours.setBounds(365, 142, 39, 19);
 		sessionsPanel.add(TFHours);
 
-		JButton btnAddSession = new JButton("Add session");
+		btnAddSession = new JButton("Add session");
 		btnAddSession.setBounds(129, 400, 166, 25);
 		sessionsPanel.add(btnAddSession);
 
@@ -289,16 +288,16 @@ public class View {
 		return this.TFTeacher.getText();
 	}
 
-	public String getRemuneration() {
-		return this.TFRemuneration.getText();
+	public int getRemuneration() {
+		return this.TFRemuneration.getValue();
 	}
 
 	public String getLocation() {
 		return this.TFLocation.getText();
 	}
 
-	public String getSpaces() {
-		return this.TFSpaces.getText();
+	public int getSpaces() {
+		return this.TFSpaces.getValue();
 	}
 
 	public DateTime getSessionDatetime() {
@@ -317,8 +316,8 @@ public class View {
 		return enrollEnd.getDateTime();
 	}
 
-	public String getFee() {
-		return String.valueOf(this.TFFee.getText());
+	public float getFee() {
+		return this.TFFee.getValue();
 	}
 
 	public void setWarningDay(String warning) {
@@ -339,5 +338,8 @@ public class View {
 
 	public void setWarningEnrollmentPeriodEnd2(String warning) {
 		this.LabelWarningEndEnroll.setText(warning);
+	}
+	public JButton getBtnAddSession() {
+		return btnAddSession;
 	}
 }
