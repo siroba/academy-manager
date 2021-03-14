@@ -23,7 +23,7 @@ DROP TABLE FormativeAction;
 CREATE TABLE IF NOT EXISTS FormativeAction(
     ID_fa           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     nameFa          text NOT NULL,
-    dateFA          datetime NOT NULL,
+    dateFA          timestamp NOT NULL,
     duration        real NOT NULL,
     location        text NOT NULL,
     remuneration    real NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS FormativeAction(
     enrollmentStart datetime NOT NULL,
     enrollmentEnd   datetime NOT NULL,
     CHECK ( duration >0 ),
-    CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('ACTIVE', 'EXECUTED', 'CANCELLED') )
+    CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('ACTIVE', 'DELAYED', 'EXECUTED', 'CANCELLED') )
 );
 
 DROP TABLE Payment;

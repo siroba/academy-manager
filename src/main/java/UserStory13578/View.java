@@ -22,6 +22,7 @@ public class View extends JFrame {
 	 * Create the frame.
 	 */
 	public View() {
+		setTitle("Select an enrollment to cancel");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 867, 337);
 		contentPane = new JPanel();

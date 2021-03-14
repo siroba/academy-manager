@@ -6,9 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
-import PL53.SI2020_PL53.DateTime;
-
 import java.awt.Window;
 
 
@@ -24,6 +21,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import javax.swing.table.TableModel;
+
+import PL53.util.DateTime;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;

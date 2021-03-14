@@ -1,4 +1,4 @@
-package PL53.SI2020_PL53;
+package PL53.util;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -197,7 +197,9 @@ public class DateTime extends Date {
 	public String toString() {
 		String h = (this.hour < 10 ? "0" : "") + this.hour;
 		String m = (this.minute < 10 ? "0" : "") + this.minute;
-		return this.day + "/" + this.month + "/" + this.year + " " + h + ":" + m;
+		String d = (this.day < 10 ? "0" : "") + this.day;
+		String mm = (this.month < 10 ? "0" : "") + this.month;
+ 		return d + "/" +mm + "/" + this.year + " " + h + ":" + m;
 	}
 	
 	/**
