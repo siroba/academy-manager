@@ -1,8 +1,5 @@
 package UserStory13727;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -10,12 +7,12 @@ import javax.swing.table.TableModel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import java.awt.Component;
-import javax.swing.Box;
 import javax.swing.JButton;
 
 public class View extends JFrame {
 
+	// Auto generated serial ID
+	private static final long serialVersionUID = -4972701049019946391L;
 	private JPanel contentPane;
 	private JTable table;
 	private JButton btnCancel;
@@ -24,7 +21,7 @@ public class View extends JFrame {
 	 * Create the frame.
 	 */
 	public View() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 765, 293);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

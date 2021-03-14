@@ -44,7 +44,17 @@ public class Controller implements PL53.util.Controller {
 						JOptionPane.WARNING_MESSAGE);
 				
 				if(option == 0) {
-					// TODO: do something
+					model.cancel(index);
+					model.refund(index);
+					model.invoiceTeachers(index);
+					
+					try {
+						model.initModel();
+
+						view.setTable(getTableModel(model.getAllData()));
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
 				
 			}
