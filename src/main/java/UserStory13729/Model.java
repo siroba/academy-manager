@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import Entities.FormativeAction;
+import Entities.Session;
 import PL53.swing.DateTimeInput;
 import PL53.util.DateTime;
 import Utils.Database;
@@ -28,12 +29,17 @@ public class Model {
 	public void delay(int selected, DateTimeInput dateTimeInput) {
 		FormativeAction fa = data[selected];
 		
-		DateTime faStart = delay(fa.getFaStart(), dateTimeInput);
+		String sessionQuery = "UPDATE Session SET sessionStart=? WHERE ID_session=?";
+		
+		for(Session s: fa.getSessions()) // Delay all the sessions by the same amount
+			db.executeUpdate(sessionQuery, delay(s.getSessionStart(), dateTimeInput), s.getID());
+		
+		// Delay the end of the enrollment period by the same amount
 		DateTime enEnd = delay(fa.getEnrollmentEnd(), dateTimeInput);
 		
-		String query = "UPDATE FormativeAction SET dateFa=?, enrollmentStart=?, status=? WHERE ID_fa=?";
+		String query = "UPDATE FormativeAction SET enrollmentEnd=?, status=? WHERE ID_fa=?";
 		
-		db.executeUpdate(query, faStart.toTimestamp(), enEnd.toTimestamp(), FormativeAction.Status.DELAYED.toString(), fa.getID());
+		db.executeUpdate(query, enEnd.toTimestamp(), FormativeAction.Status.DELAYED.toString(), fa.getID());
 	}
 
 	public DateTime delay(DateTime dt, DateTimeInput dti) {

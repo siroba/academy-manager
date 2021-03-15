@@ -55,13 +55,13 @@ public class Controller implements PL53.util.Controller{
 	}
 
 	public TableModel getTableModel(FormativeAction data[]) {
-		String header[] = { "Formative Action", "Date", "Status" };
+		String header[] = { "Formative Action", "Enrollment end", "Status" };
 
 		String body[][] = new String[data.length][header.length];
 
 		for (int i = 0; i < data.length; i++) {
 			FormativeAction d = data[i];
-			body[i] = new String[] { d.getName(), d.getFaStart().toString(), d.getStatus().toString() };
+			body[i] = new String[] { d.getName(), d.getEnrollmentEnd().toString(), d.getStatus().toString() };
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);

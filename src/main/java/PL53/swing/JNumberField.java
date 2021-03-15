@@ -18,16 +18,18 @@ import java.text.DecimalFormat;
  */
 public class JNumberField extends javax.swing.JFormattedTextField {
 	/** Auto generated Serial ID */
-	private static final long serialVersionUID = 374166271716319247L;
+	protected static final long serialVersionUID = 374166271716319247L;
 
 	/** The maximum length of the number */
-	private int maxLength;
+	protected int maxLength;
 
 	/**
 	 * Bounds for the value of the field. By default, the bounds are infinity (no
 	 * bounds).
 	 */
-	private int maxValue = Integer.MAX_VALUE, minValue = Integer.MIN_VALUE;
+	protected float maxValue = Float.MAX_VALUE, minValue = Float.MIN_VALUE;
+
+	protected float defaultValue = 0;
 
 	/**
 	 * Default constructor
@@ -63,20 +65,26 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 	 * the limits ({@link #maxValue} and {@link #minValue}), the value is set to the
 	 * closest bound.
 	 */
-	private void init() {
-		this.setText("0");
+	protected void init() {
+		this.initialValue();
 
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (!Character.isDigit(e.getKeyChar()) || getText().length() >= maxLength) {
+				// If the character is not a digit nor is it allowed
+				if (!Character.isDigit(e.getKeyChar()) || numberDigits(getText()) >= maxLength) {
+					if (isAllowed(e.getKeyChar())) {
+						setText(getText() + e.getKeyChar());
+					}
+
 					e.consume();
-				} else if (Integer.parseInt(getValue().toString() + e.getKeyChar()) > maxValue) {
-					setText(Integer.toString(maxValue));
-					e.consume();
-				} else if (Integer.parseInt(getValue().toString() + e.getKeyChar()) < minValue) {
-					setText(Integer.toString(minValue));
-					e.consume();
+				} else {
+					float newval = Float.parseFloat(getText() + e.getKeyChar());
+
+					if (newval > maxValue) {
+						setText(Float.toString(maxValue));
+						e.consume();
+					}
 				}
 			}
 		});
@@ -86,21 +94,54 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 			public void focusGained(FocusEvent e) {
 				setText("");
 			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				float newval = getInternalValue();
+
+				if (newval < minValue) {
+					setText(Float.toString(minValue));
+				}
+			}
 		});
 	}
 
-	/**
-	 * If the text field is empty, it returns 0. Otherwise, it parses the text
-	 * ({@link #getText()}) to an integer.
-	 */
-	public Integer getValue() {
-		if (this.getText().length() > 0)
-			return Integer.parseInt(this.getText());
+	protected int numberDigits(String str) {
+		int n = 0;
+
+		for (int i = 0; i < str.length(); i++) {
+			if (Character.isDigit(str.charAt(i))) {
+				n++;
+			}
+		}
+
+		return n;
+	}
+
+	protected boolean isAllowed(char c) {
+		return  (c == '-' && getText().length() == 0) || 
+				(c == '.' && !getText().contains("."));
+	}
+
+	protected float getInternalValue() {
+		if (numberDigits(getText()) > 0)
+			return Float.parseFloat(this.getText());
 		else
 			return 0;
 	}
 
-	public int getMaxLength() {
+	/**
+	 * If the text field is empty, it returns 0. Otherwise, it parses the text
+	 * ({@link #getText()}) to an Float.
+	 */
+	public Float getValue() {
+		if (numberDigits(getText()) > 0)
+			return Float.parseFloat(this.getText());
+		else
+			return minValue;
+	}
+
+	public float getMaxLength() {
 		return maxLength;
 	}
 
@@ -108,14 +149,28 @@ public class JNumberField extends javax.swing.JFormattedTextField {
 		this.maxLength = maxLength;
 	}
 	
+	protected void initialValue() {
+		this.setText(defaultValue);
+	}
+
 	/**
 	 * Set the bounds for the value of the field
 	 * 
 	 * @param min
 	 * @param max
 	 */
-	public void setBound(int min, int max) {
+	public void setBound(float min, float max) {
 		this.maxValue = max;
 		this.minValue = min;
+	}
+
+	public void setDefaultValue(float value) {
+		defaultValue = value;
+		
+		this.setText(defaultValue);
+	}
+	
+	public void setText(float f) {
+		this.setText(Float.toString(f));
 	}
 }
