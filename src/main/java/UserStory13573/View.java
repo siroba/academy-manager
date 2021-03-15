@@ -39,6 +39,9 @@ public class View {
 	private JTable table;
 	private JTextField TFLocation;
 	private JButton btnAddSession;
+	private JScrollPane scrollPane_1;
+	private JScrollPane scrollPane_2;
+	private JButton btnDeleteSession;
 
 	/**
 	 * Create the application.
@@ -161,16 +164,22 @@ public class View {
 		enrollEnd.getMonthsTextField().setBound(1, 12);
 		enrollEnd.getYearsTextField().setBound(2000, 3000);
 		enrollEnd.setBorder(blackline);
+		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 93, 188, 76);
+		panel.add(scrollPane_1);
 
 		TFObjectives = new JTextArea();
+		scrollPane_1.setViewportView(TFObjectives);
 		TFObjectives.setLineWrap(true);
-		TFObjectives.setBounds(10, 93, 188, 76);
-		panel.add(TFObjectives);
+		
+		scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(210, 93, 188, 76);
+		panel.add(scrollPane_2);
 
 		TFContents = new JTextArea();
+		scrollPane_2.setViewportView(TFContents);
 		TFContents.setLineWrap(true);
-		TFContents.setBounds(210, 93, 188, 76);
-		panel.add(TFContents);
 
 		JSeparator separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
@@ -189,43 +198,41 @@ public class View {
 
 		JLabel LabelLocation = new JLabel("Location:");
 		LabelLocation.setFont(new Font("Dialog", Font.PLAIN, 11));
-		LabelLocation.setBounds(12, 145, 51, 14);
+		LabelLocation.setBounds(9, 201, 51, 14);
 		sessionsPanel.add(LabelLocation);
 
 		LabelWarningDay = new JLabel("  ");
 		LabelWarningDay.setForeground(Color.RED);
 		LabelWarningDay.setFont(new Font("Dialog", Font.PLAIN, 11));
-		LabelWarningDay.setBounds(12, 145, 8, 14);
+		LabelWarningDay.setBounds(9, 201, 8, 14);
 		sessionsPanel.add(LabelWarningDay);
 
 		JLabel LabelDate = new JLabel("Date of the session:");
 		LabelDate.setFont(new Font("Dialog", Font.PLAIN, 11));
-		LabelDate.setBounds(10, 175, 134, 14);
+		LabelDate.setBounds(7, 231, 134, 14);
 		sessionsPanel.add(LabelDate);
 
 		JLabel LabelHours = new JLabel("Number of hours:");
 		LabelHours.setFont(new Font("Dialog", Font.PLAIN, 11));
-		LabelHours.setBounds(260, 145, 101, 14);
+		LabelHours.setBounds(257, 201, 101, 14);
 		sessionsPanel.add(LabelHours);
 
 		sessionStart = new DateTimeInput();
 		sessionStart.setBorder(blackline);
-		sessionStart.getDaysTextField().setBound(1, 31);
-		sessionStart.getMonthsTextField().setBound(1, 12);
 		sessionStart.getYearsTextField().setBound(2000, 3000);
 		sessionStart.getYearsTextField().setDefaultValue(2021);
-		sessionStart.setBounds(10, 190, 378, 70);
+		sessionStart.setBounds(7, 246, 378, 70);
 
 		sessionsPanel.add(sessionStart);
 
 		TFLocation = new JTextField();
-		TFLocation.setBounds(81, 142, 166, 19);
+		TFLocation.setBounds(78, 198, 166, 19);
 		sessionsPanel.add(TFLocation);
 		TFLocation.setColumns(10);
 
 		TFHours = new JIntField(2);
 		TFHours.setBound(0, 24);
-		TFHours.setBounds(365, 142, 39, 19);
+		TFHours.setBounds(362, 198, 39, 19);
 		sessionsPanel.add(TFHours);
 
 		btnAddSession = new JButton("Add session");
@@ -234,32 +241,37 @@ public class View {
 
 		// Teacher
 		JLabel LabelTeacher = new JLabel("Teacher:");
-		LabelTeacher.setBounds(10, 272, 50, 14);
+		LabelTeacher.setBounds(7, 328, 50, 14);
 		sessionsPanel.add(LabelTeacher);
 		LabelTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 		TFTeacher = new JTextField();
-		TFTeacher.setBounds(66, 272, 142, 18);
+		TFTeacher.setBounds(63, 328, 142, 18);
 		sessionsPanel.add(TFTeacher);
 		TFTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFTeacher.setColumns(10);
 
 		TFRemuneration = new JNumberField(4);
 		TFRemuneration.setBound(0, Integer.MAX_VALUE);
-		TFRemuneration.setBounds(310, 272, 51, 18);
+		TFRemuneration.setBounds(307, 328, 51, 18);
 		sessionsPanel.add(TFRemuneration);
 		TFRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFRemuneration.setColumns(10);
 
 		// Remuneration
 		JLabel LabelRemuneration = new JLabel("Remuneration:");
-		LabelRemuneration.setBounds(220, 272, 83, 14);
+		LabelRemuneration.setBounds(217, 328, 83, 14);
 		sessionsPanel.add(LabelRemuneration);
 		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 		LabelWarningDay = new JLabel("");
-		LabelWarningDay.setBounds(143, 175, 229, 14);
+		LabelWarningDay.setBounds(140, 231, 229, 14);
 		sessionsPanel.add(LabelWarningDay);
+		
+		btnDeleteSession = new JButton("Delete session");
+		btnDeleteSession.setEnabled(false);
+		btnDeleteSession.setBounds(7, 138, 154, 25);
+		sessionsPanel.add(btnDeleteSession);
 	}
 
 	// Getters and Setters to access from the controller (compact representation)
@@ -349,5 +361,8 @@ public class View {
 
 	public void setTable(TableModel tm) {
 		table.setModel(tm);
+	}
+	public JButton getBtnDeleteSession() {
+		return btnDeleteSession;
 	}
 }
