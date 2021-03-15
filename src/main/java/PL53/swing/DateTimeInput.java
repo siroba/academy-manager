@@ -16,10 +16,10 @@ public class DateTimeInput extends JPanel {
 
 	/**
 	 * The format for the hour and the minute, see
-	 * {@link JNumberField#JNumberField(int, DecimalFormat)}.
+	 * {@link JIntField#JIntField(int, DecimalFormat)}.
 	 */
 	public static final DecimalFormat format = new DecimalFormat("#0");
-	private JNumberField hoursTextField, minutesTextField;
+	private JIntField hoursTextField, minutesTextField;
 	private DateInput datePanel;
 	private JLabel lblHour, labelSep;
 
@@ -41,23 +41,21 @@ public class DateTimeInput extends JPanel {
 		lblHour.setBounds(29, 0, 120, 22);
 		timePanel.add(lblHour);
 
-		hoursTextField = new JNumberField(2, format);
+		hoursTextField = new JIntField(2, format);
 		hoursTextField.setBound(0, 23);
 		hoursTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		hoursTextField.setBounds(25, 20, 34, 22);
 		timePanel.add(hoursTextField);
-		hoursTextField.setText("0");
 
 		labelSep = new JLabel(":");
 		labelSep.setBounds(62, 23, 5, 15);
 		timePanel.add(labelSep);
 
-		minutesTextField = new JNumberField(2, format);
+		minutesTextField = new JIntField(2, format);
 		minutesTextField.setBound(0, 59);
 		minutesTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		minutesTextField.setBounds(70, 20, 34, 22);
 		timePanel.add(minutesTextField);
-		minutesTextField.setText("0");
 
 		datePanel = new DateInput();
 		datePanel.getLblYear().setLocation(28, 0);
@@ -69,11 +67,11 @@ public class DateTimeInput extends JPanel {
 	}
 
 	public int getHour() {
-		return this.hoursTextField.getValue();
+		return Math.round(this.hoursTextField.getValue());
 	}
 
 	public int getMinute() {
-		return this.minutesTextField.getValue();
+		return Math.round(this.minutesTextField.getValue());
 	}
 
 	public int getDay() {
@@ -88,23 +86,23 @@ public class DateTimeInput extends JPanel {
 		return datePanel.getYear();
 	}
 
-	public JNumberField getDaysTextField() {
+	public JIntField getDaysTextField() {
 		return datePanel.getDaysTextField();
 	}
 
-	public JNumberField getYearsTextField() {
+	public JIntField getYearsTextField() {
 		return datePanel.getYearsTextField();
 	}
 
-	public JNumberField getMonthsTextField() {
+	public JIntField getMonthsTextField() {
 		return datePanel.getMonthsTextField();
 	}
   
-	public JNumberField getHoursTextField() {
+	public JIntField getHoursTextField() {
 		return hoursTextField;
 	}
 
-	public JNumberField getMinutesTextField() {
+	public JIntField getMinutesTextField() {
 		return minutesTextField;
 	}
 	

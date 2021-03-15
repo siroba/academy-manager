@@ -13,18 +13,18 @@ import java.awt.Font;
 public class DateInput extends JPanel {
 	/** Auto generated serial ID */
 	private static final long serialVersionUID = 1733893010805448139L;
-	private JNumberField daysTextField, yearsTextField, monthsTextField;
+	private JIntField daysTextField, yearsTextField, monthsTextField;
 	private JLabel lblYear, labelSep1, labelSep2;
 	
 	/**
 	 * The format for the day and month, see
-	 * {@link JNumberField#JNumberField(int, DecimalFormat)}.
+	 * {@link JIntField#JIntField(int, DecimalFormat)}.
 	 */
 	public static final DecimalFormat format = new DecimalFormat("#0");
 
 	/**
 	 * The format for the year, see
-	 * {@link JNumberField#JNumberField(int, DecimalFormat)}.
+	 * {@link JIntField#JIntField(int, DecimalFormat)}.
 	 */
 	public static final DecimalFormat yearFormat = new DecimalFormat("0000");
   
@@ -40,57 +40,56 @@ public class DateInput extends JPanel {
 		lblYear.setBounds(28, 0, 159, 22);
 		add(lblYear);
 
-		daysTextField = new JNumberField(2, format);
-		daysTextField.setBound(0, 31);
+		daysTextField = new JIntField(2, format);
+		daysTextField.setDefaultValue(1);
+		daysTextField.setBound(1, 31);
 		daysTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		daysTextField.setBounds(9, 21, 34, 22);
 		add(daysTextField);
-		daysTextField.setText("0");
 
 		labelSep1 = new JLabel("/");
 		labelSep1.setBounds(52, 25, 5, 15);
 		add(labelSep1);
 
-		monthsTextField = new JNumberField(2, format);
-		monthsTextField.setBound(0, 12);
+		monthsTextField = new JIntField(2, format);
+		monthsTextField.setDefaultValue(1);
+		monthsTextField.setBound(1, 12);
 		monthsTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		monthsTextField.setBounds(66, 21, 34, 22);
 		add(monthsTextField);
-		monthsTextField.setText("0");
 
 		labelSep2 = new JLabel("/");
 		labelSep2.setBounds(109, 25, 5, 15);
 		add(labelSep2);
 
-		yearsTextField = new JNumberField(4, yearFormat);
+		yearsTextField = new JIntField(4, yearFormat);
 		yearsTextField.setBound(0, Integer.MAX_VALUE);
 		yearsTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		yearsTextField.setBounds(123, 21, 70, 22);
 		add(yearsTextField);
-		yearsTextField.setText("0");
 	}
 
 	public int getDay() {
-		return daysTextField.getValue();
+		return Math.round(daysTextField.getValue());
 	}
 
 	public int getMonth() {
-		return monthsTextField.getValue();
+		return Math.round(monthsTextField.getValue());
 	}
 
 	public int getYear() {
-		return yearsTextField.getValue();
+		return Math.round(yearsTextField.getValue());
 	}
 
-	public JNumberField getDaysTextField() {
+	public JIntField getDaysTextField() {
 		return daysTextField;
 	}
 
-	public JNumberField getYearsTextField() {
+	public JIntField getYearsTextField() {
 		return yearsTextField;
 	}
 
-	public JNumberField getMonthsTextField() {
+	public JIntField getMonthsTextField() {
 		return monthsTextField;
 	}
 
