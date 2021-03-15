@@ -5,30 +5,23 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import java.awt.Dimension;
-import java.awt.SystemColor;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.table.TableModel;
 
 import PL53.swing.DateTimeInput;
+import PL53.swing.JIntField;
 import PL53.swing.JNumberField;
 import PL53.util.DateTime;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JList;
-import java.awt.Rectangle;
 import javax.swing.JTextArea;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 public class View {
 
@@ -102,7 +95,7 @@ public class View {
 		panel.add(LabelContents);
 		LabelContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
-		TFSpaces = new JNumberField(5);
+		TFSpaces = new JIntField(5);
 		TFSpaces.setBounds(60, 369, 69, 18);
 		panel.add(TFSpaces);
 		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -126,7 +119,7 @@ public class View {
 		LabelWarningEndEnroll.setForeground(Color.RED);
 		LabelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
-		TFFee = new JNumberField(6);
+		TFFee = new JIntField(6);
 		TFFee.setBounds(180, 371, 46, 19);
 		panel.add(TFFee);
 		TFFee.setColumns(10);
@@ -175,8 +168,13 @@ public class View {
 		panel.add(TFObjectives);
 
 		TFContents = new JTextArea();
+		TFContents.setLineWrap(true);
 		TFContents.setBounds(210, 93, 188, 76);
 		panel.add(TFContents);
+
+		JSeparator separator = new JSeparator();
+		separator.setOrientation(SwingConstants.VERTICAL);
+		frmCreateANew.getContentPane().add(separator, "cell 0 0,growy");
 
 		sessionsPanel = new JPanel();
 		frmCreateANew.getContentPane().add(sessionsPanel, "cell 0 0,grow");
@@ -215,6 +213,7 @@ public class View {
 		sessionStart.getDaysTextField().setBound(1, 31);
 		sessionStart.getMonthsTextField().setBound(1, 12);
 		sessionStart.getYearsTextField().setBound(2000, 3000);
+		sessionStart.getYearsTextField().setDefaultValue(2021);
 		sessionStart.setBounds(10, 190, 378, 70);
 
 		sessionsPanel.add(sessionStart);
@@ -224,7 +223,7 @@ public class View {
 		sessionsPanel.add(TFLocation);
 		TFLocation.setColumns(10);
 
-		TFHours = new JNumberField(2);
+		TFHours = new JIntField(2);
 		TFHours.setBound(0, 24);
 		TFHours.setBounds(365, 142, 39, 19);
 		sessionsPanel.add(TFHours);
@@ -257,7 +256,7 @@ public class View {
 		LabelRemuneration.setBounds(220, 272, 83, 14);
 		sessionsPanel.add(LabelRemuneration);
 		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		
+
 		LabelWarningDay = new JLabel("");
 		LabelWarningDay.setBounds(143, 175, 229, 14);
 		sessionsPanel.add(LabelWarningDay);
@@ -288,7 +287,7 @@ public class View {
 		return this.TFTeacher.getText();
 	}
 
-	public int getRemuneration() {
+	public float getRemuneration() {
 		return this.TFRemuneration.getValue();
 	}
 
@@ -297,7 +296,7 @@ public class View {
 	}
 
 	public int getSpaces() {
-		return this.TFSpaces.getValue();
+		return Math.round(this.TFSpaces.getValue());
 	}
 
 	public DateTime getSessionDatetime() {
@@ -305,7 +304,7 @@ public class View {
 	}
 
 	public int getNumberOfHours() {
-		return this.TFHours.getValue();
+		return Math.round(this.TFHours.getValue());
 	}
 
 	public DateTime getEnrollStart() {
@@ -339,7 +338,16 @@ public class View {
 	public void setWarningEnrollmentPeriodEnd2(String warning) {
 		this.LabelWarningEndEnroll.setText(warning);
 	}
+
 	public JButton getBtnAddSession() {
 		return btnAddSession;
+	}
+
+	public JTable getTable() {
+		return table;
+	}
+
+	public void setTable(TableModel tm) {
+		table.setModel(tm);
 	}
 }
