@@ -32,29 +32,29 @@ public class DateTimeInput extends JPanel {
 
 		setLayout(null);
 		JPanel timePanel = new JPanel();
-		timePanel.setBounds(5, 9, 148, 57);
+		timePanel.setBounds(12, 9, 120, 57);
 		this.add(timePanel);
 		timePanel.setLayout(null);
 
 		lblHour = new JLabel("hour : minute");
 		lblHour.setFont(new Font("Dialog", Font.BOLD, 11));
-		lblHour.setBounds(29, 0, 120, 22);
+		lblHour.setBounds(24, 0, 86, 22);
 		timePanel.add(lblHour);
 
 		hoursTextField = new JIntField(2, format);
 		hoursTextField.setBound(0, 23);
 		hoursTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		hoursTextField.setBounds(25, 20, 34, 22);
+		hoursTextField.setBounds(21, 20, 34, 22);
 		timePanel.add(hoursTextField);
 
 		labelSep = new JLabel(":");
-		labelSep.setBounds(62, 23, 5, 15);
+		labelSep.setBounds(58, 23, 5, 15);
 		timePanel.add(labelSep);
 
 		minutesTextField = new JIntField(2, format);
 		minutesTextField.setBound(0, 59);
 		minutesTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		minutesTextField.setBounds(70, 20, 34, 22);
+		minutesTextField.setBounds(66, 20, 34, 22);
 		timePanel.add(minutesTextField);
 
 		datePanel = new DateInput();
@@ -62,7 +62,7 @@ public class DateTimeInput extends JPanel {
 		datePanel.getLblYear().setFont(new Font("Dialog", Font.BOLD, 11));
 		datePanel.getLblYear().setText("day / month / year");
 		datePanel.setLayout(null);
-		datePanel.setBounds(165, 9, 208, 57);
+		datePanel.setBounds(150, 9, 208, 57);
 		this.add(datePanel);
 	}
 
