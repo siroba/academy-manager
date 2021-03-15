@@ -1,11 +1,19 @@
 --Data for the initialization of the database 
 
-insert into FormativeAction(ID_fa, nameFa, dateFa, duration, location, remuneration, fee, totalPlaces, objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd) values
-	(1000, 'Initiation to scrum',	'2021-02-03 15:00:00.0', 2, 'online', 50, 15, 6,	'some objctives', 'some main content', 'Jose Garcia Fanjul',				'EXECUTED', '2021-01-01 00:00:00.0',	'2021-02-01 00:00:00.0'),
-	(1001, 'Initiation to agile',	'2021-02-10 15:00:00.0', 3, 'online', 60, 10, 10, 'some objctives', 'some main content', 'Jose Garcia Fanjul',				'EXECUTED', '2021-01-01 00:00:00.0',	'2021-02-08 00:00:00.0'),
-	(1002, 'JDBC',  				'2021-04-10 12:00:00.0', 3, 'online', 100, 30, 4, 'some objctives', 'some main content', 'Maria Teresa Gonzales Aparicio',	'ACTIVE', '2021-03-01 00:00:00.0',	'2021-04-08 00:00:00.0'),
-	(1003, 'Java programming',		'2021-05-01 10:00:00.0', 4, 'online', 80, 20, 5,	'some objctives', 'some main content', 'Victor Manuel Alvarez Garcia',		'ACTIVE', '2021-04-01 00:00:00.0',	'2021-04-28 00:00:00.0');
+insert into FormativeAction(ID_fa, nameFa, fee, totalPlaces, objectives, mainContent, status, enrollmentStart, enrollmentEnd) values
+	(1000, 'Initiation to scrum',	15, 6,	'some objctives', 'some main content', 'EXECUTED', '2021-01-01 00:00:00.0',	'2021-02-01 00:00:00.0'),
+	(1001, 'Initiation to agile',	10, 10, 'some objctives', 'some main content', 'EXECUTED', '2021-01-01 00:00:00.0',	'2021-02-08 00:00:00.0'),
+	(1002, 'JDBC',  				30, 4,  'some objctives', 'some main content', 'ACTIVE',   '2021-03-01 00:00:00.0',	'2021-04-08 00:00:00.0'),
+	(1003, 'Java programming',		20, 5,	'some objctives', 'some main content', 'ACTIVE',   '2021-04-01 00:00:00.0',	'2021-04-28 00:00:00.0');
 
+insert into Session(ID_session, ID_fa, location, duration, sessionStart, teacherName, remuneration) values
+	(0, 1000, 'online', 2, '2021-02-03 15:00:00.0', 'Jose Garcia Fanjul', 50),
+	(1, 1000, 'online', 2, '2021-02-04 15:00:00.0', 'Jose Garcia Fanjul', 50),
+	(2, 1000, 'online', 2, '2021-02-05 15:00:00.0', 'Jose Garcia Fanjul', 50),
+	(3, 1001, 'online', 3, '2021-02-10 09:00:00.0', 'Jose Garcia Fanjul', 60),
+	(4, 1001, 'online', 3, '2021-02-11 09:00:00.0', 'Jose Garcia Fanjul', 60),
+	(5, 1002, 'online', 3, '2021-04-10 12:00:00.0', 'Maria Teresa Gonzales Aparicio', 100),
+	(6, 1003, 'online', 4, '2021-05-01 10:00:00.0', 'Victor Manuel Alvarez Garcia', 80);
 
 insert into Professional(ID_professional, name, surname, phone, email) values
 	(2000, 'Pablo',		'Gonzales', 	'+341762568901', 	'pablo.gonzales@uniovi.es'),

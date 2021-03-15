@@ -23,20 +23,27 @@ DROP TABLE FormativeAction;
 CREATE TABLE IF NOT EXISTS FormativeAction(
     ID_fa           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     nameFa          text NOT NULL,
-    dateFA          timestamp NOT NULL,
-    duration        real NOT NULL,
-    location        text NOT NULL,
-    remuneration    real NOT NULL,
     fee             real NOT NULL,
     totalPlaces     integer NOT NULL,
     objectives       text NOT NULL,
     mainContent     text NULL,
-    teacherName     text NULL,
     status          text NOT NULL,
     enrollmentStart datetime NOT NULL,
     enrollmentEnd   datetime NOT NULL,
-    CHECK ( duration >0 ),
     CONSTRAINT FORMATIVEACTION_STATUS_CONSTRAINT CHECK ( status IN ('ACTIVE', 'DELAYED', 'EXECUTED', 'CANCELLED') )
+);
+
+DROP TABLE Session;
+CREATE TABLE IF NOT EXISTS Session(
+	ID_session		INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	ID_fa			INTEGER NOT NULL,
+    location        text NOT NULL,
+    duration        real NOT NULL,
+    sessionStart    timestamp NOT NULL,
+    teacherName     text NULL,
+    remuneration    real NOT NULL,
+    CHECK ( duration >0 ),
+ 	CONSTRAINT FK_200 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa )
 );
 
 DROP TABLE Payment;

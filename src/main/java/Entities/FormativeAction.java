@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +19,12 @@ import Utils.Database;
  */
 public class FormativeAction {
 	private int ID = -1;
-	private String name, location, objectives, mainContents, teacherName;
+	private String name, objectives, mainContents;
 	private Status status;
-	private float duration, remuneration, fee;
+	private float fee;
 	private int totalPlaces;
-	DateTime enrollmentStart, enrollmentEnd, faStart;
+	private DateTime enrollmentStart, enrollmentEnd;
+	private List<Session> sessions = new ArrayList<Session>();
 
 	/**
 	 * Constructor that assigns random values
@@ -32,18 +32,13 @@ public class FormativeAction {
 	public FormativeAction() {
 		Random r = new Random();
 		this.name = r.name(3, 10);
-		this.duration = (float) Math.random() * 2f;
-		this.location = r.name(5, 15);
-		this.remuneration = (float) Math.random() * 40f;
 		this.fee = (float) Math.random() * 80f;
 		this.totalPlaces = r.nextInt(100);
 		this.objectives = r.name(3, 20);
 		this.mainContents = r.name(3, 10);
-		this.teacherName = r.name(3, 10);
 		this.status = Status.values()[r.nextInt(Status.values().length)];
 		this.enrollmentStart = new DateTime(Date.random());
 		this.enrollmentEnd = new DateTime(Date.random());
-		this.faStart = new DateTime(Date.random());
 	}
 
 	/**
@@ -63,23 +58,18 @@ public class FormativeAction {
 	 * @param enrollmentEnd
 	 * @param faStart
 	 */
-	public FormativeAction(String name, float duration, String location, float remuneration, float fee, int totalPlaces,
-			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
-			DateTime enrollmentEnd, DateTime faStart) {
+	public FormativeAction(String name, float fee, int totalPlaces,
+			String objectives, String mainContents, Status status, DateTime enrollmentStart,
+			DateTime enrollmentEnd) {
 
 		this.name = name;
-		this.duration = duration;
-		this.location = location;
-		this.remuneration = remuneration;
 		this.fee = fee;
 		this.totalPlaces = totalPlaces;
 		this.objectives = objectives;
 		this.mainContents = mainContents;
-		this.teacherName = teacherName;
 		this.status = status;
 		this.enrollmentStart = enrollmentStart;
 		this.enrollmentEnd = enrollmentEnd;
-		this.faStart = faStart;
 	}
 
 	/**
@@ -99,24 +89,20 @@ public class FormativeAction {
 	 * @param faStart
 	 */
 
-	public FormativeAction(int ID_fa, String name, float duration, String location, float remuneration, float fee, int totalPlaces,
-			String objectives, String mainContents, String teacherName, Status status, DateTime enrollmentStart,
-			DateTime enrollmentEnd, DateTime faStart) {
+	public FormativeAction(int ID_fa, String name, float fee, int totalPlaces,
+			String objectives, String mainContents, Status status, DateTime enrollmentStart,
+			DateTime enrollmentEnd, List<Session> sessions) {
 
 		this.ID = ID_fa;
 		this.name = name;
-		this.duration = duration;
-		this.location = location;
-		this.remuneration = remuneration;
 		this.fee = fee;
 		this.totalPlaces = totalPlaces;
 		this.objectives = objectives;
 		this.mainContents = mainContents;
-		this.teacherName = teacherName;
 		this.status = status;
 		this.enrollmentStart = enrollmentStart;
 		this.enrollmentEnd = enrollmentEnd;
-		this.faStart = faStart;
+		this.sessions = sessions;
 	}
 
 	public static List<FormativeAction> create(int n) {
@@ -167,7 +153,7 @@ public class FormativeAction {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public void insert(Database db) throws SQLException, ParseException {
+	public void insert(Database db) throws SQLException {
 		/*
 		 * status TEXT NOT NULL CHECK( status IN('received','confirmed','cancelled')),
 		 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
@@ -176,8 +162,8 @@ public class FormativeAction {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if (this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_fa, nameFa, duration, location, remuneration, fee, totalPlaces,"
-					+ "objectives, mainContent, teacherName, status, enrollmentStart, enrollmentEnd, dateFa) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_fa, nameFa, fee, totalPlaces,"
+					+ "objectives, mainContent, status, enrollmentStart, enrollmentEnd) VALUES(?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -185,43 +171,38 @@ public class FormativeAction {
 
 			pstmt.setInt(1, this.getID());
 			pstmt.setString(2, this.getName());
-			pstmt.setFloat(3, this.getDuration());
-			pstmt.setString(4, this.getLocation());
-			pstmt.setFloat(5, this.getRemuneration());
-			pstmt.setFloat(6, this.getFee());
-			pstmt.setInt(7, this.getTotalPlaces());
-			pstmt.setString(8, this.getObjectives());
-			pstmt.setString(9, this.getMainContents());
-			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString());
-			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
-			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
+			pstmt.setFloat(3, this.getFee());
+			pstmt.setInt(4, this.getTotalPlaces());
+			pstmt.setString(5, this.getObjectives());
+			pstmt.setString(6, this.getMainContents());
+			pstmt.setString(7, this.getStatus().toString());
+			pstmt.setTimestamp(8, this.getEnrollmentStart().toTimestamp());
+			pstmt.setTimestamp(9, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setString(1, this.getName());
-			pstmt.setTimestamp(2, this.getFaStart().toTimestamp());
-			pstmt.setFloat(3, this.getDuration());
-			pstmt.setString(4, this.getLocation());
-			pstmt.setFloat(5, this.getRemuneration());
-			pstmt.setFloat(6, this.getFee());
-			pstmt.setInt(7, this.getTotalPlaces());
-			pstmt.setString(8, this.getObjectives());
-			pstmt.setString(9, this.getMainContents());
-			pstmt.setString(10, this.getTeacherName());
-			pstmt.setString(11, this.getStatus().toString());
-			pstmt.setTimestamp(12, this.getEnrollmentStart().toTimestamp());
-			pstmt.setTimestamp(13, this.getEnrollmentEnd().toTimestamp());
+			pstmt.setFloat(2, this.getFee());
+			pstmt.setInt(3, this.getTotalPlaces());
+			pstmt.setString(4, this.getObjectives());
+			pstmt.setString(5, this.getMainContents());
+			pstmt.setString(6, this.getStatus().toString());
+			pstmt.setTimestamp(7, this.getEnrollmentStart().toTimestamp());
+			pstmt.setTimestamp(8, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
+		}
+		
+		for(Session s: this.sessions) {
+			s.setID_fa(this.getID());
 		}
 
 		conn.close();
@@ -246,13 +227,7 @@ public class FormativeAction {
 		List<FormativeAction> fa = new ArrayList<FormativeAction>();
 
 		while (rs.next()) {
-			DateTime dstart, dend, dfa;
-
-			try {
-				dstart = DateTime.parseString(rs.getString("enrollmentStart"));
-			} catch (ParseException e) {
-				dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
-			}
+			DateTime dend, dstart;
 
 			try {
 				dend = DateTime.parseString(rs.getString("enrollmentEnd"));
@@ -261,26 +236,26 @@ public class FormativeAction {
 			}
 
 			try {
-				dfa = DateTime.parseString(rs.getString("dateFA"));
+				dstart = DateTime.parseString(rs.getString("enrollmentStart"));
 			} catch (ParseException e) {
-				dfa = DateTime.fromMillis(rs.getLong("dateFA"));
+				dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
 			}
 
+			int id_fa = rs.getInt("ID_fa");
+			
+			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+			
 			FormativeAction f = new FormativeAction(
-					rs.getInt("ID_fa"),
+					id_fa,
 					rs.getString("nameFa"),
-					rs.getFloat("duration"),
-					rs.getString("location"),
-					rs.getFloat("remuneration"),
 					rs.getFloat("fee"),
 					rs.getInt("totalPlaces"),
 					rs.getString("objectives"),
 					rs.getString("mainContent"),
-					rs.getString("teacherName"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					dstart, // TODO: Fix parsing
+					dstart,
 					dend,
-					dfa);
+					sessions);
 
 			fa.add(f);
 		}
@@ -311,13 +286,7 @@ public class FormativeAction {
 
 		rs.next();
 
-		DateTime dstart, dend, dfa;
-
-		try {
-			dstart = DateTime.parseString(rs.getString("enrollmentStart"));
-		} catch (ParseException e) {
-			dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
-		}
+		DateTime dend, dstart;
 
 		try {
 			dend = DateTime.parseString(rs.getString("enrollmentEnd"));
@@ -326,26 +295,26 @@ public class FormativeAction {
 		}
 
 		try {
-			dfa = DateTime.parseString(rs.getString("dateFA"));
+			dstart = DateTime.parseString(rs.getString("enrollmentStart"));
 		} catch (ParseException e) {
-			dfa = DateTime.fromMillis(rs.getLong("dateFA"));
+			dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
 		}
 
+		int id_fa = rs.getInt("ID_fa");
+		
+		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+		
 		FormativeAction fa = new FormativeAction(
-				rs.getInt("ID_fa"),
+				id_fa,
 				rs.getString("nameFa"),
-				rs.getFloat("duration"),
-				rs.getString("location"),
-				rs.getFloat("remuneration"),
 				rs.getFloat("fee"),
 				rs.getInt("totalPlaces"),
 				rs.getString("objectives"),
 				rs.getString("mainContent"),
-				rs.getString("teacherName"),
 				Status.valueOf(rs.getString("status").toUpperCase()),
-				dstart, // TODO: Fix parsing
+				dstart,
 				dend,
-				dfa);
+				sessions);
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -367,28 +336,12 @@ public class FormativeAction {
         else return 0f;
     }
 
-	public DateTime getFaStart() {
-		return faStart;
-	}
-
-	public void setFaStart(DateTime faStart) {
-		this.faStart = faStart;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public String getObjectives() {
@@ -407,36 +360,12 @@ public class FormativeAction {
 		this.mainContents = mainContents;
 	}
 
-	public String getTeacherName() {
-		return teacherName;
-	}
-
-	public void setTeacherName(String teacherName) {
-		this.teacherName = teacherName;
-	}
-
 	public Status getStatus() {
 		return status;
 	}
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public float getDuration() {
-		return duration;
-	}
-
-	public void setDuration(float duration) {
-		this.duration = duration;
-	}
-
-	public float getRemuneration() {
-		return remuneration;
-	}
-
-	public void setRemuneration(float remuneration) {
-		this.remuneration = remuneration;
 	}
 
 	public float getFee() {
@@ -474,6 +403,23 @@ public class FormativeAction {
 	public int getID() {
 		return ID;
 	}
+
+	public List<Session> getSessions() {
+		return sessions;
+	}
+
+	public void setSessions(List<Session> sessions) {
+		for(Session s: sessions)
+			s.setID_fa(this.getID());
+		
+		this.sessions = sessions;
+	}
+
+	public void addSession(Session session) {
+		session.setID_fa(this.getID());
+		this.sessions.add(session);
+	}
+
 
 	public enum Status {
 		ACTIVE, DELAYED, EXECUTED, CANCELLED;

@@ -14,7 +14,11 @@ import javax.swing.table.TableModel;
 import Entities.FormativeAction;
 import Entities.Invoice;
 import Entities.PaymentTeacher;
+import Entities.Session;
 import PL53.util.DateTime;
+import UserStory13580.Data;
+import UserStory13580.Model;
+import UserStory13580.View;
 
 public class Controller {
 	private Model model;
@@ -75,21 +79,25 @@ public class Controller {
 					String name = view.getNameTextField();
 					String fiscalNumber = view.getFiscalNumberTextField();
 					String address = view.getAddressTextField();
-					DateTime dateTransfer = view.getDateTransferTextField();
+					DateTime dateTransfer = DateTime.parseString(view.getDateTransferTextField());
 					int ID_fa = selectedRow.getID();
-					float amount = selectedRow.getRemuneration();
+					float amount = (float)view.getTable().getValueAt(view.getSelected(), 3);
 					String sender = "COIIPA";
-					String receiver = selectedRow.getTeacherName();
+					String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2);
 					boolean confirmed = true;
-					DateTime dateInvoice = view.getDateTextField();
+					DateTime dateInvoice = DateTime.parseString(view.getDateTextField());
 
 					Invoice invoice = new Invoice(ID_fa, dateInvoice);
 
 					PaymentTeacher paymentTeacher = new PaymentTeacher( amount, dateTransfer, sender,
 							receiver, fiscalNumber, address, confirmed);
+					
+					
 					model.insertInvoice(invoice , paymentTeacher);
 				} catch (NumberFormatException e2) {
 					JOptionPane.showMessageDialog(null, "The Invoice ID must be an integer");
+				} catch (ParseException e1) {
+					JOptionPane.showMessageDialog(null, "The Data must be a Data");
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Error creating the invoice");
 					e1.printStackTrace();
@@ -114,8 +122,11 @@ public class Controller {
 
 		for (int i = 0; i < formativeActions.length; i++) {
 			FormativeAction d = formativeActions[i];
-			body[i] = new String[] { d.getName(), d.getStatus().toString(), d.getTeacherName(),
-					Float.toString(d.getRemuneration()) };
+			
+			for(Session s: d.getSessions()) {
+				body[i] = new String[] { d.getName(), d.getStatus().toString(), s.getTeacherName(),
+						Float.toString(s.getRemuneration()) };
+			}
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
