@@ -71,7 +71,7 @@ public class View {
 
 		// Heading
 		JLabel lblNewLabel = new JLabel("Plan a formative action");
-		lblNewLabel.setBounds(18, 19, 180, 17);
+		lblNewLabel.setBounds(115, 19, 180, 17);
 		panel.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 
@@ -148,9 +148,9 @@ public class View {
 		enrollStart = new DateTimeInput();
 		enrollStart.setBounds(12, 196, 378, 70);
 		panel.add(enrollStart);
-		enrollStart.getDaysTextField().setBound(1, 31);
-		enrollStart.getMonthsTextField().setBound(1, 12);
-		enrollStart.getYearsTextField().setBound(2000, 3000);
+		enrollStart.getDatePanel().getDaysTextField().setBound(1, 31);
+		enrollStart.getDatePanel().getMonthsTextField().setBound(1, 12);
+		enrollStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollStart.setBorder(blackline);
 
 		JLabel lblEndOfEnrollment = new JLabel("End of enrollment period:");
@@ -161,9 +161,9 @@ public class View {
 		enrollEnd = new DateTimeInput();
 		enrollEnd.setBounds(12, 287, 378, 70);
 		panel.add(enrollEnd);
-		enrollEnd.getDaysTextField().setBound(1, 31);
-		enrollEnd.getMonthsTextField().setBound(1, 12);
-		enrollEnd.getYearsTextField().setBound(2000, 3000);
+		enrollEnd.getDatePanel().getDaysTextField().setBound(1, 31);
+		enrollEnd.getDatePanel().getMonthsTextField().setBound(1, 12);
+		enrollEnd.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollEnd.setBorder(blackline);
 		
 		scrollPane_1 = new JScrollPane();
@@ -171,6 +171,7 @@ public class View {
 		panel.add(scrollPane_1);
 
 		TFObjectives = new JTextArea();
+		TFObjectives.setWrapStyleWord(true);
 		scrollPane_1.setViewportView(TFObjectives);
 		TFObjectives.setLineWrap(true);
 		
@@ -179,10 +180,12 @@ public class View {
 		panel.add(scrollPane_2);
 
 		TFContents = new JTextArea();
+		TFContents.setWrapStyleWord(true);
 		scrollPane_2.setViewportView(TFContents);
 		TFContents.setLineWrap(true);
 
 		JSeparator separator = new JSeparator();
+		separator.setForeground(Color.BLACK);
 		separator.setOrientation(SwingConstants.VERTICAL);
 		frmCreateANew.getContentPane().add(separator, "cell 0 0,growy");
 
@@ -220,8 +223,8 @@ public class View {
 
 		sessionStart = new DateTimeInput();
 		sessionStart.setBorder(blackline);
-		sessionStart.getYearsTextField().setBound(2000, 3000);
-		sessionStart.getYearsTextField().setDefaultValue(2021);
+		sessionStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
+		sessionStart.getDatePanel().getYearsTextField().setDefaultValue(2021);
 		sessionStart.setBounds(7, 246, 378, 70);
 
 		sessionsPanel.add(sessionStart);
