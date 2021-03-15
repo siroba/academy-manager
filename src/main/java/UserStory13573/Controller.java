@@ -2,6 +2,8 @@ package UserStory13573;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +12,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
-import Entities.Teacher;
-import Entities.FormativeAction.Status;
 import Entities.Session;
-import PL53.util.Date;
 import PL53.util.DateTime;
 import Utils.SwingUtil;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 	private List<Session> sessions = new ArrayList<Session>();
@@ -56,6 +55,24 @@ public class Controller {
 						view.getSessionDatetime()));
 				
 				view.setTable(getTableModel(sessions));
+			}
+		});
+		
+		view.getTable().addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				view.getBtnDeleteSession().setEnabled(true);
+			}
+		});
+		
+		view.getBtnDeleteSession().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				sessions.remove(view.getTable().getSelectedRow());
+				
+				view.setTable(getTableModel(sessions));
+				
+				view.getBtnDeleteSession().setEnabled(false);
 			}
 		});
 	}

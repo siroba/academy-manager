@@ -10,7 +10,7 @@ import javax.swing.table.TableModel;
 
 import Utils.SwingUtil;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 

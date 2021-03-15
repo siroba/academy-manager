@@ -16,7 +16,7 @@ import Utils.DbUtil;
 import Utils.SwingUtil;
 import Utils.Util;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 
 	private Model model;
 	private View view;

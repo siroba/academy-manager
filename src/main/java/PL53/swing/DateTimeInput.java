@@ -67,11 +67,11 @@ public class DateTimeInput extends JPanel {
 	}
 
 	public int getHour() {
-		return Math.round(this.hoursTextField.getValue());
+		return this.hoursTextField.getValue();
 	}
 
 	public int getMinute() {
-		return Math.round(this.minutesTextField.getValue());
+		return this.minutesTextField.getValue();
 	}
 
 	public int getDay() {
