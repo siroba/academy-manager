@@ -4,6 +4,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.BeanProperty;
 import java.text.DecimalFormat;
 
 /**
@@ -130,7 +131,8 @@ public abstract class JNumberField <T extends Number> extends javax.swing.JForma
 	public int getMaxLength() {
 		return maxLength;
 	}
-
+	
+	@BeanProperty(preferred = true, bound = false, description = "The maximum number of digits this NumberField can have")
 	public void setMaxLength(int maxLength) {
 		this.maxLength = maxLength;
 	}
@@ -145,6 +147,7 @@ public abstract class JNumberField <T extends Number> extends javax.swing.JForma
 	 * @param min
 	 * @param max
 	 */
+	@BeanProperty(preferred = true, bound = false, description = "The maximum and minimum value (constraints) of this NumberField")
 	public void setBound(T min, T max) {
 		this.maxValue = max.floatValue();
 		this.minValue = min.floatValue();
@@ -154,11 +157,13 @@ public abstract class JNumberField <T extends Number> extends javax.swing.JForma
 	public abstract T getMinValue();
 	public abstract T getMaxValue();
 	
+	@BeanProperty(preferred = true, bound = false, visualUpdate = true, description = "Default value on creation")
 	public void setDefaultValue(T value) {
 		defaultValue = value.floatValue();
 		
 		this.setText(getDefaultValue());
 	}
 	
+	@BeanProperty(hidden = true)
 	public abstract void setText(T f);
 }

@@ -22,6 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 public class View {
 
@@ -32,7 +33,8 @@ public class View {
 	private JTextArea TFObjectives, TFContents;
 	private JLabel LabelObjectives;
 	private JButton BTNCreate;
-	private JLabel LabelWarningStartEnroll, LabelWarningEndEnroll, LabelWarningDay;
+	private JTextArea labelWarningStartEnroll;
+	private JLabel labelWarningDay_1, labelWarningEndEnroll, labelWarningDay;
 	private DateTimeInput enrollStart, enrollEnd, sessionStart;
 	private JLabel LabelFee;
 	private JPanel panel;
@@ -61,7 +63,7 @@ public class View {
 		frmCreateANew.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 11));
 		frmCreateANew.setTitle("Create a new Formative Action");
 		frmCreateANew.setName("Courses");
-		frmCreateANew.setBounds(0, 0, 846, 485);
+		frmCreateANew.setBounds(0, 0, 846, 502);
 		frmCreateANew.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmCreateANew.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
 
@@ -71,7 +73,7 @@ public class View {
 
 		// Heading
 		JLabel lblNewLabel = new JLabel("Plan a formative action");
-		lblNewLabel.setBounds(18, 19, 180, 17);
+		lblNewLabel.setBounds(115, 19, 180, 17);
 		panel.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 
@@ -100,43 +102,51 @@ public class View {
 		LabelContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 		TFSpaces = new JIntField(5);
-		TFSpaces.setBounds(60, 369, 69, 18);
+		TFSpaces.setBounds(60, 382, 69, 18);
 		panel.add(TFSpaces);
 		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFSpaces.setColumns(10);
 
 		// Spaces
 		JLabel LabelSpaces = new JLabel("Spaces:");
-		LabelSpaces.setBounds(10, 371, 46, 14);
+		LabelSpaces.setBounds(10, 383, 46, 14);
 		panel.add(LabelSpaces);
 		LabelSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
-		LabelWarningStartEnroll = new JLabel("");
-		LabelWarningStartEnroll.setBounds(180, 181, 210, 14);
-		panel.add(LabelWarningStartEnroll);
-		LabelWarningStartEnroll.setForeground(Color.RED);
-		LabelWarningStartEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		labelWarningStartEnroll = new JTextArea("");
+		labelWarningStartEnroll.setWrapStyleWord(true);
+		labelWarningStartEnroll.setLineWrap(true);
+		labelWarningStartEnroll.setOpaque(false);
+		labelWarningStartEnroll.setEditable(false);
+		labelWarningStartEnroll.setFocusable(false);
+		labelWarningStartEnroll.setBackground(UIManager.getColor("Label.background"));
+		labelWarningStartEnroll.setFont(UIManager.getFont("Label.font"));
+	    labelWarningStartEnroll.setBorder(UIManager.getBorder("Label.border"));
+		labelWarningStartEnroll.setBounds(180, 175, 218, 28);
+		panel.add(labelWarningStartEnroll);
+		labelWarningStartEnroll.setForeground(Color.RED);
+		labelWarningStartEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
-		LabelWarningEndEnroll = new JLabel("");
-		LabelWarningEndEnroll.setBounds(180, 271, 202, 14);
-		panel.add(LabelWarningEndEnroll);
-		LabelWarningEndEnroll.setForeground(Color.RED);
-		LabelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		labelWarningEndEnroll = new JLabel("");
+		labelWarningEndEnroll.setBounds(180, 280, 202, 14);
+		panel.add(labelWarningEndEnroll);
+		labelWarningEndEnroll.setForeground(Color.RED);
+		labelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 		TFFee = new JDecimalField(6);
-		TFFee.setBounds(180, 371, 46, 19);
+		TFFee.setBounds(180, 382, 46, 19);
 		panel.add(TFFee);
 		TFFee.setColumns(10);
 
 		// Fee
 		LabelFee = new JLabel("Fee:");
-		LabelFee.setBounds(150, 371, 24, 14);
+		LabelFee.setBounds(150, 383, 24, 14);
 		panel.add(LabelFee);
 		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 		// Create Button
 		BTNCreate = new JButton("Create formative action");
-		BTNCreate.setBounds(114, 400, 186, 24);
+		BTNCreate.setBounds(114, 420, 186, 24);
 		panel.add(BTNCreate);
 		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 11));
 
@@ -146,43 +156,50 @@ public class View {
 		LabelStartEnroll.setFont(new Font("Dialog", Font.PLAIN, 11));
 
 		enrollStart = new DateTimeInput();
-		enrollStart.setBounds(12, 196, 378, 70);
+		enrollStart.setBounds(12, 205, 378, 70);
 		panel.add(enrollStart);
-		enrollStart.getDaysTextField().setBound(1, 31);
-		enrollStart.getMonthsTextField().setBound(1, 12);
-		enrollStart.getYearsTextField().setBound(2000, 3000);
+		enrollStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
+		enrollStart.getDatePanel().getYearsTextField().setDefaultValue(2021);
+		enrollStart.getDatePanel().getDaysTextField().setBound(1, 31);
+		enrollStart.getDatePanel().getMonthsTextField().setBound(1, 12);
+		enrollStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollStart.setBorder(blackline);
 
 		JLabel lblEndOfEnrollment = new JLabel("End of enrollment period:");
-		lblEndOfEnrollment.setBounds(12, 271, 155, 15);
+		lblEndOfEnrollment.setBounds(12, 283, 155, 15);
 		panel.add(lblEndOfEnrollment);
 		lblEndOfEnrollment.setFont(new Font("Dialog", Font.PLAIN, 11));
 
 		enrollEnd = new DateTimeInput();
-		enrollEnd.setBounds(12, 287, 378, 70);
+		enrollEnd.setBounds(12, 299, 378, 70);
 		panel.add(enrollEnd);
-		enrollEnd.getDaysTextField().setBound(1, 31);
-		enrollEnd.getMonthsTextField().setBound(1, 12);
-		enrollEnd.getYearsTextField().setBound(2000, 3000);
+		enrollEnd.getDatePanel().getYearsTextField().setBound(2000, 3000);
+		enrollEnd.getDatePanel().getYearsTextField().setDefaultValue(2021);
+		enrollEnd.getDatePanel().getDaysTextField().setBound(1, 31);
+		enrollEnd.getDatePanel().getMonthsTextField().setBound(1, 12);
+		enrollEnd.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollEnd.setBorder(blackline);
-		
+
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 93, 188, 76);
 		panel.add(scrollPane_1);
 
 		TFObjectives = new JTextArea();
+		TFObjectives.setWrapStyleWord(true);
 		scrollPane_1.setViewportView(TFObjectives);
 		TFObjectives.setLineWrap(true);
-		
+
 		scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(210, 93, 188, 76);
 		panel.add(scrollPane_2);
 
 		TFContents = new JTextArea();
+		TFContents.setWrapStyleWord(true);
 		scrollPane_2.setViewportView(TFContents);
 		TFContents.setLineWrap(true);
 
 		JSeparator separator = new JSeparator();
+		separator.setForeground(Color.BLACK);
 		separator.setOrientation(SwingConstants.VERTICAL);
 		frmCreateANew.getContentPane().add(separator, "cell 0 0,growy");
 
@@ -202,11 +219,11 @@ public class View {
 		LabelLocation.setBounds(9, 201, 51, 14);
 		sessionsPanel.add(LabelLocation);
 
-		LabelWarningDay = new JLabel("  ");
-		LabelWarningDay.setForeground(Color.RED);
-		LabelWarningDay.setFont(new Font("Dialog", Font.PLAIN, 11));
-		LabelWarningDay.setBounds(9, 201, 8, 14);
-		sessionsPanel.add(LabelWarningDay);
+		labelWarningDay = new JLabel("  ");
+		labelWarningDay.setForeground(Color.RED);
+		labelWarningDay.setFont(new Font("Dialog", Font.PLAIN, 11));
+		labelWarningDay.setBounds(9, 201, 8, 14);
+		sessionsPanel.add(labelWarningDay);
 
 		JLabel LabelDate = new JLabel("Date of the session:");
 		LabelDate.setFont(new Font("Dialog", Font.PLAIN, 11));
@@ -220,8 +237,8 @@ public class View {
 
 		sessionStart = new DateTimeInput();
 		sessionStart.setBorder(blackline);
-		sessionStart.getYearsTextField().setBound(2000, 3000);
-		sessionStart.getYearsTextField().setDefaultValue(2021);
+		sessionStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
+		sessionStart.getDatePanel().getYearsTextField().setDefaultValue(2021);
 		sessionStart.setBounds(7, 246, 378, 70);
 
 		sessionsPanel.add(sessionStart);
@@ -237,7 +254,7 @@ public class View {
 		sessionsPanel.add(TFHours);
 
 		btnAddSession = new JButton("Add session");
-		btnAddSession.setBounds(129, 400, 166, 25);
+		btnAddSession.setBounds(129, 420, 166, 25);
 		sessionsPanel.add(btnAddSession);
 
 		// Teacher
@@ -265,10 +282,12 @@ public class View {
 		sessionsPanel.add(LabelRemuneration);
 		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
-		LabelWarningDay = new JLabel("");
-		LabelWarningDay.setBounds(140, 231, 229, 14);
-		sessionsPanel.add(LabelWarningDay);
-		
+		labelWarningDay_1 = new JLabel("");
+		labelWarningDay_1.setFont(new Font("Dialog", Font.PLAIN, 11));
+		labelWarningDay_1.setForeground(Color.RED);
+		labelWarningDay_1.setBounds(140, 231, 229, 14);
+		sessionsPanel.add(labelWarningDay_1);
+
 		btnDeleteSession = new JButton("Delete session");
 		btnDeleteSession.setEnabled(false);
 		btnDeleteSession.setBounds(7, 138, 154, 25);
@@ -333,23 +352,23 @@ public class View {
 	}
 
 	public void setWarningDay(String warning) {
-		this.LabelWarningDay.setText(warning);
+		this.labelWarningDay_1.setText(warning);
 	}
 
 	public void setWarningEnrollmentPeriodStart(String warning) {
-		this.LabelWarningStartEnroll.setText(warning);
+		this.labelWarningStartEnroll.setText(warning);
 	}
 
 	public void setWarningEnrollmentPeriodStart2(String warning) {
-		this.LabelWarningStartEnroll.setText(warning);
+		this.labelWarningStartEnroll.setText(warning);
 	}
 
 	public void setWarningEnrollmentPeriodEnd(String warning) {
-		this.LabelWarningEndEnroll.setText(warning);
+		this.labelWarningEndEnroll.setText(warning);
 	}
 
 	public void setWarningEnrollmentPeriodEnd2(String warning) {
-		this.LabelWarningEndEnroll.setText(warning);
+		this.labelWarningEndEnroll.setText(warning);
 	}
 
 	public JButton getBtnAddSession() {
@@ -363,7 +382,20 @@ public class View {
 	public void setTable(TableModel tm) {
 		table.setModel(tm);
 	}
+
 	public JButton getBtnDeleteSession() {
 		return btnDeleteSession;
+	}
+
+	public void hideWarningDay() {
+		this.labelWarningDay_1.setText("");
+	}
+
+	public void hideWarningEnrollmentPeriodStart() {
+		this.labelWarningStartEnroll.setText("");
+	}
+
+	public void hideWarningEnrollmentPeriodEnd() {
+		this.labelWarningEndEnroll.setText("");
 	}
 }
