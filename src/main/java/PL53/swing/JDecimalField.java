@@ -70,7 +70,7 @@ public class JDecimalField extends JNumberField<Float> {
 
 	@Override
 	public void setText(Float f) {
-		this.setText(f);
+		this.setText(Float.toString(f));
 	}
 
 	@Override
