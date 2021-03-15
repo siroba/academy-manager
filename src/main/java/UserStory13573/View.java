@@ -5,53 +5,40 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import java.awt.Dimension;
-import java.awt.SystemColor;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import java.awt.Font;
-import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.table.TableModel;
+
+import PL53.swing.DateTimeInput;
+import PL53.swing.JIntField;
+import PL53.swing.JNumberField;
+import PL53.util.DateTime;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-
+import javax.swing.BorderFactory;
+import javax.swing.JTextArea;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 public class View {
 
-	private JFrame frame;
-	private JTextField TFName;
-	private JTextField TFContents;
-	private JTextField TFTeacher;
-	private JTextField TFRemuneration;
-	private JTextField TFLocation;
-	private JTextField TFHours;
-	private JTextField TFSpaces;
+	private JFrame frmCreateANew;
+	private JTextField TFName, TFTeacher;
+	private JNumberField TFHours, TFRemuneration, TFSpaces, TFFee;
+	private JTextArea TFObjectives, TFContents;
 	private JLabel LabelObjectives;
-	private JTextField TFObjectives;
 	private JButton BTNCreate;
-	private JLabel LabelStartEnroll;
-	private JLabel LabelWarningStartEnroll;
-	private JLabel LabelWarningEndEnroll;
-	private JComboBox comboBoxDayDay;
-	private JComboBox comboBoxDayMonth;
-	private JComboBox comboBoxDayYear;
-	private JComboBox comboBoxEnrollStartDay;
-	private JComboBox comboBoxEnrollStartMonth;
-	private JComboBox comboBoxEnrollStartYear;
-	private JComboBox comboBoxEnrollEndDay;
-	private JComboBox comboBoxEnrollEndMonth;
-	private JComboBox comboBoxEnrollEndYear;
-	private JLabel LabelWarningDay;
+	private JLabel LabelWarningStartEnroll, LabelWarningEndEnroll, LabelWarningDay;
+	private DateTimeInput enrollStart, enrollEnd, sessionStart;
 	private JLabel LabelFee;
-	private JTextField TFFee;
-	private JComboBox comboBoxDayHour;
-	private JComboBox comboBoxDayMinute;
-
+	private JPanel panel;
+	private JPanel sessionsPanel;
+	private JTable table;
+	private JTextField TFLocation;
+	private JButton btnAddSession;
 
 	/**
 	 * Create the application.
@@ -64,236 +51,303 @@ public class View {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.setTitle("Courses");
-		frame.setName("Courses");
-		frame.setBounds(0, 0, 492, 480);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow][][][][][][][][][][][][][][][grow]"));
-		
-		// Heading 
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+
+		frmCreateANew = new JFrame();
+		frmCreateANew.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 11));
+		frmCreateANew.setTitle("Create a new Formative Action");
+		frmCreateANew.setName("Courses");
+		frmCreateANew.setBounds(0, 0, 846, 485);
+		frmCreateANew.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmCreateANew.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
+
+		panel = new JPanel();
+		frmCreateANew.getContentPane().add(panel, "flowx,cell 0 0,grow");
+		panel.setLayout(null);
+
+		// Heading
 		JLabel lblNewLabel = new JLabel("Plan a formative action");
+		lblNewLabel.setBounds(18, 19, 180, 17);
+		panel.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		frame.getContentPane().add(lblNewLabel, "cell 0 0,alignx center,aligny baseline");
-		
-		// Name 
-		JLabel LabelName = new JLabel("Name:");
-		LabelName.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelName, "flowx,cell 0 1,gapx 20,aligny center");
-		
+
 		TFName = new JTextField();
+		TFName.setBounds(50, 48, 273, 18);
+		panel.add(TFName);
 		TFName.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(TFName, "cell 0 1");
 		TFName.setColumns(10);
-		
-		// Objectives 
+
+		// Name
+		JLabel LabelName = new JLabel("Name:");
+		LabelName.setBounds(10, 50, 37, 14);
+		panel.add(LabelName);
+		LabelName.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
+		// Objectives
 		LabelObjectives = new JLabel("Objectives:");
+		LabelObjectives.setBounds(10, 74, 63, 14);
+		panel.add(LabelObjectives);
 		LabelObjectives.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelObjectives, "flowx,cell 0 2,gapx 20,aligny center");
-		
-		TFObjectives = new JTextField();
-		TFObjectives.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(TFObjectives, "cell 0 2");
-		TFObjectives.setColumns(10);
-		
-		// Main contents 
+
+		// Main contents
 		JLabel LabelContents = new JLabel("Main contents:");
+		LabelContents.setBounds(210, 74, 83, 14);
+		panel.add(LabelContents);
 		LabelContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelContents, "flowx,cell 0 3,gapx 20");
-		
-		TFContents = new JTextField();
-		TFContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(TFContents, "cell 0 3");
-		TFContents.setColumns(10);
-		
-		// Teacher
-		JLabel LabelTeacher = new JLabel("Teacher:");
-		LabelTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelTeacher, "flowx,cell 0 4,gapx 20");
-		
-		TFTeacher = new JTextField();
-		TFTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(TFTeacher, "cell 0 4");
-		TFTeacher.setColumns(10);
-		
-		// Remuneration
-		JLabel LabelRemuneration = new JLabel("Remuneration:");
-		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelRemuneration, "flowx,cell 0 5,gapx 20");
-		
-		TFRemuneration = new JTextField();
-		TFRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(TFRemuneration, "cell 0 5");
-		TFRemuneration.setColumns(10);
-		
-		// Location 
-		JLabel LabelLocation = new JLabel("Location:");
-		LabelLocation.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelLocation, "flowx,cell 0 6,gapx 20");
-		
-		TFLocation = new JTextField();
-		TFLocation.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(TFLocation, "cell 0 6");
-		TFLocation.setColumns(10);
-		
-		// Date 
-		JLabel LabelDate = new JLabel("Date:");
-		LabelDate.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelDate, "flowx,cell 0 7,gapx 20,aligny top");
-		
-		comboBoxDayDay = new JComboBox();
-		comboBoxDayDay.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxDayDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		comboBoxDayDay.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxDayDay, "cell 0 7,gapx 10");
-		
-		comboBoxDayMonth = new JComboBox();
-		comboBoxDayMonth.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxDayMonth.setModel(new DefaultComboBoxModel(new String[] {"Month", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-		comboBoxDayMonth.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxDayMonth, "cell 0 7,gapx 10");
-		
-		comboBoxDayYear = new JComboBox();
-		comboBoxDayYear.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxDayYear.setModel(new DefaultComboBoxModel(new String[] {"Year", "2021", "2022", "2023", "2024", "2025", "2026"}));
-		comboBoxDayYear.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxDayYear, "cell 0 7,gapx 10");
-		
-		comboBoxDayHour = new JComboBox();
-		comboBoxDayHour.setModel(new DefaultComboBoxModel(new String[] {"Hour", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
-		comboBoxDayHour.setMaximumSize(new Dimension(60, 16));
-		comboBoxDayHour.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		frame.getContentPane().add(comboBoxDayHour, "cell 0 7,gapx 10");
-		
-		comboBoxDayMinute = new JComboBox();
-		comboBoxDayMinute.setModel(new DefaultComboBoxModel(new String[] {"Min ", "00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"}));
-		comboBoxDayMinute.setMaximumSize(new Dimension(60, 16));
-		comboBoxDayMinute.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		frame.getContentPane().add(comboBoxDayMinute, "cell 0 7,gapx 10");
-		
-		LabelWarningDay = new JLabel("  ");
-		LabelWarningDay.setForeground(Color.RED);
-		LabelWarningDay.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelWarningDay, "cell 0 7,gapx 30");
-		
-		// Number of hours 
-		JLabel LabelHours = new JLabel("Number of hours:");
-		LabelHours.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelHours, "flowx,cell 0 8,gapx 20");
-		
-		TFHours = new JTextField();
-		TFHours.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(TFHours, "cell 0 8");
-		TFHours.setColumns(10);
-		
-		// Spaces 
-		JLabel LabelSpaces = new JLabel("Spaces:");
-		LabelSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelSpaces, "flowx,cell 0 9,gapx 20");
-		
-		TFSpaces = new JTextField();
+
+		TFSpaces = new JIntField(5);
+		TFSpaces.setBounds(60, 369, 69, 18);
+		panel.add(TFSpaces);
 		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(TFSpaces, "cell 0 9");
 		TFSpaces.setColumns(10);
-		
-		// Start of enrollment period 
-		LabelStartEnroll = new JLabel("Start of enrollment period:");
-		LabelStartEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelStartEnroll, "flowx,cell 0 10,gapx 20,aligny top");
-		
-		comboBoxEnrollStartDay = new JComboBox();
-		comboBoxEnrollStartDay.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxEnrollStartDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		comboBoxEnrollStartDay.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxEnrollStartDay, "cell 0 10,gapx 10");
-		
-		comboBoxEnrollStartMonth = new JComboBox();
-		comboBoxEnrollStartMonth.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxEnrollStartMonth.setModel(new DefaultComboBoxModel(new String[] {"Month", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-		comboBoxEnrollStartMonth.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxEnrollStartMonth, "cell 0 10,gapx 10");
-		
-		comboBoxEnrollStartYear = new JComboBox();
-		comboBoxEnrollStartYear.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxEnrollStartYear.setModel(new DefaultComboBoxModel(new String[] {"Year", "2021", "2022", "2023", "2024", "2025", "2026"}));
-		comboBoxEnrollStartYear.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxEnrollStartYear, "cell 0 10,gapx 10");
-	
+
+		// Spaces
+		JLabel LabelSpaces = new JLabel("Spaces:");
+		LabelSpaces.setBounds(10, 371, 46, 14);
+		panel.add(LabelSpaces);
+		LabelSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
 		LabelWarningStartEnroll = new JLabel("");
+		LabelWarningStartEnroll.setBounds(180, 181, 210, 14);
+		panel.add(LabelWarningStartEnroll);
 		LabelWarningStartEnroll.setForeground(Color.RED);
 		LabelWarningStartEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelWarningStartEnroll, "cell 0 11,gapx 160");
-		
-		// End of enrollment period
-		JLabel LabelEndEnroll = new JLabel("End of enrollment period:");
-		LabelEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelEndEnroll, "flowx,cell 0 12,gapx 20");
-		
-		comboBoxEnrollEndDay = new JComboBox();
-		comboBoxEnrollEndDay.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxEnrollEndDay.setModel(new DefaultComboBoxModel(new String[] {"Day", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		comboBoxEnrollEndDay.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxEnrollEndDay, "cell 0 12,gapx 10");
-		
-		comboBoxEnrollEndMonth = new JComboBox();
-		comboBoxEnrollEndMonth.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxEnrollEndMonth.setModel(new DefaultComboBoxModel(new String[] {"Month", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-		comboBoxEnrollEndMonth.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxEnrollEndMonth, "cell 0 12,gapx 10");
-		
-		comboBoxEnrollEndYear = new JComboBox();
-		comboBoxEnrollEndYear.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBoxEnrollEndYear.setModel(new DefaultComboBoxModel(new String[] {"Year", "2021", "2022", "2023", "2024", "2025", "2026"}));
-		comboBoxEnrollEndYear.setMaximumSize(new Dimension(60, 16));
-		frame.getContentPane().add(comboBoxEnrollEndYear, "cell 0 12,gapx 10");
-		
+
 		LabelWarningEndEnroll = new JLabel("");
+		LabelWarningEndEnroll.setBounds(180, 271, 202, 14);
+		panel.add(LabelWarningEndEnroll);
 		LabelWarningEndEnroll.setForeground(Color.RED);
 		LabelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelWarningEndEnroll, "cell 0 13,gapx 155");
-		
+
+		TFFee = new JIntField(6);
+		TFFee.setBounds(180, 371, 46, 19);
+		panel.add(TFFee);
+		TFFee.setColumns(10);
+
 		// Fee
 		LabelFee = new JLabel("Fee:");
+		LabelFee.setBounds(150, 371, 24, 14);
+		panel.add(LabelFee);
 		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		frame.getContentPane().add(LabelFee, "flowx,cell 0 14, gapx 20");
-		
-		TFFee = new JTextField();
-		frame.getContentPane().add(TFFee, "cell 0 14");
-		TFFee.setColumns(10);
-		
-		// Create Button 
+
+		// Create Button
 		BTNCreate = new JButton("Create formative action");
+		BTNCreate.setBounds(114, 400, 186, 24);
+		panel.add(BTNCreate);
 		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 11));
-		frame.getContentPane().add(BTNCreate, "cell 0 15,alignx center");
+
+		JLabel LabelStartEnroll = new JLabel("Start of enrollment period:");
+		LabelStartEnroll.setBounds(12, 181, 152, 14);
+		panel.add(LabelStartEnroll);
+		LabelStartEnroll.setFont(new Font("Dialog", Font.PLAIN, 11));
+
+		enrollStart = new DateTimeInput();
+		enrollStart.setBounds(12, 196, 378, 70);
+		panel.add(enrollStart);
+		enrollStart.getDaysTextField().setBound(1, 31);
+		enrollStart.getMonthsTextField().setBound(1, 12);
+		enrollStart.getYearsTextField().setBound(2000, 3000);
+		enrollStart.setBorder(blackline);
+
+		JLabel lblEndOfEnrollment = new JLabel("End of enrollment period:");
+		lblEndOfEnrollment.setBounds(12, 271, 155, 15);
+		panel.add(lblEndOfEnrollment);
+		lblEndOfEnrollment.setFont(new Font("Dialog", Font.PLAIN, 11));
+
+		enrollEnd = new DateTimeInput();
+		enrollEnd.setBounds(12, 287, 378, 70);
+		panel.add(enrollEnd);
+		enrollEnd.getDaysTextField().setBound(1, 31);
+		enrollEnd.getMonthsTextField().setBound(1, 12);
+		enrollEnd.getYearsTextField().setBound(2000, 3000);
+		enrollEnd.setBorder(blackline);
+
+		TFObjectives = new JTextArea();
+		TFObjectives.setLineWrap(true);
+		TFObjectives.setBounds(10, 93, 188, 76);
+		panel.add(TFObjectives);
+
+		TFContents = new JTextArea();
+		TFContents.setLineWrap(true);
+		TFContents.setBounds(210, 93, 188, 76);
+		panel.add(TFContents);
+
+		JSeparator separator = new JSeparator();
+		separator.setOrientation(SwingConstants.VERTICAL);
+		frmCreateANew.getContentPane().add(separator, "cell 0 0,growy");
+
+		sessionsPanel = new JPanel();
+		frmCreateANew.getContentPane().add(sessionsPanel, "cell 0 0,grow");
+		sessionsPanel.setLayout(null);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(7, 26, 402, 103);
+		sessionsPanel.add(scrollPane);
+
+		table = new JTable();
+		scrollPane.setViewportView(table);
+
+		JLabel LabelLocation = new JLabel("Location:");
+		LabelLocation.setFont(new Font("Dialog", Font.PLAIN, 11));
+		LabelLocation.setBounds(12, 145, 51, 14);
+		sessionsPanel.add(LabelLocation);
+
+		LabelWarningDay = new JLabel("  ");
+		LabelWarningDay.setForeground(Color.RED);
+		LabelWarningDay.setFont(new Font("Dialog", Font.PLAIN, 11));
+		LabelWarningDay.setBounds(12, 145, 8, 14);
+		sessionsPanel.add(LabelWarningDay);
+
+		JLabel LabelDate = new JLabel("Date of the session:");
+		LabelDate.setFont(new Font("Dialog", Font.PLAIN, 11));
+		LabelDate.setBounds(10, 175, 134, 14);
+		sessionsPanel.add(LabelDate);
+
+		JLabel LabelHours = new JLabel("Number of hours:");
+		LabelHours.setFont(new Font("Dialog", Font.PLAIN, 11));
+		LabelHours.setBounds(260, 145, 101, 14);
+		sessionsPanel.add(LabelHours);
+
+		sessionStart = new DateTimeInput();
+		sessionStart.setBorder(blackline);
+		sessionStart.getDaysTextField().setBound(1, 31);
+		sessionStart.getMonthsTextField().setBound(1, 12);
+		sessionStart.getYearsTextField().setBound(2000, 3000);
+		sessionStart.getYearsTextField().setDefaultValue(2021);
+		sessionStart.setBounds(10, 190, 378, 70);
+
+		sessionsPanel.add(sessionStart);
+
+		TFLocation = new JTextField();
+		TFLocation.setBounds(81, 142, 166, 19);
+		sessionsPanel.add(TFLocation);
+		TFLocation.setColumns(10);
+
+		TFHours = new JIntField(2);
+		TFHours.setBound(0, 24);
+		TFHours.setBounds(365, 142, 39, 19);
+		sessionsPanel.add(TFHours);
+
+		btnAddSession = new JButton("Add session");
+		btnAddSession.setBounds(129, 400, 166, 25);
+		sessionsPanel.add(btnAddSession);
+
+		// Teacher
+		JLabel LabelTeacher = new JLabel("Teacher:");
+		LabelTeacher.setBounds(10, 272, 50, 14);
+		sessionsPanel.add(LabelTeacher);
+		LabelTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
+		TFTeacher = new JTextField();
+		TFTeacher.setBounds(66, 272, 142, 18);
+		sessionsPanel.add(TFTeacher);
+		TFTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		TFTeacher.setColumns(10);
+
+		TFRemuneration = new JNumberField(4);
+		TFRemuneration.setBound(0, Integer.MAX_VALUE);
+		TFRemuneration.setBounds(310, 272, 51, 18);
+		sessionsPanel.add(TFRemuneration);
+		TFRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		TFRemuneration.setColumns(10);
+
+		// Remuneration
+		JLabel LabelRemuneration = new JLabel("Remuneration:");
+		LabelRemuneration.setBounds(220, 272, 83, 14);
+		sessionsPanel.add(LabelRemuneration);
+		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
+		LabelWarningDay = new JLabel("");
+		LabelWarningDay.setBounds(143, 175, 229, 14);
+		sessionsPanel.add(LabelWarningDay);
 	}
 
-	//Getters and Setters to access from the controller (compact representation)
-	public JFrame getFrame() { return this.frame; }
-	public JButton getCreateBtn() {return this.BTNCreate;}
-	public String getName() {return this.TFName.getText();}
-	public String getObjectives() {return this.TFObjectives.getText();}
-	public String getMainContents() {return this.TFContents.getText();}
-	public String getTeacher() {return this.TFTeacher.getText();}
-	public String getRemuneration() {return this.TFRemuneration.getText();}
-	public String getLocation() {return this.TFLocation.getText();}
-	public String getSpaces() {return this.TFSpaces.getText();}
-	public String getDayDay() {return String.valueOf(this.comboBoxDayDay.getSelectedItem());}
-	public String getDayMonth() {return String.valueOf(this.comboBoxDayMonth.getSelectedItem());}
-	public String getDayYear() {return String.valueOf(this.comboBoxDayYear.getSelectedItem());}
-	public String getDayHour() {return String.valueOf(this.comboBoxDayHour.getSelectedItem());}
-	public String getDayMinute() {return String.valueOf(this.comboBoxDayMinute.getSelectedItem());}
-	public String getNumberOfHours() {return this.TFHours.getText();}
-	public String getEnrollStartDay() {return String.valueOf(this.comboBoxEnrollStartDay.getSelectedItem());}
-	public String getEnrollStartMonth() {return String.valueOf(this.comboBoxEnrollStartMonth.getSelectedItem());}
-	public String getEnrollStartYear() {return String.valueOf(this.comboBoxEnrollStartYear.getSelectedItem());}
-	public String getEnrollEndDay() {return String.valueOf(this.comboBoxEnrollEndDay.getSelectedItem());}
-	public String getEnrollEndMonth() {return String.valueOf(this.comboBoxEnrollEndMonth.getSelectedItem());}
-	public String getEnrollEndYear() {return String.valueOf(this.comboBoxEnrollEndYear.getSelectedItem());}
-	public String getFee() {return String.valueOf(this.TFFee.getText());}
-	public void setWarningDay(String warning)  { this.LabelWarningDay.setText(warning); }
-	public void setWarningEnrollmentPeriodStart(String warning)  { this.LabelWarningStartEnroll.setText(warning); }
-	public void setWarningEnrollmentPeriodStart2(String warning)  { this.LabelWarningStartEnroll.setText(warning); }
-	public void setWarningEnrollmentPeriodEnd(String warning)  { this.LabelWarningEndEnroll.setText(warning); }
-	public void setWarningEnrollmentPeriodEnd2(String warning)  { this.LabelWarningEndEnroll.setText(warning); }
+	// Getters and Setters to access from the controller (compact representation)
+	public JFrame getFrame() {
+		return this.frmCreateANew;
+	}
+
+	public JButton getCreateBtn() {
+		return this.BTNCreate;
+	}
+
+	public String getName() {
+		return this.TFName.getText();
+	}
+
+	public String getObjectives() {
+		return this.TFObjectives.getText();
+	}
+
+	public String getMainContents() {
+		return this.TFContents.getText();
+	}
+
+	public String getTeacher() {
+		return this.TFTeacher.getText();
+	}
+
+	public float getRemuneration() {
+		return this.TFRemuneration.getValue();
+	}
+
+	public String getLocation() {
+		return this.TFLocation.getText();
+	}
+
+	public int getSpaces() {
+		return Math.round(this.TFSpaces.getValue());
+	}
+
+	public DateTime getSessionDatetime() {
+		return sessionStart.getDateTime();
+	}
+
+	public int getNumberOfHours() {
+		return Math.round(this.TFHours.getValue());
+	}
+
+	public DateTime getEnrollStart() {
+		return enrollStart.getDateTime();
+	}
+
+	public DateTime getEnrollEnd() {
+		return enrollEnd.getDateTime();
+	}
+
+	public float getFee() {
+		return this.TFFee.getValue();
+	}
+
+	public void setWarningDay(String warning) {
+		this.LabelWarningDay.setText(warning);
+	}
+
+	public void setWarningEnrollmentPeriodStart(String warning) {
+		this.LabelWarningStartEnroll.setText(warning);
+	}
+
+	public void setWarningEnrollmentPeriodStart2(String warning) {
+		this.LabelWarningStartEnroll.setText(warning);
+	}
+
+	public void setWarningEnrollmentPeriodEnd(String warning) {
+		this.LabelWarningEndEnroll.setText(warning);
+	}
+
+	public void setWarningEnrollmentPeriodEnd2(String warning) {
+		this.LabelWarningEndEnroll.setText(warning);
+	}
+
+	public JButton getBtnAddSession() {
+		return btnAddSession;
+	}
+
+	public JTable getTable() {
+		return table;
+	}
+
+	public void setTable(TableModel tm) {
+		table.setModel(tm);
+	}
 }

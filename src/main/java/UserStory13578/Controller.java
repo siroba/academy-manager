@@ -97,7 +97,7 @@ public class Controller {
 		 */
 		// name of the formative action, the name and email of the professional, the fee
 		// paid, the date of the course and the status of the registration
-		String header[] = { "Formative Action", "Professional name", "Professional email", "Fee", "Date", "Status" };
+		String header[] = { "Formative Action", "Professional name", "Professional email", "Fee", "Enrollment end", "Status" };
 
 		String body[][] = new String[data.length][header.length];
 
@@ -108,7 +108,7 @@ public class Controller {
 					d.professional.getName(),
 					d.professional.getEmail(),
 					Float.toString(d.formativeAction.getFee()),
-					d.formativeAction.getFaStart().toString(),
+					d.formativeAction.getEnrollmentEnd().toString(),
 					d.enrollment.getStatus().toString() };
 		}
 
