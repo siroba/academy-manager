@@ -227,8 +227,8 @@ public class FormativeAction {
 		List<FormativeAction> fa = new ArrayList<FormativeAction>();
 
 		while (rs.next()) {
-			DateTime dend, dfa;
-			
+			DateTime dend, dstart;
+
 			try {
 				dend = DateTime.parseString(rs.getString("enrollmentEnd"));
 			} catch (ParseException e) {
@@ -236,9 +236,9 @@ public class FormativeAction {
 			}
 
 			try {
-				dfa = DateTime.parseString(rs.getString("dateFA"));
+				dstart = DateTime.parseString(rs.getString("enrollmentStart"));
 			} catch (ParseException e) {
-				dfa = DateTime.fromMillis(rs.getLong("dateFA"));
+				dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
 			}
 
 			int id_fa = rs.getInt("ID_fa");
@@ -253,8 +253,8 @@ public class FormativeAction {
 					rs.getString("objectives"),
 					rs.getString("mainContent"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
+					dstart,
 					dend,
-					dfa,
 					sessions);
 
 			fa.add(f);
@@ -286,7 +286,7 @@ public class FormativeAction {
 
 		rs.next();
 
-		DateTime dend, dfa;
+		DateTime dend, dstart;
 
 		try {
 			dend = DateTime.parseString(rs.getString("enrollmentEnd"));
@@ -295,9 +295,9 @@ public class FormativeAction {
 		}
 
 		try {
-			dfa = DateTime.parseString(rs.getString("dateFA"));
+			dstart = DateTime.parseString(rs.getString("enrollmentStart"));
 		} catch (ParseException e) {
-			dfa = DateTime.fromMillis(rs.getLong("dateFA"));
+			dstart = DateTime.fromMillis(rs.getLong("enrollmentStart"));
 		}
 
 		int id_fa = rs.getInt("ID_fa");
@@ -312,8 +312,8 @@ public class FormativeAction {
 				rs.getString("objectives"),
 				rs.getString("mainContent"),
 				Status.valueOf(rs.getString("status").toUpperCase()),
+				dstart,
 				dend,
-				dfa,
 				sessions);
 
 		// Very important to always close all the objects related to the database
