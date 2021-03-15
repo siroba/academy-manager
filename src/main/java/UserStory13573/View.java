@@ -11,8 +11,8 @@ import javax.swing.border.Border;
 import javax.swing.table.TableModel;
 
 import PL53.swing.DateTimeInput;
+import PL53.swing.JDecimalField;
 import PL53.swing.JIntField;
-import PL53.swing.JNumberField;
 import PL53.util.DateTime;
 
 import javax.swing.JTextField;
@@ -27,7 +27,8 @@ public class View {
 
 	private JFrame frmCreateANew;
 	private JTextField TFName, TFTeacher;
-	private JNumberField TFHours, TFRemuneration, TFSpaces, TFFee;
+	private JIntField TFHours, TFSpaces;
+	private JDecimalField TFRemuneration, TFFee;
 	private JTextArea TFObjectives, TFContents;
 	private JLabel LabelObjectives;
 	private JButton BTNCreate;
@@ -122,7 +123,7 @@ public class View {
 		LabelWarningEndEnroll.setForeground(Color.RED);
 		LabelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
-		TFFee = new JIntField(6);
+		TFFee = new JDecimalField(6);
 		TFFee.setBounds(180, 371, 46, 19);
 		panel.add(TFFee);
 		TFFee.setColumns(10);
@@ -251,8 +252,8 @@ public class View {
 		TFTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFTeacher.setColumns(10);
 
-		TFRemuneration = new JNumberField(4);
-		TFRemuneration.setBound(0, Integer.MAX_VALUE);
+		TFRemuneration = new JDecimalField(4);
+		TFRemuneration.setBound(0f, Float.MAX_VALUE);
 		TFRemuneration.setBounds(307, 328, 51, 18);
 		sessionsPanel.add(TFRemuneration);
 		TFRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -308,7 +309,7 @@ public class View {
 	}
 
 	public int getSpaces() {
-		return Math.round(this.TFSpaces.getValue());
+		return this.TFSpaces.getValue();
 	}
 
 	public DateTime getSessionDatetime() {
@@ -316,7 +317,7 @@ public class View {
 	}
 
 	public int getNumberOfHours() {
-		return Math.round(this.TFHours.getValue());
+		return this.TFHours.getValue();
 	}
 
 	public DateTime getEnrollStart() {
