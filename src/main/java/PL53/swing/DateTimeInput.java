@@ -85,18 +85,6 @@ public class DateTimeInput extends JPanel {
 	public int getYear() {
 		return datePanel.getYear();
 	}
-
-	public JIntField getDaysTextField() {
-		return datePanel.getDaysTextField();
-	}
-
-	public JIntField getYearsTextField() {
-		return datePanel.getYearsTextField();
-	}
-
-	public JIntField getMonthsTextField() {
-		return datePanel.getMonthsTextField();
-	}
   
 	public JIntField getHoursTextField() {
 		return hoursTextField;
@@ -105,18 +93,6 @@ public class DateTimeInput extends JPanel {
 	public JIntField getMinutesTextField() {
 		return minutesTextField;
 	}
-	
-	public JLabel getLblYear() {
-		return datePanel.getLblYear();
-	}
-
-	public JLabel getLabelSep1() {
-		return datePanel.getLabelSep1();
-	}
-
-	public JLabel getLabelSep2() {
-		return datePanel.getLabelSep2();
-	}	
 
 	public JLabel getLblHour() {
 		return lblHour;
@@ -126,6 +102,10 @@ public class DateTimeInput extends JPanel {
 		return labelSep;
 	}
 
+	public DateInput getDatePanel() {
+		return datePanel;
+	}
+	
 	/**
 	 * See {@link DateInput#getDate()}.
 	 * 
