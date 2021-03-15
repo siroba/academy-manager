@@ -74,6 +74,6 @@ public class JIntField extends JNumberField<Integer>{
 
 	@Override
 	public void setText(Integer f) {
-		this.setText(f);
+		this.setText(Integer.toString(f));
 	}
 }
