@@ -14,7 +14,9 @@ DROP TABLE Invoice;
 CREATE TABLE Invoice
 (
  ID_invoice INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+
  dateIn     date NOT NULL,
+
  ID_fa      integer NOT NULL,
  CONSTRAINT FK_161 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa )
 );
