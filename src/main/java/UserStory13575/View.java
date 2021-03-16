@@ -4,14 +4,17 @@ package UserStory13575;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Window;
 
-
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 import javax.swing.JLabel;
+
+import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
@@ -22,6 +25,10 @@ import javax.swing.JTextPane;
 
 import javax.swing.table.TableModel;
 
+import PL53.swing.DateInput;
+import PL53.swing.DateTimeInput;
+import PL53.swing.JDecimalField;
+import PL53.swing.JNumberField;
 import PL53.util.DateTime;
 
 import java.awt.event.MouseAdapter;
@@ -49,13 +56,14 @@ public class View extends JFrame {
 	 * Create the frame.
 	 */
 	
-	private JTextPane dateTextPane;
+	private DateTimeInput dateTextPane;
 	private JButton confirmButton;
-	private JTextPane amountPaidTextPane;
+	private JDecimalField amountPaidTextField;
 	private JTable table;
 	private JScrollPane scrollPane;
 	
 	public View() {
+		
 		setBounds(100, 100, 822, 581);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -89,20 +97,31 @@ public class View extends JFrame {
 		lblNewLabel_4.setBounds(334, 359, 45, 13);
 		contentPane.add(lblNewLabel_4);
 		
-		dateTextPane = new JTextPane();
-		dateTextPane.setBounds(413, 353, 200, 19);
-		contentPane.add(dateTextPane);
+	
 		
 		 confirmButton = new JButton("Confirm");
 		
+		/* dateTextPane = new DateInput();
+		 dateTextPane.setBounds(420, 353, 211, 69);
+		 dateTextPane.setBorder(blackline);
+		 dateTextPane.getYearsTextField().setBound(2000, 3000);
+			contentPane.add(dateTextPane);*/
 		 
+			dateTextPane = new DateTimeInput();
+			Border blackline = BorderFactory.createLineBorder(Color.black);
+			dateTextPane.setBorder(blackline);
+			dateTextPane.setBounds(368, 359, 408, 67);
+			contentPane.add(dateTextPane);
+			
 		 
-		confirmButton.setBounds(266, 438, 149, 21);
+		confirmButton.setBounds(264, 470, 149, 21);
 		contentPane.add(confirmButton);
 		
-		amountPaidTextPane = new JTextPane();
-		amountPaidTextPane.setBounds(147, 353, 99, 19);
-		contentPane.add(amountPaidTextPane);
+		amountPaidTextField = new JDecimalField(2);
+		amountPaidTextField.setBounds(147, 353, 99, 19);
+		amountPaidTextField.setBound( 0.f,Float.MAX_VALUE);
+
+		contentPane.add(amountPaidTextField);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 92, 788, 224);
@@ -122,20 +141,23 @@ public class View extends JFrame {
 		return this.confirmButton;
 	}
 	
-	public JTextPane getDateTextPane(){
+	public DateTimeInput getDateTextPane(){
 		return this.dateTextPane;
 	}
 	
-	public JTextPane getAmountPaidTextPane() {
-		return this.amountPaidTextPane;
-	}
 	
-	public void setAmountPaidTextPane(String string) {
-		this.amountPaidTextPane.setText(string);
+	
+	public float getAmountPaidTextField() {
+		return this.amountPaidTextField.getValue();
+	}
+
+	
+	public void setAmountPaidTextField(String string) {
+		this.amountPaidTextField.setText(string);
 	}
 	
 	public void setDateTextPane(DateTime datetime) {
-		this.dateTextPane.setText(datetime.toString());
+		this.dateTextPane.setToolTipText(datetime.toString());
 	}
 	
 
