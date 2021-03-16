@@ -9,7 +9,9 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 
+import PL53.swing.DateInput;
 import PL53.swing.DateTimeInput;
+import PL53.util.Date;
 import PL53.util.DateTime;
 
 import javax.swing.JLabel;
@@ -25,11 +27,11 @@ public class View extends JFrame {
 	private static final long serialVersionUID = -7328790026428798502L;
 	
 	private JPanel contentPane;
-	private DateTimeInput dateTextField;
+	private DateInput dateTextField;
 	private JTextField nameTextField;
 	private JTextField fiscalNumberTextField;
 	private JTextField addressTextField;
-	private DateTimeInput dateTransferTextField;
+	private DateInput dateTransferTextField;
 	private JTable table;
 	private JButton registerButton;
 
@@ -77,14 +79,21 @@ public class View extends JFrame {
 		contentPane.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("Date of the invoice:");
-		lblNewLabel_3.setBounds(153, 250, 123, 13);
+		lblNewLabel_3.setBounds(227, 250, 123, 13);
 		contentPane.add(lblNewLabel_3);
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
-		dateTextField = new DateTimeInput();
-		dateTextField.setBounds(153, 274, 385, 69);
+		dateTextField = new DateInput();
+		dateTextField.setBounds(227, 275, 211, 69);
 		dateTextField.setBorder(blackline);
+		dateTextField.getYearsTextField().setBound(2000, 3000);
 		contentPane.add(dateTextField);
+		
+		dateTransferTextField = new DateInput();
+		dateTransferTextField.setBounds(208, 467, 230, 65);
+		dateTransferTextField.setBorder(blackline);
+		dateTransferTextField.getYearsTextField().setBound(2000, 3000);
+		contentPane.add(dateTransferTextField);
 		
 		JLabel lblNewLabel_5 = new JLabel("Issuer tax data");
 		lblNewLabel_5.setBounds(50, 343, 93, 13);
@@ -92,7 +101,7 @@ public class View extends JFrame {
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JPanel taxDataPanel = new JPanel();
-		taxDataPanel.setBounds(39, 368, 612, 59);
+		taxDataPanel.setBounds(41, 366, 612, 59);
 		taxDataPanel.setBorder(blackline);
 		contentPane.add(taxDataPanel);
 		taxDataPanel.setLayout(null);
@@ -129,13 +138,10 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel_9 = new JLabel("Date of the transfer");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_9.setBounds(153, 435, 115, 13);
+		lblNewLabel_9.setBounds(227, 444, 115, 13);
 		contentPane.add(lblNewLabel_9);
 		
-		dateTransferTextField = new DateTimeInput();
-		dateTransferTextField.setBounds(153, 460, 385, 69);
-		dateTransferTextField.setBorder(blackline);
-		contentPane.add(dateTransferTextField);
+		
 		
 		registerButton = new JButton("Register");
 		
@@ -144,7 +150,7 @@ public class View extends JFrame {
 		contentPane.add(registerButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 669, 117);
+		scrollPane.setBounds(10, 101, 657, 117);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -156,8 +162,8 @@ public class View extends JFrame {
 		return addressTextField.getText();
 	}
 	
-	public DateTime getDateTextField() {
-		return dateTextField.getDateTime();
+	public Date getDateTextField() {
+		return dateTextField.getDate();
 	}
 	public JTable getTable() {
 		return table;
@@ -180,8 +186,8 @@ public class View extends JFrame {
 		this.fiscalNumberTextField = fiscalNumberTextField;
 	}
 
-	public DateTime getDateTransferTextField() {
-		return dateTransferTextField.getDateTime();
+	public Date getDateTransferTextField() {
+		return dateTransferTextField.getDate();
 	}	
 
 	public void setAddressTextField(JTextField addressTextField) {

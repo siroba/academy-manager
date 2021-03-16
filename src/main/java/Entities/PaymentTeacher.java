@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import PL53.util.Date;
 import PL53.util.DateTime;
 import Utils.Database;
 
@@ -16,7 +17,7 @@ public class PaymentTeacher {
 	
 		private int ID = -1, ID_invoice=-1;
 		private float amount;
-		private DateTime payDate;
+		private Date payDate;
 		private String sender, receiver, fiscalNumber, address;
 		private boolean confirmed;
 
@@ -29,7 +30,7 @@ public class PaymentTeacher {
 		 * @param address
 		 * @param confirmed
 		 */
-		public PaymentTeacher( float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
+		public PaymentTeacher( float amount, Date payDate, String sender, String receiver, String fiscalNumber,
 				String address, boolean confirmed) {
 			
 			this.amount = amount;
@@ -54,7 +55,7 @@ public class PaymentTeacher {
 		 * @param address
 		 * @param confirmed
 		 */
-		public PaymentTeacher(int ID_payment, int ID_invoice,  float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
+		public PaymentTeacher(int ID_payment, int ID_invoice,  float amount, Date payDate, String sender, String receiver, String fiscalNumber,
 				String address, boolean confirmed) {
 			this.ID = ID_payment;
 			this.ID_invoice = ID_invoice;
@@ -106,11 +107,11 @@ public class PaymentTeacher {
 			List<PaymentTeacher> enrollments = new ArrayList<>();
 
 			while (rs.next()) {
-				DateTime datepay;
+				Date datepay;
 				try {
-					datepay = DateTime.parseString(rs.getString("datePay"));
+					datepay = Date.parseString(rs.getString("datePay"));
 				} catch (ParseException e) {
-					datepay = DateTime.fromMillis(rs.getLong("datePay"));
+					datepay = Date.fromMillis(rs.getLong("datePay"));
 				}
 
 				PaymentTeacher e = new PaymentTeacher(
@@ -153,11 +154,11 @@ public class PaymentTeacher {
 			ResultSet rs = st.executeQuery(query.toString());
 			rs.next();
 
-			DateTime datepay;
+			Date datepay;
 			try {
-				datepay = DateTime.parseString(rs.getString("datePay"));
+				datepay = Date.parseString(rs.getString("datePay"));
 			} catch (ParseException e) {
-				datepay = DateTime.fromMillis(rs.getLong("datePay"));
+				datepay = Date.fromMillis(rs.getLong("datePay"));
 			}
 
 			PaymentTeacher e = new PaymentTeacher(
@@ -188,7 +189,7 @@ public class PaymentTeacher {
 		 * @throws SQLException
 		 * @throws ParseException
 		 */
-		public void insert(Database db) throws SQLException {
+		public void insert(Database db) throws SQLException, ParseException {
 			/*
 			 * status TEXT NOT NULL CHECK( status IN('received','confirmed','cancelled')),
 			 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
@@ -208,7 +209,7 @@ public class PaymentTeacher {
 				pstmt.setInt(2, this.getID_invoice());
 	
 				pstmt.setFloat(3, this.getAmount());
-				pstmt.setTimestamp(4, this.getPayDate().toTimestamp());
+				pstmt.setDate(4, this.getPayDate().toSQL());
 				pstmt.setString(5,this.getSender());
 				pstmt.setString(6, this.getReceiver());
 				pstmt.setString(7, this.getFiscalNumber());
@@ -223,7 +224,7 @@ public class PaymentTeacher {
 				// Sets of the parameters of the prepared statement
 
 				pstmt.setFloat(1, this.getAmount());
-				pstmt.setTimestamp(2, this.getPayDate().toTimestamp());
+				pstmt.setDate(2, this.getPayDate().toSQL());
 				pstmt.setString(3,this.getSender());
 				pstmt.setString(4, this.getReceiver());
 				pstmt.setString(5, this.getAddress());
@@ -255,11 +256,11 @@ public class PaymentTeacher {
 			this.amount = amount;
 		}
 
-		public DateTime getPayDate() {
+		public Date getPayDate() {
 			return payDate;
 		}
 
-		public void setPayDate(DateTime payDate) {
+		public void setPayDate(Date payDate) {
 			this.payDate = payDate;
 		}
 
