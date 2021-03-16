@@ -1,4 +1,4 @@
-package PL53.SI2020_PL53;
+package PL53.util;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -246,7 +246,10 @@ public class Date extends java.util.Date {
 	 */
 	@Override
 	public String toString() {
-		return this.day + "/" + this.month + "/" + this.year;
+		String d = (this.day < 10 ? "0" : "") + this.day;
+		String mm = (this.month < 10 ? "0" : "") + this.month;
+		
+		return d + "/" + mm + "/" + this.year;
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package PL53.SI2020_PL53;
+package PL53.util;
 
 public class Random extends java.util.Random{
 	// Serial ID assigned by eclipse

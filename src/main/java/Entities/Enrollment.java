@@ -9,10 +9,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import PL53.util.Date;
+import PL53.util.DateTime;
+import PL53.util.Random;
 import Utils.Database;
-import PL53.SI2020_PL53.Date;
-import PL53.SI2020_PL53.DateTime;
-import PL53.SI2020_PL53.Random;
 
 public class Enrollment {
 	private int ID_fa, ID_professional;
