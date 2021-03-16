@@ -222,7 +222,7 @@ public class FormativeAction {
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
-		ResultSet rs = st.executeQuery(query.toString());
+		ResultSet rs = st.executeQuery(query);
 
 		List<FormativeAction> fa = new ArrayList<FormativeAction>();
 
@@ -423,5 +423,13 @@ public class FormativeAction {
 
 	public enum Status {
 		ACTIVE, DELAYED, EXECUTED, CANCELLED;
+	}
+
+
+	public String getTeacherName() {
+		if(this.sessions.size()<=0)
+			return "";
+		
+		return this.sessions.get(0).getTeacherName();
 	}
 }

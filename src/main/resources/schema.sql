@@ -56,9 +56,11 @@ CREATE TABLE IF NOT EXISTS Payment(
     address         text NOT NULL,
     fiscalNumber    text NOT NULL,
     confirmed       boolean NOT NULL,
+    refundStatus    text DEFAULT 'NONE',
     ID_fa           integer NOT NULL,
     ID_professional integer NOT NULL,
-    CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
+    CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional ),
+    CHECK ( refundStatus IN('NONE', 'SOLICITED', 'REFUNDED') )
 );
 
 DROP TABLE PaymentTeacher;

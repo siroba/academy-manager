@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +18,7 @@ public class Payment {
 	private DateTime payDate;
 	private String sender, receiver, fiscalNumber, address;
 	private boolean confirmed;
+	private RefundStatus refundStatus = RefundStatus.NONE;
 
 	public Payment(int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
 			String address, boolean confirmed) {
@@ -48,7 +48,7 @@ public class Payment {
 	 * @param confirmed
 	 */
 	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
-			String address, boolean confirmed) {
+			String address, boolean confirmed, RefundStatus refundStatus) {
 		this.ID = ID_payment;
 		this.ID_fa = ID_fa;
 		this.ID_professional = ID_professional;
@@ -59,6 +59,7 @@ public class Payment {
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
 		this.confirmed = confirmed;
+		this.setRefundStatus(refundStatus);
 	}
 
 	public static String tableName() {
@@ -116,7 +117,8 @@ public class Payment {
 					rs.getString("receiver"),
 					rs.getString("fiscalNumber"),
 					rs.getString("address"),
-					rs.getBoolean("confirmed"));
+					rs.getBoolean("confirmed"),
+					RefundStatus.valueOf(rs.getString("refundStatus")));
 
 			enrollments.add(e);
 		}
@@ -163,7 +165,8 @@ public class Payment {
 				rs.getString("receiver"),
 				rs.getString("fiscalNumber"),
 				rs.getString("address"),
-				rs.getBoolean("confirmed"));
+				rs.getBoolean("confirmed"),
+				RefundStatus.valueOf(rs.getString("refundStatus")));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -202,7 +205,7 @@ public class Payment {
 
 		if(this.getID() != -1) {
 			String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_fa, ID_professional, amount, payDate, sender, receiver, fiscalNumber,"
-					+ " address, confirmed) VALUES(?,?,?,?,?,?,?,?,?,?)";
+					+ " address, confirmed, refundStatus) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -218,9 +221,10 @@ public class Payment {
 			pstmt.setString(8, this.getFiscalNumber());
 			pstmt.setString(9, this.getAddress());
 			pstmt.setBoolean(10, this.isConfirmed());
+			pstmt.setString(8, this.getRefundStatus().toString());
 			pstmt.executeUpdate(); // statement execution
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -233,8 +237,9 @@ public class Payment {
 			pstmt.setString(5, this.getAddress());
 			pstmt.setString(6, this.getFiscalNumber());
 			pstmt.setBoolean(7, this.isConfirmed());
-			pstmt.setInt(8, this.getID_fa());
-			pstmt.setInt(9, this.getID_professional());
+			pstmt.setString(8, this.getRefundStatus().toString());
+			pstmt.setInt(9, this.getID_fa());
+			pstmt.setInt(10, this.getID_professional());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -321,5 +326,17 @@ public class Payment {
 
 	public void setID_professional(int iD_professional) {
 		ID_professional = iD_professional;
+	}
+	
+	public RefundStatus getRefundStatus() {
+		return refundStatus;
+	}
+
+	public void setRefundStatus(RefundStatus refundStatus) {
+		this.refundStatus = refundStatus;
+	}
+
+	public enum RefundStatus {
+		NONE, SOLICITED, REFUNDED;
 	}
 }
