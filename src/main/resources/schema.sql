@@ -11,8 +11,7 @@ CREATE TABLE IF NOT EXISTS Enrollment(
 );
 
 DROP TABLE Invoice;
-CREATE TABLE Invoice
-(
+CREATE TABLE Invoice (
  ID_invoice INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
  dateIn     datetime NOT NULL,
  ID_fa      integer NOT NULL,
@@ -64,8 +63,7 @@ CREATE TABLE IF NOT EXISTS Payment(
 );
 
 DROP TABLE PaymentTeacher;
-CREATE TABLE PaymentTeacher
-(
+CREATE TABLE PaymentTeacher (
  ID_payment      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
  amount       real NOT NULL,
  datePay      date NOT NULL,

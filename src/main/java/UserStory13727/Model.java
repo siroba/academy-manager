@@ -68,9 +68,9 @@ public class Model {
 	}
 
 	public Data[] getSolicitedRefunds(FormativeAction fa) throws SQLException {
-		String queryEnrollments = "SELECT * FROM Enrollment "
+		String queryEnrollments = "SELECT Enrollment.* FROM Enrollment "
 								+ "INNER JOIN Payment on Payment.ID_fa=Enrollment.ID_fa AND Payment.ID_professional=Enrollment.ID_professional "
-								+ "WHERE Enrollment.ID_fa=" + fa.getID() + " AND Payment.refundStatus='SOLICITED';";
+								+ "WHERE Enrollment.ID_fa=" + fa.getID() + ";";
 
 		String queryPayments = "SELECT * FROM Payment WHERE ID_fa=" + fa.getID() + " AND ID_professional=";
 		String queryProfessional = "SELECT * FROM Professional WHERE ID_professional=";
