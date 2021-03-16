@@ -15,7 +15,7 @@ import Entities.Professional;
 import Exceptions.InvalidFieldValue;
 import PL53.util.DateTime;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 	private FormativeAction selected = null;
