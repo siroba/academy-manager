@@ -1,5 +1,6 @@
 package PL53.swing;
 
+import java.beans.JavaBean;
 import java.text.DecimalFormat;
 
 /**
@@ -12,6 +13,7 @@ import java.text.DecimalFormat;
  *         This is used in the {@link DateTimeInput} and {@link DateInput}
  *         classes.
  */
+@JavaBean(defaultProperty = "UIClassID", description = "A component which allows for the editing of a single decimal number with the possibility of adding constraints.")
 public class JDecimalField extends JNumberField<Float> {
 	// Auto generated serial ID
 	private static final long serialVersionUID = 4549728989108805238L;
