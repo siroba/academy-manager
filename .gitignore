@@ -142,6 +142,13 @@
 hs_err_pid*
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+# Database 
+**/*.db
+=======
+# Data base 
+**/*.db
+=======
 # Data base 
 **/*.db
 =======
@@ -152,4 +159,5 @@ hs_err_pid*
 # Data base 
 **/*.db
 >>>>>>> main
+>>>>>>> develop
 >>>>>>> main
