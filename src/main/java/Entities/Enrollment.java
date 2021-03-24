@@ -9,10 +9,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import PL53.util.Date;
+import PL53.util.DateTime;
+import PL53.util.Random;
 import Utils.Database;
-import PL53.SI2020_PL53.Date;
-import PL53.SI2020_PL53.DateTime;
-import PL53.SI2020_PL53.Random;
 
 public class Enrollment {
 	private int ID_fa, ID_professional;
@@ -86,11 +86,18 @@ public class Enrollment {
 		List<Enrollment> enrollments = new ArrayList<>();
 
 		while (rs.next()) {
+			DateTime d;
+			try {
+				d = DateTime.parseString(rs.getString("timeEn"));
+			} catch (ParseException e) {
+				d = DateTime.fromMillis(rs.getLong("timeEn"));
+			}
+
 			Enrollment e = new Enrollment(
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					DateTime.fromMillis(rs.getLong("timeEn"))); // TODO: Fix parse
+					d); // TODO: Fix parse
 
 			enrollments.add(e);
 		}
@@ -119,11 +126,18 @@ public class Enrollment {
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
 
+		DateTime d;
+		try {
+			d = DateTime.parseString(rs.getString("timeEn"));
+		} catch (ParseException e) {
+			d = DateTime.fromMillis(rs.getLong("timeEn"));
+		}
+
 		Enrollment e = new Enrollment(
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					DateTime.fromMillis(rs.getLong("timeEn"))); // TODO: Fix parse
+					d); // TODO: Fix parse
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -168,7 +182,7 @@ public class Enrollment {
 
 		pstmt.setInt(1, this.getID_fa());
 		pstmt.setInt(2, this.getID_professional());
-		pstmt.setString(3, this.getStatus().toString().toLowerCase());
+		pstmt.setString(3, this.getStatus().toString().toUpperCase());
 		pstmt.setTimestamp(4, this.getTimeEn().toTimestamp());
 
 		pstmt.executeUpdate(); // statement execution

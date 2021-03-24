@@ -22,7 +22,7 @@ import javax.swing.table.TableModel;
 [x] In this sprint we assume that refunds are correctly made for all registrations that are cancelled, at the time the cancellation is done.
 */
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 
@@ -97,14 +97,18 @@ public class Controller {
 		 */
 		// name of the formative action, the name and email of the professional, the fee
 		// paid, the date of the course and the status of the registration
-		String header[] = { "Formative Action", "Professional name", "Professional email", "Fee", "Date", "Status" };
+		String header[] = { "Formative Action", "Professional name", "Professional email", "Fee", "Enrollment end", "Status" };
 
 		String body[][] = new String[data.length][header.length];
 
 		for (int i = 0; i < data.length; i++) {
 			Data d = data[i];
-			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getEmail(),
-					Float.toString(d.formativeAction.getFee()), d.formativeAction.getFaStart().toString(),
+			body[i] = new String[] {
+					d.formativeAction.getName(),
+					d.professional.getName(),
+					d.professional.getEmail(),
+					Float.toString(d.formativeAction.getFee()),
+					d.formativeAction.getEnrollmentEnd().toString(),
 					d.enrollment.getStatus().toString() };
 		}
 

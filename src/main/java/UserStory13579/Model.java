@@ -6,7 +6,6 @@ import java.util.List;
 
 import Entities.Session;
 import PL53.util.DateTime;
-import Utils.ApplicationException;
 import Utils.Database;
 import Utils.UnexpectedException;
 
@@ -53,7 +52,7 @@ public class Model {
 		ResultSet rsExpensesEstimated=stmtExpensesEstimated.executeQuery(queryExpensesEstimated.toString());
 		
 		// Sessions 
-		List<Session> sessions = Session.get("select s.ID_fa, s.sessionStart from session s", db);
+		List<Session> sessions = Session.get("select * from session s", db);
 		List<DateTime> ListFaFirstSessionLastSession = getListFirstSessionLastSession(sessions);
 		
 		// Create list of Financial Balance objects 
@@ -147,7 +146,7 @@ public class Model {
 
 		List<TotalBalance> totalBalance = new ArrayList<>();
 		totalBalance.add(tB);
-		
+
 		// Close statements, result sets & connection
 		rsTotalIncomeConfirmed.close();
 		stmtTotalIncomeConfirmed.close();
@@ -164,6 +163,9 @@ public class Model {
 		}
 	}
 	
+	/**
+	 * Returns a list containing the DateTime of the first and last session celebrated for all the formative action  
+	 */
 	private List<DateTime> getListFirstSessionLastSession(List<Session> sessions) {
 		List<DateTime> FirstSessionLastSession = new ArrayList<DateTime>(); 
 		int idFaLast = sessions.get(0).getID_fa();
@@ -174,6 +176,8 @@ public class Model {
 				FirstSessionLastSession.add(DateTimeFaLast);
 				FirstSessionLastSession.add(sessions.get(i).getSessionStart());
 			}
+			idFaLast = sessions.get(i).getID_fa();
+			DateTimeFaLast = sessions.get(i).getSessionStart();
 		}
 		FirstSessionLastSession.add(sessions.get(sessions.size()-1).getSessionStart());
 		return FirstSessionLastSession;

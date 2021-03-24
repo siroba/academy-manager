@@ -1,6 +1,6 @@
 package Entities;
 
-import PL53.SI2020_PL53.Random;
+import PL53.util.Random;
 
 public class TrainingManager {
 	private int ID = -1;

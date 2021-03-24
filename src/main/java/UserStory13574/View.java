@@ -14,33 +14,33 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class View extends JFrame {
 	// Auto-generated serial ID
 	private static final long serialVersionUID = -70145237442153458L;
 
 	private JPanel contentPane, selectionPanel, registrationPanel;
-	private JButton btnEnroll;
 	private JList<String> faList;
 	private JScrollPane scrollPane;
-	private JTextPane textSelectedFA;
 	private JTextField profName;
-	private JButton backButton;
 	private JTextField textSurname;
 	private JTextField textPhone;
 	private JTextField textEmail;
 	private JButton btnConfirmAndEnroll;
+	private JLabel lblTheFeeWill;
+	private JTextField txtFee;
 
 	/**
 	 * Create the frame.
 	 */
 	public View() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 		setTitle("Enroll in a Formative Action");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 760, 306);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -51,12 +51,8 @@ public class View extends JFrame {
 		contentPane.add(selectionPanel);
 		selectionPanel.setLayout(null);
 
-		btnEnroll = new JButton("Enroll");
-		btnEnroll.setBounds(12, 226, 404, 25);
-		selectionPanel.add(btnEnroll);
-
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 37, 404, 177);
+		scrollPane.setBounds(12, 37, 404, 213);
 		selectionPanel.add(scrollPane);
 
 		faList = new JList<String>();
@@ -69,115 +65,114 @@ public class View extends JFrame {
 		selectionPanel.add(lblSelectTheFormative);
 
 		registrationPanel = new JPanel();
-		registrationPanel.setVisible(false);
-		registrationPanel.setBounds(12, -6, 426, 264);
+		registrationPanel.setBounds(452, -13, 294, 264);
 		contentPane.add(registrationPanel);
+		registrationPanel.setVisible(false);
 		registrationPanel.setLayout(null);
 
-		JLabel lblFormativeAction = new JLabel("Selected Formative Action:");
-		lblFormativeAction.setBounds(12, 32, 235, 15);
-		registrationPanel.add(lblFormativeAction);
-
-		textSelectedFA = new JTextPane();
-		textSelectedFA.setEditable(false);
-		textSelectedFA.setBounds(224, 26, 190, 21);
-		registrationPanel.add(textSelectedFA);
-
-		backButton = new JButton("< Back");
-		backButton.setBounds(0, 239, 117, 25);
-		registrationPanel.add(backButton);
-
 		JLabel lblName = new JLabel("Name:");
-		lblName.setBounds(12, 71, 70, 15);
+		lblName.setBounds(12, 92, 70, 15);
 		registrationPanel.add(lblName);
 
-		JSeparator separator = new JSeparator();
-		separator.setBounds(12, 59, 402, 2);
-		registrationPanel.add(separator);
-
 		profName = new JTextField();
-		profName.setBounds(67, 69, 114, 19);
+		profName.setBounds(67, 90, 199, 19);
 		registrationPanel.add(profName);
 		profName.setColumns(10);
 
 		JLabel lblSurname = new JLabel("Surname:");
-		lblSurname.setBounds(212, 71, 70, 15);
+		lblSurname.setBounds(12, 120, 70, 15);
 		registrationPanel.add(lblSurname);
 
 		textSurname = new JTextField();
-		textSurname.setBounds(287, 69, 114, 19);
+		textSurname.setBounds(87, 118, 179, 19);
 		registrationPanel.add(textSurname);
 		textSurname.setColumns(10);
 
 		JLabel lblPhone = new JLabel("Phone:");
-		lblPhone.setBounds(12, 129, 70, 15);
+		lblPhone.setBounds(12, 149, 70, 15);
 		registrationPanel.add(lblPhone);
 
 		textPhone = new JTextField();
-		textPhone.setBounds(67, 127, 114, 19);
+		textPhone.setBounds(67, 147, 114, 19);
 		registrationPanel.add(textPhone);
 		textPhone.setColumns(10);
 
 		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(212, 129, 70, 15);
+		lblEmail.setBounds(12, 176, 70, 15);
 		registrationPanel.add(lblEmail);
 
 		textEmail = new JTextField();
-		textEmail.setBounds(266, 127, 135, 19);
+		textEmail.setBounds(67, 176, 148, 19);
 		registrationPanel.add(textEmail);
 		textEmail.setColumns(10);
 
 		btnConfirmAndEnroll = new JButton("Confirm and enroll");
-		btnConfirmAndEnroll.setBounds(243, 239, 171, 25);
+		btnConfirmAndEnroll.setBounds(12, 207, 235, 25);
 		registrationPanel.add(btnConfirmAndEnroll);
-	}
 
-	public JButton getEnrollBtn() {
-		return this.btnEnroll;
+		JLabel lblFillYourInformation = new JLabel("Fill your information:");
+		lblFillYourInformation.setBounds(44, 56, 238, 15);
+		registrationPanel.add(lblFillYourInformation);
+		
+		lblTheFeeWill = new JLabel("The Fee will be: ");
+		lblTheFeeWill.setBounds(12, 24, 135, 15);
+		registrationPanel.add(lblTheFeeWill);
+		
+		txtFee = new JTextField();
+		txtFee.setEditable(false);
+		txtFee.setBounds(145, 22, 121, 19);
+		registrationPanel.add(txtFee);
+		txtFee.setColumns(10);
+
+		JSeparator separator = new JSeparator();
+		separator.setBounds(441, -11, 18, 282);
+		contentPane.add(separator);
+		separator.setOrientation(SwingConstants.VERTICAL);
 	}
 
 	public void setFAList(List<FormativeAction> list) {
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 
-		for(FormativeAction fa: list)
+		for (FormativeAction fa : list)
 			listModel.addElement(fa.getName());
 
 		this.faList.setModel(listModel);
 	}
 
-	public JList<String> getFAList(){
+	public JList<String> getFAList() {
 		return this.faList;
 	}
 
 	public void changeView(boolean change) {
-		this.selectionPanel.setVisible(!change);
+		//this.selectionPanel.setVisible(!change);
 
 		this.registrationPanel.setVisible(change);
 	}
 
-	public void setTextSelectedFA(String text) {
-		textSelectedFA.setText(text);
-	}
-
-	public JTextPane getTextSelectedFA() {
-		return textSelectedFA;
-	}
-	public JButton getBackButton() {
-		return backButton;
-	}
 	public JButton getBtnConfirmAndEnroll() {
 		return btnConfirmAndEnroll;
 	}
+
 	public String getProfName() {
 		return profName.getText();
 	}
+
 	public String getTextSurname() {
 		return textSurname.getText();
 	}
+
 	public String getTextPhone() {
 		return textPhone.getText();
 	}
+
 	public String getTextEmail() {
 		return textEmail.getText();
+	}
+	public JTextField getTxtFee() {
+		return txtFee;
+	}
+
+	public void setTxtFee(String string) {
+		txtFee.setText(string);
 	}
 }

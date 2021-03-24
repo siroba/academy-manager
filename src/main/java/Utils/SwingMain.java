@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import Utils.Database;
 
 /**
  * Main entry point including database initialization actions and buttons for
@@ -53,9 +52,9 @@ public class SwingMain {
 		frame = new JFrame();
 		frame.setTitle("Main");
 
-		frame.setBounds(0, 0, 800, 250);
+		frame.setBounds(0, 0, 840, 323);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(6, 3, 10, 10));
+		frame.getContentPane().setLayout(new GridLayout(8, 3, 10, 10));
 
 		// Initialize the DB and fill it with data
 		Database db = new Database();
@@ -65,11 +64,34 @@ public class SwingMain {
 		// Secretary
 		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
 
-		JButton btnRegisterPayments = new JButton("Register Payments");
-
+		JButton btnRegisterPayments = new JButton("Register a Payment");
+		btnRegisterPayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13575.Controller controller = new UserStory13575.Controller();
+				controller.initController();
+			}
+		});
 		JButton btnListFormativeActions = new JButton("List formative actions");
+		btnListFormativeActions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UserStory13576.Controller controller = new UserStory13576.Controller(new UserStory13576.Model(), new UserStory13576.View());
+				controller.initController();
+				
+			}
+		});
 
 		JButton btnStatusOfFormativeActions = new JButton("Status of formative actions");
+		btnStatusOfFormativeActions.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UserStory13577.Controller controller = new UserStory13577.Controller();
+				controller.initController();
+				
+			}
+		});
 
 		JButton btnRegisterCancellations = new JButton("Register cancellations");
 		btnRegisterCancellations.addActionListener(new ActionListener() {
@@ -79,12 +101,41 @@ public class SwingMain {
 			}
 		});
 
-		JButton btnRecordPayments = new JButton("Record payments");
+		JButton btnPayTeacher = new JButton("Pay a teacher");
+		btnPayTeacher.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13580.Controller controller = new UserStory13580.Controller();
+				controller.initController();
+			}
+		});
+
+		JButton btnDelayFA = new JButton("Delay a Formative Action");
+		btnDelayFA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13729.Controller controller = new UserStory13729.Controller();
+				controller.initController();
+			}
+		});
+
+		JButton btnNewButton = new JButton("Cancel a Formative Action");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13727.Controller controller = new UserStory13727.Controller();
+				controller.initController();
+			}
+		});
 
 		// Professional
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
 		
 		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
+		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13574.Controller controller = new UserStory13574.Controller();
+				controller.initController();
+			}
+		});
+		
 		
 		// Training manager
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
@@ -99,6 +150,7 @@ public class SwingMain {
 		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
+
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
@@ -138,14 +190,23 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty4);
 		frame.getContentPane().add(labelEmpty5);
 		// Row 6
-		frame.getContentPane().add(btnRecordPayments);
+		frame.getContentPane().add(btnPayTeacher);
 		frame.getContentPane().add(labelEmpty6);
 		frame.getContentPane().add(labelEmpty7);
+		
+		// Row 7
+		frame.getContentPane().add(btnDelayFA);
+		
+		JLabel label = new JLabel("");
+		frame.getContentPane().add(label);
+		
+		JLabel label_1 = new JLabel("");
+		frame.getContentPane().add(label_1);
+		
+		frame.getContentPane().add(btnNewButton);
 	}
-
 
 	public JFrame getFrame() {
 		return this.frame;
 	}
-
 }

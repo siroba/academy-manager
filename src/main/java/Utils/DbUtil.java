@@ -6,8 +6,10 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +21,7 @@ import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
-import PL53.SI2020_PL53.DateTime;
+import PL53.util.DateTime;
 
 
 /**
@@ -28,9 +30,9 @@ import PL53.SI2020_PL53.DateTime;
  * It is implemented as an abstract class so that the derived class implements the details * related to the connection and to the database structure to be created, and at the same time
  * The derived class implements the details related to the connection and to the database structure to be created, and at the same time
  * can use the methods defined here.
- *
+ * 
  <br>Most of the utility methods use apache commons-dbutils which handles all the handling of the resultsets, their mapping, and their * mapping.
- <br>Most of the utility methods use apache commons-dbutils which handles all the handling of resultsets, their mapping to objects and exceptions allowing a much cleaner code.
+ <br>Most of the utility methods use apache commons-dbutils which handles all the handling of resultsets, their mapping to objects and exceptions allowing a much cleaner code. 
  * in the business layer classes and DAOs.
  */
 public abstract class DbUtil {
@@ -45,7 +47,7 @@ public abstract class DbUtil {
 	//Documentacion de apache dbutils:
 	//https://commons.apache.org/proper/commons-dbutils/apidocs/index.html
 	//https://commons.apache.org/proper/commons-dbutils/examples.html
-
+	
 	/**
 	 Executes a sql query with the specified parameters mapping the result to a list of objects of the class specified in pojoClass; /** * Runs a sql query with the specified parameters mapping the result into a list of objects
 	 * of the class specified in pojoClass;
@@ -85,6 +87,7 @@ public abstract class DbUtil {
 		}
 	}
 
+	
 	/**
 	 * Execute a sql update query with the specified parameters
 	 */
@@ -100,14 +103,12 @@ public abstract class DbUtil {
 				}
 				else if (Integer.class.isInstance(params[i])) {
 					pstmt.setInt(i+1, (int) params[i]);
-
 				}
 				else if (Float.class.isInstance(params[i])) {
 					pstmt.setFloat(i+1, (float) params[i]);
-
 				}
 				else {
-					pstmt.setTimestamp(i+1,((DateTime) params[i]).toTimestamp());
+					pstmt.setTimestamp(i+1,((Timestamp) params[i]));
 				}
 			}
 			pstmt.executeUpdate();
@@ -152,7 +153,11 @@ public abstract class DbUtil {
 	 * Simple method to execute all sql statements found in a file, taking into account:
 	 * <br/>- Each statement MUST end in ; and may occupy several lines.
 	 <br/>- Line comments (--) are allowed.
+<<<<<<< HEAD
+	 <br/>- All drop statements are executed at the beginning, 
+=======
 	 <br/>- All drop statements are executed at the beginning,
+>>>>>>> main
 	 <br/>- Failures are ignored in case the table does not exist (only for drop).
 	 */
 	public void executeScript(String fileName) {

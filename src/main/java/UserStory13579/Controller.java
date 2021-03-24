@@ -4,16 +4,17 @@ import java.util.List;
 
 import javax.swing.table.TableModel;
 
+import UserStory13579.Model;
+import UserStory13579.View;
 import Utils.SwingUtil;
 
 public class Controller{
-
 	private Model model;
 	private View view;
 
-	public Controller(Model m, View v) {
-		this.model = m;
-		this.view = v;
+	public Controller(UserStory13579.Model model, UserStory13579.View view) {
+		this.model = model;
+		this.view = view;
 		//no model-specific initialization, only view-specific initialization
 		this.initView();
 	}
