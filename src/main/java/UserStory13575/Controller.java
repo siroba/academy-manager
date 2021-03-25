@@ -61,7 +61,6 @@ public class Controller implements PL53.util.Controller {
 				UserStory13575.Data d = model.getData(view.getSelected());
 				selectedRow = d;
 
-				
 			}
 		});
 
@@ -80,16 +79,42 @@ public class Controller implements PL53.util.Controller {
 				else if (view.getAmountPaidTextField() != selectedRow.formativeAction.getFee()) {
 					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
 
-				} else if (Math.abs(DateTime.minutesSince(view.getDateTextPane().getDateTime(),
-						selectedRow.payment.getPayDate())) > 2880) {
-					// 2880 -> 48 * 60 conversion from 48 h to minutes
+				} /*else if (Math.abs(DateTime.minutesSince(view.getDateTextPane().getDateTime(),
+						selectedRow.payment.getPayDate())) > 2880) { // 2880 -> 48 * 60 conversionfrom 48 h to minutes
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours before the enrollmet");
-				}
+				}*/
 
 				else {
-					model.updateStatus(selectedRow.payment.getID(), selectedRow.enrollment.getID_fa(),
-							selectedRow.enrollment.getID_professional());
+
+					
+					float amount = view.getAmountPaidTextField();
+					DateTime payDate = view.getDateTextPane().getDateTime();
+					String sender = selectedRow.professional.getName();
+					String receiver = "COIPA";
+					int ID_fa = selectedRow.formativeAction.getID();
+					int ID_professional = selectedRow.professional.getID();
+					String address = "tt"; // To Do
+					String fiscalNumber = "test"; // ToDo
+					Boolean confirmed = true;
+
+					Payment payment = new Payment(ID_fa, ID_professional, amount, payDate, sender, receiver,
+							fiscalNumber, address, confirmed);
+					
+					
+					try {
+						model.insertPayment(payment);
+						model.updateStatus(payment.getID(), payment.getID_fa(), payment.getID_professional());
+						if (payment != null) {
+							JOptionPane.showMessageDialog(null, "The payment has been correctly created");
+						}
+					} catch (SQLException e2) {
+
+						e2.printStackTrace();
+					} catch (ParseException e2) {
+
+						e2.printStackTrace();
+					}
 					try {
 						model.initModel();
 						view.setTable(getTableModel(model.getAllData()));
@@ -103,7 +128,6 @@ public class Controller implements PL53.util.Controller {
 			}
 		});
 
-		
 	}
 
 	public void initView() {

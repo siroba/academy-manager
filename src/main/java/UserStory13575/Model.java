@@ -15,7 +15,9 @@ import Utils.Database;
 import Utils.UnexpectedException;
 import Entities.Enrollment;
 import Entities.FormativeAction;
+import Entities.Invoice;
 import Entities.Payment;
+import Entities.PaymentTeacher;
 //import Entities.FormativeAction;
 import Entities.Professional;
 import UserStory13575.Data;
@@ -93,5 +95,12 @@ public class Model {
 		String quer= "UPDATE Payment SET confirmed= true WHERE ID_payment=? "; 
 		db.executeUpdateQuery(query, id_fa, id_professional);
 		db.executeUpdate(quer, id_pay);
+	}
+	
+	public void insertPayment ( Payment payment ) throws SQLException, ParseException {
+		payment.insert(db);
+	
+		
+		
 	}
 }
