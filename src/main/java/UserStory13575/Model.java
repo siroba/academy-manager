@@ -20,6 +20,7 @@ import Entities.Payment;
 import Entities.PaymentTeacher;
 //import Entities.FormativeAction;
 import Entities.Professional;
+import PL53.util.DateTime;
 import UserStory13575.Data;
 
 /**
@@ -90,17 +91,12 @@ public class Model {
 		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
 	}
 
-	void updateStatus(int id_pay ,int id_fa, int id_professional) {
+	void updateStatus(int id_pay ,int id_fa, int id_professional , float amount , DateTime datePay) {
 		String query = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?"; 
-		String quer= "UPDATE Payment SET confirmed= true WHERE ID_payment=? "; 
+		String quer= "UPDATE Payment SET confirmed= true, amount=? ,datePay=? WHERE ID_payment=? "; 
 		db.executeUpdateQuery(query, id_fa, id_professional);
-		db.executeUpdate(quer, id_pay);
+		db.executeUpdate(quer, amount, datePay.toTimestamp(), id_pay);
 	}
 	
-	public void insertPayment ( Payment payment ) throws SQLException, ParseException {
-		payment.insert(db);
 	
-		
-		
-	}
 }

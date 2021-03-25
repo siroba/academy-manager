@@ -46,5 +46,6 @@ public class Model {
         p.insert(db);
         en.setID_professional(p.getID());
         en.insert(db);
+        
     }
 }
