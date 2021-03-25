@@ -15,7 +15,7 @@ import PL53.util.Random;
 import Utils.Database;
 
 /**
- * 
+ *
  */
 public class FormativeAction {
 	private int ID = -1;
@@ -200,7 +200,7 @@ public class FormativeAction {
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
 		}
-		
+
 		for(Session s: this.sessions) {
 			s.setID_fa(this.getID());
 		}
@@ -242,9 +242,9 @@ public class FormativeAction {
 			}
 
 			int id_fa = rs.getInt("ID_fa");
-			
+
 			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
-			
+
 			FormativeAction f = new FormativeAction(
 					id_fa,
 					rs.getString("nameFa"),
@@ -301,9 +301,9 @@ public class FormativeAction {
 		}
 
 		int id_fa = rs.getInt("ID_fa");
-		
+
 		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
-		
+
 		FormativeAction fa = new FormativeAction(
 				id_fa,
 				rs.getString("nameFa"),
@@ -327,7 +327,7 @@ public class FormativeAction {
 	public float refund() {
         return this.refundPercentage()*this.getFee();
     }
-  
+
     public float refundPercentage() {
         int days = Date.daysSince(enrollmentEnd);
 
@@ -411,7 +411,7 @@ public class FormativeAction {
 	public void setSessions(List<Session> sessions) {
 		for(Session s: sessions)
 			s.setID_fa(this.getID());
-		
+
 		this.sessions = sessions;
 	}
 
@@ -429,7 +429,7 @@ public class FormativeAction {
 	public String getTeacherName() {
 		if(this.sessions.size()<=0)
 			return "";
-		
+
 		return this.sessions.get(0).getTeacherName();
 	}
 }

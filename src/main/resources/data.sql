@@ -52,13 +52,13 @@ insert into Payment(ID_payment, amount, datePay, sender, receiver, address, fisc
 	(3008, 10, '2021-01-24 08:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2002),
 	(3009, 10, '2021-02-04 10:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2003),
 	(3010, 10, '2021-02-01 15:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2004);
-	
+
 insert into Payment(ID_payment, amount, datePay, sender, receiver, address, fiscalNumber, confirmed, refundStatus, ID_fa, ID_professional) values
 	(3011, 15, '2021-01-02 17:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 'NONE', 1002, 2000),
 	(3012, 25, '2021-01-02 17:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 'SOLICITED', 1002, 2005),
 	(3013, 35, '2021-01-02 17:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 'REFUNDED', 1002, 2001);
-	
-	
+
+
 insert into Invoice (Id_invoice , dateIn , ID_fa) values
 	(4000, '2021-01-02 17:00:00', 1000),
 	(4001, '2021-01-03 17:00:00', 1001),
