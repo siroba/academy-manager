@@ -53,6 +53,7 @@ public class SwingMain {
 		frame.setTitle("Main");
 
 		frame.setBounds(0, 0, 840, 323);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(8, 3, 10, 10));
 

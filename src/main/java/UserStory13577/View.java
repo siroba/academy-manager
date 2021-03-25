@@ -29,6 +29,7 @@ public class View {
 		frame.setTitle("Courses");
 		frame.setName("Courses");
 		frame.setBounds(0, 0, 700, 350);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow][grow]"));
 		
