@@ -21,12 +21,10 @@ import PL53.util.DateTime;
 //import Entities.FormativeAction;
 import UserStory13575.Data;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
-	private String lastSelectedKey = ""; // remembers the last selected row to restore it when changing the race table
 	private Data selectedRow;
-	
 
 	public Controller() {
 		this.model = new Model();
@@ -59,41 +57,54 @@ public class Controller {
 		view.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 				UserStory13575.Data d = model.getData(view.getSelected());
 				selectedRow = d;
-				view.getAmountPaidTextPane().setText(Float.toString(d.payment.getAmount()));
-				view.getDateTextPane().setText(d.payment.getPayDate().toString());
+
 			}
 		});
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
 			public void actionPerformed(ActionEvent e) {
 				
-			
-		
+				int calcTime= DateTime.minutesSince(
+						view.getDateTextPane().getDateTime() ,selectedRow.enrollment.getTimeEn());
+				
+
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
-				} else if (selectedRow.payment.getAmount() != selectedRow.formativeAction.getFee()) {
-					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
-					
-				} else if (Math.abs(DateTime.minutesSince(selectedRow.enrollment.getTimeEn(),
-						selectedRow.payment.getPayDate())) > 2880) {
-					// 2880 -> 48 * 60 conversion from 48 h to minutes
+				} else if (view.getAmountPaidTextField() == 0.0) {
+					JOptionPane.showMessageDialog(null, "You have to introduce the amount ");
+				} else if (view.getDateTextPane().getYear() == 0) {
 					JOptionPane.showMessageDialog(null,
-							"The payment must be done with a margin of 48 hours before the enrollmet");
+							"You have to introduce a valid year for the date of the transfer (ex: 2021) ");
+				}
+
+				else if (view.getAmountPaidTextField() != selectedRow.formativeAction.getFee()) {
+					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
+
+				} 
+				
+				else if (calcTime > 2880 || calcTime<0) { // 2880 -> 48 * 60 conversionfrom 48 h to
+																		// minutes
+					JOptionPane.showMessageDialog(null,
+							"The payment must be done with a margin of 48 hours after the enrollmet");
+					
 				}
 
 				else {
-					model.updateStatus(selectedRow.payment.getID(), selectedRow.enrollment.getID_fa(), selectedRow.enrollment.getID_professional());
+
+					float amount = view.getAmountPaidTextField();
+					DateTime payDate = view.getDateTextPane().getDateTime();
+
+					model.updateStatus(selectedRow.payment.getID(), selectedRow.formativeAction.getID(),
+							selectedRow.professional.getID(), amount, payDate);
 					try {
 						model.initModel();
 						view.setTable(getTableModel(model.getAllData()));
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -101,14 +112,6 @@ public class Controller {
 			}
 		});
 
-		try {
-			model.initModel();
-		} catch (SQLException | ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		view.setTable(getTableModel(model.getAllData()));
 	}
 
 	public void initView() {

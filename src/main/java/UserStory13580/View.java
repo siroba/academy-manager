@@ -1,56 +1,48 @@
 package UserStory13580;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
+
+import PL53.swing.DateInput;
+import PL53.swing.DateTimeInput;
+import PL53.util.Date;
+import PL53.util.DateTime;
+
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTable;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class View extends JFrame {
-
+	// Auto generated serial ID
+	private static final long serialVersionUID = -7328790026428798502L;
+	
 	private JPanel contentPane;
-	private JTextField dateTextField;
+	private DateInput dateTextField;
 	private JTextField nameTextField;
 	private JTextField fiscalNumberTextField;
 	private JTextField addressTextField;
-	private JTextField dateTransferTextField;
+	private DateInput dateTransferTextField;
 	private JTable table;
 	private JButton registerButton;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					View frame = new View();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public View() {
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+		
 		setBounds(100, 100, 691, 651);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -68,72 +60,82 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel_2 = new JLabel("Data of the invoice");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_2.setBounds(50, 283, 170, 13);
+		lblNewLabel_2.setBounds(50, 225, 170, 13);
 		contentPane.add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_3 = new JLabel("Date");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_3.setBounds(51, 326, 45, 13);
+		JLabel lblNewLabel_3 = new JLabel("Date of the invoice:");
+		lblNewLabel_3.setBounds(227, 250, 123, 13);
 		contentPane.add(lblNewLabel_3);
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 10));
+		
+		dateTextField = new DateInput();
+		dateTextField.setBounds(227, 275, 211, 69);
+		dateTextField.setBorder(blackline);
+		dateTextField.getYearsTextField().setBound(2000, 3000);
+		contentPane.add(dateTextField);
+		
+		dateTransferTextField = new DateInput();
+		dateTransferTextField.setBounds(208, 467, 230, 65);
+		dateTransferTextField.setBorder(blackline);
+		dateTransferTextField.getYearsTextField().setBound(2000, 3000);
+		contentPane.add(dateTransferTextField);
 		
 		JLabel lblNewLabel_5 = new JLabel("Issuer tax data");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_5.setBounds(50, 376, 93, 13);
+		lblNewLabel_5.setBounds(50, 343, 93, 13);
 		contentPane.add(lblNewLabel_5);
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 10));
+		
+		JPanel taxDataPanel = new JPanel();
+		taxDataPanel.setBounds(41, 366, 612, 59);
+		taxDataPanel.setBorder(blackline);
+		contentPane.add(taxDataPanel);
+		taxDataPanel.setLayout(null);
 		
 		JLabel lblNewLabel_6 = new JLabel("Name");
+		lblNewLabel_6.setBounds(13, 20, 45, 13);
+		taxDataPanel.add(lblNewLabel_6);
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_6.setBounds(51, 410, 45, 13);
-		contentPane.add(lblNewLabel_6);
 		
 		JLabel lblNewLabel_7 = new JLabel("Fiscal number");
+		lblNewLabel_7.setBounds(179, 20, 81, 13);
+		taxDataPanel.add(lblNewLabel_7);
 		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_7.setBounds(247, 410, 81, 13);
-		contentPane.add(lblNewLabel_7);
 		
 		JLabel lblNewLabel_8 = new JLabel("Address");
+		lblNewLabel_8.setBounds(382, 20, 81, 13);
+		taxDataPanel.add(lblNewLabel_8);
 		lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_8.setBounds(432, 410, 81, 13);
-		contentPane.add(lblNewLabel_8);
-		
-		dateTextField = new JTextField();
-		dateTextField.setBounds(126, 323, 129, 19);
-		contentPane.add(dateTextField);
-		dateTextField.setColumns(10);
 		
 		nameTextField = new JTextField();
-		nameTextField.setBounds(50, 445, 135, 19);
-		contentPane.add(nameTextField);
+		nameTextField.setBounds(12, 36, 135, 19);
+		taxDataPanel.add(nameTextField);
 		nameTextField.setColumns(10);
 		
 		fiscalNumberTextField = new JTextField();
-		fiscalNumberTextField.setBounds(229, 445, 163, 19);
-		contentPane.add(fiscalNumberTextField);
+		fiscalNumberTextField.setBounds(179, 36, 163, 19);
+		taxDataPanel.add(fiscalNumberTextField);
 		fiscalNumberTextField.setColumns(10);
 		
 		addressTextField = new JTextField();
-		addressTextField.setBounds(432, 445, 217, 19);
-		contentPane.add(addressTextField);
+		addressTextField.setBounds(382, 36, 217, 19);
+		taxDataPanel.add(addressTextField);
 		addressTextField.setColumns(10);
 		
 		JLabel lblNewLabel_9 = new JLabel("Date of the transfer");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_9.setBounds(50, 507, 115, 13);
+		lblNewLabel_9.setBounds(227, 444, 115, 13);
 		contentPane.add(lblNewLabel_9);
 		
-		dateTransferTextField = new JTextField();
-		dateTransferTextField.setBounds(175, 504, 135, 19);
-		contentPane.add(dateTransferTextField);
-		dateTransferTextField.setColumns(10);
+		
 		
 		registerButton = new JButton("Register");
 		
 		registerButton.setFont(new Font("Tahoma", Font.BOLD, 12));
-		registerButton.setBounds(253, 563, 115, 41);
+		registerButton.setBounds(288, 563, 115, 41);
 		contentPane.add(registerButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 596, 117);
+		scrollPane.setBounds(10, 101, 657, 117);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -145,8 +147,8 @@ public class View extends JFrame {
 		return addressTextField.getText();
 	}
 	
-	public String getDateTextField() {
-		return dateTextField.getText();
+	public Date getDateTextField() {
+		return dateTextField.getDate();
 	}
 	public JTable getTable() {
 		return table;
@@ -169,19 +171,9 @@ public class View extends JFrame {
 		this.fiscalNumberTextField = fiscalNumberTextField;
 	}
 
-	public String getDateTransferTextField() {
-		return dateTransferTextField.getText();
-	}
-
-	public void setDateTransferTextField(JTextField dateTransferTextField) {
-		this.dateTransferTextField = dateTransferTextField;
-	}
-
-	public void setDateTextField(JTextField dateTextField) {
-		this.dateTextField = dateTextField;
-	}
-
-	
+	public Date getDateTransferTextField() {
+		return dateTransferTextField.getDate();
+	}	
 
 	public void setAddressTextField(JTextField addressTextField) {
 		this.addressTextField = addressTextField;

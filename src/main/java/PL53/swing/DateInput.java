@@ -70,15 +70,15 @@ public class DateInput extends JPanel {
 	}
 
 	public int getDay() {
-		return Math.round(daysTextField.getValue());
+		return daysTextField.getValue();
 	}
 
 	public int getMonth() {
-		return Math.round(monthsTextField.getValue());
+		return monthsTextField.getValue();
 	}
 
 	public int getYear() {
-		return Math.round(yearsTextField.getValue());
+		return yearsTextField.getValue();
 	}
 
 	public JIntField getDaysTextField() {

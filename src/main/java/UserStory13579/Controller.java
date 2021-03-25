@@ -1,29 +1,20 @@
 package UserStory13579;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import Entities.FormativeAction;
-import Entities.Professional;
-import Utils.DbUtil;
+import UserStory13579.Model;
+import UserStory13579.View;
 import Utils.SwingUtil;
-import Utils.Util;
 
-public class Controller {
-
+public class Controller{
 	private Model model;
 	private View view;
 
-	public Controller(Model m, View v) {
-		this.model = m;
-		this.view = v;
+	public Controller(UserStory13579.Model model, UserStory13579.View view) {
+		this.model = model;
+		this.view = view;
 		//no model-specific initialization, only view-specific initialization
 		this.initView();
 	}
@@ -54,7 +45,7 @@ public class Controller {
 	 */
 	public void getListFormativeActions() {
 		List<FinancialBalance> financialBalances = model.getListFinancialBalanceNoFilter();
-		TableModel tmodel=SwingUtil.getTableModelFromPojos(financialBalances, new String[] {"date", "name", "status", "incomeConfirmed", "expensesConfirmed", "balanceConfirmed", "incomeEstimated", "expensesEstimated", "balanceEstimated"}, new String[] {"date", "name", "status", "income confirmed", "expenses confirmed", "balance confirmed", "income estimated", "expenses estimated", "balance estimated"}, true);
+		TableModel tmodel=SwingUtil.getTableModelFromPojos(financialBalances, new String[] {"name", "status", "firstSession", "lastSession", "incomeConfirmed", "expensesConfirmed", "balanceConfirmed", "incomeEstimated", "expensesEstimated", "balanceEstimated"}, new String[] {"name", "status", "first session", "last session" ,"income confirmed", "expenses confirmed", "balance confirmed", "income estimated", "expenses estimated", "balance estimated"}, true);
 		view.getTableFormativeActionBalance().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTableFormativeActionBalance());
 	}
