@@ -69,3 +69,4 @@ insert into PaymentTeacher( ID_payment, amount, datePay, sender, receiver, addre
 
 
 
+
