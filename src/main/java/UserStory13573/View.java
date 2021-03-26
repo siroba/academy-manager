@@ -25,7 +25,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 public class View {
-
 	private JFrame frmCreateANew;
 	private JTextField TFName, TFTeacher;
 	private JIntField TFHours, TFSpaces;
@@ -398,5 +397,9 @@ public class View {
 
 	public void hideWarningEnrollmentPeriodEnd() {
 		this.labelWarningEndEnroll.setText("");
+	}
+	
+	public void dispose() {
+		frmCreateANew.dispose();
 	}
 }

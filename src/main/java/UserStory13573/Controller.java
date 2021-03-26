@@ -41,11 +41,28 @@ public class Controller implements PL53.util.Controller {
 		view.getCreateBtn().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// does not use mouseClicked because when setting single selection in the race
-				// table
-				// the user could drag the mouse over several rows and only the last one is of
-				// interest.
-				SwingUtil.exceptionWrapper(() -> createFormativeAction());
+				// Reset warnings
+				view.setWarningDay("");
+				view.setWarningEnrollmentPeriodStart("");
+				view.setWarningEnrollmentPeriodEnd("");
+				view.setWarningEnrollmentPeriodStart2("");
+				view.setWarningEnrollmentPeriodEnd2("");
+
+				// Get dates
+				DateTime dateFormativeAction = view.getSessionDatetime();
+				DateTime dateEnrollStart = view.getEnrollStart();
+				DateTime dateEnrollEnd = view.getEnrollEnd();
+
+				// Validate dates
+				if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)) {
+					// does not use mouseClicked because when setting single selection in the race
+					// table
+					// the user could drag the mouse over several rows and only the last one is of
+					// interest.
+					SwingUtil.exceptionWrapper(() -> createFormativeAction(dateFormativeAction, dateEnrollStart, dateEnrollEnd));
+					
+					view.dispose();
+				}
 			}
 		});
 
@@ -90,36 +107,20 @@ public class Controller implements PL53.util.Controller {
 	/**
 	 * Create a new formative action object and add it to the db
 	 */
-	public void createFormativeAction() {
-
-		// Reset warnings
-		view.setWarningDay("");
-		view.setWarningEnrollmentPeriodStart("");
-		view.setWarningEnrollmentPeriodEnd("");
-		view.setWarningEnrollmentPeriodStart2("");
-		view.setWarningEnrollmentPeriodEnd2("");
-
-		// Get dates
-		DateTime dateFormativeAction = view.getSessionDatetime();
-		DateTime dateEnrollStart = view.getEnrollStart();
-		DateTime dateEnrollEnd = view.getEnrollEnd();
-
+	public void createFormativeAction(DateTime dateFormativeAction, DateTime dateEnrollStart, DateTime dateEnrollEnd) {
 		List<Session> sessions = this.getSessions();
 
-		// Validate dates
-		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)) {
-			// Create new formative action and add it to DB
-			FormativeAction formativeAction = new FormativeAction(view.getName(), view.getFee(), view.getSpaces(),
-					view.getObjectives(), view.getMainContents(), FormativeAction.Status.ACTIVE, dateEnrollStart,
-					dateEnrollEnd);
+		// Create new formative action and add it to DB
+		FormativeAction formativeAction = new FormativeAction(view.getName(), view.getFee(), view.getSpaces(),
+				view.getObjectives(), view.getMainContents(), FormativeAction.Status.ACTIVE, dateEnrollStart,
+				dateEnrollEnd);
 
-			formativeAction.setSessions(sessions);
+		formativeAction.setSessions(sessions);
 
-			try {
-				model.setFormativeAction(formativeAction);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		try {
+			model.setFormativeAction(formativeAction);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -167,14 +168,14 @@ public class Controller implements PL53.util.Controller {
 		} else {
 			view.hideWarningEnrollmentPeriodStart();
 		}
-		
+
 		if (daysBetweenEndAction <= 0) {
 			view.setWarningEnrollmentPeriodEnd2("Should end before formative action begins");
 			return false;
 		} else {
 			view.hideWarningEnrollmentPeriodEnd();
 		}
-		
+
 		if (daysBetweenStartEnd <= 0) {
 			view.setWarningEnrollmentPeriodEnd2("Not enough time between start and end of enrollment period");
 			return false;
