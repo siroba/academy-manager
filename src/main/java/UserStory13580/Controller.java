@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.InvoiceTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
 import PL53.util.Date;
@@ -111,10 +111,9 @@ public class Controller implements PL53.util.Controller {
 					boolean confirmed = true;
 					Date dateInvoice = view.getDateTextField();
 
-					Invoice invoice = new Invoice(ID_fa, dateInvoice);
+					InvoiceTeacher invoice = new InvoiceTeacher(ID_fa, dateInvoice,sender,receiver, address, fiscalNumber);
 
-					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer, sender, receiver,
-							fiscalNumber, address, confirmed);
+					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer,  confirmed);
 
 					model.insertInvoice(invoice, paymentTeacher);
 					if (paymentTeacher != null) {
@@ -150,6 +149,7 @@ public class Controller implements PL53.util.Controller {
 
 		for (int i = 0; i < formativeActions.length; i++) {
 			FormativeAction d = formativeActions[i];
+		
 
 			for (Session s : d.getSessions()) {
 				body[i] = new String[] { d.getName(), d.getStatus().toString(), s.getTeacherName(),

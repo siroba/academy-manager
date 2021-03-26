@@ -66,7 +66,7 @@ DROP TABLE Payment;
 CREATE TABLE IF NOT EXISTS Payment(
     ID_payment      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     amount          real NOT NULL,
-    datePay         datetime NOT NULL,
+    datePay         date NOT NULL,
     confirmed       boolean NOT NULL,
     cash 	     boolean default 0,
     ID_invoice      integer NOT NULL,

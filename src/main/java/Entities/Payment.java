@@ -14,22 +14,18 @@ import PL53.util.DateTime;
 import Utils.Database;
 
 public class Payment {
-	private int ID = -1, ID_fa, ID_professional;
+	private int ID = -1, ID_invoice;
 	private float amount;
 	private DateTime payDate;
 	private String sender, receiver, fiscalNumber, address;
 	private boolean confirmed;
 
-	public Payment(int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
-			String address, boolean confirmed) {
-		this.ID_fa = ID_fa;
-		this.ID_professional = ID_professional;
+	public Payment(int ID_invoice, float amount, DateTime payDate,  boolean confirmed) {
+		this.ID_invoice = ID_invoice;
+	
 		this.amount = amount;
 		this.payDate = payDate;
-		this.sender = sender;
-		this.receiver = receiver;
-		this.fiscalNumber = fiscalNumber;
-		this.address = address;
+		
 		this.confirmed = confirmed;
 	}
 
@@ -47,18 +43,15 @@ public class Payment {
 	 * @param address
 	 * @param confirmed
 	 */
-	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
-			String address, boolean confirmed) {
+	public Payment(int ID_payment, int ID_invoice, float amount, DateTime payDate,  boolean confirmed) {
 		this.ID = ID_payment;
-		this.ID_fa = ID_fa;
-		this.ID_professional = ID_professional;
+		this.ID_invoice = ID_invoice;
+		
 		this.amount = amount;
 		this.payDate = payDate;
-		this.sender = sender;
-		this.receiver = receiver;
-		this.fiscalNumber = fiscalNumber;
-		this.address = address;
+		
 		this.confirmed = confirmed;
+	
 	}
 
 	public static String tableName() {
@@ -108,14 +101,11 @@ public class Payment {
 
 			Payment e = new Payment(
 					rs.getInt("ID_payment"),
-					rs.getInt("ID_fa"),
-					rs.getInt("ID_professional"),
+					rs.getInt("ID_invoice"),
+					
 					rs.getFloat("amount"),
 					datepay,
-					rs.getString("sender"),
-					rs.getString("receiver"),
-					rs.getString("fiscalNumber"),
-					rs.getString("address"),
+					
 					rs.getBoolean("confirmed"));
 
 			enrollments.add(e);
@@ -155,14 +145,11 @@ public class Payment {
 
 		Payment e = new Payment(
 				rs.getInt("ID_payment"),
-				rs.getInt("ID_fa"),
-				rs.getInt("ID_professional"),
+				rs.getInt("ID_invoice"),
+			
 				rs.getFloat("amount"),
 				datepay,
-				rs.getString("sender"),
-				rs.getString("receiver"),
-				rs.getString("fiscalNumber"),
-				rs.getString("address"),
+				
 				rs.getBoolean("confirmed"));
 
 		// Very important to always close all the objects related to the database
@@ -209,18 +196,14 @@ public class Payment {
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setInt(1, this.getID());
-			pstmt.setInt(2, this.getID_fa());
-			pstmt.setInt(3, this.getID_professional());
-			pstmt.setFloat(4, this.getAmount());
-			pstmt.setTimestamp(5, this.getPayDate().toTimestamp());
-			pstmt.setString(6,this.getSender());
-			pstmt.setString(7, this.getReceiver());
-			pstmt.setString(8, this.getFiscalNumber());
-			pstmt.setString(9, this.getAddress());
-			pstmt.setBoolean(10, this.isConfirmed());
+			pstmt.setInt(2, this.getID_invoice());
+			pstmt.setFloat(3, this.getAmount());
+			pstmt.setTimestamp(4, this.getPayDate().toTimestamp());
+			
+			pstmt.setBoolean(5, this.isConfirmed());
 			pstmt.executeUpdate(); // statement execution
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -228,13 +211,9 @@ public class Payment {
 
 			pstmt.setFloat(1, this.getAmount());
 			pstmt.setTimestamp(2, this.getPayDate().toTimestamp());
-			pstmt.setString(3,this.getSender());
-			pstmt.setString(4, this.getReceiver());
-			pstmt.setString(5, this.getAddress());
-			pstmt.setString(6, this.getFiscalNumber());
-			pstmt.setBoolean(7, this.isConfirmed());
-			pstmt.setInt(8, this.getID_fa());
-			pstmt.setInt(9, this.getID_professional());
+			pstmt.setBoolean(3, this.isConfirmed());
+			pstmt.setInt(4, this.getID_invoice());
+			
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -307,19 +286,13 @@ public class Payment {
 		return ID;
 	}
 
-	public int getID_fa() {
-		return ID_fa;
+	public int getID_invoice() {
+		return ID_invoice;
 	}
 
 	public void setID_fa(int iD_fa) {
-		ID_fa = iD_fa;
+		ID_invoice = iD_fa;
 	}
 
-	public int getID_professional() {
-		return ID_professional;
-	}
-
-	public void setID_professional(int iD_professional) {
-		ID_professional = iD_professional;
-	}
+	
 }
