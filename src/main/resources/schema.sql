@@ -10,15 +10,35 @@ CREATE TABLE IF NOT EXISTS Enrollment(
     CHECK ( status IN('RECEIVED','CONFIRMED','CANCELLED') )
 );
 
-DROP TABLE Invoice;
-CREATE TABLE Invoice
+DROP TABLE Invoice_Teacher;
+CREATE TABLE Invoice_Teacher
 (
  ID_invoice INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-
- dateIn     date NOT NULL,
-
  ID_fa      integer NOT NULL,
+ dateIn     date NOT NULL,
+ sender       text NOT NULL,
+ receiver     text NOT NULL,
+ address      text NOT NULL,
+ fiscalNumber text NOT NULL,
+
+
  CONSTRAINT FK_161 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa )
+);
+
+DROP TABLE Invoice_Professional;
+CREATE TABLE Invoice_Professional
+(
+ ID_invoice INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+ ID_fa      integer NOT NULL,
+ ID_professional integer NOT NULL,
+ dateIn     date NOT NULL,
+ sender       text NOT NULL,
+ receiver     text NOT NULL,
+ address      text NOT NULL,
+ fiscalNumber text NOT NULL,
+
+
+ CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
 );
 
 DROP TABLE FormativeAction;
@@ -52,15 +72,12 @@ DROP TABLE Payment;
 CREATE TABLE IF NOT EXISTS Payment(
     ID_payment      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     amount          real NOT NULL,
-    datePay         datetime NOT NULL,
-    sender          text NOT NULL,
-    receiver        text NOT NULL,
-    address         text NOT NULL,
-    fiscalNumber    text NOT NULL,
+    datePay         date NOT NULL,
+    
     confirmed       boolean NOT NULL,
-    ID_fa           integer NOT NULL,
-    ID_professional integer NOT NULL,
-    CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Enrollment ( ID_fa, ID_professional )
+    ID_invoice           integer NOT NULL,
+    
+    CONSTRAINT FK_104 FOREIGN KEY ( ID_fa, ID_professional ) REFERENCES Invoice_Professional ( ID_invoice )
 );
 
 DROP TABLE PaymentTeacher;
@@ -69,13 +86,10 @@ CREATE TABLE PaymentTeacher
  ID_payment      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
  amount       real NOT NULL,
  datePay      date NOT NULL,
- sender       text NOT NULL,
- receiver     text NOT NULL,
- address      text NOT NULL,
- fiscalNumber text NOT NULL,
+ 
  confirmed    boolean NOT NULL,
  ID_invoice   integer NOT NULL,
- CONSTRAINT FK_158 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice ( ID_invoice )
+ CONSTRAINT FK_158 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice_Teacher ( ID_invoice )
 );
 
 

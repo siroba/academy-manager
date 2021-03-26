@@ -38,29 +38,40 @@ insert into Enrollment(ID_fa, ID_professional, status, timeEn) values
 	(1002, 2000, 'RECEIVED', '2021-03-02 12:00:00'),
 	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00'),
 	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00');
+	
+insert into Invoice_Teacher(Id_invoice , dateIn , sender, receiver, address, fiscalNumber,ID_fa) values
 
-insert into Payment(ID_payment, amount, datePay, sender, receiver, address, fiscalNumber, confirmed, ID_fa, ID_professional) values
-	(3000, 15, '2021-01-02 17:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1000, 2000),
-	(3001, 15, '2021-01-04 18:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1000, 2001),
-	(3002, 15, '2021-01-07 20:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1000, 2002),
-	(3003, 15, '2021-01-11 12:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1000, 2003),
-	(3004, 15, '2021-01-14 13:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1000, 2004),
-	(3005, 15, '2021-01-16 14:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1000, 2005),
-	(3006, 10, '2021-01-02 18:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2000),
-	(3007, 10, '2021-01-13 15:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2001),
-	(3008, 10, '2021-01-24 08:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2002),
-	(3009, 10, '2021-02-04 10:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2003),
-	(3010, 10, '2021-02-01 15:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2004),
-	(3011, 30, '2021-03-22 13:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 1002, 2000),
-	(3012, 30, '2021-03-03 13:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 1002, 2005),
-	(3013, 30, '2021-03-05 10:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1002, 2001);
+	(4000, '2021-01-02', 'senderName', 'recieverName', 'address', 'fiscalNumber' , 1000),
+	(4001, '2021-01-03 ', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001),
+	(4002, '2021-01-04 ', 'senderName', 'recieverName', 'address', 'fiscalNumber',  1002);
+	
+insert into Invoice_Professional(Id_invoice , dateIn , sender, receiver, address, fiscalNumber,ID_fa , ID_professional) values
+
+	(5000, '2021-01-02', 'senderName', 'recieverName', 'address', 'fiscalNumber' , 1000),
+	(5001, '2021-01-03 ', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001),
+	(5002, '2021-01-04 ', 'senderName', 'recieverName', 'address', 'fiscalNumber',  1002);
+	(5003, '2021-01-02', 'senderName', 'recieverName', 'address', 'fiscalNumber' , 1000),
+	(5004, '2021-01-03 ', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001),
+	(5005, '2021-01-04 ', 'senderName', 'recieverName', 'address', 'fiscalNumber',  1002);
+
+insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
+	(3000, 15, '2021-01-02 ', true, 1000, 5000),
+	(3001, 15, '2021-01-04 ', true, 1000, 5001),
+	(3002, 15, '2021-01-07 ', true, 1000, 5002),
+	(3003, 15, '2021-01-11 ',  true, 1000, 5003),
+	(3004, 15, '2021-01-14 ', true, 1000, 5004),
+	(3005, 15, '2021-01-16 ', true, 1000, 5005),
+	(3006, 10, '2021-01-02 ', true, 1001, 5000),
+	(3007, 10, '2021-01-13 ',  true, 1001, 5001),
+	(3008, 10, '2021-01-24 ',  true, 1001, 5002),
+	(3009, 10, '2021-02-04 ',  true, 1001, 5003),
+	(3010, 10, '2021-02-01 ',  true, 1001, 5004),
+	(3011, 30, '2021-03-22 ',  false, 1002, 5000),
+	(3012, 30, '2021-03-03 ',  false, 1002, 5005),
+	(3013, 30, '2021-03-05 ',  true, 1002, 5001);
 
 
-insert into Invoice (Id_invoice , dateIn , ID_fa) values
 
-	(4000, '2021-01-02' , 1000),
-	(4001, '2021-01-03 ', 1001),
-	(4002, '2021-01-04 ',  1002);
 
 insert into PaymentTeacher( ID_payment, amount, datePay, sender, receiver, address, fiscalNumber, confirmed, ID_invoice) values
 (3000, 15, '2021-01-02 ', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 4000),

@@ -16,25 +16,34 @@ import Utils.Database;
 public class Invoice {
 	private int ID = -1, ID_fa;
 	private Date dateIn;
+	private String sender, receiver, fiscalNumber, address;
 
 	/** Constructor with ID_invoice
 	 * @param ID_invoice
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(int ID_invoice,int ID_fa,  Date dateIn) {
+	public Invoice(int ID_invoice,int ID_fa,  Date dateIn , String sender , String receiver, String fiscalNumber, String address) {
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
 		this.dateIn=dateIn;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.fiscalNumber = fiscalNumber;
+		this.address = address;
 		
 	}
 	/**Default Constructor
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(int ID_fa,  Date dateIn) {
+	public Invoice(int ID_fa,  Date dateIn,String sender , String receiver, String fiscalNumber, String address) {
 		this.ID_fa = ID_fa;
 		this.dateIn=dateIn;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.fiscalNumber = fiscalNumber;
+		this.address = address;
 	
 	}
 	public static String tableName() {
@@ -86,7 +95,12 @@ public class Invoice {
 			Invoice e = new Invoice(
 					rs.getInt("ID_invoice"),
 					rs.getInt("ID_fa"),
-					dateIn);
+					dateIn,
+					rs.getString("sender"),
+					rs.getString("receiver"),
+					rs.getString("fiscalNumber"),
+					rs.getString("address")
+					);
 					
 
 			invoices.add(e);
@@ -127,8 +141,13 @@ public class Invoice {
 		Invoice e = new Invoice(
 				rs.getInt("ID_invoice"),
 				rs.getInt("ID_fa"),
-				dateIn
+				dateIn,
+				rs.getString("sender"),
+				rs.getString("receiver"),
+				rs.getString("fiscalNumber"),
+				rs.getString("address")
 				);
+				
 
 
 		// Very important to always close all the objects related to the database
@@ -163,6 +182,10 @@ public class Invoice {
 			pstmt.setInt(1, this.getID());
 			pstmt.setInt(2, this.getID_fa());
 			pstmt.setDate(3, this.getDateIn().toSQL());
+			pstmt.setString(4,this.getSender());
+			pstmt.setString(5, this.getReceiver());
+			pstmt.setString(6, this.getFiscalNumber());
+			pstmt.setString(7, this.getAddress());
 			
 			pstmt.executeUpdate(); // statement execution
 		}else {
@@ -200,6 +223,37 @@ public class Invoice {
 	}
 	public void setID_fa(int iD_fa) {
 		ID_fa = iD_fa;
+	}
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+
+	public String getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
+	}
+
+	public String getFiscalNumber() {
+		return fiscalNumber;
+	}
+
+	public void setFiscalNumber(String fiscalNumber) {
+		this.fiscalNumber = fiscalNumber;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 
