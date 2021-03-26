@@ -64,6 +64,7 @@ public class View {
 		frmCreateANew.setTitle("Create a new Formative Action");
 		frmCreateANew.setName("Courses");
 		frmCreateANew.setBounds(0, 0, 846, 502);
+		frmCreateANew.setLocationRelativeTo(null);
 		frmCreateANew.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmCreateANew.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
 
