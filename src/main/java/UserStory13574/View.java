@@ -41,6 +41,7 @@ public class View extends JFrame {
 
 		setTitle("Enroll in a Formative Action");
 		setBounds(100, 100, 760, 306);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
