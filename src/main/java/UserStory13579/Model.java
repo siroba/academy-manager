@@ -30,19 +30,19 @@ public class Model {
 		// Income confirmed
 		StringBuilder queryIncomeConfirmed = new StringBuilder();
 		queryIncomeConfirmed.append("select fa.nameFa, fa.status, ifnull(sum(CASE WHEN p.confirmed=true THEN p.amount END), 0) as income_confirmed  ");
-		queryIncomeConfirmed.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Payment p on e.ID_professional=p.ID_professional AND e.ID_fa=p.ID_fa group by fa.ID_fa;");
+		queryIncomeConfirmed.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa left join Payment p on p.ID_invoice=i.ID_invoice group by fa.ID_fa;");
 		ResultSet rsIncomeConfirmed=stmtIncomeConfirmed.executeQuery(queryIncomeConfirmed.toString());
 		
 		// Expenses confirmed
 		StringBuilder queryExpensesConfirmed = new StringBuilder();
-		queryExpensesConfirmed.append("select fa.nameFa, fa.status, ifnull(sum(pt.amount), 0) as expenses_confirmed ");
-		queryExpensesConfirmed.append("from FormativeAction fA left join Invoice i on fA.ID_fa=i.ID_fa left join PaymentTeacher pt on pt.ID_invoice=i.ID_invoice group by fa.ID_fa;");
+		queryExpensesConfirmed.append("select fa.nameFa, fa.status, ifnull(sum(CASE WHEN pt.confirmed THEN pt.amount END), 0) as expenses_confirmed ");
+		queryExpensesConfirmed.append("from FormativeAction fA left join InvoiceTeacher it on fA.ID_fa=it.ID_fa left join PaymentTeacher pt on pt.ID_invoice=it.ID_invoice group by fa.ID_fa;");
 		ResultSet rsExpensesConfirmed=stmtExpensesConfirmed.executeQuery(queryExpensesConfirmed.toString());
 		
 		// Income estimated
 		StringBuilder queryIncomeEstimated = new StringBuilder();
-		queryIncomeEstimated.append("select fa.nameFa, fa.status, (count(e.ID_fa))*fA.fee as income_estimated ");
-		queryIncomeEstimated.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Payment p on e.ID_professional=p.ID_professional AND e.ID_fa=p.ID_fa group by fa.ID_fa;");
+		queryIncomeEstimated.append("select  fa.nameFa, fa.status, ifnull(sum(CASE WHEN e.ID_fa THEN f.amount END), 0) as income_estimated ");
+		queryIncomeEstimated.append("from FormativeAction fA left join Fee f on f.id_fa=fa.ID_fa left join enrollment e on fa.ID_fa=e.ID_fa and e.category=f.category group by fa.ID_fa;");
 		ResultSet rsIncomeEstimated=stmtIncomeEstimated.executeQuery(queryIncomeEstimated.toString());
 			
 		// Expenses estimated
@@ -110,23 +110,23 @@ public class Model {
 		queryTotalIncomeConfirmed.append("select sum(income_confirmed) as total_income_confirmed ");
 		queryTotalIncomeConfirmed.append("FROM ");
 		queryTotalIncomeConfirmed.append("(select fa.nameFa, fa.status, ifnull(sum(CASE WHEN p.confirmed=true THEN p.amount END), 0) as income_confirmed ");
-		queryTotalIncomeConfirmed.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Payment p on e.ID_professional=p.ID_professional AND e.ID_fa=p.ID_fa group by fa.ID_fa);");
+		queryTotalIncomeConfirmed.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa left join Payment p on p.ID_invoice=i.ID_invoice group by fa.ID_fa);");
 		ResultSet rsTotalIncomeConfirmed=stmtTotalIncomeConfirmed.executeQuery(queryTotalIncomeConfirmed.toString());
 		
 		// Total Expenses Confirmed 
 		StringBuilder queryTotalExpensesConfirmed = new StringBuilder();
 		queryTotalExpensesConfirmed.append("select sum(expenses_confirmed) as total_expenses_confirmed ");
 		queryTotalExpensesConfirmed.append("FROM ");
-		queryTotalExpensesConfirmed.append("(select fa.nameFa, fa.status, ifnull(sum(pt.amount), 0) as expenses_confirmed ");
-		queryTotalExpensesConfirmed.append("from FormativeAction fA left join Invoice i on fA.ID_fa=i.ID_fa left join PaymentTeacher pt on pt.ID_invoice=i.ID_invoice group by fa.ID_fa);");
+		queryTotalExpensesConfirmed.append("(select fa.nameFa, fa.status, ifnull(sum(CASE WHEN pt.confirmed THEN pt.amount END), 0) as expenses_confirmed ");
+		queryTotalExpensesConfirmed.append("from FormativeAction fA left join InvoiceTeacher it on fA.ID_fa=it.ID_fa left join PaymentTeacher pt on pt.ID_invoice=it.ID_invoice group by fa.ID_fa);");
 		ResultSet rsTotalExpensesConfirmed=stmtTotalExpensesConfirmed.executeQuery(queryTotalExpensesConfirmed.toString());
 		
 		// Total Income Estimated
 		StringBuilder queryTotalIncomeEstimated = new StringBuilder();
 		queryTotalIncomeEstimated.append("select sum(income_estimated) as total_income_estimated ");
 		queryTotalIncomeEstimated.append("FROM ");
-		queryTotalIncomeEstimated.append("(select fa.nameFa, fa.status, (count(e.ID_fa))*fA.fee as income_estimated ");
-		queryTotalIncomeEstimated.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Payment p on e.ID_professional=p.ID_professional AND e.ID_fa=p.ID_fa group by fa.ID_fa);");
+		queryTotalIncomeEstimated.append("(select  fa.nameFa, fa.status, ifnull(sum(CASE WHEN e.ID_fa THEN f.amount END), 0) as income_estimated ");
+		queryTotalIncomeEstimated.append("from FormativeAction fA left join Fee f on f.id_fa=fa.ID_fa left join enrollment e on fa.ID_fa=e.ID_fa and e.category=f.category group by fa.ID_fa);");
 		ResultSet rsTotalIncomeEstimated=stmtTotalIncomeEstimated.executeQuery(queryTotalIncomeEstimated.toString());
 		
 		// Total Expenses Estimated
