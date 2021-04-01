@@ -60,6 +60,7 @@ public class View {
 		frame.setName("FinancialBalance");
 		frame.setBounds(0, 0, 1215, 400);
 		frame.setLocationRelativeTo(null);
+
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow 10][grow][][]"));
 //		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow 10][][][][][grow][][]"));

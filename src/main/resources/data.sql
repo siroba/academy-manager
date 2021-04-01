@@ -92,3 +92,4 @@ insert into PaymentTeacher( ID_payment, amount, datePay,  confirmed, ID_invoice)
 
 
 
+
