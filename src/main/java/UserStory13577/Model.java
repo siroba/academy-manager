@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import PL53.util.Date;
 import Utils.Database;
 import Utils.UnexpectedException;
 
@@ -51,8 +52,8 @@ public class Model {
 			FormativeActionDetails fs = new FormativeActionDetails(
 					rs.getString("nameFa"),
 					rs.getString("status"), 
-					rs.getDate("enrollmentStart"), 
-					rs.getDate("enrollmentEnd"),
+					Date.parse(rs.getTimestamp("enrollmentStart")), 
+					Date.parse(rs.getTimestamp("enrollmentEnd")),
 					rs.getInt("totalPlaces"),
 					rs.getInt("leftPlaces"));
 			
@@ -95,7 +96,7 @@ public class Model {
 				Registration list = new Registration(
 						rs.getString("name"),
 						rs.getString("surname"),
-						rs.getDate("timeEn"),
+						Date.parse(rs.getTimestamp("timeEn")),
 						rs.getFloat("amount"),
 						rs.getString("status"));
 				registrationLists.add(list);
