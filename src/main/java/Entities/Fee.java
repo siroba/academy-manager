@@ -15,6 +15,10 @@ public class Fee {
 	private String group;
 	private float amount;
 
+	public Fee(String group) {
+		this.group = group;
+	}
+	
 	public Fee(String group, float amount) {
 		this.group = group;
 		this.amount = amount; 

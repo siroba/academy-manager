@@ -24,6 +24,7 @@ public class FormativeAction {
 	private int totalPlaces;
 	private DateTime enrollmentStart, enrollmentEnd;
 	private List<Session> sessions = new ArrayList<Session>();
+	private List<Fee> fees = new ArrayList<Fee>();
 
 	/**
 	 * Constructor that assigns random values
@@ -402,7 +403,22 @@ public class FormativeAction {
 		this.sessions.add(session);
 	}
 
+	public List<Fee> getFees() {
+		return fees;
+	}
 
+	public void setFees(List<Fee> fees) {
+		for(Fee f: fees)
+			f.setID_fa(this.getID());
+		
+		this.fees = fees;
+	}
+
+	public void addFee(Fee fee) {
+		fee.setID_fa(this.getID());
+		this.fees.add(fee);
+	}
+	
 	public enum Status {
 		ACTIVE, DELAYED, EXECUTED, CANCELLED;
 	}

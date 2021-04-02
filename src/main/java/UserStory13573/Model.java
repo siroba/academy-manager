@@ -2,6 +2,7 @@ package UserStory13573;
 
 import java.sql.SQLException;
 
+import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Session;
 import Utils.Database;
@@ -29,6 +30,9 @@ public class Model {
 		fA.insert(db);
 		for(Session s: fA.getSessions()) {
 			s.insert(db);
+		}
+		for(Fee f: fA.getFees()) {
+			f.insert(db);
 		}
 	}
 	

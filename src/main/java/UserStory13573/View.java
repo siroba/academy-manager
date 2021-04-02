@@ -25,6 +25,8 @@ import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class View {
 
@@ -361,7 +363,6 @@ public class View {
 		
 		// Add fee 
 		btnAddFee = new JButton("Add fee");
-		btnAddFee.setEnabled(false);
 		btnAddFee.setBounds(30, 330, 154, 25);
 		feesPanel.add(btnAddFee);
 				
@@ -486,8 +487,8 @@ public class View {
 		tableFees.setModel(tm);
 	}
 	
-	public boolean getFree() {
-		return this.chckbxFree.isSelected();
+	public JCheckBox getFree() {
+		return this.chckbxFree;
 	}
 	
 	public String getGroup() {
@@ -502,11 +503,15 @@ public class View {
 		return this.TFFee.getValue();
 	}
 	
-	public JButton getAddFee() {
+	public void setFee(float fee) {
+		this.TFFee.setText(fee);
+	}
+	
+	public JButton getBtnAddFee() {
 		return this.btnAddFee;
 	}
 	
-	public JButton getDeleteFee() {
+	public JButton getBtnDeleteFee() {
 		return this.btnDeleteFee;
 	}
 }
