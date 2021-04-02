@@ -9,7 +9,6 @@ import javax.swing.SwingConstants;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.awt.event.ActionEvent;
 
 
@@ -156,13 +155,8 @@ public class SwingMain {
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13579.Controller controller;
-				try {
-					controller = new UserStory13579.Controller(new UserStory13579.Model(), new UserStory13579.View());
-					controller.initController();
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				controller = new UserStory13579.Controller(new UserStory13579.Model(), new UserStory13579.View());
+				controller.initController();
 			}
 		});
 

@@ -20,7 +20,7 @@ public class Model {
 	 * Gets the list of active races in object form for a given registration date.
 	 * @throws ParseException 
 	 */
-	public List<FinancialBalance> getListFinancialBalance(Date startDate,Date endDate, String status) throws ParseException {
+	public List<FinancialBalance> getListFinancialBalance(Date startDate,Date endDate, String status){
 		//Query all rows from the result of a SQL query
 		try {
 		// Setup connection & statements 
@@ -118,11 +118,14 @@ public class Model {
 		return financialBalances;
 		} catch (SQLException e) { 
 			throw new UnexpectedException(e);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
+		return new ArrayList<>();
 	}
 	
 	
-	public List<TotalBalance> getListTotalBalance(Date startDate,Date endDate, String status) throws ParseException {
+	public List<TotalBalance> getListTotalBalance(Date startDate,Date endDate, String status) {
 		//Query all rows from the result of a SQL query
 		try {
 			
@@ -207,7 +210,10 @@ public class Model {
 		return totalBalance;
 		} catch (SQLException e) { 
 			throw new UnexpectedException(e);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
+		return new ArrayList<>();
 	}
 	
 	/**
@@ -215,18 +221,20 @@ public class Model {
 	 */
 	private List<DateTime> getListFirstSessionLastSession(List<Session> sessions) {
 		List<DateTime> FirstSessionLastSession = new ArrayList<DateTime>(); 
+		if (!sessions.isEmpty()) {
 		int idFaLast = sessions.get(0).getID_fa();
-		DateTime DateTimeFaLast = sessions.get(0).getSessionStart();
-		FirstSessionLastSession.add(DateTimeFaLast);
-		for(int i=1; i<sessions.size(); i++){
-			if (idFaLast != sessions.get(i).getID_fa()) {
-				FirstSessionLastSession.add(DateTimeFaLast);
-				FirstSessionLastSession.add(sessions.get(i).getSessionStart());
-			}
-			idFaLast = sessions.get(i).getID_fa();
-			DateTimeFaLast = sessions.get(i).getSessionStart();
+			DateTime DateTimeFaLast = sessions.get(0).getSessionStart();
+		    FirstSessionLastSession.add(DateTimeFaLast);
+		    for(int i=1; i<sessions.size(); i++){
+		    	if (idFaLast != sessions.get(i).getID_fa()) {
+		    		FirstSessionLastSession.add(DateTimeFaLast);
+		    		FirstSessionLastSession.add(sessions.get(i).getSessionStart());
+		    	}
+		    	idFaLast = sessions.get(i).getID_fa();
+		    	DateTimeFaLast = sessions.get(i).getSessionStart();
+		    }
+		    FirstSessionLastSession.add(sessions.get(sessions.size()-1).getSessionStart());
 		}
-		FirstSessionLastSession.add(sessions.get(sessions.size()-1).getSessionStart());
 		return FirstSessionLastSession;
 	}		
 }

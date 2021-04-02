@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.swing.table.TableModel;
 
-import Entities.Session;
 import PL53.util.Date;
 import Utils.SwingUtil;
 
@@ -15,7 +14,7 @@ public class Controller{
 	private Model model;
 	private View view;
 
-	public Controller(UserStory13579.Model model, UserStory13579.View view) throws ParseException {
+	public Controller(UserStory13579.Model model, UserStory13579.View view){
 		this.model = model;
 		this.view = view;
 		//no model-specific initialization, only view-specific initialization
@@ -41,17 +40,12 @@ public class Controller{
 					end = view.getEndDate();
 				if (view.getFilterStatus())
 					status = view.getStatus();
-				try {
-					getBalances(start, end, status);
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				getBalances(start, end, status);
 			}
 		});
 	}
 	
-	public void initView() throws ParseException {
+	public void initView(){
 		// Update the view data
 		this.getBalances(view.getStartDate(), view.getEndDate(), null);
 		
@@ -65,7 +59,7 @@ public class Controller{
 	 * and use SwingUtil method to create 2 tablemodels which are finally assigned to the tables.
 	 * @throws ParseException 
 	 */
-	public void getBalances(Date startDate,Date endDate, String status) throws ParseException {
+	public void getBalances(Date startDate,Date endDate, String status){
 		
 		// Financial Balance for each formative action 
 		List<FinancialBalance> financialBalances = model.getListFinancialBalance(startDate, endDate, status);
