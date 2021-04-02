@@ -138,6 +138,23 @@ public class SwingUtil {
 		}
 		return tm;
 	}
+	
+	public static <E> TableModel getRecordModelFromPojoWithCustomName(E pojo, String[] colProperties,
+			String[] colNames) {
+		TableModel tm;
+		tm = new DefaultTableModel(new String[] { "", "" }, colProperties.length);
+		for (int j = 0; j < colProperties.length; j++) {
+			try {
+				tm.setValueAt(colNames[j], j, 0);
+				Object value = PropertyUtils.getSimpleProperty(pojo, colProperties[j]);
+				tm.setValueAt(value, j, 1);
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				throw new UnexpectedException(e);
+			}
+		}
+		return tm;
+	}
+	
 	public static <E> TableModel getRecordModelFromPojo(E pojo, String[] colProperties) {
 		//Initial tablemodel creation and dimensioning
 		//since there will be only two columns I put a header with two empty values, so that 

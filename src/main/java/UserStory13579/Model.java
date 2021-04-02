@@ -124,7 +124,7 @@ public class Model {
 		return new ArrayList<>();
 	}
 	
-	
+
 	public List<TotalBalance> getListTotalBalance(Date startDate,Date endDate, String status) {
 		//Query all rows from the result of a SQL query
 		try {

@@ -30,20 +30,20 @@ insert into Professional(ID_professional, name, surname, phone, email) values
 	(2005, 'Paul', 	'Bauer', 		'+4917064578933', 	'paul.bauer@rub.de');
 
 insert into Enrollment(ID_fa, ID_professional, status, timeEn, category) values
-	(1000, 2000, 'CONFIRMED', '2021-01-02 16:00:00', 'Standard'),
-	(1000, 2001, 'CONFIRMED', '2021-01-04 17:00:00', 'Standard'),
-	(1000, 2002, 'CONFIRMED', '2021-01-07 18:00:00', 'Standard'),
-	(1000, 2003, 'CONFIRMED', '2021-01-10 19:00:00', 'Standard'),
-	(1000, 2004, 'CONFIRMED', '2021-01-13 10:00:00', 'Standard'),
-	(1000, 2005, 'CONFIRMED', '2021-01-16 13:00:00', 'Standard'),
-	(1001, 2000, 'CONFIRMED', '2021-01-02 12:00:00', 'Standard'),
-	(1001, 2001, 'CONFIRMED', '2021-01-13 14:00:00', 'Standard'),
-	(1001, 2002, 'CONFIRMED', '2021-01-23 22:00:00', 'Standard'),
-	(1001, 2003, 'CONFIRMED', '2021-02-03 20:00:00', 'Standard'),
-	(1001, 2004, 'CONFIRMED', '2021-02-01 08:00:00', 'Standard'),
-	(1002, 2000, 'RECEIVED', '2021-03-02 12:00:00', 'Standard'),
-	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00', 'Standard'),
-	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00', 'Standard');
+	(1000, 2000, 'CONFIRMED', '2021-01-02 16:00:00.0', 'Standard'),
+	(1000, 2001, 'CONFIRMED', '2021-01-04 17:00:00.0', 'Standard'),
+	(1000, 2002, 'CONFIRMED', '2021-01-07 18:00:00.0', 'Standard'),
+	(1000, 2003, 'CONFIRMED', '2021-01-10 19:00:00.0', 'Standard'),
+	(1000, 2004, 'CONFIRMED', '2021-01-13 10:00:00.0', 'Standard'),
+	(1000, 2005, 'CONFIRMED', '2021-01-16 13:00:00.0', 'Standard'),
+	(1001, 2000, 'CONFIRMED', '2021-01-02 12:00:00.0', 'Standard'),
+	(1001, 2001, 'CONFIRMED', '2021-01-13 14:00:00.0', 'Standard'),
+	(1001, 2002, 'CONFIRMED', '2021-01-23 22:00:00.0', 'Standard'),
+	(1001, 2003, 'CONFIRMED', '2021-02-03 20:00:00.0', 'Standard'),
+	(1001, 2004, 'CONFIRMED', '2021-02-01 08:00:00.0', 'Standard'),
+	(1002, 2000, 'RECEIVED', '2021-03-02 12:00:00.0', 'Standard'),
+	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00.0', 'Standard'),
+	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00.0', 'Standard');
 
 insert into Invoice (Id_invoice , dateIn , sender, receiver, address, fiscalNumber, ID_fa, ID_professional) values
         (4000, '2021-01-02', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2000 ),
@@ -62,20 +62,20 @@ insert into Invoice (Id_invoice , dateIn , sender, receiver, address, fiscalNumb
         (4013, '2021-03-05', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1002, 2001 );
 
 insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
-	(3000, 15, '2021-01-02 17:00:00', true, 4000),
-	(3001, 15, '2021-01-04 18:00:00', true, 4001),
-	(3002, 15, '2021-01-07 20:00:00', true, 4002),
-	(3003, 15, '2021-01-11 12:00:00', true, 4003),
-	(3004, 15, '2021-01-14 13:00:00', true, 4004),
-	(3005, 15, '2021-01-16 14:00:00', true, 4005),
-	(3006, 10, '2021-01-02 18:00:00', true, 4006),
-	(3007, 10, '2021-01-13 15:00:00', true, 4007),
-	(3008, 10, '2021-01-24 08:00:00', true, 4008),
-	(3009, 10, '2021-02-04 10:00:00', true, 4009),
-	(3010, 10, '2021-02-01 15:00:00', true, 4010),
-	(3011, 30, '2021-03-22 13:00:00', false, 4011),
-	(3012, 30, '2021-03-03 13:00:00', false, 4012),
-	(3013, 30, '2021-03-05 10:00:00', true, 4013);    
+	(3000, 15, '2021-01-02 17:00:00.0', true, 4000),
+	(3001, 15, '2021-01-04 18:00:00.0', true, 4001),
+	(3002, 15, '2021-01-07 20:00:00.0', true, 4002),
+	(3003, 15, '2021-01-11 12:00:00.0', true, 4003),
+	(3004, 15, '2021-01-14 13:00:00.0', true, 4004),
+	(3005, 15, '2021-01-16 14:00:00.0', true, 4005),
+	(3006, 10, '2021-01-02 18:00:00.0', true, 4006),
+	(3007, 10, '2021-01-13 15:00:00.0', true, 4007),
+	(3008, 10, '2021-01-24 08:00:00.0', true, 4008),
+	(3009, 10, '2021-02-04 10:00:00.0', true, 4009),
+	(3010, 10, '2021-02-01 15:00:00.0', true, 4010),
+	(3011, 30, '2021-03-22 13:00:00.0', false, 4011),
+	(3012, 30, '2021-03-03 13:00:00.0', false, 4012),
+	(3013, 30, '2021-03-05 10:00:00.0', true, 4013);    
 	
 	
 insert into InvoiceTeacher (Id_invoice , dateIn, sender, receiver, address, fiscalNumber, ID_fa) values
