@@ -21,7 +21,6 @@ public class FormativeAction {
 	private int ID = -1;
 	private String name, objectives, mainContents;
 	private Status status;
-	private float fee;
 	private int totalPlaces;
 	private DateTime enrollmentStart, enrollmentEnd;
 	private List<Session> sessions = new ArrayList<Session>();
@@ -32,7 +31,6 @@ public class FormativeAction {
 	public FormativeAction() {
 		Random r = new Random();
 		this.name = r.name(3, 10);
-		this.fee = (float) Math.random() * 80f;
 		this.totalPlaces = r.nextInt(100);
 		this.objectives = r.name(3, 20);
 		this.mainContents = r.name(3, 10);
@@ -48,7 +46,6 @@ public class FormativeAction {
 	 * @param duration
 	 * @param location
 	 * @param remuneration
-	 * @param fee
 	 * @param totalPlaces
 	 * @param objectives
 	 * @param mainContents
@@ -58,12 +55,11 @@ public class FormativeAction {
 	 * @param enrollmentEnd
 	 * @param faStart
 	 */
-	public FormativeAction(String name, float fee, int totalPlaces,
+	public FormativeAction(String name, int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd) {
 
 		this.name = name;
-		this.fee = fee;
 		this.totalPlaces = totalPlaces;
 		this.objectives = objectives;
 		this.mainContents = mainContents;
@@ -78,7 +74,6 @@ public class FormativeAction {
 	 * @param duration
 	 * @param location
 	 * @param remuneration
-	 * @param fee
 	 * @param totalPlaces
 	 * @param objectives
 	 * @param mainContents
@@ -89,13 +84,12 @@ public class FormativeAction {
 	 * @param faStart
 	 */
 
-	public FormativeAction(int ID_fa, String name, float fee, int totalPlaces,
+	public FormativeAction(int ID_fa, String name, int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd, List<Session> sessions) {
 
 		this.ID = ID_fa;
 		this.name = name;
-		this.fee = fee;
 		this.totalPlaces = totalPlaces;
 		this.objectives = objectives;
 		this.mainContents = mainContents;
@@ -162,8 +156,8 @@ public class FormativeAction {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if (this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_fa, nameFa, fee, totalPlaces,"
-					+ "objectives, mainContent, status, enrollmentStart, enrollmentEnd) VALUES(?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_fa, nameFa, totalPlaces,"
+					+ "objectives, mainContent, status, enrollmentStart, enrollmentEnd) VALUES(?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -171,7 +165,6 @@ public class FormativeAction {
 
 			pstmt.setInt(1, this.getID());
 			pstmt.setString(2, this.getName());
-			pstmt.setFloat(3, this.getFee());
 			pstmt.setInt(4, this.getTotalPlaces());
 			pstmt.setString(5, this.getObjectives());
 			pstmt.setString(6, this.getMainContents());
@@ -180,14 +173,13 @@ public class FormativeAction {
 			pstmt.setTimestamp(9, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setString(1, this.getName());
-			pstmt.setFloat(2, this.getFee());
 			pstmt.setInt(3, this.getTotalPlaces());
 			pstmt.setString(4, this.getObjectives());
 			pstmt.setString(5, this.getMainContents());
@@ -248,7 +240,6 @@ public class FormativeAction {
 			FormativeAction f = new FormativeAction(
 					id_fa,
 					rs.getString("nameFa"),
-					rs.getFloat("fee"),
 					rs.getInt("totalPlaces"),
 					rs.getString("objectives"),
 					rs.getString("mainContent"),
@@ -307,7 +298,6 @@ public class FormativeAction {
 		FormativeAction fa = new FormativeAction(
 				id_fa,
 				rs.getString("nameFa"),
-				rs.getFloat("fee"),
 				rs.getInt("totalPlaces"),
 				rs.getString("objectives"),
 				rs.getString("mainContent"),
@@ -324,17 +314,17 @@ public class FormativeAction {
 		return fa;
 	}
 
-	public float refund() {
-        return this.refundPercentage()*this.getFee();
-    }
-  
-    public float refundPercentage() {
-        int days = Date.daysSince(enrollmentEnd);
-
-        if(days > 7) return 1f;
-        else if (days <= 6 && days >=3) return 0.5f;
-        else return 0f;
-    }
+//	public float refund() {
+//        return this.refundPercentage()*this.getFee();
+//    }
+//  
+//    public float refundPercentage() {
+//        int days = Date.daysSince(enrollmentEnd);
+//
+//        if(days > 7) return 1f;
+//        else if (days <= 6 && days >=3) return 0.5f;
+//        else return 0f;
+//    }
 
 	public String getName() {
 		return name;
@@ -366,14 +356,6 @@ public class FormativeAction {
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public float getFee() {
-		return fee;
-	}
-
-	public void setFee(float fee) {
-		this.fee = fee;
 	}
 
 	public int getTotalPlaces() {

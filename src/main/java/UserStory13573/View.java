@@ -17,6 +17,8 @@ import PL53.util.DateTime;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+
 import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
@@ -36,15 +38,15 @@ public class View {
 	private JTextArea labelWarningStartEnroll;
 	private JLabel labelWarningDay_1, labelWarningEndEnroll, labelWarningDay;
 	private DateTimeInput enrollStart, enrollEnd, sessionStart;
-	private JLabel LabelFee;
 	private JPanel panel;
-	private JPanel sessionsPanel;
-	private JTable table;
-	private JTextField TFLocation;
+	private JPanel sessionsPanel, feesPanel;
+	private JTable table, tableFees;
+	private JTextField TFLocation, TFGroup;
 	private JButton btnAddSession;
 	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane_2;
-	private JButton btnDeleteSession;
+	private JButton btnDeleteSession, btnAddFee, btnDeleteFee;
+	private JCheckBox chckbxFree;
 
 	/**
 	 * Create the application.
@@ -63,7 +65,7 @@ public class View {
 		frmCreateANew.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 11));
 		frmCreateANew.setTitle("Create a new Formative Action");
 		frmCreateANew.setName("Courses");
-		frmCreateANew.setBounds(0, 0, 846, 502);
+		frmCreateANew.setBounds(0, 0, 1280, 502);
 		frmCreateANew.setLocationRelativeTo(null);
 		frmCreateANew.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmCreateANew.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
@@ -139,11 +141,11 @@ public class View {
 		panel.add(TFFee);
 		TFFee.setColumns(10);
 
-		// Fee
-		LabelFee = new JLabel("Fee:");
-		LabelFee.setBounds(150, 383, 24, 14);
-		panel.add(LabelFee);
-		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
+//		// Fee
+//		LabelFee = new JLabel("Fee:");
+//		LabelFee.setBounds(150, 383, 24, 14);
+//		panel.add(LabelFee);
+//		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 		// Create Button
 		BTNCreate = new JButton("Create formative action");
@@ -151,6 +153,7 @@ public class View {
 		panel.add(BTNCreate);
 		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 11));
 
+		// Start of enrollment period 
 		JLabel LabelStartEnroll = new JLabel("Start of enrollment period:");
 		LabelStartEnroll.setBounds(12, 181, 152, 14);
 		panel.add(LabelStartEnroll);
@@ -166,6 +169,7 @@ public class View {
 		enrollStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollStart.setBorder(blackline);
 
+		// End of enrollment period 
 		JLabel lblEndOfEnrollment = new JLabel("End of enrollment period:");
 		lblEndOfEnrollment.setBounds(12, 283, 155, 15);
 		panel.add(lblEndOfEnrollment);
@@ -185,6 +189,7 @@ public class View {
 		scrollPane_1.setBounds(10, 93, 188, 76);
 		panel.add(scrollPane_1);
 
+		// Objectives 
 		TFObjectives = new JTextArea();
 		TFObjectives.setWrapStyleWord(true);
 		scrollPane_1.setViewportView(TFObjectives);
@@ -194,16 +199,19 @@ public class View {
 		scrollPane_2.setBounds(210, 93, 188, 76);
 		panel.add(scrollPane_2);
 
+		// Main contents 
 		TFContents = new JTextArea();
 		TFContents.setWrapStyleWord(true);
 		scrollPane_2.setViewportView(TFContents);
 		TFContents.setLineWrap(true);
 
+		// Seperator 
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.BLACK);
 		separator.setOrientation(SwingConstants.VERTICAL);
 		frmCreateANew.getContentPane().add(separator, "cell 0 0,growy");
 
+		// Session panel
 		sessionsPanel = new JPanel();
 		frmCreateANew.getContentPane().add(sessionsPanel, "cell 0 0,grow");
 		sessionsPanel.setLayout(null);
@@ -226,11 +234,13 @@ public class View {
 		labelWarningDay.setBounds(9, 201, 8, 14);
 		sessionsPanel.add(labelWarningDay);
 
+		// Date of session 
 		JLabel LabelDate = new JLabel("Date of the session:");
 		LabelDate.setFont(new Font("Dialog", Font.PLAIN, 11));
 		LabelDate.setBounds(7, 231, 134, 14);
 		sessionsPanel.add(LabelDate);
 
+		// Duration of session 
 		JLabel LabelHours = new JLabel("Number of hours:");
 		LabelHours.setFont(new Font("Dialog", Font.PLAIN, 11));
 		LabelHours.setBounds(257, 201, 101, 14);
@@ -289,10 +299,78 @@ public class View {
 		labelWarningDay_1.setBounds(140, 231, 229, 14);
 		sessionsPanel.add(labelWarningDay_1);
 
+		// Delete session 
 		btnDeleteSession = new JButton("Delete session");
 		btnDeleteSession.setEnabled(false);
 		btnDeleteSession.setBounds(7, 138, 154, 25);
 		sessionsPanel.add(btnDeleteSession);
+		
+		// Seperator 
+		JSeparator separator2 = new JSeparator();
+		separator2.setForeground(Color.BLACK);
+		separator2.setOrientation(SwingConstants.VERTICAL);
+		frmCreateANew.getContentPane().add(separator2, "cell 0 0,growy");
+		
+		// Fee panel
+		feesPanel = new JPanel();
+		frmCreateANew.getContentPane().add(feesPanel, "cell 0 0,grow");
+		feesPanel.setLayout(null);
+		
+		// Label fees
+		JLabel HeadingFee = new JLabel("Fees:");
+		HeadingFee.setFont(new Font("Dialog", Font.BOLD, 12));
+		HeadingFee.setBounds(9, 25, 51, 14);
+		feesPanel.add(HeadingFee);
+		
+		// Free of charge option 
+		chckbxFree = new JCheckBox("Free of charge");
+		chckbxFree.setFont(new Font("Dialog", Font.PLAIN, 11));
+		chckbxFree.setBounds(9, 60, 140, 14);
+		feesPanel.add(chckbxFree);
+		
+		// Fee table 
+		JScrollPane scrollPaneFees = new JScrollPane();
+		scrollPaneFees.setBounds(7, 100, 400, 150);
+		feesPanel.add(scrollPaneFees);
+
+		tableFees = new JTable();
+		scrollPaneFees.setViewportView(tableFees);
+		
+		// Group
+		JLabel LabelGroup = new JLabel("Group:");
+		LabelGroup.setBounds(10, 283, 46, 14);
+		feesPanel.add(LabelGroup);
+		LabelGroup.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
+		TFGroup = new JTextField();
+		TFGroup.setBounds(60, 282, 140, 18);
+		feesPanel.add(TFGroup);
+		TFGroup.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		TFGroup.setColumns(10);
+		
+		// Fee 
+		JLabel LabelFee = new JLabel("Fee:");
+		LabelFee.setBounds(220, 283, 46, 14);
+		feesPanel.add(LabelFee);
+		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
+		TFFee = new JDecimalField(6);
+		TFFee.setBounds(250, 282, 46, 19);
+		feesPanel.add(TFFee);
+		TFFee.setColumns(10);
+		
+		// Add fee 
+		btnAddFee = new JButton("Add fee");
+		btnAddFee.setEnabled(false);
+		btnAddFee.setBounds(30, 330, 154, 25);
+		feesPanel.add(btnAddFee);
+				
+		// Delete fee 
+		btnDeleteFee = new JButton("Delete fee");
+		btnDeleteFee.setEnabled(false);
+		btnDeleteFee.setBounds(240, 330, 154, 25);
+		feesPanel.add(btnDeleteFee);
+		
 	}
 
 	// Getters and Setters to access from the controller (compact representation)
@@ -348,9 +426,9 @@ public class View {
 		return enrollEnd.getDateTime();
 	}
 
-	public float getFee() {
-		return this.TFFee.getValue();
-	}
+//	public float getFee() {
+//		return this.TFFee.getValue();
+//	}
 
 	public void setWarningDay(String warning) {
 		this.labelWarningDay_1.setText(warning);
@@ -398,5 +476,37 @@ public class View {
 
 	public void hideWarningEnrollmentPeriodEnd() {
 		this.labelWarningEndEnroll.setText("");
+	}
+	
+	public JTable getTableFees() {
+		return tableFees;
+	}
+
+	public void setTableFees(TableModel tm) {
+		tableFees.setModel(tm);
+	}
+	
+	public boolean getFree() {
+		return this.chckbxFree.isSelected();
+	}
+	
+	public String getGroup() {
+		return this.TFGroup.getText();
+	}
+	
+	public void setGroup(String group) {
+		this.TFGroup.setText(group);
+	}
+	
+	public float getFee() {
+		return this.TFFee.getValue();
+	}
+	
+	public JButton getAddFee() {
+		return this.btnAddFee;
+	}
+	
+	public JButton getDeleteFee() {
+		return this.btnDeleteFee;
 	}
 }
