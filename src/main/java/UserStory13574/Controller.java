@@ -4,12 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Entities.Enrollment;
+import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Professional;
 import Exceptions.InvalidFieldValue;
@@ -55,7 +57,20 @@ public class Controller implements PL53.util.Controller {
 						view.changeView(true);
 						selected = selectFormativeAction(index);
 
-						view.setTxtFee(selected.getFee() + "€");
+						// Add groups for selected fA to ComboBox
+						List<Fee> fees = selected.getFees();
+						for (int i=0; i<fees.size(); i++) {
+							view.addCbGroup(fees.get(i).getGroup());
+						}
+						
+						// Set Fee according to the selection of the group
+						float fee = 0;
+						for (int i=0; i<fees.size(); i++) {
+							if (fees.get(i).getGroup().equals(view.getGroup())) {
+								fee = fees.get(i).getAmount();
+							}
+						}
+						view.setTxtFee(fee + "€");
 					}
 				}
 			}
@@ -68,10 +83,11 @@ public class Controller implements PL53.util.Controller {
 				String surname = view.getTextSurname();
 				String phone = view.getTextPhone();
 				String email = view.getTextEmail();
+				String group = view.getGroup();
 
 				try {
 					Professional p = model.createProfessional(name, surname, phone, email);
-					Enrollment en = p.enroll(selected, p, Enrollment.Status.RECEIVED, DateTime.now());
+					Enrollment en = p.enroll(selected, p, Enrollment.Status.RECEIVED, DateTime.now(), group);
 
 					model.doEnrollment(p, en);
 
@@ -99,5 +115,4 @@ public class Controller implements PL53.util.Controller {
 	private FormativeAction selectFormativeAction(int n) {
 		return model.getFormativeAction(n);
 	}
-
 }

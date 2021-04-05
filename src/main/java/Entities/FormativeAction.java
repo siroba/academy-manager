@@ -87,7 +87,7 @@ public class FormativeAction {
 
 	public FormativeAction(int ID_fa, String name, int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
-			DateTime enrollmentEnd, List<Session> sessions) {
+			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees) {
 
 		this.ID = ID_fa;
 		this.name = name;
@@ -98,6 +98,7 @@ public class FormativeAction {
 		this.enrollmentStart = enrollmentStart;
 		this.enrollmentEnd = enrollmentEnd;
 		this.sessions = sessions;
+		this.fees = fees;
 	}
 
 	public static List<FormativeAction> create(int n) {
@@ -197,6 +198,10 @@ public class FormativeAction {
 		for(Session s: this.sessions) {
 			s.setID_fa(this.getID());
 		}
+		
+		for(Fee f: this.fees) {
+			f.setID_fa(this.getID());
+		}
 
 		conn.close();
 	}
@@ -237,6 +242,7 @@ public class FormativeAction {
 			int id_fa = rs.getInt("ID_fa");
 			
 			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+			List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
 			
 			FormativeAction f = new FormativeAction(
 					id_fa,
@@ -247,7 +253,8 @@ public class FormativeAction {
 					Status.valueOf(rs.getString("status").toUpperCase()),
 					dstart,
 					dend,
-					sessions);
+					sessions, 
+					fees);
 
 			fa.add(f);
 		}
@@ -295,6 +302,7 @@ public class FormativeAction {
 		int id_fa = rs.getInt("ID_fa");
 		
 		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+		List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
 		
 		FormativeAction fa = new FormativeAction(
 				id_fa,
@@ -305,7 +313,8 @@ public class FormativeAction {
 				Status.valueOf(rs.getString("status").toUpperCase()),
 				dstart,
 				dend,
-				sessions);
+				sessions, 
+				fees);
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -315,17 +324,17 @@ public class FormativeAction {
 		return fa;
 	}
 
-//	public float refund() {
-//        return this.refundPercentage()*this.getFee();
-//    }
-//  
-//    public float refundPercentage() {
-//        int days = Date.daysSince(enrollmentEnd);
-//
-//        if(days > 7) return 1f;
-//        else if (days <= 6 && days >=3) return 0.5f;
-//        else return 0f;
-//    }
+	public float refund(String group) {
+        return this.refundPercentage()*this.getFee(group);
+    }
+  
+    public float refundPercentage() {
+        int days = Date.daysSince(enrollmentEnd);
+
+        if(days > 7) return 1f;
+        else if (days <= 6 && days >=3) return 0.5f;
+        else return 0f;
+    }
 
 	public String getName() {
 		return name;
@@ -406,6 +415,15 @@ public class FormativeAction {
 	public List<Fee> getFees() {
 		return fees;
 	}
+	
+	public float getFee(String group) {
+		List<Fee> fees = this.getFees();
+		float fee = 0;
+		for (int i=0; i<fees.size(); i++) {
+			if (fees.get(i).getGroup().equals(group)) fee=fees.get(i).getAmount();
+		}
+        return fee;
+    }
 
 	public void setFees(List<Fee> fees) {
 		for(Fee f: fees)

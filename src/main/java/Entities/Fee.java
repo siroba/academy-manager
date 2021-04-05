@@ -129,7 +129,7 @@ public class Fee {
 		List<Fee> fees = new ArrayList<Fee>();
 
 		while (rs.next()) {
-			Fee f = new Fee(rs.getInt("ID_fee"), rs.getInt("ID_fa"), rs.getString("group"), rs.getFloat("amount"));
+			Fee f = new Fee(rs.getInt("ID_fee"), rs.getInt("ID_fa"), rs.getString("category"), rs.getFloat("amount"));
 
 			fees.add(f);
 		}
@@ -160,7 +160,7 @@ public class Fee {
 
 		rs.next();
 
-		Fee f = new Fee(rs.getInt("ID_fee"), rs.getInt("ID_fa"), rs.getString("group"), rs.getFloat("amount"));
+		Fee f = new Fee(rs.getInt("ID_fee"), rs.getInt("ID_fa"), rs.getString("category"), rs.getFloat("amount"));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
