@@ -1,6 +1,6 @@
 package UserStory13577;
 
-import java.util.Date;
+import PL53.util.Date;
 
 public class Registration {
 	//p.name, p.surname, date(e.timeEn), Fee.amount, e.status

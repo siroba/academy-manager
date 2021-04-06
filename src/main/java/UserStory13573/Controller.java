@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -59,9 +60,17 @@ public class Controller implements PL53.util.Controller {
 
 		// Add session 
 		view.getBtnAddSession().addActionListener(new ActionListener() {
-			@Override
+			@Override				
 			public void actionPerformed(ActionEvent e) {
-				if (validateDates(view.getSessionDatetime(), view.getEnrollStart(), view.getEnrollEnd())) {
+				
+				// Get dates of sessions, start of enrollment period & end of enrollment period 
+				List<DateTime> datesFormativeAction = new ArrayList<DateTime>(); 
+				for (int i=0; i<sessions.size(); i++) {
+					datesFormativeAction.add(sessions.get(i).getSessionStart());
+				}
+				// Validate dates 
+				if (validateDates(datesFormativeAction, view.getEnrollStart(), view.getEnrollEnd())) {
+					// Add session to table 
 					sessions.add(new Session(view.getLocation(), view.getTeacher(), view.getNumberOfHours(),
 							view.getRemuneration(), view.getSessionDatetime()));
 
@@ -149,6 +158,7 @@ public class Controller implements PL53.util.Controller {
 				if (view.getFree().isSelected()) {
 					fees.clear();
 					view.setTableFees(getTableModelFees(fees));
+					fees.add(new Fee("Free of charge", 0));
 				}
 				else {
 					fees.clear();
@@ -175,40 +185,45 @@ public class Controller implements PL53.util.Controller {
 	}
 
 	/**
-	 * Create a new formative action object and add it to the db
+	 * Create a new formative action object and add it to the DB
 	 */
 	public void createFormativeAction() {
 
-		// Reset warnings
-		view.setWarningDay("");
-		view.setWarningEnrollmentPeriodStart("");
-		view.setWarningEnrollmentPeriodEnd("");
-		view.setWarningEnrollmentPeriodStart2("");
-		view.setWarningEnrollmentPeriodEnd2("");
 
-		// Get dates
-		DateTime dateFormativeAction = view.getSessionDatetime();
+		// Sessions and fees 
+		List<Session> sessions = this.getSessions();
+		List<Fee> fees = this.getFees();
+		
+		// Get dates of sessions, start of enrollment period & end of enrollment period 
+		List<DateTime> datesFormativeAction = new ArrayList<DateTime>(); 
+		for (int i=0; i<sessions.size(); i++) {
+			datesFormativeAction.add(sessions.get(i).getSessionStart());
+		}
 		DateTime dateEnrollStart = view.getEnrollStart();
 		DateTime dateEnrollEnd = view.getEnrollEnd();
 
-		List<Session> sessions = this.getSessions();
-		List<Fee> fees = this.getFees();
+		// Validate session dates
+		if (validateDates(datesFormativeAction, dateEnrollStart, dateEnrollEnd)) {
+			// Validate fees
+			if (validateFees(fees)) {
+				// Create new formative action and add it to DB
+				FormativeAction formativeAction = new FormativeAction(view.getName(), view.getSpaces(),
+						view.getObjectives(), view.getMainContents(), FormativeAction.Status.ACTIVE, dateEnrollStart,
+						dateEnrollEnd);
+				
+				//  Add associated fees and sessions to fA
+				formativeAction.setSessions(sessions);
+				formativeAction.setFees(fees);
 
-		// Validate dates
-		if (validateDates(dateFormativeAction, dateEnrollStart, dateEnrollEnd)) {
-			// Create new formative action and add it to DB
-			FormativeAction formativeAction = new FormativeAction(view.getName(), view.getSpaces(),
-					view.getObjectives(), view.getMainContents(), FormativeAction.Status.ACTIVE, dateEnrollStart,
-					dateEnrollEnd);
-
-			formativeAction.setSessions(sessions);
-			formativeAction.setFees(fees);
-
-			try {
-				model.setFormativeAction(formativeAction);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}	
+				try {
+					// Insert into DB and close window 
+					model.setFormativeAction(formativeAction);
+					view.getFrame().setVisible(false);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}	
+			}
+			
 		}
 	}
 
@@ -224,58 +239,88 @@ public class Controller implements PL53.util.Controller {
 	 * Check if the provided dates for the formative action, the start & end of the
 	 * enrollment period are valid
 	 */
-	public boolean validateDates(DateTime formativeAction, DateTime enrollStart, DateTime enrollEnd) {
+	public boolean validateDates(List<DateTime> formativeActionDates, DateTime enrollStart, DateTime enrollEnd) {
 		DateTime now = DateTime.now();
-		long daysBetweenStartAction = DateTime.daysSince(formativeAction, enrollStart);
-		long daysBetweenEndAction = DateTime.daysSince(formativeAction, enrollEnd);
 		long daysBetweenStartEnd = DateTime.daysSince(enrollEnd, enrollStart);
 		long daysBetweenNowStart = DateTime.daysSince(enrollStart, now);
 		long daysBetweenNowEnd = DateTime.daysSince(enrollEnd, now);
-		long daysBetweenNowAction = DateTime.daysSince(formativeAction, now);
 
-		if (daysBetweenNowAction < 0) {
-			view.setWarningDay("Can't take place in the past");
-			return false;
-		} else {
-			view.hideWarningDay();
-		}
-
-		if (daysBetweenNowStart < 0) {
-			view.setWarningEnrollmentPeriodStart2("Can't start in the past");
-			return false;
-		} else {
-			view.hideWarningEnrollmentPeriodStart();
-		}
-
-		if (daysBetweenNowEnd < 0) {
-			view.setWarningEnrollmentPeriodEnd2("Can't end in the past");
-			return false;
-		} else {
-			view.hideWarningEnrollmentPeriodEnd();
-		}
-
-		if (daysBetweenStartAction < 21) {
-			view.setWarningEnrollmentPeriodStart2("Should begin at least 3 weeks before formative action");
-			return false;
-		} else {
-			view.hideWarningEnrollmentPeriodStart();
-		}
-		
-		if (daysBetweenEndAction <= 0) {
-			view.setWarningEnrollmentPeriodEnd2("Should end before formative action begins");
-			return false;
-		} else {
-			view.hideWarningEnrollmentPeriodEnd();
-		}
-		
+		// Check that enrollment period is long enough 
 		if (daysBetweenStartEnd <= 0) {
-			view.setWarningEnrollmentPeriodEnd2("Not enough time between start and end of enrollment period");
+			JOptionPane.showMessageDialog(null,
+				    "Not enough time between start and end of enrollment period.",
+				    "Enrollment period not valid",
+				    JOptionPane.ERROR_MESSAGE);
 			return false;
-		} else {
-			view.hideWarningEnrollmentPeriodEnd();
+		} 
+		// Check that start of enrollment period is not in the past 
+		if (daysBetweenNowStart < 0) {
+			JOptionPane.showMessageDialog(null,
+				    "Enrollment period can't start in the past",
+				    "Start of enrollment period not valid",
+				    JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
-
+		// Check that end of enrollment period is not in the past 
+		if (daysBetweenNowEnd < 0) {
+			JOptionPane.showMessageDialog(null,
+				    "Enrollment period can't end in the past",
+				    "End of enrollment period not valid",
+				    JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		// Check that the session dates are valid 
+		for (int i=0; i<formativeActionDates.size(); i++) {
+			
+			// Get date of current formative action 
+			DateTime formativeActionDate = formativeActionDates.get(i);
+			
+			long daysBetweenNowAction = DateTime.daysSince(formativeActionDate, now);
+			long daysBetweenStartAction = DateTime.daysSince(formativeActionDate, enrollStart);
+			long daysBetweenEndAction = DateTime.daysSince(formativeActionDate, enrollEnd);
+			
+			if (daysBetweenNowAction < 0) {
+				JOptionPane.showMessageDialog(null,
+					    "Session can't take place in the past.",
+					    "Session date not valid",
+					    JOptionPane.ERROR_MESSAGE);
+				return false;
+			} 
+			if (daysBetweenStartAction < 21) {
+				JOptionPane.showMessageDialog(null,
+					    "Enrollment period should begin at least 3 weeks before formative action",
+					    "Start of enrollment period not valid",
+					    JOptionPane.ERROR_MESSAGE);
+				return false;
+			} 
+			
+			if (daysBetweenEndAction <= 0) {
+				JOptionPane.showMessageDialog(null,
+					    "Enrollment period should end before first session of the formative action takes place.",
+					    "End of enrollment period not valid",
+					    JOptionPane.ERROR_MESSAGE);
+				return false;
+			} 
+		}
 		return true;
+	}
+	
+	/**
+	 * Check if the provided fees for the formative action are valid
+	 */
+	public boolean validateFees(List<Fee> fees) {
+		if (view.getFree().isSelected()) return true; 
+		for (int i=0; i<fees.size(); i++) {
+			if (fees.get(i).getAmount()==0.0){
+				// Show error message indicating that every fee must have an amount 
+				JOptionPane.showMessageDialog(null,
+				    "For every group in the list an amount for the fee must be specified. \nEither delete the groups without amounts or specify the missing amounts. ",
+				    "Fees not valid",
+				    JOptionPane.ERROR_MESSAGE);
+				return false; 
+			}
+		}
+		return true; 
 	}
 
 	public TableModel getTableModel(List<Session> sessions) {

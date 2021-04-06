@@ -22,7 +22,7 @@ public class Model {
 	private Database db=new Database();
 	
 	/**
-	 * Insert a new formative action into the formativeActions table 
+	 * Insert a new formative action as well as the associated fees and sessions into the DB 
 	 * @throws  
 	 * @throws SQLException 
 	 */

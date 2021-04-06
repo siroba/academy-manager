@@ -68,9 +68,10 @@ public class View {
 		frmCreateANew.setTitle("Create a new Formative Action");
 		frmCreateANew.setName("Courses");
 		frmCreateANew.setBounds(0, 0, 1280, 502);
+		frmCreateANew.setBounds(0, 0, 1280, 540);
 		frmCreateANew.setLocationRelativeTo(null);
 		frmCreateANew.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frmCreateANew.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
+		frmCreateANew.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow][]"));
 
 		panel = new JPanel();
 		frmCreateANew.getContentPane().add(panel, "flowx,cell 0 0,grow");
@@ -82,78 +83,47 @@ public class View {
 		panel.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 
+		// Name
+		JLabel LabelName = new JLabel("Name:");
+		LabelName.setBounds(10, 50, 37, 14);
+		panel.add(LabelName);
+		LabelName.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
 		TFName = new JTextField();
 		TFName.setBounds(50, 48, 273, 18);
 		panel.add(TFName);
 		TFName.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFName.setColumns(10);
 
-		// Name
-		JLabel LabelName = new JLabel("Name:");
-		LabelName.setBounds(10, 50, 37, 14);
-		panel.add(LabelName);
-		LabelName.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
 		// Objectives
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 93, 188, 76);
+		panel.add(scrollPane_1);
+
 		LabelObjectives = new JLabel("Objectives:");
 		LabelObjectives.setBounds(10, 74, 63, 14);
 		panel.add(LabelObjectives);
 		LabelObjectives.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
+		TFObjectives = new JTextArea();
+		TFObjectives.setWrapStyleWord(true);
+		scrollPane_1.setViewportView(TFObjectives);
+		TFObjectives.setLineWrap(true);
+
 		// Main contents
+		scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(210, 93, 188, 76);
+		panel.add(scrollPane_2);
+		
 		JLabel LabelContents = new JLabel("Main contents:");
 		LabelContents.setBounds(210, 74, 83, 14);
 		panel.add(LabelContents);
 		LabelContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		TFSpaces = new JIntField(5);
-		TFSpaces.setBounds(60, 382, 69, 18);
-		panel.add(TFSpaces);
-		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		TFSpaces.setColumns(10);
-
-		// Spaces
-		JLabel LabelSpaces = new JLabel("Spaces:");
-		LabelSpaces.setBounds(10, 383, 46, 14);
-		panel.add(LabelSpaces);
-		LabelSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		labelWarningStartEnroll = new JTextArea("");
-		labelWarningStartEnroll.setWrapStyleWord(true);
-		labelWarningStartEnroll.setLineWrap(true);
-		labelWarningStartEnroll.setOpaque(false);
-		labelWarningStartEnroll.setEditable(false);
-		labelWarningStartEnroll.setFocusable(false);
-		labelWarningStartEnroll.setBackground(UIManager.getColor("Label.background"));
-		labelWarningStartEnroll.setFont(UIManager.getFont("Label.font"));
-	    labelWarningStartEnroll.setBorder(UIManager.getBorder("Label.border"));
-		labelWarningStartEnroll.setBounds(180, 175, 218, 28);
-		panel.add(labelWarningStartEnroll);
-		labelWarningStartEnroll.setForeground(Color.RED);
-		labelWarningStartEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		labelWarningEndEnroll = new JLabel("");
-		labelWarningEndEnroll.setBounds(180, 280, 202, 14);
-		panel.add(labelWarningEndEnroll);
-		labelWarningEndEnroll.setForeground(Color.RED);
-		labelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		TFFee = new JDecimalField(6);
-		TFFee.setBounds(180, 382, 46, 19);
-		panel.add(TFFee);
-		TFFee.setColumns(10);
-
-//		// Fee
-//		LabelFee = new JLabel("Fee:");
-//		LabelFee.setBounds(150, 383, 24, 14);
-//		panel.add(LabelFee);
-//		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		// Create Button
-		BTNCreate = new JButton("Create formative action");
-		BTNCreate.setBounds(114, 420, 186, 24);
-		panel.add(BTNCreate);
-		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 11));
+		
+		TFContents = new JTextArea();
+		TFContents.setWrapStyleWord(true);
+		scrollPane_2.setViewportView(TFContents);
+		TFContents.setLineWrap(true);
 
 		// Start of enrollment period 
 		JLabel LabelStartEnroll = new JLabel("Start of enrollment period:");
@@ -185,192 +155,233 @@ public class View {
 		enrollEnd.getDatePanel().getDaysTextField().setBound(1, 31);
 		enrollEnd.getDatePanel().getMonthsTextField().setBound(1, 12);
 		enrollEnd.getDatePanel().getYearsTextField().setBound(2000, 3000);
-		enrollEnd.setBorder(blackline);
+		enrollEnd.setBorder(blackline);		
 
-		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 93, 188, 76);
-		panel.add(scrollPane_1);
+		// Spaces
+		JLabel LabelSpaces = new JLabel("Spaces:");
+		LabelSpaces.setBounds(10, 383, 46, 14);
+		panel.add(LabelSpaces);
+		LabelSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
+		TFSpaces = new JIntField(5);
+		TFSpaces.setBounds(60, 382, 69, 18);
+		panel.add(TFSpaces);
+		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		TFSpaces.setColumns(10);
 
-		// Objectives 
-		TFObjectives = new JTextArea();
-		TFObjectives.setWrapStyleWord(true);
-		scrollPane_1.setViewportView(TFObjectives);
-		TFObjectives.setLineWrap(true);
+//		labelWarningStartEnroll = new JTextArea("");
+//		labelWarningStartEnroll.setWrapStyleWord(true);
+//		labelWarningStartEnroll.setLineWrap(true);
+//		labelWarningStartEnroll.setOpaque(false);
+//		labelWarningStartEnroll.setEditable(false);
+//		labelWarningStartEnroll.setFocusable(false);
+//		labelWarningStartEnroll.setBackground(UIManager.getColor("Label.background"));
+//		labelWarningStartEnroll.setFont(UIManager.getFont("Label.font"));
+//	    labelWarningStartEnroll.setBorder(UIManager.getBorder("Label.border"));
+//		labelWarningStartEnroll.setBounds(180, 175, 218, 28);
+//		panel.add(labelWarningStartEnroll);
+//		labelWarningStartEnroll.setForeground(Color.RED);
+//		labelWarningStartEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
+//
+//		labelWarningEndEnroll = new JLabel("");
+//		labelWarningEndEnroll.setBounds(180, 280, 202, 14);
+//		panel.add(labelWarningEndEnroll);
+//		labelWarningEndEnroll.setForeground(Color.RED);
+//		labelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
-		scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(210, 93, 188, 76);
-		panel.add(scrollPane_2);
+		// Create Button
+		BTNCreate = new JButton("Create formative action");
+		//BTNCreate.setBounds(114, 420, 186, 24);
+		// panel.add(BTNCreate);
+//		BTNCreate.setBounds(550, 420, 186, 24);
+		frmCreateANew.getContentPane().add(BTNCreate, "cell 0 1,alignx center,gapy 10");
+		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		// Main contents 
-		TFContents = new JTextArea();
-		TFContents.setWrapStyleWord(true);
-		scrollPane_2.setViewportView(TFContents);
-		TFContents.setLineWrap(true);
-
-		// Seperator 
+		// Separator 
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.BLACK);
 		separator.setOrientation(SwingConstants.VERTICAL);
 		frmCreateANew.getContentPane().add(separator, "cell 0 0,growy");
 
-		// Session panel
+		// Sessions
 		sessionsPanel = new JPanel();
 		frmCreateANew.getContentPane().add(sessionsPanel, "cell 0 0,grow");
 		sessionsPanel.setLayout(null);
 
+		// Sessions - Heading 
+		JLabel HeadingSessions = new JLabel("Sessions:");
+		HeadingSessions.setFont(new Font("Dialog", Font.BOLD, 12));
+		HeadingSessions.setBounds(9, 25, 71, 14);
+		sessionsPanel.add(HeadingSessions);
+		
+		// Sessions - Table 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(7, 26, 402, 103);
+		scrollPane.setBounds(7, 56, 402, 103);
 		sessionsPanel.add(scrollPane);
 
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
+		// Session - Location 
 		JLabel LabelLocation = new JLabel("Location:");
 		LabelLocation.setFont(new Font("Dialog", Font.PLAIN, 11));
-		LabelLocation.setBounds(9, 201, 51, 14);
+		LabelLocation.setBounds(9, 231, 51, 14);
 		sessionsPanel.add(LabelLocation);
+		
+		TFLocation = new JTextField();
+		TFLocation.setBounds(78, 228, 166, 19);
+		sessionsPanel.add(TFLocation);
+		TFLocation.setColumns(10);
 
-		labelWarningDay = new JLabel("  ");
-		labelWarningDay.setForeground(Color.RED);
-		labelWarningDay.setFont(new Font("Dialog", Font.PLAIN, 11));
-		labelWarningDay.setBounds(9, 201, 8, 14);
-		sessionsPanel.add(labelWarningDay);
+//		labelWarningDay = new JLabel("  ");
+//		labelWarningDay.setForeground(Color.RED);
+//		labelWarningDay.setFont(new Font("Dialog", Font.PLAIN, 11));
+//		labelWarningDay.setBounds(9, 201, 8, 14);
+//		sessionsPanel.add(labelWarningDay);
 
-		// Date of session 
+		// Session - Date 
 		JLabel LabelDate = new JLabel("Date of the session:");
 		LabelDate.setFont(new Font("Dialog", Font.PLAIN, 11));
-		LabelDate.setBounds(7, 231, 134, 14);
+		LabelDate.setBounds(7, 261, 134, 14);
 		sessionsPanel.add(LabelDate);
-
-		// Duration of session 
-		JLabel LabelHours = new JLabel("Number of hours:");
-		LabelHours.setFont(new Font("Dialog", Font.PLAIN, 11));
-		LabelHours.setBounds(257, 201, 101, 14);
-		sessionsPanel.add(LabelHours);
-
+		
 		sessionStart = new DateTimeInput();
 		sessionStart.setBorder(blackline);
 		sessionStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		sessionStart.getDatePanel().getYearsTextField().setDefaultValue(2021);
-		sessionStart.setBounds(7, 246, 378, 70);
-
+		sessionStart.setBounds(7, 276, 378, 70);
 		sessionsPanel.add(sessionStart);
 
-		TFLocation = new JTextField();
-		TFLocation.setBounds(78, 198, 166, 19);
-		sessionsPanel.add(TFLocation);
-		TFLocation.setColumns(10);
+		// Session - Duration 
+		JLabel LabelHours = new JLabel("Number of hours:");
+		LabelHours.setFont(new Font("Dialog", Font.PLAIN, 11));
+		LabelHours.setBounds(257, 231, 101, 14);
+		sessionsPanel.add(LabelHours);
 
 		TFHours = new JIntField(2);
 		TFHours.setBound(0, 24);
-		TFHours.setBounds(362, 198, 39, 19);
+		TFHours.setBounds(362, 228, 39, 19);
 		sessionsPanel.add(TFHours);
-
-		btnAddSession = new JButton("Add session");
-		btnAddSession.setBounds(129, 420, 166, 25);
-		sessionsPanel.add(btnAddSession);
-
+		
 		// Teacher
 		JLabel LabelTeacher = new JLabel("Teacher:");
-		LabelTeacher.setBounds(7, 328, 50, 14);
+		LabelTeacher.setBounds(7, 358, 50, 14);
 		sessionsPanel.add(LabelTeacher);
 		LabelTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
 		TFTeacher = new JTextField();
-		TFTeacher.setBounds(63, 328, 142, 18);
+		TFTeacher.setBounds(63, 358, 142, 18);
 		sessionsPanel.add(TFTeacher);
 		TFTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFTeacher.setColumns(10);
 
+		// Remuneration
+		JLabel LabelRemuneration = new JLabel("Remuneration:");
+		LabelRemuneration.setBounds(217, 358, 83, 14);
+		sessionsPanel.add(LabelRemuneration);
+		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
 		TFRemuneration = new JDecimalField(4);
 		TFRemuneration.setBound(0f, Float.MAX_VALUE);
-		TFRemuneration.setBounds(307, 328, 51, 18);
+		TFRemuneration.setBounds(307, 358, 51, 18);
 		sessionsPanel.add(TFRemuneration);
 		TFRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFRemuneration.setColumns(10);
 
-		// Remuneration
-		JLabel LabelRemuneration = new JLabel("Remuneration:");
-		LabelRemuneration.setBounds(217, 328, 83, 14);
-		sessionsPanel.add(LabelRemuneration);
-		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		// Session - Button to add session 
+		btnAddSession = new JButton("Add session");
+		btnAddSession.setBounds(129, 390, 166, 25);
+		sessionsPanel.add(btnAddSession);
 
-		labelWarningDay_1 = new JLabel("");
-		labelWarningDay_1.setFont(new Font("Dialog", Font.PLAIN, 11));
-		labelWarningDay_1.setForeground(Color.RED);
-		labelWarningDay_1.setBounds(140, 231, 229, 14);
-		sessionsPanel.add(labelWarningDay_1);
+//		labelWarningDay_1 = new JLabel("");
+//		labelWarningDay_1.setFont(new Font("Dialog", Font.PLAIN, 11));
+//		labelWarningDay_1.setForeground(Color.RED);
+//		labelWarningDay_1.setBounds(140, 231, 229, 14);
+//		sessionsPanel.add(labelWarningDay_1);
 
-		// Delete session 
+		// Session - Button to delete session 
 		btnDeleteSession = new JButton("Delete session");
 		btnDeleteSession.setEnabled(false);
-		btnDeleteSession.setBounds(7, 138, 154, 25);
+		btnDeleteSession.setBounds(7, 168, 154, 25);
 		sessionsPanel.add(btnDeleteSession);
 		
-		// Seperator 
+		// Separator 
 		JSeparator separator2 = new JSeparator();
 		separator2.setForeground(Color.BLACK);
 		separator2.setOrientation(SwingConstants.VERTICAL);
 		frmCreateANew.getContentPane().add(separator2, "cell 0 0,growy");
 		
-		// Fee panel
+		// Fees
 		feesPanel = new JPanel();
 		frmCreateANew.getContentPane().add(feesPanel, "cell 0 0,grow");
 		feesPanel.setLayout(null);
 		
-		// Label fees
+		// Fees - Heading 
 		JLabel HeadingFee = new JLabel("Fees:");
 		HeadingFee.setFont(new Font("Dialog", Font.BOLD, 12));
 		HeadingFee.setBounds(9, 25, 51, 14);
 		feesPanel.add(HeadingFee);
 		
-		// Free of charge option 
+		// Fees - Free of charge option 
 		chckbxFree = new JCheckBox("Free of charge");
 		chckbxFree.setFont(new Font("Dialog", Font.PLAIN, 11));
 		chckbxFree.setBounds(9, 60, 140, 14);
 		feesPanel.add(chckbxFree);
 		
-		// Fee table 
+		// Fees - Table 
 		JScrollPane scrollPaneFees = new JScrollPane();
 		scrollPaneFees.setBounds(7, 100, 400, 150);
 		feesPanel.add(scrollPaneFees);
 
 		tableFees = new JTable();
+		tableFees.setDefaultEditor(Object.class, null);
 		scrollPaneFees.setViewportView(tableFees);
 		
-		// Group
+		// Fees - Button to Delete fee 
+		btnDeleteFee = new JButton("Delete fee");
+		btnDeleteFee.setEnabled(false);
+		btnDeleteFee.setBounds(7, 260, 154, 25);
+		feesPanel.add(btnDeleteFee);
+		
+		// Fees - Group
 		JLabel LabelGroup = new JLabel("Group:");
-		LabelGroup.setBounds(10, 283, 46, 14);
+		LabelGroup.setBounds(10, 313, 46, 14);
 		feesPanel.add(LabelGroup);
 		LabelGroup.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		TFGroup = new JTextField();
-		TFGroup.setBounds(60, 282, 140, 18);
+		TFGroup.setBounds(60, 312, 160, 18);
 		feesPanel.add(TFGroup);
 		TFGroup.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFGroup.setColumns(10);
 		
-		// Fee 
+		// Fees - Amount 
 		JLabel LabelFee = new JLabel("Fee:");
-		LabelFee.setBounds(220, 283, 46, 14);
+		LabelFee.setBounds(240, 313, 46, 14);
 		feesPanel.add(LabelFee);
 		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		TFFee = new JDecimalField(6);
-		TFFee.setBounds(250, 282, 46, 19);
+		TFFee.setBounds(270, 312, 46, 19);
 		feesPanel.add(TFFee);
 		TFFee.setColumns(10);
 		
-		// Add fee 
+		// Fees - Button to Add fee 
 		btnAddFee = new JButton("Add fee");
-		btnAddFee.setBounds(30, 330, 154, 25);
+		btnAddFee.setBounds(129, 350, 174, 25);
 		feesPanel.add(btnAddFee);
+		
+		// Separator 
+		JSeparator separator3 = new JSeparator();
+		separator3.setForeground(Color.BLACK);
+		separator3.setOrientation(SwingConstants.HORIZONTAL);
+		frmCreateANew.getContentPane().add(separator3, "cell 0 1");
 				
-		// Delete fee 
-		btnDeleteFee = new JButton("Delete fee");
-		btnDeleteFee.setEnabled(false);
-		btnDeleteFee.setBounds(240, 330, 154, 25);
-		feesPanel.add(btnDeleteFee);
+//		// Fees - Button to Delete fee 
+//		btnDeleteFee = new JButton("Delete fee");
+//		btnDeleteFee.setEnabled(false);
+//		btnDeleteFee.setBounds(240, 330, 154, 25);
+//		feesPanel.add(btnDeleteFee);
 		
 	}
 
@@ -426,10 +437,6 @@ public class View {
 	public DateTime getEnrollEnd() {
 		return enrollEnd.getDateTime();
 	}
-
-//	public float getFee() {
-//		return this.TFFee.getValue();
-//	}
 
 	public void setWarningDay(String warning) {
 		this.labelWarningDay_1.setText(warning);

@@ -182,12 +182,12 @@ public class FormativeAction {
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setString(1, this.getName());
-			pstmt.setInt(3, this.getTotalPlaces());
-			pstmt.setString(4, this.getObjectives());
-			pstmt.setString(5, this.getMainContents());
-			pstmt.setString(6, this.getStatus().toString());
-			pstmt.setTimestamp(7, this.getEnrollmentStart().toTimestamp());
-			pstmt.setTimestamp(8, this.getEnrollmentEnd().toTimestamp());
+			pstmt.setInt(2, this.getTotalPlaces());
+			pstmt.setString(3, this.getObjectives());
+			pstmt.setString(4, this.getMainContents());
+			pstmt.setString(5, this.getStatus().toString());
+			pstmt.setTimestamp(6, this.getEnrollmentStart().toTimestamp());
+			pstmt.setTimestamp(7, this.getEnrollmentEnd().toTimestamp());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();

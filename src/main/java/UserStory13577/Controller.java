@@ -69,7 +69,7 @@ public class Controller implements PL53.util.Controller {
 	public void showFormativeActionDetails() {
 		FormativeActionDetails fs = model.getFormativeActionDetails(view.getListFormativeActions().getSelectedValue());
 
-		TableModel tmodel = SwingUtil.getRecordModelFromPojoWithCustomName(fs,
+		TableModel tmodel = SwingUtil.getRecordModelFromPojo(fs,
 				new String[] { "name", "status", "enrollmentPeriodStart", "enrollmentPeriodEnd", "totalPlaces",
 						"leftPlaces" },
 				new String[] { "Name", "Status", "Enrollment Start", "Enrollment End", "Total places", "Left places" });

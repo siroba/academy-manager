@@ -91,15 +91,15 @@ public class Fee {
 
 			pstmt.executeUpdate(); // statement execution
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
-
-			pstmt.setInt(1, getID_fa());
+			
+			pstmt.setFloat(1, getAmount());
 			pstmt.setString(2, getGroup());
-			pstmt.setFloat(3, getAmount());
+			pstmt.setInt(3, getID_fa());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();

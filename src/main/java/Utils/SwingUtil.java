@@ -150,8 +150,7 @@ public class SwingUtil {
 		return tm;
 	}
 	
-	public static <E> TableModel getRecordModelFromPojoWithCustomName(E pojo, String[] colProperties,
-			String[] colNames) {
+	public static <E> TableModel getRecordModelFromPojo(E pojo, String[] colProperties, String[] colNames) {
 		TableModel tm;
 		tm = new DefaultTableModel(new String[] { "", "" }, colProperties.length);
 		for (int j = 0; j < colProperties.length; j++) {
