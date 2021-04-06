@@ -171,8 +171,8 @@ public class FormativeAction {
 			pstmt.setString(5, this.getObjectives());
 			pstmt.setString(6, this.getMainContents());
 			pstmt.setString(7, this.getStatus().toString());
-			pstmt.setTimestamp(8, this.getEnrollmentStart().toTimestamp());
-			pstmt.setTimestamp(9, this.getEnrollmentEnd().toTimestamp());
+			pstmt.setString(8,  this.getEnrollmentStart().toSQLiteString());
+			pstmt.setString(9,  this.getEnrollmentEnd().toSQLiteString());
 			pstmt.executeUpdate(); // statement execution
 		} else {
 			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?)";
@@ -186,8 +186,8 @@ public class FormativeAction {
 			pstmt.setString(3, this.getObjectives());
 			pstmt.setString(4, this.getMainContents());
 			pstmt.setString(5, this.getStatus().toString());
-			pstmt.setTimestamp(6, this.getEnrollmentStart().toTimestamp());
-			pstmt.setTimestamp(7, this.getEnrollmentEnd().toTimestamp());
+			pstmt.setString(6,  this.getEnrollmentStart().toSQLiteString());
+			pstmt.setString(7,  this.getEnrollmentEnd().toSQLiteString());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();

@@ -24,9 +24,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 
 public class View {
 
