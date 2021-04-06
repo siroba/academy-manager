@@ -83,6 +83,17 @@ public class SwingUtil {
 	}
 	
 	/** 
+	 * Gets the value (of the requested column) of the selected row in the table or empty string (if it does not exist).
+	 */
+	public static String getSelectedValue(JTable table, int col) {
+		int row=table.getSelectedRow(); //the item in the first column is the race id
+		if (row>=0)
+			return (String)table.getModel().getValueAt(row,col);
+		else //no rows selected
+			return "";
+	}
+	
+	/** 
 	 * Selects the table row with the specified key and returns the value of the resulting key of the selected row.
 	 * (the same key or empty string if the row does not exist)
 	 */

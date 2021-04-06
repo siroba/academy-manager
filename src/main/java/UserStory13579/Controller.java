@@ -32,7 +32,7 @@ public class Controller{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Date start = new Date(1,1,1000);
-				Date end = new Date(1, 1, 10000);
+				Date end = new Date(1, 1, 3000);
 				String status = null; 
 				if (view.getFilterStartDate())
 					start = view.getStartDate();
