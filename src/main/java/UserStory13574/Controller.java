@@ -59,23 +59,30 @@ public class Controller implements PL53.util.Controller {
 
 						// Add groups for selected fA to ComboBox
 						List<Fee> fees = selected.getFees();
+						view.clearCbGroup();
 						for (int i=0; i<fees.size(); i++) {
 							view.addCbGroup(fees.get(i).getGroup());
 						}
-						
-						// Set Fee according to the selection of the group
-						float fee = 0;
-						for (int i=0; i<fees.size(); i++) {
-							if (fees.get(i).getGroup().equals(view.getGroup())) {
-								fee = fees.get(i).getAmount();
-							}
-						}
-						view.setTxtFee(fee + "€");
 					}
 				}
 			}
 		});
+		
+		// Set Fee according to the selection of the group
+		view.getCBGroup().addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	List<Fee> fees = selected.getFees();
+				float fee = 0;
+				for (int i=0; i<fees.size(); i++) {
+					if (fees.get(i).getGroup().equals(view.getGroup())) {
+						fee = fees.get(i).getAmount();
+					}
+				}
+				view.setTxtFee(fee + "€");
+		    }
+		});
 
+		
 		view.getBtnConfirmAndEnroll().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

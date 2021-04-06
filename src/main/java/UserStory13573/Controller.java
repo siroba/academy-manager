@@ -308,6 +308,14 @@ public class Controller implements PL53.util.Controller {
 	 */
 	public boolean validateFees(List<Fee> fees) {
 		if (view.getFree().isSelected()) return true; 
+		if (fees.size()==0) {
+			// Show error message indicating that there is not fee specified
+			JOptionPane.showMessageDialog(null,
+			    "There is no fee specified. \nEither select the 'Free of charge' option or add a fee.",
+			    "Fees not valid",
+			    JOptionPane.ERROR_MESSAGE);
+			return false; 
+		}
 		for (int i=0; i<fees.size(); i++) {
 			if (fees.get(i).getAmount()==0.0){
 				// Show error message indicating that every fee must have an amount 

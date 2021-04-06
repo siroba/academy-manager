@@ -182,6 +182,10 @@ public class View extends JFrame {
 	public JTextField getTxtFee() {
 		return txtFee;
 	}
+	
+	public JComboBox<String> getCBGroup() {
+		return this.cbGroup;
+	}
 	public String getGroup() {
 		return cbGroup.getSelectedItem().toString();
 	}
@@ -191,6 +195,9 @@ public class View extends JFrame {
 	}
 	public void addCbGroup(String group) {
 		cbGroup.addItem(group);
+	}
+	public void clearCbGroup() {
+		cbGroup.removeAllItems();
 	}
 	
 }

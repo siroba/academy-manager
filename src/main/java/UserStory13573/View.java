@@ -62,22 +62,27 @@ public class View {
 		frmCreateANew.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 11));
 		frmCreateANew.setTitle("Create a new Formative Action");
 		frmCreateANew.setName("Courses");
-		frmCreateANew.setBounds(0, 0, 1280, 502);
-		frmCreateANew.setBounds(0, 0, 1280, 540);
+		frmCreateANew.setBounds(0, 0, 1500, 540);
 		frmCreateANew.setLocationRelativeTo(null);
 		frmCreateANew.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frmCreateANew.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow][]"));
-
-		panel = new JPanel();
-		frmCreateANew.getContentPane().add(panel, "flowx,cell 0 0,grow");
-		panel.setLayout(null);
+		frmCreateANew.getContentPane().setLayout(new MigLayout("", "[grow]", "[][][grow][][]"));
 
 		// Heading
 		JLabel lblNewLabel = new JLabel("Plan a formative action");
-		lblNewLabel.setBounds(115, 19, 180, 17);
-		panel.add(lblNewLabel);
+		lblNewLabel.setBounds(155, 19, 180, 17);
+		frmCreateANew.getContentPane().add(lblNewLabel, "cell 0 0, alignx center");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+				
+		panel = new JPanel();
+		frmCreateANew.getContentPane().add(panel, "flowx,cell 0 2,grow");
+		panel.setLayout(null);
 
+		// General Infos - Heading 
+		JLabel HeadingGeneralInfos = new JLabel("General information:");
+		HeadingGeneralInfos.setFont(new Font("Dialog", Font.BOLD, 12));
+		HeadingGeneralInfos.setBounds(9, 15, 161, 14);
+		panel.add(HeadingGeneralInfos);
+				
 		// Name
 		JLabel LabelName = new JLabel("Name:");
 		LabelName.setBounds(10, 50, 37, 14);
@@ -92,11 +97,11 @@ public class View {
 
 		// Objectives
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 93, 188, 76);
+		scrollPane_1.setBounds(10, 93, 208, 76);
 		panel.add(scrollPane_1);
 
 		LabelObjectives = new JLabel("Objectives:");
-		LabelObjectives.setBounds(10, 74, 63, 14);
+		LabelObjectives.setBounds(10, 74, 123, 14);
 		panel.add(LabelObjectives);
 		LabelObjectives.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
@@ -107,11 +112,11 @@ public class View {
 
 		// Main contents
 		scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(210, 93, 188, 76);
+		scrollPane_2.setBounds(260, 93, 208, 76);
 		panel.add(scrollPane_2);
 		
 		JLabel LabelContents = new JLabel("Main contents:");
-		LabelContents.setBounds(210, 74, 83, 14);
+		LabelContents.setBounds(260, 74, 123, 14);
 		panel.add(LabelContents);
 		LabelContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
@@ -127,13 +132,12 @@ public class View {
 		LabelStartEnroll.setFont(new Font("Dialog", Font.PLAIN, 11));
 
 		enrollStart = new DateTimeInput();
-		enrollStart.setBounds(12, 205, 378, 70);
+		enrollStart.setBounds(12, 205, 455, 70);
 		panel.add(enrollStart);
 		enrollStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollStart.getDatePanel().getYearsTextField().setDefaultValue(2021);
 		enrollStart.getDatePanel().getDaysTextField().setBound(1, 31);
 		enrollStart.getDatePanel().getMonthsTextField().setBound(1, 12);
-		enrollStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollStart.setBorder(blackline);
 
 		// End of enrollment period 
@@ -143,13 +147,12 @@ public class View {
 		lblEndOfEnrollment.setFont(new Font("Dialog", Font.PLAIN, 11));
 
 		enrollEnd = new DateTimeInput();
-		enrollEnd.setBounds(12, 299, 378, 70);
+		enrollEnd.setBounds(12, 299, 455, 70);
 		panel.add(enrollEnd);
 		enrollEnd.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollEnd.getDatePanel().getYearsTextField().setDefaultValue(2021);
 		enrollEnd.getDatePanel().getDaysTextField().setBound(1, 31);
 		enrollEnd.getDatePanel().getMonthsTextField().setBound(1, 12);
-		enrollEnd.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		enrollEnd.setBorder(blackline);		
 
 		// Spaces
@@ -164,31 +167,26 @@ public class View {
 		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFSpaces.setColumns(10);
 
-		// Create Button
-		BTNCreate = new JButton("Create formative action");
-		frmCreateANew.getContentPane().add(BTNCreate, "cell 0 1,alignx center,gapy 10");
-		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 12));
-
 		// Separator 
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.BLACK);
 		separator.setOrientation(SwingConstants.VERTICAL);
-		frmCreateANew.getContentPane().add(separator, "cell 0 0,growy");
+		frmCreateANew.getContentPane().add(separator, "cell 0 2,growy");
 
 		// Sessions
 		sessionsPanel = new JPanel();
-		frmCreateANew.getContentPane().add(sessionsPanel, "cell 0 0,grow");
+		frmCreateANew.getContentPane().add(sessionsPanel, "cell 0 2,grow");
 		sessionsPanel.setLayout(null);
 
 		// Sessions - Heading 
 		JLabel HeadingSessions = new JLabel("Sessions:");
 		HeadingSessions.setFont(new Font("Dialog", Font.BOLD, 12));
-		HeadingSessions.setBounds(9, 25, 71, 14);
+		HeadingSessions.setBounds(9, 15, 71, 14);
 		sessionsPanel.add(HeadingSessions);
 		
 		// Sessions - Table 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(7, 56, 402, 103);
+		scrollPane.setBounds(7, 56, 472, 103);
 		sessionsPanel.add(scrollPane);
 
 		table = new JTable();
@@ -215,7 +213,7 @@ public class View {
 		sessionStart.setBorder(blackline);
 		sessionStart.getDatePanel().getYearsTextField().setBound(2000, 3000);
 		sessionStart.getDatePanel().getYearsTextField().setDefaultValue(2021);
-		sessionStart.setBounds(7, 276, 378, 70);
+		sessionStart.setBounds(7, 276, 455, 70);
 		sessionsPanel.add(sessionStart);
 
 		// Session - Duration 
@@ -256,7 +254,7 @@ public class View {
 
 		// Session - Button to add session 
 		btnAddSession = new JButton("Add session");
-		btnAddSession.setBounds(129, 390, 166, 25);
+		btnAddSession.setBounds(159, 390, 166, 25);
 		sessionsPanel.add(btnAddSession);
 
 		// Session - Button to delete session 
@@ -269,17 +267,17 @@ public class View {
 		JSeparator separator2 = new JSeparator();
 		separator2.setForeground(Color.BLACK);
 		separator2.setOrientation(SwingConstants.VERTICAL);
-		frmCreateANew.getContentPane().add(separator2, "cell 0 0,growy");
+		frmCreateANew.getContentPane().add(separator2, "cell 0 2,growy");
 		
 		// Fees
 		feesPanel = new JPanel();
-		frmCreateANew.getContentPane().add(feesPanel, "cell 0 0,grow");
+		frmCreateANew.getContentPane().add(feesPanel, "cell 0 2,grow");
 		feesPanel.setLayout(null);
 		
 		// Fees - Heading 
 		JLabel HeadingFee = new JLabel("Fees:");
 		HeadingFee.setFont(new Font("Dialog", Font.BOLD, 12));
-		HeadingFee.setBounds(9, 25, 51, 14);
+		HeadingFee.setBounds(9, 15, 51, 14);
 		feesPanel.add(HeadingFee);
 		
 		// Fees - Free of charge option 
@@ -290,7 +288,7 @@ public class View {
 		
 		// Fees - Table 
 		JScrollPane scrollPaneFees = new JScrollPane();
-		scrollPaneFees.setBounds(7, 100, 400, 150);
+		scrollPaneFees.setBounds(7, 100, 470, 150);
 		feesPanel.add(scrollPaneFees);
 
 		tableFees = new JTable();
@@ -310,32 +308,43 @@ public class View {
 		LabelGroup.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		TFGroup = new JTextField();
-		TFGroup.setBounds(60, 312, 160, 18);
+		TFGroup.setBounds(60, 312, 200, 18);
 		feesPanel.add(TFGroup);
 		TFGroup.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFGroup.setColumns(10);
 		
 		// Fees - Amount 
 		JLabel LabelFee = new JLabel("Fee:");
-		LabelFee.setBounds(240, 313, 46, 14);
+		LabelFee.setBounds(280, 313, 46, 14);
 		feesPanel.add(LabelFee);
 		LabelFee.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		TFFee = new JDecimalField(6);
-		TFFee.setBounds(270, 312, 46, 19);
+		TFFee.setBounds(310, 312, 46, 19);
 		feesPanel.add(TFFee);
 		TFFee.setColumns(10);
 		
 		// Fees - Button to Add fee 
 		btnAddFee = new JButton("Add fee");
-		btnAddFee.setBounds(129, 350, 174, 25);
+		btnAddFee.setBounds(159, 350, 174, 25);
 		feesPanel.add(btnAddFee);
 		
 		// Separator 
 		JSeparator separator3 = new JSeparator();
 		separator3.setForeground(Color.BLACK);
 		separator3.setOrientation(SwingConstants.HORIZONTAL);
-		frmCreateANew.getContentPane().add(separator3, "cell 0 1");
+		frmCreateANew.getContentPane().add(separator3, "cell 0 3, growx");
+		
+		JSeparator separator4 = new JSeparator();
+		separator4.setForeground(Color.BLACK);
+		separator4.setOrientation(SwingConstants.HORIZONTAL);
+		frmCreateANew.getContentPane().add(separator4, "cell 0 1, growx, span ");
+		
+		
+		// Create Button
+		BTNCreate = new JButton("Create formative action");
+		frmCreateANew.getContentPane().add(BTNCreate, "cell 0 4,alignx center,gapy 10");
+		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 12));
 				
 	}
 
