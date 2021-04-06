@@ -37,8 +37,6 @@ public class View {
 	private JTextArea TFObjectives, TFContents;
 	private JLabel LabelObjectives;
 	private JButton BTNCreate;
-	private JTextArea labelWarningStartEnroll;
-	private JLabel labelWarningDay_1, labelWarningEndEnroll, labelWarningDay;
 	private DateTimeInput enrollStart, enrollEnd, sessionStart;
 	private JPanel panel;
 	private JPanel sessionsPanel, feesPanel;
@@ -169,31 +167,8 @@ public class View {
 		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFSpaces.setColumns(10);
 
-//		labelWarningStartEnroll = new JTextArea("");
-//		labelWarningStartEnroll.setWrapStyleWord(true);
-//		labelWarningStartEnroll.setLineWrap(true);
-//		labelWarningStartEnroll.setOpaque(false);
-//		labelWarningStartEnroll.setEditable(false);
-//		labelWarningStartEnroll.setFocusable(false);
-//		labelWarningStartEnroll.setBackground(UIManager.getColor("Label.background"));
-//		labelWarningStartEnroll.setFont(UIManager.getFont("Label.font"));
-//	    labelWarningStartEnroll.setBorder(UIManager.getBorder("Label.border"));
-//		labelWarningStartEnroll.setBounds(180, 175, 218, 28);
-//		panel.add(labelWarningStartEnroll);
-//		labelWarningStartEnroll.setForeground(Color.RED);
-//		labelWarningStartEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-//
-//		labelWarningEndEnroll = new JLabel("");
-//		labelWarningEndEnroll.setBounds(180, 280, 202, 14);
-//		panel.add(labelWarningEndEnroll);
-//		labelWarningEndEnroll.setForeground(Color.RED);
-//		labelWarningEndEnroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
 		// Create Button
 		BTNCreate = new JButton("Create formative action");
-		//BTNCreate.setBounds(114, 420, 186, 24);
-		// panel.add(BTNCreate);
-//		BTNCreate.setBounds(550, 420, 186, 24);
 		frmCreateANew.getContentPane().add(BTNCreate, "cell 0 1,alignx center,gapy 10");
 		BTNCreate.setFont(new Font("Tahoma", Font.BOLD, 12));
 
@@ -232,12 +207,6 @@ public class View {
 		TFLocation.setBounds(78, 228, 166, 19);
 		sessionsPanel.add(TFLocation);
 		TFLocation.setColumns(10);
-
-//		labelWarningDay = new JLabel("  ");
-//		labelWarningDay.setForeground(Color.RED);
-//		labelWarningDay.setFont(new Font("Dialog", Font.PLAIN, 11));
-//		labelWarningDay.setBounds(9, 201, 8, 14);
-//		sessionsPanel.add(labelWarningDay);
 
 		// Session - Date 
 		JLabel LabelDate = new JLabel("Date of the session:");
@@ -292,12 +261,6 @@ public class View {
 		btnAddSession = new JButton("Add session");
 		btnAddSession.setBounds(129, 390, 166, 25);
 		sessionsPanel.add(btnAddSession);
-
-//		labelWarningDay_1 = new JLabel("");
-//		labelWarningDay_1.setFont(new Font("Dialog", Font.PLAIN, 11));
-//		labelWarningDay_1.setForeground(Color.RED);
-//		labelWarningDay_1.setBounds(140, 231, 229, 14);
-//		sessionsPanel.add(labelWarningDay_1);
 
 		// Session - Button to delete session 
 		btnDeleteSession = new JButton("Delete session");
@@ -377,12 +340,6 @@ public class View {
 		separator3.setOrientation(SwingConstants.HORIZONTAL);
 		frmCreateANew.getContentPane().add(separator3, "cell 0 1");
 				
-//		// Fees - Button to Delete fee 
-//		btnDeleteFee = new JButton("Delete fee");
-//		btnDeleteFee.setEnabled(false);
-//		btnDeleteFee.setBounds(240, 330, 154, 25);
-//		feesPanel.add(btnDeleteFee);
-		
 	}
 
 	// Getters and Setters to access from the controller (compact representation)
@@ -438,26 +395,6 @@ public class View {
 		return enrollEnd.getDateTime();
 	}
 
-	public void setWarningDay(String warning) {
-		this.labelWarningDay_1.setText(warning);
-	}
-
-	public void setWarningEnrollmentPeriodStart(String warning) {
-		this.labelWarningStartEnroll.setText(warning);
-	}
-
-	public void setWarningEnrollmentPeriodStart2(String warning) {
-		this.labelWarningStartEnroll.setText(warning);
-	}
-
-	public void setWarningEnrollmentPeriodEnd(String warning) {
-		this.labelWarningEndEnroll.setText(warning);
-	}
-
-	public void setWarningEnrollmentPeriodEnd2(String warning) {
-		this.labelWarningEndEnroll.setText(warning);
-	}
-
 	public JButton getBtnAddSession() {
 		return btnAddSession;
 	}
@@ -474,18 +411,6 @@ public class View {
 		return btnDeleteSession;
 	}
 
-	public void hideWarningDay() {
-		this.labelWarningDay_1.setText("");
-	}
-
-	public void hideWarningEnrollmentPeriodStart() {
-		this.labelWarningStartEnroll.setText("");
-	}
-
-	public void hideWarningEnrollmentPeriodEnd() {
-		this.labelWarningEndEnroll.setText("");
-	}
-	
 	public JTable getTableFees() {
 		return tableFees;
 	}
