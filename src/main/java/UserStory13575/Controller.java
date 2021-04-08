@@ -67,30 +67,23 @@ public class Controller implements PL53.util.Controller {
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
 			public void actionPerformed(ActionEvent e) {
-				
+
 				int calcTime= DateTime.daysSince(
 						view.getDateTextPane().getDate() ,selectedRow.enrollment.getTimeEn());
-				
+
 
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
-				} else if (view.getAmountPaidTextField() == 0.0) {
-					JOptionPane.showMessageDialog(null, "You have to introduce the amount ");
-				} else if (view.getDateTextPane().getYear() == 0) {
-					JOptionPane.showMessageDialog(null,
-							"You have to introduce a valid year for the date of the transfer (ex: 2021) ");
-				}
-
-				else if (view.getAmountPaidTextField() != selectedRow.formativeAction.getFee()) {
+				} else if (selectedRow.payment.getAmount() != selectedRow.formativeAction.getFee(selectedRow.enrollment.getGroup())) {
 					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
 
-				} 
-				
+				}
+
 				else if (calcTime > 2|| calcTime<0) { // 2880 -> 48 * 60 conversionfrom 48 h to
 																		// minutes
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours after the enrollmet");
-					
+
 				}
 
 				else {
@@ -134,7 +127,7 @@ public class Controller implements PL53.util.Controller {
 		for (int i = 0; i < datas.length; i++) {
 			UserStory13575.Data d = datas[i];
 			body[i] = new String[] { Integer.toString(d.payment.getID()), d.formativeAction.getName(),
-					d.professional.getName(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee()),
+					d.professional.getName(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
 					d.enrollment.getTimeEn().toString() };
 		}
 
