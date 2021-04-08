@@ -73,7 +73,7 @@ public class Controller implements PL53.util.Controller {
 		
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
-				} else if (selectedRow.payment.getAmount() != selectedRow.formativeAction.getFee()) {
+				} else if (selectedRow.payment.getAmount() != selectedRow.formativeAction.getFee(selectedRow.enrollment.getGroup())) {
 					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
 					
 				} else if (Math.abs(DateTime.minutesSince(selectedRow.enrollment.getTimeEn(),
@@ -127,7 +127,7 @@ public class Controller implements PL53.util.Controller {
 		for (int i = 0; i < datas.length; i++) {
 			UserStory13575.Data d = datas[i];
 			body[i] = new String[] { Integer.toString(d.payment.getID()), d.formativeAction.getName(),
-					d.professional.getName(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee()),
+					d.professional.getName(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
 					d.enrollment.getTimeEn().toString() };
 		}
 

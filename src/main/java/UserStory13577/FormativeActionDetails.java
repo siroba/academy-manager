@@ -1,6 +1,6 @@
 package UserStory13577;
 
-import java.util.Date;
+import PL53.util.Date;
 
 public class FormativeActionDetails {
 //(name, state, enrolment period, date, total places and places left)

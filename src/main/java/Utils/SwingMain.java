@@ -154,8 +154,8 @@ public class SwingMain {
 
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
-						new UserStory13579.View());
+				UserStory13579.Controller controller;
+				controller = new UserStory13579.Controller(new UserStory13579.Model(), new UserStory13579.View());
 				controller.initController();
 			}
 		});
