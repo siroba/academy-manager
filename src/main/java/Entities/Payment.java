@@ -10,17 +10,18 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import PL53.util.Date;
 import PL53.util.DateTime;
 import Utils.Database;
 
 public class Payment {
 	private int ID = -1, ID_fa, ID_professional;
 	private float amount;
-	private DateTime payDate;
+	private Date payDate;
 	private String sender, receiver, fiscalNumber, address;
 	private boolean confirmed;
 
-	public Payment(int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
+	public Payment(int ID_fa, int ID_professional, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
 			String address, boolean confirmed) {
 		this.ID_fa = ID_fa;
 		this.ID_professional = ID_professional;
@@ -47,7 +48,7 @@ public class Payment {
 	 * @param address
 	 * @param confirmed
 	 */
-	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
+	public Payment(int ID_payment, int ID_fa, int ID_professional, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
 			String address, boolean confirmed) {
 		this.ID = ID_payment;
 		this.ID_fa = ID_fa;
@@ -255,11 +256,11 @@ public class Payment {
 		this.amount = amount;
 	}
 
-	public DateTime getPayDate() {
+	public Date getPayDate() {
 		return payDate;
 	}
 
-	public void setPayDate(DateTime payDate) {
+	public void setPayDate(Date payDate) {
 		this.payDate = payDate;
 	}
 

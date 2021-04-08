@@ -56,7 +56,7 @@ public class View extends JFrame {
 	 * Create the frame.
 	 */
 	
-	private DateTimeInput dateTextPane;
+	private DateInput dateTextPane;
 	private JButton confirmButton;
 	private JDecimalField amountPaidTextField;
 	private JTable table;
@@ -102,13 +102,9 @@ public class View extends JFrame {
 		
 		 confirmButton = new JButton("Confirm");
 		
-		/* dateTextPane = new DateInput();
-		 dateTextPane.setBounds(420, 353, 211, 69);
-		 dateTextPane.setBorder(blackline);
-		 dateTextPane.getYearsTextField().setBound(2000, 3000);
-			contentPane.add(dateTextPane);*/
+	
 		 
-			dateTextPane = new DateTimeInput();
+			dateTextPane = new DateInput();
 			Border blackline = BorderFactory.createLineBorder(Color.black);
 			dateTextPane.setBorder(blackline);
 			dateTextPane.setBounds(368, 359, 408, 67);
@@ -142,7 +138,7 @@ public class View extends JFrame {
 		return this.confirmButton;
 	}
 	
-	public DateTimeInput getDateTextPane(){
+	public DateInput getDateTextPane(){
 		return this.dateTextPane;
 	}
 	

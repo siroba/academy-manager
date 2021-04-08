@@ -17,6 +17,7 @@ import javax.swing.table.TableModel;
 
 import BaseProject.SwingUtil;
 import Entities.Payment;
+import PL53.util.Date;
 import PL53.util.DateTime;
 //import Entities.FormativeAction;
 import UserStory13575.Data;
@@ -95,7 +96,7 @@ public class Controller implements PL53.util.Controller {
 				else {
 
 					float amount = view.getAmountPaidTextField();
-					DateTime payDate = view.getDateTextPane().getDateTime();
+					Date payDate = view.getDateTextPane().getDate();
 
 					model.updateStatus(selectedRow.payment.getID(), selectedRow.formativeAction.getID(),
 							selectedRow.professional.getID(), amount, payDate);
