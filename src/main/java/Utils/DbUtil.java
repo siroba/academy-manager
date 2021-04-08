@@ -21,8 +21,6 @@ import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
-import PL53.util.DateTime;
-
 
 /**
  * Utility methods to simplify the queries performed in the classes.
