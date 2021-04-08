@@ -68,8 +68,8 @@ public class Controller implements PL53.util.Controller {
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
 			public void actionPerformed(ActionEvent e) {
 				
-				int calcTime= DateTime.minutesSince(
-						view.getDateTextPane().getDateTime() ,selectedRow.enrollment.getTimeEn());
+				int calcTime= DateTime.daysSince(
+						view.getDateTextPane().getDate() ,selectedRow.enrollment.getTimeEn());
 				
 
 				if (selectedRow == null) {
@@ -86,7 +86,7 @@ public class Controller implements PL53.util.Controller {
 
 				} 
 				
-				else if (calcTime > 2880 || calcTime<0) { // 2880 -> 48 * 60 conversionfrom 48 h to
+				else if (calcTime > 2|| calcTime<0) { // 2880 -> 48 * 60 conversionfrom 48 h to
 																		// minutes
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours after the enrollmet");
@@ -100,6 +100,8 @@ public class Controller implements PL53.util.Controller {
 
 					model.updateStatus(selectedRow.payment.getID(), selectedRow.formativeAction.getID(),
 							selectedRow.professional.getID(), amount, payDate);
+					JOptionPane.showMessageDialog(null,
+							"The payment has been register");
 					try {
 						model.initModel();
 						view.setTable(getTableModel(model.getAllData()));

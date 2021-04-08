@@ -36,8 +36,7 @@ insert into Enrollment(ID_fa, ID_professional, status, timeEn) values
 	(1001, 2003, 'CONFIRMED', '2021-02-03 20:00:00'),
 	(1001, 2004, 'CONFIRMED', '2021-02-01 08:00:00'),
 	(1002, 2000, 'RECEIVED', '2021-03-02 12:00:00'),
-	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00'),
-	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00');
+	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00');
 
 insert into Payment(ID_payment, amount, datePay, sender, receiver, address, fiscalNumber, confirmed, ID_fa, ID_professional) values
 	(3000, 15, '2021-01-02 17:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1000, 2000),
@@ -52,8 +51,7 @@ insert into Payment(ID_payment, amount, datePay, sender, receiver, address, fisc
 	(3009, 10, '2021-02-04 10:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2003),
 	(3010, 10, '2021-02-01 15:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1001, 2004),
 	(3011, 0, '0', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 1002, 2000),
-	(3012, 0, '0-0-0 0:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 1002, 2005),
-	(3013, 30, '2021-03-05 10:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', true, 1002, 2001);
+	(3012, 0, '0-0-0 0:00:00', 'senderName', 'recieverName', 'address', 'fiscalNumber', false, 1002, 2005);
 	
 	
 insert into Invoice (Id_invoice , dateIn , ID_fa) values

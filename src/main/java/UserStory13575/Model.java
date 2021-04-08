@@ -91,11 +91,11 @@ public class Model {
 		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
 	}
 
-	void updateStatus(int id_pay ,int id_fa, int id_professional , float amount , DateTime datePay) {
+	void updateStatus(int id_pay ,int id_fa, int id_professional , float amount , Date datePay) {
 		String query = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?"; 
 		String quer= "UPDATE Payment SET confirmed= true, amount=? ,datePay=? WHERE ID_payment=? "; 
 		db.executeUpdateQuery(query, id_fa, id_professional);
-		db.executeUpdate(quer, amount, datePay.toTimestamp(), id_pay);
+		db.executeUpdate(quer, amount, datePay, id_pay);
 	}
 	
 	
