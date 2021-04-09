@@ -110,13 +110,13 @@ public class SwingMain {
 			}
 		});
 
-		JButton btnDelayFA = new JButton("Delay a Formative Action");
+		/*JButton btnDelayFA = new JButton("Delay a Formative Action");
 		btnDelayFA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13729.Controller controller = new UserStory13729.Controller();
 				controller.initController();
 			}
-		});
+		});*/
 
 		JButton btnNewButton = new JButton("Cancel a Formative Action");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -192,11 +192,11 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty5);
 		// Row 6
 		frame.getContentPane().add(btnPayTeacher);
-		frame.getContentPane().add(labelEmpty6);
-		frame.getContentPane().add(labelEmpty7);
+		//frame.getContentPane().add(labelEmpty6);
+		//frame.getContentPane().add(labelEmpty7);
 		
 		// Row 7
-		frame.getContentPane().add(btnDelayFA);
+		//frame.getContentPane().add(btnDelayFA);
 		
 		JLabel label = new JLabel("");
 		frame.getContentPane().add(label);
