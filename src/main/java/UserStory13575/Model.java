@@ -14,6 +14,7 @@ import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import Utils.Database;
 import Utils.UnexpectedException;
 import Entities.Enrollment;
+import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Invoice;
 import Entities.Payment;
@@ -62,29 +63,30 @@ public class Model {
 	}
 
 	private Data[] initData() throws SQLException, ParseException {
-		String sql = "SELECT DISTINCT Payment.* FROM Payment "
-				+ "INNER JOIN  Enrollment  on  Enrollment.ID_fa=Payment.ID_fa "
-				+ "INNER JOIN FormativeAction on FormativeAction.ID_fa=Enrollment.ID_fa "
-				+ "WHERE   Enrollment.status='RECEIVED' AND FormativeAction.status = 'ACTIVE' AND Payment.confirmed=0 ; ";
-
+		List<Data> data = new ArrayList<Data>();
+		String sql = "	SELECT DISTINCT Invoice.* FROM Invoice\r\n"
+				+ "		WHERE Invoice.ID_invoice NOT IN ( SELECT ID_invoice From Payment);";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
+		String queryFee = "SELECT * FROM Fee WHERE ID_fa=";
+		
 
-		List<Payment> pendingPayments = Payment.get(sql, db);
-		List<Data> data = new ArrayList<Data>();
-
-		for (Payment p : pendingPayments) {
-			Data d = new Data();
-
-			d.payment = p;
-			d.formativeAction = FormativeAction.getOne(queryFa + p.getID_fa() + ";", db);
-			d.professional = Professional.getOne(queryProf + p.getID_professional() + ";", db);
-			d.enrollment = Enrollment.getOne(queryEnroll(d.formativeAction.getID(), d.professional.getID()), db);
-			data.add(d);
+		List<Invoice> invoices= Invoice.get(sql, db);
+		for ( Invoice in : invoices){
+			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" +in.getID_fa() +" AND ID_professional=" +in.g;
+			
+			Data d = new Data() ;
+			d.invoice= in;
+			d.formativeAction = FormativeAction.getOne(queryFa + in.getID_fa(), db);
+			d.fee= Fee.getOne(queryFee + in.getID_fa(), db);
+			d.enrollment=Enrollment.getOne(query, db)
+			
 		}
+		
 
-		Data data2[] = new Data[data.size()];
-		return data.toArray(data2);
+		Data data2[] = new Data[data1.size()];
+		return data1.toArray(data2);
+		
 	}
 
 	private String queryEnroll(int ID_fa, int ID_prof) {

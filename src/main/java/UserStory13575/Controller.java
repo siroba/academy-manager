@@ -79,8 +79,7 @@ public class Controller implements PL53.util.Controller {
 
 				}
 
-				else if (calcTime > 2|| calcTime<0) { // 2880 -> 48 * 60 conversionfrom 48 h to
-																		// minutes
+				else if (calcTime > 2|| calcTime<0) { 
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours after the enrollmet");
 
@@ -127,7 +126,9 @@ public class Controller implements PL53.util.Controller {
 		for (int i = 0; i < datas.length; i++) {
 			UserStory13575.Data d = datas[i];
 			body[i] = new String[] { Integer.toString(d.payment.getID()), d.formativeAction.getName(),
-					d.professional.getName(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
+					//d.professional.getName(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
+					d.professional.getName(), d.professional.getEmail(), Float.toString(d.fee.getAmount()),
+
 					d.enrollment.getTimeEn().toString() };
 		}
 
