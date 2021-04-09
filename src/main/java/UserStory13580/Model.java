@@ -7,8 +7,9 @@ import java.util.List;
 
 
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.InvoiceTeacher;
 import Entities.PaymentTeacher;
+import Entities.Session;
 import UserStory13580.Data;
 import Utils.Database;
 
@@ -55,16 +56,19 @@ public class Model {
 
 		
 		String sql = "SELECT  FormativeAction.* FROM FormativeAction\r\n"
-				+ "WHERE ID_fa NOT IN ( SELECT ID_fa FROM Invoice);";
+				+ "WHERE ID_fa NOT IN ( SELECT ID_fa FROM InvoiceTeacher);";
 		
 
 		List<FormativeAction> formativeActions = FormativeAction.get(sql, db);
+		for  (FormativeAction fa: formativeActions) {
+			fa.setSessions(Session.get("Select * From Session WHERE ID_fa = "+ fa.getID(), db));
+		}
 		
 		FormativeAction data2[] = new FormativeAction[formativeActions.size()];
 		return formativeActions.toArray(data2);
 	}
 	
-	public void insertInvoice ( Invoice invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
+	public void insertInvoice ( InvoiceTeacher invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
 		invoice.insert(db);
 		paymentTeacher.setInvoiceID(invoice.getID());
 		paymentTeacher.insert(db);

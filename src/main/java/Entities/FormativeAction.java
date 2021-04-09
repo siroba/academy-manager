@@ -15,12 +15,13 @@ import PL53.util.Random;
 import Utils.Database;
 
 /**
- * 
+ *
  */
 public class FormativeAction {
 	private int ID = -1;
 	private String name, objectives, mainContents;
 	private Status status;
+
 	private int totalPlaces;
 	private DateTime enrollmentStart, enrollmentEnd;
 	private List<Session> sessions = new ArrayList<Session>();
@@ -32,6 +33,7 @@ public class FormativeAction {
 	public FormativeAction() {
 		Random r = new Random();
 		this.name = r.name(3, 10);
+
 		this.totalPlaces = r.nextInt(100);
 		this.objectives = r.name(3, 20);
 		this.mainContents = r.name(3, 10);
@@ -61,6 +63,7 @@ public class FormativeAction {
 			DateTime enrollmentEnd) {
 
 		this.name = name;
+
 		this.totalPlaces = totalPlaces;
 		this.objectives = objectives;
 		this.mainContents = mainContents;
@@ -85,12 +88,13 @@ public class FormativeAction {
 	 * @param faStart
 	 */
 
-	public FormativeAction(int ID_fa, String name, int totalPlaces,
+	public FormativeAction(int ID_fa, String name,  int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees) {
 
 		this.ID = ID_fa;
 		this.name = name;
+
 		this.totalPlaces = totalPlaces;
 		this.objectives = objectives;
 		this.mainContents = mainContents;
@@ -194,11 +198,11 @@ public class FormativeAction {
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
 		}
-		
+
 		for(Session s: this.sessions) {
 			s.setID_fa(this.getID());
 		}
-		
+
 		for(Fee f: this.fees) {
 			f.setID_fa(this.getID());
 		}
@@ -240,10 +244,10 @@ public class FormativeAction {
 			}
 
 			int id_fa = rs.getInt("ID_fa");
-			
+
 			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
 			List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
-			
+
 			FormativeAction f = new FormativeAction(
 					id_fa,
 					rs.getString("nameFa"),
@@ -253,7 +257,7 @@ public class FormativeAction {
 					Status.valueOf(rs.getString("status").toUpperCase()),
 					dstart,
 					dend,
-					sessions, 
+					sessions,
 					fees);
 
 			fa.add(f);
@@ -300,10 +304,10 @@ public class FormativeAction {
 		}
 
 		int id_fa = rs.getInt("ID_fa");
-		
+
 		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
 		List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
-		
+
 		FormativeAction fa = new FormativeAction(
 				id_fa,
 				rs.getString("nameFa"),
@@ -313,7 +317,7 @@ public class FormativeAction {
 				Status.valueOf(rs.getString("status").toUpperCase()),
 				dstart,
 				dend,
-				sessions, 
+				sessions,
 				fees);
 
 		// Very important to always close all the objects related to the database
@@ -327,7 +331,7 @@ public class FormativeAction {
 	public float refund(String group) {
         return this.refundPercentage()*this.getFee(group);
     }
-  
+
     public float refundPercentage() {
         int days = Date.daysSince(enrollmentEnd);
 
@@ -403,7 +407,7 @@ public class FormativeAction {
 	public void setSessions(List<Session> sessions) {
 		for(Session s: sessions)
 			s.setID_fa(this.getID());
-		
+
 		this.sessions = sessions;
 	}
 
@@ -415,7 +419,7 @@ public class FormativeAction {
 	public List<Fee> getFees() {
 		return fees;
 	}
-	
+
 	public float getFee(String group) {
 		List<Fee> fees = this.getFees();
 		float fee = 0;
@@ -428,7 +432,7 @@ public class FormativeAction {
 	public void setFees(List<Fee> fees) {
 		for(Fee f: fees)
 			f.setID_fa(this.getID());
-		
+
 		this.fees = fees;
 	}
 
@@ -436,7 +440,7 @@ public class FormativeAction {
 		fee.setID_fa(this.getID());
 		this.fees.add(fee);
 	}
-	
+
 	public enum Status {
 		ACTIVE, DELAYED, EXECUTED, CANCELLED;
 	}
