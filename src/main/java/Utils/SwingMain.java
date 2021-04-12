@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import CloseFormativeAction.Controller;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -125,6 +127,14 @@ public class SwingMain {
 				controller.initController();
 			}
 		});
+		
+		JButton btnCloseFA = new JButton("Close a Formative Action");
+		btnCloseFA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CloseFormativeAction.Controller controller = new CloseFormativeAction.Controller();
+				controller.initController();
+			}
+		});
 
 		// Professional
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
@@ -192,19 +202,22 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty5);
 		// Row 6
 		frame.getContentPane().add(btnPayTeacher);
-		//frame.getContentPane().add(labelEmpty6);
-		//frame.getContentPane().add(labelEmpty7);
+		frame.getContentPane().add(labelEmpty6);
+		frame.getContentPane().add(labelEmpty7);
 		
 		// Row 7
 		//frame.getContentPane().add(btnDelayFA);
+//		frame.getContentPane().add(new JLabel(""));
+//		frame.getContentPane().add(new JLabel(""));
 		
-		JLabel label = new JLabel("");
-		frame.getContentPane().add(label);
-		
-		JLabel label_1 = new JLabel("");
-		frame.getContentPane().add(label_1);
-		
+		// Row 8
 		frame.getContentPane().add(btnNewButton);
+		frame.getContentPane().add(new JLabel(""));
+		frame.getContentPane().add(new JLabel(""));
+		
+		// Row 9
+		frame.getContentPane().add(btnCloseFA);
+		
 	}
 
 	public JFrame getFrame() {

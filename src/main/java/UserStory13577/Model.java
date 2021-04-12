@@ -1,7 +1,6 @@
 package UserStory13577;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,9 +13,15 @@ import Utils.UnexpectedException;
 
 public class Model {
 	
+	private Database db;
+	
+	public Model() {
+		db = new Database();
+	}
+	
 	public List<String> getListFormativeAction() {
 		try {
-			Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); 
+			Connection cn=db.getConnection();
 			PreparedStatement ps = cn.prepareStatement("SELECT nameFa FROM FormativeAction;");
 			ResultSet rs=ps.executeQuery();
 			
@@ -39,7 +44,7 @@ public class Model {
 	
 	public FormativeActionDetails getFormativeActionDetails(String selectedFormativeAction) {
 		try {
-			Connection cn=DriverManager.getConnection("jdbc:sqlite:database.db"); 
+			Connection cn=db.getConnection();
 			StringBuilder query = new StringBuilder();
 			query.append("SELECT  fa.nameFa, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces, (fa.totalPlaces - count(e.ID_fa)) as leftPlaces ");
 			query.append("FROM FormativeAction fa LEFT JOIN Enrollment e on e.ID_fa=fa.ID_fa ");
@@ -71,7 +76,6 @@ public class Model {
 	 * TODO Description of Function, parameter and return value
 	 * */
 	public List<Registration> getRegistrationList(String selectedFormativeAction) {
-		Database db = new Database();
 		try {
 			Connection cn = db.getConnection();
 			StringBuilder query = new StringBuilder();
