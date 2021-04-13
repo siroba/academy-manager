@@ -9,20 +9,19 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import PL53.util.Date;
 import PL53.util.DateTime;
 import Utils.Database;
 
 public class Invoice {
 	private int ID = -1, ID_fa;
-	private Date dateIn;
+	private DateTime dateIn;
 
 	/** Constructor with ID_invoice
 	 * @param ID_invoice
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(int ID_invoice,int ID_fa,  Date dateIn) {
+	public Invoice(int ID_invoice,int ID_fa,  DateTime dateIn) {
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
 		this.dateIn=dateIn;
@@ -32,7 +31,7 @@ public class Invoice {
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(int ID_fa,  Date dateIn) {
+	public Invoice(int ID_fa,  DateTime dateIn) {
 		this.ID_fa = ID_fa;
 		this.dateIn=dateIn;
 	
@@ -75,11 +74,11 @@ public class Invoice {
 		List<Invoice> invoices = new ArrayList<>();
 
 		while (rs.next()) {
-			Date dateIn;
+			DateTime dateIn;
 			try {
-				dateIn = Date.parseString(rs.getString("dateIn"));
+				dateIn = DateTime.parseString(rs.getString("dateIn"));
 			} catch (ParseException e) {
-				dateIn = Date.fromMillis(rs.getLong("dateIn"));
+				dateIn = DateTime.fromMillis(rs.getLong("dateIn"));
 			}
 			
 
@@ -116,11 +115,11 @@ public class Invoice {
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
 
-		Date dateIn;
+		DateTime dateIn;
 		try {
-			dateIn = Date.parseString(rs.getString("dateIn"));
+			dateIn = DateTime.parseString(rs.getString("dateIn"));
 		} catch (ParseException e) {
-			dateIn = Date.fromMillis(rs.getLong("dateIn"));
+			dateIn = DateTime.fromMillis(rs.getLong("dateIn"));
 		}
 		
 
@@ -145,7 +144,7 @@ public class Invoice {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public void insert(Database db) throws SQLException, ParseException {
+	public void insert(Database db) throws SQLException {
 		/*
 		 * status TEXT NOT NULL CHECK( status IN('received','confirmed','cancelled')),
 		 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
@@ -162,7 +161,7 @@ public class Invoice {
 
 			pstmt.setInt(1, this.getID());
 			pstmt.setInt(2, this.getID_fa());
-			pstmt.setDate(3, this.getDateIn().toSQL());
+			pstmt.setTimestamp(3, this.getDateIn().toTimestamp());
 			
 			pstmt.executeUpdate(); // statement execution
 		}else {
@@ -172,7 +171,7 @@ public class Invoice {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
-			pstmt.setDate(1, this.getDateIn().toSQL());
+			pstmt.setTimestamp(1, this.getDateIn().toTimestamp());
 			pstmt.setInt(2, this.getID_fa());
 			pstmt.executeUpdate(); // statement execution
 
@@ -183,10 +182,10 @@ public class Invoice {
 
 		conn.close();
 	}
-	public Date getDateIn() {
+	public DateTime getDateIn() {
 		return dateIn;
 	}
-	public void setDateIn(Date dateIn) {
+	public void setDateIn(DateTime dateIn) {
 		this.dateIn = dateIn;
 	}
 	public int getID() {

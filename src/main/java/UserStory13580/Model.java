@@ -64,12 +64,10 @@ public class Model {
 		return formativeActions.toArray(data2);
 	}
 	
-	public void insertInvoice ( Invoice invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
+	public void insertInvoice ( Invoice invoice, PaymentTeacher paymentTeacher) throws SQLException {
 		invoice.insert(db);
 		paymentTeacher.setInvoiceID(invoice.getID());
 		paymentTeacher.insert(db);
-		
-		
 	}
 
 	

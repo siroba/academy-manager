@@ -33,7 +33,6 @@ public class View extends JFrame {
 		setTitle("Delay a Formative Action");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 473, 375);
-		setLocationRelativeTo(null);
     
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

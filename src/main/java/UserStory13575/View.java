@@ -57,7 +57,6 @@ public class View extends JFrame {
 	
 	public View() {
 		setBounds(100, 100, 822, 581);
-		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
