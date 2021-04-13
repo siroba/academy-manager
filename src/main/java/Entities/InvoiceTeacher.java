@@ -14,16 +14,16 @@ import PL53.util.DateTime;
 import Utils.Database;
 
 public class InvoiceTeacher {
-	private int ID = -1, ID_fa;
+	private int ID_fa;
 	private Date dateIn;
-	private String sender, receiver, fiscalNumber, address;
+	private String sender, receiver, fiscalNumber, address , ID="";
 
 	/** Constructor with ID_invoice
 	 * @param ID_invoice
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(int ID_invoice,int ID_fa,  Date dateIn , String sender , String receiver, String fiscalNumber, String address) {
+	public InvoiceTeacher(String ID_invoice,int ID_fa,  Date dateIn , String sender , String receiver, String fiscalNumber, String address) {
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
 		this.dateIn=dateIn;
@@ -93,7 +93,7 @@ public class InvoiceTeacher {
 			
 
 			InvoiceTeacher e = new InvoiceTeacher(
-					rs.getInt("ID_invoice"),
+					rs.getString("ID_invoice"),
 					rs.getInt("ID_fa"),
 					dateIn,
 					rs.getString("sender"),
@@ -139,7 +139,7 @@ public class InvoiceTeacher {
 		
 
 		InvoiceTeacher e = new InvoiceTeacher(
-				rs.getInt("ID_invoice"),
+				rs.getString("ID_invoice"),
 				rs.getInt("ID_fa"),
 				dateIn,
 				rs.getString("sender"),
@@ -172,14 +172,14 @@ public class InvoiceTeacher {
 		 */
 		Connection conn = db.getConnection(); // Obtain the connection
 
-		if(this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, ID_fa,  dateIn) VALUES(?,?,?)";
+		if(this.getID().compareTo("")==0) {
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, ID_fa,  dateIn, sender, receiver , fiscalNumber , address) VALUES(?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
-			pstmt.setInt(1, this.getID());
+			pstmt.setString(1, this.getID());
 			pstmt.setInt(2, this.getID_fa());
 			pstmt.setDate(3, this.getDateIn().toSQL());
 			pstmt.setString(4,this.getSender());
@@ -189,19 +189,23 @@ public class InvoiceTeacher {
 			
 			pstmt.executeUpdate(); // statement execution
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setDate(1, this.getDateIn().toSQL());
-			pstmt.setInt(2, this.getID_fa());
+			pstmt.setInt(6, this.getID_fa());
+			pstmt.setString(2,this.getSender());
+			pstmt.setString(3, this.getReceiver());
+			pstmt.setString(5, this.getFiscalNumber());
+			pstmt.setString(4, this.getAddress());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
-			this.ID = tableKeys.getInt(1);
+			this.ID = tableKeys.getString(1);
 		}
 
 		conn.close();
@@ -212,10 +216,10 @@ public class InvoiceTeacher {
 	public void setDateIn(Date dateIn) {
 		this.dateIn = dateIn;
 	}
-	public int getID() {
+	public String getID() {
 		return ID;
 	}
-	public void setID(int iD) {
+	public void setID(String iD) {
 		ID = iD;
 	}
 	public int getID_fa() {

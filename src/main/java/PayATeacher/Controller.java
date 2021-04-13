@@ -93,6 +93,9 @@ public class Controller implements PL53.util.Controller {
 					{
 						JOptionPane.showMessageDialog(null, "You have to introduce a valid year for the date of the invoice (ex: 2021)");
 					}
+					else if(view.getIDInvoice().length()==0){
+						JOptionPane.showMessageDialog(null, "You have to introduce the ID of the invoice");
+					}
 					else{
 					String name = view.getNameTextField();
 					String fiscalNumber = view.getFiscalNumberTextField();
@@ -104,8 +107,9 @@ public class Controller implements PL53.util.Controller {
 					String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2);
 					boolean confirmed = true;
 					Date dateInvoice = view.getDateTextField();
+					String IDInvoice = view.getIDInvoice();
 
-					InvoiceTeacher invoice = new InvoiceTeacher(ID_fa, dateInvoice,sender,receiver, address, fiscalNumber);
+					InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice,ID_fa, dateInvoice,sender,receiver, address, fiscalNumber);
 
 					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer,  confirmed);
 

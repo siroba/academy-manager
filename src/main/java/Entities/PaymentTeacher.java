@@ -15,9 +15,10 @@ import Utils.Database;
 
 public class PaymentTeacher {
 	
-		private int ID = -1, ID_invoice=-1;
+		private int ID = -1;
 		private float amount;
 		private Date payDate;
+		private String ID_invoice;
 		
 		private boolean confirmed;
 
@@ -51,7 +52,7 @@ public class PaymentTeacher {
 		 * @param address
 		 * @param confirmed
 		 */
-		public PaymentTeacher(int ID_payment, int ID_invoice,  float amount, Date payDate, boolean confirmed) {
+		public PaymentTeacher(int ID_payment, String ID_invoice,  float amount, Date payDate, boolean confirmed) {
 			this.ID = ID_payment;
 			this.ID_invoice = ID_invoice;
 			
@@ -108,7 +109,7 @@ public class PaymentTeacher {
 
 				PaymentTeacher e = new PaymentTeacher(
 						rs.getInt("ID_payment"),
-						rs.getInt("ID_invoice"),
+						rs.getString("ID_invoice"),
 						
 						rs.getFloat("amount"),
 						datepay,
@@ -152,7 +153,7 @@ public class PaymentTeacher {
 
 			PaymentTeacher e = new PaymentTeacher(
 					rs.getInt("ID_payment"),
-					rs.getInt("ID_invoice"),
+					rs.getString("ID_invoice"),
 					rs.getFloat("amount"),
 					datepay,
 					
@@ -191,7 +192,7 @@ public class PaymentTeacher {
 				// Sets of the parameters of the prepared statement
 
 				pstmt.setInt(1, this.getID());
-				pstmt.setInt(2, this.getID_invoice());
+				pstmt.setString(2, this.getID_invoice());
 	
 				pstmt.setFloat(3, this.getAmount());
 				pstmt.setDate(4, this.getPayDate().toSQL());
@@ -209,7 +210,7 @@ public class PaymentTeacher {
 				pstmt.setDate(2, this.getPayDate().toSQL());
 			
 				pstmt.setBoolean(3, this.isConfirmed());
-				pstmt.setInt(4, this.getID_invoice());
+				pstmt.setString(4, this.getID_invoice());
 				pstmt.executeUpdate(); // statement execution
 
 				ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -222,7 +223,7 @@ public class PaymentTeacher {
 
 
 
-		public int getID_invoice() {
+		public String getID_invoice() {
 			
 			return ID_invoice;
 		}
@@ -256,8 +257,8 @@ public class PaymentTeacher {
 			return ID;
 		}
 
-		public void setInvoiceID(int ID_invoice) {
-			this.ID_invoice= ID_invoice; 
+		public void setInvoiceID(String ID) {
+			this.ID_invoice= ID; 
 		}
 
 		
