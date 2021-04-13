@@ -93,7 +93,8 @@ public class Controller implements PL53.util.Controller {
 
 		for (int i = 0; i < data.length; i++) {
 			FormativeAction d = data[i];
-			body[i] = new String[] { d.getName(), d.getEnrollmentEnd().toString(), d.getTeacherName(),
+			// TODO: Fix this
+			body[i] = new String[] { d.getName(), d.getEnrollmentEnd().toString(), "Teacher name" /*d.getTeacherName()*/,
 					Integer.toString(d.getTotalPlaces()) };
 		}
 

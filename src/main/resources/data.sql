@@ -79,18 +79,25 @@ insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
 	(3012, 30, '2021-03-03 13:00:00.0', false, 4012),
 	(3013, 30, '2021-03-05 10:00:00.0', true, 4013);    
 	
+insert into Teacher (ID_teacher, name) values 
+	(1000, "Fanjul"),
+	(1001, "Marcos"),
+	(1002, "Marek"),
+	(1003, "Vivien"),
+	(1004, "Silvia");
 	
-insert into InvoiceTeacher (Id_invoice , dateIn, sender, receiver, address, fiscalNumber, ID_fa) values
+insert into InvoiceTeacher (Id_invoice , dateIn, sender, receiver, address, fiscalNumber, ID_fa, ID_teacher) values
 
-	(4000, '2021-01-02' , 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000),
-	(4001, '2021-01-03 ', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001),
-	(4002, '2021-01-04 ', 'senderName', 'recieverName', 'address', 'fiscalNumber',  1002);
+	(4000, '2021-01-02' , 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 1000),
+	(4001, '2021-01-03 ', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 1001),
+	(4002, '2021-01-04 ', 'senderName', 'recieverName', 'address', 'fiscalNumber',  1002, 1002);
 
 insert into PaymentTeacher( ID_payment, amount, datePay,  confirmed, ID_invoice) values
 	(3000, 15, '2021-01-02 ', true, 4000),
 	(3001, 15, '2021-01-04 ', false, 4001),
 	(3002, 15, '2021-01-07 ', false, 4002);
 
+	
 
 
 
