@@ -7,8 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import CloseFormativeAction.Controller;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -55,9 +53,8 @@ public class SwingMain {
 		frame.setTitle("Main");
 
 		frame.setBounds(0, 0, 840, 323);
-		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(8, 3, 10, 10));
+		frame.getContentPane().setLayout(new GridLayout(7, 3, 10, 10));
 
 		// Initialize the DB and fill it with data
 		Database db = new Database();
@@ -70,7 +67,7 @@ public class SwingMain {
 		JButton btnRegisterPayments = new JButton("Register a Payment");
 		btnRegisterPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegisterPayment.Controller controller = new RegisterPayment.Controller();
+				UserStory13575.Controller controller = new UserStory13575.Controller();
 				controller.initController();
 			}
 		});
@@ -79,7 +76,7 @@ public class SwingMain {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ListFormativeActions.Controller controller = new ListFormativeActions.Controller(new ListFormativeActions.Model(), new ListFormativeActions.View());
+				UserStory13576.Controller controller = new UserStory13576.Controller(new UserStory13576.Model(), new UserStory13576.View());
 				controller.initController();
 				
 			}
@@ -90,7 +87,7 @@ public class SwingMain {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StatusOfFormativeAction.Controller controller = new StatusOfFormativeAction.Controller();
+				UserStory13577.Controller controller = new UserStory13577.Controller();
 				controller.initController();
 				
 			}
@@ -99,7 +96,7 @@ public class SwingMain {
 		JButton btnRegisterCancellations = new JButton("Register cancellations");
 		btnRegisterCancellations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegisterCancellations.Controller controller = new RegisterCancellations.Controller();
+				UserStory13578.Controller controller = new UserStory13578.Controller();
 				controller.initController();
 			}
 		});
@@ -107,31 +104,15 @@ public class SwingMain {
 		JButton btnPayTeacher = new JButton("Pay a teacher");
 		btnPayTeacher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PayATeacher.Controller controller = new PayATeacher.Controller();
+				UserStory13580.Controller controller = new UserStory13580.Controller();
 				controller.initController();
 			}
 		});
 
-		/*JButton btnDelayFA = new JButton("Delay a Formative Action");
+		JButton btnDelayFA = new JButton("Delay a Formative Action");
 		btnDelayFA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13729.Controller controller = new UserStory13729.Controller();
-				controller.initController();
-			}
-		});*/
-
-		JButton btnNewButton = new JButton("Cancel a Formative Action");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CancelFormativeAction.Controller controller = new CancelFormativeAction.Controller();
-				controller.initController();
-			}
-		});
-		
-		JButton btnCloseFA = new JButton("Close a Formative Action");
-		btnCloseFA.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CloseFormativeAction.Controller controller = new CloseFormativeAction.Controller();
 				controller.initController();
 			}
 		});
@@ -142,11 +123,10 @@ public class SwingMain {
 		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
 		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EnrollInFormativeAction.Controller controller = new EnrollInFormativeAction.Controller();
+				UserStory13574.Controller controller = new UserStory13574.Controller();
 				controller.initController();
 			}
 		});
-		
 		
 		// Training manager
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
@@ -154,8 +134,8 @@ public class SwingMain {
 		JButton btnPlanFormativeAction = new JButton("Plan formative action");
 		btnPlanFormativeAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CreateFormativeAction.Controller controller = new CreateFormativeAction.Controller(new CreateFormativeAction.Model(),
-						new CreateFormativeAction.View());
+				UserStory13573.Controller controller = new UserStory13573.Controller(new UserStory13573.Model(),
+						new UserStory13573.View());
 				controller.initController();
 			}
 		});
@@ -164,8 +144,8 @@ public class SwingMain {
 
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CheckFinancialBalance.Controller controller;
-				controller = new CheckFinancialBalance.Controller(new CheckFinancialBalance.Model(), new CheckFinancialBalance.View());
+				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
+						new UserStory13579.View());
 				controller.initController();
 			}
 		});
@@ -206,18 +186,7 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty7);
 		
 		// Row 7
-		//frame.getContentPane().add(btnDelayFA);
-//		frame.getContentPane().add(new JLabel(""));
-//		frame.getContentPane().add(new JLabel(""));
-		
-		// Row 8
-		frame.getContentPane().add(btnNewButton);
-		frame.getContentPane().add(new JLabel(""));
-		frame.getContentPane().add(new JLabel(""));
-		
-		// Row 9
-		frame.getContentPane().add(btnCloseFA);
-		
+		frame.getContentPane().add(btnDelayFA);
 	}
 
 	public JFrame getFrame() {

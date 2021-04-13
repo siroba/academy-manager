@@ -165,32 +165,6 @@ public class DateTime extends Date {
 	}
 
 	/**
-	 * Gives the days passed between the two dates Uses the function
-	 * {@link #daysSince(Date, Date)} and assumes the other date to be today (uses
-	 * the function {@link #now()})
-	 *
-	 * @param date
-	 * @return days passed
-	 */
-	public static int daysSince(DateTime d) {
-		return daysSince(d, DateTime.now());
-	}
-
-	/**
-	 * Gives the days passed between the two given dates
-	 *
-	 * @param date1
-	 * @param date2
-	 * @return days passed
-	 */
-	public static int daysSince(DateTime date1, DateTime date2) {
-		long difference = date1.toMillis() - date2.toMillis();
-		int daysBetween = Math.round(difference / (1000.0f * 60.0f * 60.0f * 24.0f));
-
-		return daysBetween;
-	}
-	
-	/**
 	 * Same as {@link Date#daysSince(Date)}, but with minutes
 	 *
 	 * @param d
