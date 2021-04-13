@@ -15,15 +15,16 @@ import Entities.FormativeAction;
 import Entities.Invoice;
 import Entities.PaymentTeacher;
 import Entities.Session;
+import PL53.util.Date;
 import PL53.util.DateTime;
 import UserStory13580.Data;
 import UserStory13580.Model;
 import UserStory13580.View;
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
-	
+
 	private FormativeAction selectedRow;
 
 	public Controller() {
@@ -31,14 +32,14 @@ public class Controller {
 		try {
 			model.initModel();
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		} catch (ParseException e) {
-			
+
 			e.printStackTrace();
 		}
 		this.view = new View();
-		
+
 		this.initView();
 	}
 
@@ -75,31 +76,58 @@ public class Controller {
 
 				// INPUT THE INVOICE
 				try {
-
+					if (selectedRow == null) {
+						JOptionPane.showMessageDialog(null, "You have to select one pending payment");
+					}
+					else if (view.getNameTextField().length()==0 )
+					{
+						JOptionPane.showMessageDialog(null, "You have to introduce the name of the teacher");
+					}
+					else if (view.getFiscalNumberTextField().length()==0 )
+					{
+						JOptionPane.showMessageDialog(null, "You have to introduce the fiscal number");
+					}
+					else if (view.getAddressTextField().length()==0 )
+					{
+						JOptionPane.showMessageDialog(null, "You have to introduce the address");
+					}
+					else if (view.getDateTransferTextField().getYear()==0 )
+					{
+						JOptionPane.showMessageDialog(null, "You have to introduce a valid year for the date of the transfer (ex: 2021) ");
+					}
+					else if (view.getDateTextField().getYear()==0 )
+					{
+						JOptionPane.showMessageDialog(null, "You have to introduce a valid year for the date of the invoice (ex: 2021)");
+					}
+					else{
 					String name = view.getNameTextField();
 					String fiscalNumber = view.getFiscalNumberTextField();
 					String address = view.getAddressTextField();
-					DateTime dateTransfer = DateTime.parseString(view.getDateTransferTextField());
+					Date dateTransfer = view.getDateTransferTextField();
 					int ID_fa = selectedRow.getID();
-					float amount = (float)view.getTable().getValueAt(view.getSelected(), 3);
+					float amount = Float.parseFloat((String) view.getTable().getValueAt(view.getSelected(), 3));
 					String sender = "COIIPA";
 					String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2);
 					boolean confirmed = true;
-					DateTime dateInvoice = DateTime.parseString(view.getDateTextField());
+					Date dateInvoice = view.getDateTextField();
 
 					Invoice invoice = new Invoice(ID_fa, dateInvoice);
 
-					PaymentTeacher paymentTeacher = new PaymentTeacher( amount, dateTransfer, sender,
-							receiver, fiscalNumber, address, confirmed);
-					
-					
-					model.insertInvoice(invoice , paymentTeacher);
+					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer, sender, receiver,
+							fiscalNumber, address, confirmed);
+
+					model.insertInvoice(invoice, paymentTeacher);
+					if (paymentTeacher != null) {
+						JOptionPane.showMessageDialog(null, "The invoice has been successfully created");
+					}
+					}
 				} catch (NumberFormatException e2) {
 					JOptionPane.showMessageDialog(null, "The Invoice ID must be an integer");
-				} catch (ParseException e1) {
-					JOptionPane.showMessageDialog(null, "The Data must be a Data");
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Error creating the invoice");
+					e1.printStackTrace();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -122,8 +150,8 @@ public class Controller {
 
 		for (int i = 0; i < formativeActions.length; i++) {
 			FormativeAction d = formativeActions[i];
-			
-			for(Session s: d.getSessions()) {
+
+			for (Session s : d.getSessions()) {
 				body[i] = new String[] { d.getName(), d.getStatus().toString(), s.getTeacherName(),
 						Float.toString(s.getRemuneration()) };
 			}

@@ -53,8 +53,9 @@ public class SwingMain {
 		frame.setTitle("Main");
 
 		frame.setBounds(0, 0, 840, 323);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(7, 3, 10, 10));
+		frame.getContentPane().setLayout(new GridLayout(8, 3, 10, 10));
 
 		// Initialize the DB and fill it with data
 		Database db = new Database();
@@ -117,6 +118,14 @@ public class SwingMain {
 			}
 		});
 
+		JButton btnNewButton = new JButton("Cancel a Formative Action");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserStory13727.Controller controller = new UserStory13727.Controller();
+				controller.initController();
+			}
+		});
+
 		// Professional
 		JLabel labelProfessional = new JLabel("Professional", SwingConstants.CENTER);
 		
@@ -127,6 +136,7 @@ public class SwingMain {
 				controller.initController();
 			}
 		});
+		
 		
 		// Training manager
 		JLabel labelTrainingManager = new JLabel("Training manager", SwingConstants.CENTER);
@@ -144,8 +154,8 @@ public class SwingMain {
 
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13579.Controller controller = new UserStory13579.Controller(new UserStory13579.Model(),
-						new UserStory13579.View());
+				UserStory13579.Controller controller;
+				controller = new UserStory13579.Controller(new UserStory13579.Model(), new UserStory13579.View());
 				controller.initController();
 			}
 		});
@@ -187,6 +197,14 @@ public class SwingMain {
 		
 		// Row 7
 		frame.getContentPane().add(btnDelayFA);
+		
+		JLabel label = new JLabel("");
+		frame.getContentPane().add(label);
+		
+		JLabel label_1 = new JLabel("");
+		frame.getContentPane().add(label_1);
+		
+		frame.getContentPane().add(btnNewButton);
 	}
 
 	public JFrame getFrame() {

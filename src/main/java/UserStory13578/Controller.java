@@ -22,7 +22,7 @@ import javax.swing.table.TableModel;
 [x] In this sprint we assume that refunds are correctly made for all registrations that are cancelled, at the time the cancellation is done.
 */
 
-public class Controller {
+public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 
@@ -58,7 +58,7 @@ public class Controller {
 				int input = JOptionPane.showConfirmDialog(null,
 						"You are going to cancel the registration of " + selected.professional.getName() + 
 						" to "	+ selected.formativeAction.getName() + ". Are you sure? " + 
-						selected.formativeAction.refund() + "€ will be refunded to " + 
+						selected.formativeAction.refund(selected.enrollment.getGroup()) + "€ will be refunded to " + 
 						selected.professional.getName() + ".",
 						"Are you sure you want to cancel the registration?", 
 						JOptionPane.YES_NO_OPTION,
@@ -107,7 +107,7 @@ public class Controller {
 					d.formativeAction.getName(),
 					d.professional.getName(),
 					d.professional.getEmail(),
-					Float.toString(d.formativeAction.getFee()),
+					Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
 					d.formativeAction.getEnrollmentEnd().toString(),
 					d.enrollment.getStatus().toString() };
 		}
