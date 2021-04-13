@@ -6,14 +6,14 @@ insert into FormativeAction(ID_fa, nameFa, totalPlaces, objectives, mainContent,
 	(1002, 'JDBC',  		 4,  	'some objctives', 'some main content', 'ACTIVE',   '2021-03-01 00:00:00.0',	'2021-04-08 00:00:00.0'),
 	(1003, 'Java programming',	 5,	'some objctives', 'some main content', 'ACTIVE',   '2021-04-01 00:00:00.0',	'2021-04-28 00:00:00.0');
 
-insert into Session(ID_session, ID_fa, location, duration, sessionStart, teacherName, remuneration) values
-	(0, 1000, 'online', 2, '2021-02-03 15:00:00.0', 'Jose Garcia Fanjul', 50),
-	(1, 1000, 'online', 2, '2021-02-04 15:00:00.0', 'Jose Garcia Fanjul', 50),
-	(2, 1000, 'online', 2, '2021-02-05 15:00:00.0', 'Jose Garcia Fanjul', 50),
-	(3, 1001, 'online', 3, '2021-02-10 09:00:00.0', 'Jose Garcia Fanjul', 60),
-	(4, 1001, 'online', 3, '2021-02-11 09:00:00.0', 'Jose Garcia Fanjul', 60),
-	(5, 1002, 'online', 3, '2021-04-10 12:00:00.0', 'Maria Teresa Gonzales Aparicio', 100),
-	(6, 1003, 'online', 4, '2021-05-01 10:00:00.0', 'Victor Manuel Alvarez Garcia', 80);
+insert into Session(ID_session, ID_fa, location, duration, sessionStart) values
+	(0, 1000, 'online', 2, '2021-02-03 15:00:00.0'),
+	(1, 1000, 'online', 2, '2021-02-04 15:00:00.0'),
+	(2, 1000, 'online', 2, '2021-02-05 15:00:00.0'),
+	(3, 1001, 'online', 3, '2021-02-10 09:00:00.0'),
+	(4, 1001, 'online', 3, '2021-02-11 09:00:00.0'),
+	(5, 1002, 'online', 3, '2021-04-10 12:00:00.0'),
+	(6, 1003, 'online', 4, '2021-05-01 10:00:00.0');
 	
 insert into Fee(ID_fee, amount, category, ID_fa) values
 	(1000, 15, 'Standard', 1000),	

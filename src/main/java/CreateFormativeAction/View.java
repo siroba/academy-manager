@@ -28,9 +28,9 @@ import javax.swing.SwingConstants;
 public class View {
 
 	private JFrame frmCreateANew;
-	private JTextField TFName, TFTeacher;
+	private JTextField TFName;
 	private JIntField TFHours, TFSpaces;
-	private JDecimalField TFRemuneration, TFFee;
+	private JDecimalField TFFee;
 	private JTextArea TFObjectives, TFContents;
 	private JLabel LabelObjectives;
 	private JButton BTNCreate;
@@ -44,6 +44,10 @@ public class View {
 	private JScrollPane scrollPane_2;
 	private JButton btnDeleteSession, btnAddFee, btnDeleteFee;
 	private JCheckBox chckbxFree;
+	private JLabel LabelTeacher;
+	private JTextField TFTeacher;
+	private JLabel LabelRemuneration;
+	private JDecimalField TFRemuneration;
 
 	/**
 	 * Create the application.
@@ -157,15 +161,35 @@ public class View {
 
 		// Spaces
 		JLabel LabelSpaces = new JLabel("Spaces:");
-		LabelSpaces.setBounds(10, 383, 46, 14);
+		LabelSpaces.setBounds(10, 382, 46, 14);
 		panel.add(LabelSpaces);
 		LabelSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		TFSpaces = new JIntField(5);
-		TFSpaces.setBounds(60, 382, 69, 18);
+		TFSpaces.setBounds(60, 380, 69, 18);
 		panel.add(TFSpaces);
 		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFSpaces.setColumns(10);
+		
+		LabelTeacher = new JLabel("Teacher:");
+		LabelTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		LabelTeacher.setBounds(139, 382, 50, 14);
+		panel.add(LabelTeacher);
+		
+		TFTeacher = new JTextField();
+		TFTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		TFTeacher.setColumns(10);
+		TFTeacher.setBounds(186, 380, 142, 18);
+		panel.add(TFTeacher);
+		
+		LabelRemuneration = new JLabel("Remuneration:");
+		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		LabelRemuneration.setBounds(338, 382, 83, 14);
+		panel.add(LabelRemuneration);
+		
+		TFRemuneration = new JDecimalField(4);
+		TFRemuneration.setBounds(417, 380, 51, 18);
+		panel.add(TFRemuneration);
 
 		// Separator 
 		JSeparator separator = new JSeparator();
@@ -226,31 +250,6 @@ public class View {
 		TFHours.setBound(0, 24);
 		TFHours.setBounds(362, 228, 39, 19);
 		sessionsPanel.add(TFHours);
-		
-		// Teacher
-		JLabel LabelTeacher = new JLabel("Teacher:");
-		LabelTeacher.setBounds(7, 358, 50, 14);
-		sessionsPanel.add(LabelTeacher);
-		LabelTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		TFTeacher = new JTextField();
-		TFTeacher.setBounds(63, 358, 142, 18);
-		sessionsPanel.add(TFTeacher);
-		TFTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		TFTeacher.setColumns(10);
-
-		// Remuneration
-		JLabel LabelRemuneration = new JLabel("Remuneration:");
-		LabelRemuneration.setBounds(217, 358, 83, 14);
-		sessionsPanel.add(LabelRemuneration);
-		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		
-		TFRemuneration = new JDecimalField(4);
-		TFRemuneration.setBound(0f, Float.MAX_VALUE);
-		TFRemuneration.setBounds(307, 358, 51, 18);
-		sessionsPanel.add(TFRemuneration);
-		TFRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		TFRemuneration.setColumns(10);
 
 		// Session - Button to add session 
 		btnAddSession = new JButton("Add session");

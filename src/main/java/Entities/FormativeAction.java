@@ -331,8 +331,11 @@ public class FormativeAction {
 		return fa;
 	}
 	
-	public void teach(Teacher t, float remuneration) {
-		teachers.add(new TeacherTeaches(t, this, remuneration));
+	public TeacherTeaches teach(Teacher t, float remuneration) {
+		TeacherTeaches tt = new TeacherTeaches(t, this, remuneration);
+		teachers.add(tt);
+		
+		return tt;
 	}
 	
 	public List<TeacherTeaches> getTeacherTeaches(){

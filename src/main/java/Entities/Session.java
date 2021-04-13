@@ -13,27 +13,21 @@ import Utils.Database;
 
 public class Session {
 	private int ID = -1, ID_fa = -1;
-	private String location, teacherName;
+	private String location;
 	private int numberOfHours;
-	private float remuneration;
 	private DateTime sessionStart;
 
-	public Session(String location, String teacherName, int numberOfHours, float remuneration, DateTime sessionStart) {
+	public Session(String location, int numberOfHours, DateTime sessionStart) {
 		this.location = location;
-		this.teacherName = teacherName;
 		this.numberOfHours = numberOfHours;
-		this.remuneration = remuneration;
 		this.sessionStart = sessionStart;
 	}
 
-	public Session(int ID, int ID_fa, String location, String teacherName, int numberOfHours, float remuneration,
-			DateTime sessionStart) {
+	public Session(int ID, int ID_fa, String location, int numberOfHours, DateTime sessionStart) {
 		this.ID = ID;
 		this.ID_fa = ID_fa;
 		this.location = location;
-		this.teacherName = teacherName;
 		this.numberOfHours = numberOfHours;
-		this.remuneration = remuneration;
 		this.sessionStart = sessionStart;
 	}
 
@@ -85,7 +79,7 @@ public class Session {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if (this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -95,12 +89,10 @@ public class Session {
 			pstmt.setString(3, getLocation());
 			pstmt.setInt(4, getNumberOfHours());
 			pstmt.setString(5,  getSessionStart().toSQLiteString());
-			pstmt.setString(6, getTeacherName());
-			pstmt.setFloat(7, getRemuneration());
 
 			pstmt.executeUpdate(); // statement execution
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -110,8 +102,6 @@ public class Session {
 			pstmt.setString(2, getLocation());
 			pstmt.setInt(3, getNumberOfHours());
 			pstmt.setString(4,  getSessionStart().toSQLiteString());
-			pstmt.setString(5, getTeacherName());
-			pstmt.setFloat(6, getRemuneration());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -149,8 +139,7 @@ public class Session {
 				dstart = DateTime.fromMillis(rs.getLong("sessionStart"));
 			}
 
-			Session s = new Session(rs.getInt("ID_session"), rs.getInt("ID_fa"), rs.getString("location"),
-					rs.getString("teacherName"), rs.getInt("duration"), rs.getFloat("remuneration"), dstart);
+			Session s = new Session(rs.getInt("ID_session"), rs.getInt("ID_fa"), rs.getString("location"), rs.getInt("duration"), dstart);
 
 			sessions.add(s);
 		}
@@ -189,8 +178,7 @@ public class Session {
 			dstart = DateTime.fromMillis(rs.getLong("sessionStart"));
 		}
 
-		Session s = new Session(rs.getInt("ID_session"), rs.getInt("ID_fa"), rs.getString("location"),
-				rs.getString("teacherName"), rs.getInt("duration"), rs.getFloat("remuneration"), dstart);
+		Session s = new Session(rs.getInt("ID_session"), rs.getInt("ID_fa"), rs.getString("location"), rs.getInt("duration"), dstart);
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -220,28 +208,12 @@ public class Session {
 		this.location = location;
 	}
 
-	public String getTeacherName() {
-		return teacherName;
-	}
-
-	public void setTeacherName(String teacherName) {
-		this.teacherName = teacherName;
-	}
-
 	public int getNumberOfHours() {
 		return numberOfHours;
 	}
 
 	public void setNumberOfHours(int numberOfHours) {
 		this.numberOfHours = numberOfHours;
-	}
-
-	public float getRemuneration() {
-		return remuneration;
-	}
-
-	public void setRemuneration(float remuneration) {
-		this.remuneration = remuneration;
 	}
 
 	public DateTime getSessionStart() {

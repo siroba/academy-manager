@@ -69,8 +69,7 @@ public class Controller implements PL53.util.Controller {
 				// Validate dates 
 				if (validateDates(datesFormativeAction, view.getEnrollStart(), view.getEnrollEnd())) {
 					// Add session to table 
-					sessions.add(new Session(view.getLocation(), view.getTeacher(), view.getNumberOfHours(),
-							view.getRemuneration(), view.getSessionDatetime()));
+					sessions.add(new Session(view.getLocation(), view.getNumberOfHours(), view.getSessionDatetime()));
 
 					view.setTable(getTableModel(sessions));
 				}
@@ -215,7 +214,7 @@ public class Controller implements PL53.util.Controller {
 
 				try {
 					// Insert into DB and close window 
-					model.setFormativeAction(formativeAction);
+					model.setFormativeAction(formativeAction, view.getTeacher(), view.getRemuneration());
 					view.getFrame().setVisible(false);
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -330,14 +329,13 @@ public class Controller implements PL53.util.Controller {
 	}
 
 	public TableModel getTableModel(List<Session> sessions) {
-		String header[] = { "Date", "Location", "Teacher", "Remuneration" };
+		String header[] = { "Date", "Duration", "Location" };
 
 		String body[][] = new String[sessions.size()][header.length];
 
 		int i = 0;
 		for (Session s : sessions) {
-			body[i++] = new String[] { s.getSessionStart().toString(), s.getLocation(), s.getTeacherName(),
-					Float.toString(s.getRemuneration()) };
+			body[i++] = new String[] { s.getSessionStart().toString(), Float.toString(s.getNumberOfHours()), s.getLocation() };
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);

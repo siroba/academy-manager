@@ -30,7 +30,7 @@ public class Teacher {
 	}
 
 	public static String tableName() {
-		return "TeacherTeaches";
+		return "Teacher";
 	}
 
 	public void insert(Database db) throws SQLException {
@@ -44,6 +44,12 @@ public class Teacher {
 			// Sets of the parameters of the prepared statement
 	
 			pstmt.setString(1, this.getName());
+
+			pstmt.executeUpdate();
+			
+			ResultSet tableKeys = pstmt.getGeneratedKeys();
+			tableKeys.next();
+			this.ID = tableKeys.getInt(1);
 		}else {
 			String sql = "INSERT INTO " + tableName() + " (ID_teacher, name) VALUES (?, ?)";
 	
@@ -52,9 +58,9 @@ public class Teacher {
 	
 			pstmt.setInt(1, this.getID());
 			pstmt.setString(2, this.getName());
-		}
 
-		pstmt.executeUpdate();
+			pstmt.executeUpdate();
+		}
 	}
 
 	public static List<Teacher> get(String sql, Database db) throws SQLException {

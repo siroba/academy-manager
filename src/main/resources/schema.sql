@@ -29,9 +29,7 @@ CREATE TABLE IF NOT EXISTS Session(
     ID_fa	     	INTEGER NOT NULL,
     location        text NOT NULL,
     duration        real NOT NULL,
-    sessionStart    timestamp NOT NULL,
-    teacherName     text NULL,
-    remuneration    real NOT NULL,
+    sessionStart    timestamp NOT NULL
     CHECK ( duration >0 ),
  	CONSTRAINT FK_200 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa )
 );
