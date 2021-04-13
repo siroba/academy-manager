@@ -68,7 +68,7 @@ public class SwingMain {
 		JButton btnRegisterPayments = new JButton("Register a Payment");
 		btnRegisterPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13575.Controller controller = new UserStory13575.Controller();
+				RegisterPayment.Controller controller = new RegisterPayment.Controller();
 				controller.initController();
 			}
 		});
@@ -77,7 +77,7 @@ public class SwingMain {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				UserStory13576.Controller controller = new UserStory13576.Controller(new UserStory13576.Model(), new UserStory13576.View());
+				ListFormativeActions.Controller controller = new ListFormativeActions.Controller(new ListFormativeActions.Model(), new ListFormativeActions.View());
 				controller.initController();
 				
 			}
@@ -88,7 +88,7 @@ public class SwingMain {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				UserStory13577.Controller controller = new UserStory13577.Controller();
+				StatusOfFormativeAction.Controller controller = new StatusOfFormativeAction.Controller();
 				controller.initController();
 				
 			}
@@ -97,7 +97,7 @@ public class SwingMain {
 		JButton btnRegisterCancellations = new JButton("Register cancellations");
 		btnRegisterCancellations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13578.Controller controller = new UserStory13578.Controller();
+				RegisterCancellations.Controller controller = new RegisterCancellations.Controller();
 				controller.initController();
 			}
 		});
@@ -105,23 +105,23 @@ public class SwingMain {
 		JButton btnPayTeacher = new JButton("Pay a teacher");
 		btnPayTeacher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13580.Controller controller = new UserStory13580.Controller();
+				PayATeacher.Controller controller = new PayATeacher.Controller();
 				controller.initController();
 			}
 		});
 
-		JButton btnDelayFA = new JButton("Delay a Formative Action");
+		/*JButton btnDelayFA = new JButton("Delay a Formative Action");
 		btnDelayFA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserStory13729.Controller controller = new UserStory13729.Controller();
 				controller.initController();
 			}
-		});
+		});*/
 
 		JButton btnNewButton = new JButton("Cancel a Formative Action");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13727.Controller controller = new UserStory13727.Controller();
+				CancelFormativeAction.Controller controller = new CancelFormativeAction.Controller();
 				controller.initController();
 			}
 		});
@@ -132,7 +132,7 @@ public class SwingMain {
 		JButton btnEnrollInFormativeAction = new JButton("Enroll in formative action");
 		btnEnrollInFormativeAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13574.Controller controller = new UserStory13574.Controller();
+				EnrollInFormativeAction.Controller controller = new EnrollInFormativeAction.Controller();
 				controller.initController();
 			}
 		});
@@ -144,8 +144,8 @@ public class SwingMain {
 		JButton btnPlanFormativeAction = new JButton("Plan formative action");
 		btnPlanFormativeAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13573.Controller controller = new UserStory13573.Controller(new UserStory13573.Model(),
-						new UserStory13573.View());
+				CreateFormativeAction.Controller controller = new CreateFormativeAction.Controller(new CreateFormativeAction.Model(),
+						new CreateFormativeAction.View());
 				controller.initController();
 			}
 		});
@@ -154,8 +154,8 @@ public class SwingMain {
 
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13579.Controller controller;
-				controller = new UserStory13579.Controller(new UserStory13579.Model(), new UserStory13579.View());
+				CheckFinancialBalance.Controller controller;
+				controller = new CheckFinancialBalance.Controller(new CheckFinancialBalance.Model(), new CheckFinancialBalance.View());
 				controller.initController();
 			}
 		});
@@ -192,11 +192,11 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty5);
 		// Row 6
 		frame.getContentPane().add(btnPayTeacher);
-		frame.getContentPane().add(labelEmpty6);
-		frame.getContentPane().add(labelEmpty7);
+		//frame.getContentPane().add(labelEmpty6);
+		//frame.getContentPane().add(labelEmpty7);
 		
 		// Row 7
-		frame.getContentPane().add(btnDelayFA);
+		//frame.getContentPane().add(btnDelayFA);
 		
 		JLabel label = new JLabel("");
 		frame.getContentPane().add(label);
