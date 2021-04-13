@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS Payment(
     ID_payment      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     amount          real NOT NULL,
     datePay         datetime NOT NULL,
-    confirmed       boolean NOT NULL,
+    confirmed       boolean default 1,
     cash 	     	boolean default 0,
     ID_invoice      integer NOT NULL,
     CONSTRAINT FK_104 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice ( ID_invoice )

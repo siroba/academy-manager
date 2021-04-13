@@ -9,7 +9,7 @@ import Entities.Enrollment;
 import Entities.FormativeAction;
 import Entities.Payment;
 import Entities.Professional;
-import UserStory13578.Data;
+import RegisterCancellations.Data;
 import Utils.Database;
 
 public class Model {

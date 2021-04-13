@@ -13,7 +13,7 @@ import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
 import PL53.swing.CheckboxTableModel;
-import UserStory13578.Data;
+import RegisterCancellations.Data;
 
 public class Controller implements PL53.util.Controller {
 	private Model model;
