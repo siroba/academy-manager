@@ -9,42 +9,31 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import PL53.util.Date;
+import PL53.util.DateTime;
 import Utils.Database;
 
 public class Invoice {
-	private int ID = -1, ID_fa , ID_professional;
-	private Date dateIn;
-	private String sender, receiver, fiscalNumber, address;
+	private int ID = -1, ID_fa;
+	private DateTime dateIn;
 
 	/** Constructor with ID_invoice
 	 * @param ID_invoice
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(int ID_invoice,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public Invoice(int ID_invoice,int ID_fa,  DateTime dateIn) {
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
 		this.dateIn=dateIn;
-		this.sender = sender;
-		this.receiver = receiver;
-		this.fiscalNumber = fiscalNumber;
-		this.address = address;
-		this.ID_professional=ID_professional;
 		
 	}
 	/**Default Constructor
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public Invoice(int ID_fa,  DateTime dateIn) {
 		this.ID_fa = ID_fa;
 		this.dateIn=dateIn;
-		this.sender = sender;
-		this.receiver = receiver;
-		this.fiscalNumber = fiscalNumber;
-		this.address = address;
-		this.ID_professional=ID_professional;
 	
 	}
 	public static String tableName() {
@@ -85,25 +74,18 @@ public class Invoice {
 		List<Invoice> invoices = new ArrayList<>();
 
 		while (rs.next()) {
-			Date dateIn;
+			DateTime dateIn;
 			try {
-				dateIn = Date.parseString(rs.getString("dateIn"));
+				dateIn = DateTime.parseString(rs.getString("dateIn"));
 			} catch (ParseException e) {
-				dateIn = Date.fromMillis(rs.getLong("dateIn"));
+				dateIn = DateTime.fromMillis(rs.getLong("dateIn"));
 			}
 			
 
 			Invoice e = new Invoice(
 					rs.getInt("ID_invoice"),
-					
-					dateIn,
-					rs.getString("sender"),
-					rs.getString("receiver"),
-					rs.getString("fiscalNumber"),
-					rs.getString("address"),
 					rs.getInt("ID_fa"),
-					rs.getInt("ID_professional")
-					);
+					dateIn);
 					
 
 			invoices.add(e);
@@ -133,26 +115,19 @@ public class Invoice {
 		ResultSet rs = st.executeQuery(query.toString());
 		rs.next();
 
-		Date dateIn;
+		DateTime dateIn;
 		try {
-			dateIn = Date.parseString(rs.getString("dateIn"));
+			dateIn = DateTime.parseString(rs.getString("dateIn"));
 		} catch (ParseException e) {
-			dateIn = Date.fromMillis(rs.getLong("dateIn"));
+			dateIn = DateTime.fromMillis(rs.getLong("dateIn"));
 		}
 		
 
 		Invoice e = new Invoice(
 				rs.getInt("ID_invoice"),
-				
-				dateIn,
-				rs.getString("sender"),
-				rs.getString("receiver"),
-				rs.getString("fiscalNumber"),
-				rs.getString("address"),
 				rs.getInt("ID_fa"),
-				rs.getInt("ID_professional")
+				dateIn
 				);
-				
 
 
 		// Very important to always close all the objects related to the database
@@ -169,7 +144,7 @@ public class Invoice {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public void insert(Database db) throws SQLException, ParseException {
+	public void insert(Database db) throws SQLException {
 		/*
 		 * status TEXT NOT NULL CHECK( status IN('received','confirmed','cancelled')),
 		 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
@@ -185,32 +160,19 @@ public class Invoice {
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setInt(1, this.getID());
-			
-			pstmt.setDate(2, this.getDateIn().toSQL());
-			pstmt.setString(3,this.getSender());
-			pstmt.setString(4, this.getReceiver());
-			
-			pstmt.setString(5, this.getAddress());
-			pstmt.setString(6, this.getFiscalNumber());
-			pstmt.setInt(7, this.getID_fa());
-			pstmt.setInt(8, this.getID_professional());
+			pstmt.setInt(2, this.getID_fa());
+			pstmt.setTimestamp(3, this.getDateIn().toTimestamp());
 			
 			pstmt.executeUpdate(); // statement execution
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
-			pstmt.setDate(1, this.getDateIn().toSQL());
-			pstmt.setString(2,this.getSender());
-			pstmt.setString(3, this.getReceiver());
-			
-			pstmt.setString(4, this.getAddress());
-			pstmt.setString(5, this.getFiscalNumber());
-			pstmt.setInt(6, this.getID_fa());
-			pstmt.setInt(7, this.getID_professional());
+			pstmt.setTimestamp(1, this.getDateIn().toTimestamp());
+			pstmt.setInt(2, this.getID_fa());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -220,16 +182,10 @@ public class Invoice {
 
 		conn.close();
 	}
-	public int getID_professional() {
-		return ID_professional;
-	}
-	public void setID_professional(int iD_professional) {
-		ID_professional = iD_professional;
-	}
-	public Date getDateIn() {
+	public DateTime getDateIn() {
 		return dateIn;
 	}
-	public void setDateIn(Date dateIn) {
+	public void setDateIn(DateTime dateIn) {
 		this.dateIn = dateIn;
 	}
 	public int getID() {
@@ -244,39 +200,8 @@ public class Invoice {
 	public void setID_fa(int iD_fa) {
 		ID_fa = iD_fa;
 	}
-	public String getSender() {
-		return sender;
-	}
 
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
 
-	public String getReceiver() {
-		return receiver;
-	}
 
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
 
-	public String getFiscalNumber() {
-		return fiscalNumber;
-	}
-
-	public void setFiscalNumber(String fiscalNumber) {
-		this.fiscalNumber = fiscalNumber;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
 }
-
-
-
-
