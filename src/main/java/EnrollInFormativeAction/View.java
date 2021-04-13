@@ -167,27 +167,48 @@ public class View extends JFrame {
 	public String getProfName() {
 		return profName.getText();
 	}
+	
+	public void setProfName(String text) {
+		profName.setText(text);
+	}
 
 	public String getTextSurname() {
 		return textSurname.getText();
+	}
+	
+	public void setTextSurname(String text) {
+		textSurname.setText(text);
 	}
 
 	public String getTextPhone() {
 		return textPhone.getText();
 	}
+	
+	public void setTextPhone(String text) {
+		textPhone.setText(text);
+	}
 
 	public String getTextEmail() {
 		return textEmail.getText();
 	}
+	
+	public void setTextEmail(String text) {
+		textEmail.setText(text);
+	} 
+	
 	public JTextField getTxtFee() {
 		return txtFee;
 	}
+	
+	public void setTextFee(String text) {
+		txtFee.setText(text);
+	} 
 	
 	public JComboBox<String> getCBGroup() {
 		return this.cbGroup;
 	}
 	public String getGroup() {
-		return cbGroup.getSelectedItem().toString();
+		return String.valueOf(cbGroup.getSelectedItem());
 	}
 
 	public void setTxtFee(String string) {
