@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -23,7 +24,7 @@ public class Controller implements PL53.util.Controller {
 
 		try {
 			this.model.initModel();
-		} catch (SQLException e) {
+		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
 		}
 
@@ -57,7 +58,7 @@ public class Controller implements PL53.util.Controller {
 
 						view.setTable(getTableModel(model.getAllData()));
 						view.setTableCancelledFA(getTableModel(model.getCancelled()));
-					} catch (SQLException e1) {
+					} catch (SQLException | ParseException e1) {
 						e1.printStackTrace();
 					}
 				}

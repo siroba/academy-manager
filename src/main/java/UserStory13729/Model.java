@@ -1,6 +1,7 @@
 package UserStory13729;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import Entities.FormativeAction;
@@ -13,7 +14,7 @@ public class Model {
 	private Database db = new Database();
 	private FormativeAction[] data;
 
-	public void initModel() throws SQLException {
+	public void initModel() throws SQLException, ParseException {
 		String query = "SELECT * FROM FormativeAction WHERE status IN ('ACTIVE', 'DELAYED')";
 
 		List<FormativeAction> la = FormativeAction.get(query, db);

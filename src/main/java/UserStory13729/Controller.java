@@ -3,6 +3,7 @@ package UserStory13729;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,7 +19,7 @@ public class Controller implements PL53.util.Controller{
 		this.model = new Model();
 		try {
 			model.initModel();
-		} catch (SQLException e) {
+		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
 		}
 
@@ -37,7 +38,7 @@ public class Controller implements PL53.util.Controller{
 					model.initModel();
 
 					view.setTable(getTableModel(model.getAllData()));
-				} catch (SQLException e1) {
+				} catch (SQLException | ParseException e1) {
 					e1.printStackTrace();
 				} catch (ArrayIndexOutOfBoundsException e2) {
 					JOptionPane.showMessageDialog(null, "You have to select one Formative Action");
