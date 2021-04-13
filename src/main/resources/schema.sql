@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS Professional(
     email           text NOT NULL
 );
 
-CREATE TABLE Table_FA (
+CREATE TABLE TeacherTeaches (
 	ID_teacher   	INTEGER PRIMARY KEY AUTOINCREMENT,
 	ID_fa        	integer NOT NULL,
 	remuneration 	real NOT NULL,
