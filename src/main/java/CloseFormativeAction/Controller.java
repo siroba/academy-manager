@@ -33,6 +33,7 @@ public class Controller {
 				}
 				else {
 					view.getBtnCloseFA().setEnabled(true);
+					checkFormativeAction(false);
 				}
 			}
 		});
@@ -41,10 +42,11 @@ public class Controller {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (checkFormativeAction()) {
+				if (checkFormativeAction(true)) {
 					closeFormativeAction();
+					view.getFrame().setVisible(false);
 				}
-				view.getFrame().setVisible(false);
+				
 			}
 		});
 		
@@ -64,42 +66,48 @@ public class Controller {
 		}
 	}
 	
-	public boolean checkFormativeAction() {
+	public boolean checkFormativeAction(boolean close) {
 		
 		String error = "The following error occured while trying to close the formative action:\n\n";
 		Boolean errorOccured = false;
 		Boolean ret = false;
 		String fa = view.getListFormativeActions().getSelectedValue();
-		//System.out.println("Formative Acction: " + fa);
 		
 		int confirmedIncomeProfessional = model.getSumIncomeConfirmedProfessional(fa);
 		int expectedIncomeProfessional = model.getSumIncomeExpectedProfessional(fa);
 		if (confirmedIncomeProfessional != expectedIncomeProfessional) {
 			errorOccured = true;
-			error += "The confirmed income from the professionals does not correspond with the expected income\n";
+			error += "The income from the professionals does not correspond with the expected income\n";
+			view.getLblFeesCorrect().setText("The income from the professionals \ndoes not correspond with the expected income\n"
+					+ "Expected: " + expectedIncomeProfessional + "\n Actual: " + confirmedIncomeProfessional);
 		}
-//		System.out.println("Confirmed Income " + confirmedIncomeProfessional);
-//		System.out.println("Expected Income " + expectedIncomeProfessional);
+		else {
+			view.getLblFeesCorrect().setText("Correct");
+		}
 		
 		int confirmedPaymentsToTeacher = model.getPaymentTeacherConfirmed(fa);
 		int expectedPaymentsToTeacher = model.getPaymentTeacherExpected(fa);
 		if (confirmedPaymentsToTeacher != expectedPaymentsToTeacher) {
 			errorOccured = true;
-			error += "The confirmed payments to the teacher does not correspond with the expected payments\n";
+			error += "The payments to the teacher does not correspond with the expected payments\n";
+			view.getLblRemunerationsCorrect().setText("The payments to the teacher does not \ncorrespond with the expected payments\n"
+					+ "Expected: " + expectedPaymentsToTeacher + "\n Actual: " + confirmedPaymentsToTeacher);
 		}
-//		System.out.println("Confirmed Payments " + confirmedPaymentsToTeacher);
-//		System.out.println("Expected Payments " + expectedPaymentsToTeacher);
+		else {
+			view.getLblRemunerationsCorrect().setText("Correct");
+		}
 		
 		
-		// TODO check if all sessions are in the past
 		Date lastSession = model.getDateOfLastSession(fa);
 		if (lastSession.after(new Date()) || lastSession.equals(new Date())) {
 			errorOccured = true;
 			error += "Not all sessions of the formative action have been celebrated\n";
+			view.getLblSessionFinished().setText("Not all sessions of the formative \naction have been celebrated");
 		}
-//		System.out.println(error);
-//		System.out.println("last session: " + lastSession + "\ncurrent date: " + new Date());
-		if (errorOccured) {
+		else {
+			view.getLblSessionFinished().setText("All session have been celebrated");
+		}
+		if (errorOccured && close) {
 			int i = JOptionPane.showConfirmDialog(null, error + "\nYou still want to close the formative action?", "Confirm close of Formative Action", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 			if (i == 0) {
 				ret = true;
