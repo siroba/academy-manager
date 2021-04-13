@@ -80,10 +80,10 @@ public class Controller implements PL53.util.Controller {
 
 				int calcTime= DateTime.daysSince(
 						view.getDateTextPane().getDate() ,selectedRow.enrollment.getTimeEn());
+				
 
 
-
-				 if (calcTime > 2|| calcTime<-0.1) {
+				 if (calcTime > 2|| calcTime<-1 ) {
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours after the enrollmet");
 
