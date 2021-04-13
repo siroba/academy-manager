@@ -78,8 +78,8 @@ public class Professional {
 	 * @param FormativeAction
 	 * @param EnrollmentName
 	 */
-	public Enrollment enroll(FormativeAction fA, Professional p, Status status, DateTime date, String group) {
-		Enrollment e = new Enrollment(fA.getID(), p.getID(), status, date, group);
+	public Enrollment enroll(FormativeAction fA, Professional p, Status status, DateTime date) {
+		Enrollment e = new Enrollment(fA.getID(), p.getID(), status, date);
 		enrollments.add(e);
 
 		return e;

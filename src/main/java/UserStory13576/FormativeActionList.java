@@ -5,15 +5,15 @@ import PL53.util.Date;
 public class FormativeActionList {
 	private String nameOfAction;
 	private String status;
-	private Date enrollmentPeriodStart;
-	private Date enrollmentPeriodEnd;
+	private String enrollmentPeriodStart;
+	private String enrollmentPeriodEnd;
 	private int totalPlaces;
 	private int leftPlaces;
 	private Date date;
-	private int sessionNumber;
-
-	public FormativeActionList(String nameOfAction, String status, Date enrollmentPeriodStart, Date enrollmentPeriodEnd,
-			int totalPlaces, int leftPlaces, Date date, int sessionNumber) {
+	
+	public FormativeActionList(String nameOfAction, String status, String enrollmentPeriodStart,
+			String enrollmentPeriodEnd, int totalPlaces, int leftPlaces, Date date) {
+		super();
 		this.nameOfAction = nameOfAction;
 		this.status = status;
 		this.enrollmentPeriodStart = enrollmentPeriodStart;
@@ -21,7 +21,6 @@ public class FormativeActionList {
 		this.totalPlaces = totalPlaces;
 		this.leftPlaces = leftPlaces;
 		this.date = date;
-		this.sessionNumber = sessionNumber;
 	}
 
 	public String getNameOfAction() {
@@ -40,19 +39,19 @@ public class FormativeActionList {
 		this.status = status;
 	}
 
-	public Date getEnrollmentPeriodStart() {
+	public String getEnrollmentPeriodStart() {
 		return enrollmentPeriodStart;
 	}
 
-	public void setEnrollmentPeriodStart(Date enrolmentPeriodStart) {
+	public void setEnrollmentPeriodStart(String enrolmentPeriodStart) {
 		this.enrollmentPeriodStart = enrolmentPeriodStart;
 	}
 
-	public Date getEnrollmentPeriodEnd() {
+	public String getEnrollmentPeriodEnd() {
 		return enrollmentPeriodEnd;
 	}
 
-	public void setEnrollmentPeriodEnd(Date enrolmentPeriodEnd) {
+	public void setEnrollmentPeriodEnd(String enrolmentPeriodEnd) {
 		this.enrollmentPeriodEnd = enrolmentPeriodEnd;
 	}
 
@@ -78,13 +77,5 @@ public class FormativeActionList {
 
 	public void setDate(Date date) {
 		this.date = date;
-	}
-
-	public int getSessionNumber() {
-		return sessionNumber;
-	}
-
-	public void setSessionNumber(int sessionNumber) {
-		this.sessionNumber = sessionNumber;
 	}
 }

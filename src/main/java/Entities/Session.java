@@ -85,7 +85,7 @@ public class Session {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if (this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -94,13 +94,13 @@ public class Session {
 			pstmt.setInt(2, getID_fa());
 			pstmt.setString(3, getLocation());
 			pstmt.setInt(4, getNumberOfHours());
-			pstmt.setString(5,  getSessionStart().toSQLiteString());
+			pstmt.setTimestamp(5, getSessionStart().toTimestamp());
 			pstmt.setString(6, getTeacherName());
 			pstmt.setFloat(7, getRemuneration());
 
 			pstmt.executeUpdate(); // statement execution
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -109,7 +109,7 @@ public class Session {
 			pstmt.setInt(1, getID_fa());
 			pstmt.setString(2, getLocation());
 			pstmt.setInt(3, getNumberOfHours());
-			pstmt.setString(4,  getSessionStart().toSQLiteString());
+			pstmt.setTimestamp(4, getSessionStart().toTimestamp());
 			pstmt.setString(5, getTeacherName());
 			pstmt.setFloat(6, getRemuneration());
 			pstmt.executeUpdate(); // statement execution

@@ -2,7 +2,6 @@ package UserStory13573;
 
 import java.sql.SQLException;
 
-import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Session;
 import Utils.Database;
@@ -22,7 +21,7 @@ public class Model {
 	private Database db=new Database();
 	
 	/**
-	 * Insert a new formative action as well as the associated fees and sessions into the DB 
+	 * Insert a new formative action into the formativeActions table 
 	 * @throws  
 	 * @throws SQLException 
 	 */
@@ -30,9 +29,6 @@ public class Model {
 		fA.insert(db);
 		for(Session s: fA.getSessions()) {
 			s.insert(db);
-		}
-		for(Fee f: fA.getFees()) {
-			f.insert(db);
 		}
 	}
 	
