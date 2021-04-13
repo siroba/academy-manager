@@ -93,12 +93,14 @@ public class Controller implements PL53.util.Controller {
 				String phone = view.getTextPhone();
 				String email = view.getTextEmail();
 				String group = view.getGroup();
+				String address = view.getAddress();
+				String fiscalNumber = view.getFiscalNumber();
 
 				try {
 					Professional p = model.createProfessional(name, surname, phone, email);
 					Enrollment en = p.enroll(selected, p, Enrollment.Status.RECEIVED, DateTime.now(), group);
 
-					model.doEnrollment(p, en);
+					model.doEnrollment(p, en , address, fiscalNumber );
 
 					model.loadFormativeActions();
 					view.setFAList(model.getFormativeActions());

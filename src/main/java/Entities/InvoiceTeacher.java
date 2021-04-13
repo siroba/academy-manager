@@ -10,19 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PL53.util.Date;
+import PL53.util.DateTime;
 import Utils.Database;
 
-public class Invoice {
-	private int ID = -1, ID_fa , ID_professional;
+public class InvoiceTeacher {
+	private int ID_fa;
 	private Date dateIn;
-	private String sender, receiver, fiscalNumber, address;
+	private String sender, receiver, fiscalNumber, address , ID="";
 
 	/** Constructor with ID_invoice
 	 * @param ID_invoice
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(int ID_invoice,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public InvoiceTeacher(String ID_invoice,int ID_fa,  Date dateIn , String sender , String receiver, String fiscalNumber, String address) {
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
 		this.dateIn=dateIn;
@@ -30,25 +31,23 @@ public class Invoice {
 		this.receiver = receiver;
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
-		this.ID_professional=ID_professional;
 		
 	}
 	/**Default Constructor
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public InvoiceTeacher(int ID_fa,  Date dateIn,String sender , String receiver, String fiscalNumber, String address) {
 		this.ID_fa = ID_fa;
 		this.dateIn=dateIn;
 		this.sender = sender;
 		this.receiver = receiver;
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
-		this.ID_professional=ID_professional;
 	
 	}
 	public static String tableName() {
-		return "Invoice";
+		return "InvoiceTeacher";
 	}
 
 	/**
@@ -75,14 +74,14 @@ public class Invoice {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<Invoice> get(String query, Database db) throws SQLException {
+	public static List<InvoiceTeacher> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 
-		List<Invoice> invoices = new ArrayList<>();
+		List<InvoiceTeacher> invoices = new ArrayList<>();
 
 		while (rs.next()) {
 			Date dateIn;
@@ -93,16 +92,14 @@ public class Invoice {
 			}
 			
 
-			Invoice e = new Invoice(
-					rs.getInt("ID_invoice"),
-					
+			InvoiceTeacher e = new InvoiceTeacher(
+					rs.getString("ID_invoice"),
+					rs.getInt("ID_fa"),
 					dateIn,
 					rs.getString("sender"),
 					rs.getString("receiver"),
 					rs.getString("fiscalNumber"),
-					rs.getString("address"),
-					rs.getInt("ID_fa"),
-					rs.getInt("ID_professional")
+					rs.getString("address")
 					);
 					
 
@@ -125,7 +122,7 @@ public class Invoice {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static Invoice getOne(String query, Database db) throws SQLException {
+	public static InvoiceTeacher getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -141,16 +138,14 @@ public class Invoice {
 		}
 		
 
-		Invoice e = new Invoice(
-				rs.getInt("ID_invoice"),
-				
+		InvoiceTeacher e = new InvoiceTeacher(
+				rs.getString("ID_invoice"),
+				rs.getInt("ID_fa"),
 				dateIn,
 				rs.getString("sender"),
 				rs.getString("receiver"),
 				rs.getString("fiscalNumber"),
-				rs.getString("address"),
-				rs.getInt("ID_fa"),
-				rs.getInt("ID_professional")
+				rs.getString("address")
 				);
 				
 
@@ -177,54 +172,43 @@ public class Invoice {
 		 */
 		Connection conn = db.getConnection(); // Obtain the connection
 
-		if(this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, ID_fa,  dateIn) VALUES(?,?,?)";
+		if(this.getID().compareTo("")==0) {
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, ID_fa,  dateIn, sender, receiver , fiscalNumber , address) VALUES(?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
-			pstmt.setInt(1, this.getID());
-			
-			pstmt.setDate(2, this.getDateIn().toSQL());
-			pstmt.setString(3,this.getSender());
-			pstmt.setString(4, this.getReceiver());
-			
-			pstmt.setString(5, this.getAddress());
+			pstmt.setString(1, this.getID());
+			pstmt.setInt(2, this.getID_fa());
+			pstmt.setDate(3, this.getDateIn().toSQL());
+			pstmt.setString(4,this.getSender());
+			pstmt.setString(5, this.getReceiver());
 			pstmt.setString(6, this.getFiscalNumber());
-			pstmt.setInt(7, this.getID_fa());
-			pstmt.setInt(8, this.getID_professional());
+			pstmt.setString(7, this.getAddress());
 			
 			pstmt.executeUpdate(); // statement execution
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setDate(1, this.getDateIn().toSQL());
+			pstmt.setInt(6, this.getID_fa());
 			pstmt.setString(2,this.getSender());
 			pstmt.setString(3, this.getReceiver());
-			
-			pstmt.setString(4, this.getAddress());
 			pstmt.setString(5, this.getFiscalNumber());
-			pstmt.setInt(6, this.getID_fa());
-			pstmt.setInt(7, this.getID_professional());
+			pstmt.setString(4, this.getAddress());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
-			this.ID = tableKeys.getInt(1);
+			this.ID = tableKeys.getString(1);
 		}
 
 		conn.close();
-	}
-	public int getID_professional() {
-		return ID_professional;
-	}
-	public void setID_professional(int iD_professional) {
-		ID_professional = iD_professional;
 	}
 	public Date getDateIn() {
 		return dateIn;
@@ -232,10 +216,10 @@ public class Invoice {
 	public void setDateIn(Date dateIn) {
 		this.dateIn = dateIn;
 	}
-	public int getID() {
+	public String getID() {
 		return ID;
 	}
-	public void setID(int iD) {
+	public void setID(String iD) {
 		ID = iD;
 	}
 	public int getID_fa() {
@@ -275,8 +259,8 @@ public class Invoice {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
+
+
+
 }
-
-
-
-
