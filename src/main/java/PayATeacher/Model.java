@@ -9,6 +9,7 @@ import java.util.List;
 import Entities.FormativeAction;
 import Entities.InvoiceTeacher;
 import Entities.PaymentTeacher;
+import Entities.Session;
 import PayATeacher.Data;
 import Utils.Database;
 

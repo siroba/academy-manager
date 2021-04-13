@@ -20,8 +20,7 @@ public class Payment {
 	private Date payDate;
 	private boolean confirmed ,cash;
 
-	public Payment(int ID_invoice, float amount, Date payDate,
-			 boolean confirmed , boolean cash) {
+	public Payment(int ID_invoice, float amount, Date payDate, boolean confirmed , boolean cash) {
 		this.ID_invoice = ID_invoice;
 		this.amount = amount;
 		this.payDate = payDate;
@@ -208,7 +207,7 @@ public class Payment {
 
 			pstmt.executeUpdate(); // statement execution
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);

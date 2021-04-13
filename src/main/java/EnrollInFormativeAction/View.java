@@ -76,82 +76,82 @@ public class View extends JFrame {
 		registrationPanel.setLayout(null);
 		
 		JLabel lblFillYourInformation = new JLabel("Fill your information:");
-		lblFillYourInformation.setBounds(12, 24, 238, 15);
+		lblFillYourInformation.setBounds(12, 18, 238, 15);
 		registrationPanel.add(lblFillYourInformation);
 
 		JLabel lblName = new JLabel("Name:");
-		lblName.setBounds(12, 53, 70, 15);
+		lblName.setBounds(12, 51, 70, 15);
 		registrationPanel.add(lblName);
 
 		profName = new JTextField();
-		profName.setBounds(67, 51, 199, 19);
+		profName.setBounds(67, 49, 199, 19);
 		registrationPanel.add(profName);
 		profName.setColumns(10);
 
 		JLabel lblSurname = new JLabel("Surname:");
-		lblSurname.setBounds(12, 82, 70, 15);
+		lblSurname.setBounds(12, 84, 70, 15);
 		registrationPanel.add(lblSurname);
 
 		textSurname = new JTextField();
-		textSurname.setBounds(87, 80, 179, 19);
+		textSurname.setBounds(87, 82, 179, 19);
 		registrationPanel.add(textSurname);
 		textSurname.setColumns(10);
 
 		JLabel lblPhone = new JLabel("Phone:");
-		lblPhone.setBounds(12, 111, 70, 15);
+		lblPhone.setBounds(12, 117, 70, 15);
 		registrationPanel.add(lblPhone);
 
 		textPhone = new JTextField();
-		textPhone.setBounds(67, 109, 114, 19);
+		textPhone.setBounds(67, 115, 114, 19);
 		registrationPanel.add(textPhone);
 		textPhone.setColumns(10);
 
 		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(12, 140, 70, 15);
+		lblEmail.setBounds(12, 150, 70, 15);
 		registrationPanel.add(lblEmail);
 
 		textEmail = new JTextField();
-		textEmail.setBounds(67,138, 148, 19);
+		textEmail.setBounds(67,148, 148, 19);
 		registrationPanel.add(textEmail);
 		textEmail.setColumns(10);
 
 		JLabel lblGroup = new JLabel("Group:");
-		lblGroup.setBounds(12, 169, 70, 15);
+		lblGroup.setBounds(12, 183, 70, 15);
 		registrationPanel.add(lblGroup);
 
 		cbGroup = new JComboBox<String>();
-		cbGroup.setBounds(67, 167, 148, 19);
+		cbGroup.setBounds(67, 181, 148, 19);
 		registrationPanel.add(cbGroup);
 
 		lblTheFeeWill = new JLabel("The Fee will be: ");
-		lblTheFeeWill.setBounds(12, 266, 135, 15);
+		lblTheFeeWill.setBounds(12, 278, 135, 15);
 		registrationPanel.add(lblTheFeeWill);
 		
 		txtFee = new JTextField();
 		txtFee.setEditable(false);
-		txtFee.setBounds(116, 264, 121, 19);
+		txtFee.setBounds(116, 276, 121, 19);
 		registrationPanel.add(txtFee);
 		txtFee.setColumns(10);
 		
 		btnConfirmAndEnroll = new JButton("Confirm and enroll");
-		btnConfirmAndEnroll.setBounds(12, 303, 235, 25);
+		btnConfirmAndEnroll.setBounds(12, 311, 235, 25);
 		registrationPanel.add(btnConfirmAndEnroll);
 		
 		JLabel lblNewLabel = new JLabel("Address");
-		lblNewLabel.setBounds(10, 204, 45, 13);
+		lblNewLabel.setBounds(10, 216, 72, 13);
 		registrationPanel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Fiscal number");
-		lblNewLabel_1.setBounds(12, 227, 70, 13);
+		lblNewLabel_1.setBounds(12, 247, 101, 13);
 		registrationPanel.add(lblNewLabel_1);
 		
 		Address = new JTextField();
-		Address.setBounds(67, 194, 199, 19);
+		Address.setBounds(60, 213, 179, 19);
 		registrationPanel.add(Address);
 		Address.setColumns(10);
 		
 		FiscalNumber = new JTextField();
-		FiscalNumber.setBounds(85, 224, 165, 19);
+		FiscalNumber.setBounds(110, 244, 165, 19);
 		registrationPanel.add(FiscalNumber);
 		FiscalNumber.setColumns(10);
 

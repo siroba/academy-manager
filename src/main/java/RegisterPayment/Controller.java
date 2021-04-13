@@ -83,7 +83,7 @@ public class Controller implements PL53.util.Controller {
 
 
 
-				 if (calcTime > 2|| calcTime<0) {
+				 if (calcTime > 2|| calcTime<-0.1) {
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours after the enrollmet");
 
@@ -94,11 +94,12 @@ public class Controller implements PL53.util.Controller {
 					float amount = view.getAmountPaidTextField();
 					Date payDate = view.getDateTextPane().getDate();
 
-					model.createPayment( selectedRow.formativeAction.getID(),
-							selectedRow.professional.getID(), amount, payDate);
-					JOptionPane.showMessageDialog(null,
-							"The payment has been register");
 					try {
+						model.createPayment( selectedRow.formativeAction.getID(),
+								selectedRow.professional.getID(), amount, payDate, view.isCash());
+						JOptionPane.showMessageDialog(null,
+								"The payment has been registered");
+						
 						model.initModel();
 						view.setTable(getTableModel(model.getAllData()));
 					} catch (SQLException e1) {
@@ -129,8 +130,8 @@ public class Controller implements PL53.util.Controller {
 
 		for (int i = 0; i < datas.length; i++) {
 			RegisterPayment.Data d = datas[i];
-			body[i] = new String[] { Integer.toString(d.payment.getID()), d.formativeAction.getName(),
-					d.professional.getName(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
+			body[i] = new String[] {  d.formativeAction.getName(),
+					d.professional.getName(), d.professional.getSurname(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
 					d.enrollment.getTimeEn().toString() };
 		}
 

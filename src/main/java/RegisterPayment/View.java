@@ -35,6 +35,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
 
 
 
@@ -61,6 +62,7 @@ public class View extends JFrame {
 	private JDecimalField amountPaidTextField;
 	private JTable table;
 	private JScrollPane scrollPane;
+	private JCheckBox isCash;
 	
 	public View() {
 		
@@ -126,6 +128,10 @@ public class View extends JFrame {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		
+		isCash = new JCheckBox("Cash payment");
+		isCash.setBounds(34, 393, 212, 21);
+		contentPane.add(isCash);
 	}
 
 	public Window getFrame() {
@@ -168,5 +174,9 @@ public class View extends JFrame {
 	
 	public int getSelected() {
 		return this.table.getSelectedRow();
+	}
+	
+	public boolean isCash() {
+		return isCash.isSelected();
 	}
 }
