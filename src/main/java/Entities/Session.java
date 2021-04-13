@@ -94,7 +94,7 @@ public class Session {
 			pstmt.setInt(2, getID_fa());
 			pstmt.setString(3, getLocation());
 			pstmt.setInt(4, getNumberOfHours());
-			pstmt.setTimestamp(5, getSessionStart().toTimestamp());
+			pstmt.setString(5,  getSessionStart().toSQLiteString());
 			pstmt.setString(6, getTeacherName());
 			pstmt.setFloat(7, getRemuneration());
 
@@ -109,7 +109,7 @@ public class Session {
 			pstmt.setInt(1, getID_fa());
 			pstmt.setString(2, getLocation());
 			pstmt.setInt(3, getNumberOfHours());
-			pstmt.setTimestamp(4, getSessionStart().toTimestamp());
+			pstmt.setString(4,  getSessionStart().toSQLiteString());
 			pstmt.setString(5, getTeacherName());
 			pstmt.setFloat(6, getRemuneration());
 			pstmt.executeUpdate(); // statement execution

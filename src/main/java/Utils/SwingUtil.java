@@ -83,6 +83,17 @@ public class SwingUtil {
 	}
 	
 	/** 
+	 * Gets the value (of the requested column) of the selected row in the table or empty string (if it does not exist).
+	 */
+	public static String getSelectedValue(JTable table, int col) {
+		int row=table.getSelectedRow(); //the item in the first column is the race id
+		if (row>=0)
+			return (String)table.getModel().getValueAt(row,col);
+		else //no rows selected
+			return "";
+	}
+	
+	/** 
 	 * Selects the table row with the specified key and returns the value of the resulting key of the selected row.
 	 * (the same key or empty string if the row does not exist)
 	 */
@@ -139,8 +150,7 @@ public class SwingUtil {
 		return tm;
 	}
 	
-	public static <E> TableModel getRecordModelFromPojoWithCustomName(E pojo, String[] colProperties,
-			String[] colNames) {
+	public static <E> TableModel getRecordModelFromPojo(E pojo, String[] colProperties, String[] colNames) {
 		TableModel tm;
 		tm = new DefaultTableModel(new String[] { "", "" }, colProperties.length);
 		for (int j = 0; j < colProperties.length; j++) {
