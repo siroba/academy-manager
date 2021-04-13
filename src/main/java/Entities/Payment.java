@@ -18,11 +18,10 @@ public class Payment {
 	private int ID = -1, ID_invoice;
 	private float amount;
 	private Date payDate;
-	private String sender, receiver, fiscalNumber, address;
 	private boolean confirmed ,cash;
 
-	public Payment(int ID_invoice, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
-			String address, boolean confirmed , boolean cash) {
+	public Payment(int ID_invoice, float amount, Date payDate,
+			 boolean confirmed , boolean cash) {
 		this.ID_invoice = ID_invoice;
 		this.amount = amount;
 		this.payDate = payDate;
@@ -45,8 +44,7 @@ public class Payment {
 	 * @param address
 	 * @param confirmed
 	 */
-	public Payment(int ID_payment, int ID_invoice, float amount, Date payDate, String sender, String receiver, String fiscalNumber,
-			String address, boolean confirmed, boolean cash) {
+	public Payment(int ID_payment, int ID_invoice, float amount, Date payDate,  boolean confirmed, boolean cash) {
 		this.ID = ID_payment;
 		this.ID_invoice = ID_invoice;
 
@@ -56,6 +54,7 @@ public class Payment {
 		this.confirmed = confirmed;
 
 		this.cash=cash;
+	}
 
 
 	public static String tableName() {
@@ -109,10 +108,7 @@ public class Payment {
 
 					rs.getFloat("amount"),
 					datepay,
-					rs.getString("sender"),
-					rs.getString("receiver"),
-					rs.getString("fiscalNumber"),
-					rs.getString("address"),
+					
 					rs.getBoolean("confirmed"),
 					rs.getBoolean("cash"));
 
@@ -157,10 +153,7 @@ public class Payment {
 				rs.getInt("ID_invoice"),
 				rs.getFloat("amount"),
 				datepay,
-				rs.getString("sender"),
-				rs.getString("receiver"),
-				rs.getString("fiscalNumber"),
-				rs.getString("address"),
+				
 				rs.getBoolean("confirmed"),
 				rs.getBoolean("cash"));
 
@@ -200,8 +193,7 @@ public class Payment {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if(this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_fa, ID_professional, amount, payDate, sender, receiver, fiscalNumber,"
-					+ " address, confirmed) VALUES(?,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_fa, ID_professional, amount, payDate, confirmed,cash) VALUES(?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -211,12 +203,8 @@ public class Payment {
 			pstmt.setInt(2, this.getID_invoice());
 			pstmt.setFloat(3, this.getAmount());
 			pstmt.setTimestamp(4, this.getPayDate().toTimestamp());
-			pstmt.setString(5,this.getSender());
-			pstmt.setString(6, this.getReceiver());
-			pstmt.setString(7, this.getFiscalNumber());
-			pstmt.setString(8, this.getAddress());
-			pstmt.setBoolean(9, this.isConfirmed());
-			pstmt.setBoolean(10, this.isCash());
+			pstmt.setBoolean(5, this.isConfirmed());
+			pstmt.setBoolean(6, this.isCash());
 
 			pstmt.executeUpdate(); // statement execution
 		}else {
@@ -228,13 +216,9 @@ public class Payment {
 
 			pstmt.setFloat(1, this.getAmount());
 			pstmt.setDate(2, this.getPayDate().toSQL());
-			pstmt.setString(3,this.getSender());
-			pstmt.setString(4, this.getReceiver());
-			pstmt.setString(5, this.getAddress());
-			pstmt.setString(6, this.getFiscalNumber());
-			pstmt.setBoolean(7, this.isConfirmed());
-			pstmt.setBoolean(8, this.isCash());
-			pstmt.setInt(9, this.getID_invoice());
+			pstmt.setBoolean(3, this.isConfirmed());
+			pstmt.setBoolean(4, this.isCash());
+			pstmt.setInt(5, this.getID_invoice());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -247,9 +231,7 @@ public class Payment {
 
 
 
-	public int getID_invoice() {
-		return ID_invoice;
-	}
+
 
 	public void setID_invoice(int iD_invoice) {
 		ID_invoice = iD_invoice;
@@ -283,37 +265,7 @@ public class Payment {
 		this.payDate = payDate;
 	}
 
-	public String getSender() {
-		return sender;
-	}
-
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
-
-	public String getReceiver() {
-		return receiver;
-	}
-
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
-
-	public String getFiscalNumber() {
-		return fiscalNumber;
-	}
-
-	public void setFiscalNumber(String fiscalNumber) {
-		this.fiscalNumber = fiscalNumber;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
+	
 
 	public boolean isConfirmed() {
 		return confirmed;

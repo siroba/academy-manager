@@ -34,6 +34,8 @@ public class View extends JFrame {
 	private JLabel lblTheFeeWill;
 	private JTextField txtFee;
 	private JComboBox<String> cbGroup;
+	private JTextField Address;
+	private JTextField FiscalNumber;
 
 	/**
 	 * Create the frame.
@@ -42,7 +44,7 @@ public class View extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setTitle("Enroll in a Formative Action");
-		setBounds(100, 100, 760, 306);
+		setBounds(100, 100, 760, 378);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,7 +70,7 @@ public class View extends JFrame {
 		selectionPanel.add(lblSelectTheFormative);
 
 		registrationPanel = new JPanel();
-		registrationPanel.setBounds(452, -13, 298, 264);
+		registrationPanel.setBounds(452, -13, 298, 358);
 		contentPane.add(registrationPanel);
 		registrationPanel.setVisible(false);
 		registrationPanel.setLayout(null);
@@ -122,21 +124,39 @@ public class View extends JFrame {
 		registrationPanel.add(cbGroup);
 
 		lblTheFeeWill = new JLabel("The Fee will be: ");
-		lblTheFeeWill.setBounds(12, 198, 135, 15);
+		lblTheFeeWill.setBounds(12, 266, 135, 15);
 		registrationPanel.add(lblTheFeeWill);
 		
 		txtFee = new JTextField();
 		txtFee.setEditable(false);
-		txtFee.setBounds(145, 197, 121, 19);
+		txtFee.setBounds(116, 264, 121, 19);
 		registrationPanel.add(txtFee);
 		txtFee.setColumns(10);
 		
 		btnConfirmAndEnroll = new JButton("Confirm and enroll");
-		btnConfirmAndEnroll.setBounds(12, 230, 235, 25);
+		btnConfirmAndEnroll.setBounds(12, 303, 235, 25);
 		registrationPanel.add(btnConfirmAndEnroll);
+		
+		JLabel lblNewLabel = new JLabel("Address");
+		lblNewLabel.setBounds(10, 204, 45, 13);
+		registrationPanel.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("Fiscal number");
+		lblNewLabel_1.setBounds(12, 227, 70, 13);
+		registrationPanel.add(lblNewLabel_1);
+		
+		Address = new JTextField();
+		Address.setBounds(67, 194, 199, 19);
+		registrationPanel.add(Address);
+		Address.setColumns(10);
+		
+		FiscalNumber = new JTextField();
+		FiscalNumber.setBounds(85, 224, 165, 19);
+		registrationPanel.add(FiscalNumber);
+		FiscalNumber.setColumns(10);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(441, -11, 18, 282);
+		separator.setBounds(441, -11, 18, 356);
 		contentPane.add(separator);
 		separator.setOrientation(SwingConstants.VERTICAL);
 	}
@@ -199,5 +219,10 @@ public class View extends JFrame {
 	public void clearCbGroup() {
 		cbGroup.removeAllItems();
 	}
-	
+	public String getAddress() {
+		return Address.getText();
+	}
+	public String getFiscalNumber() {
+		return FiscalNumber.getText();
+	}
 }

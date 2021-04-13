@@ -55,6 +55,9 @@ public class Model {
 	}
 
 	public Data getData(int i) {
+		if(i<0 || i> this.data.length-1) {
+			return null;
+		}
 		return this.data[i];
 	}
 
@@ -68,24 +71,27 @@ public class Model {
 				+ "		WHERE Invoice.ID_invoice NOT IN ( SELECT ID_invoice From Payment);";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
-		String queryFee = "SELECT * FROM Fee WHERE ID_fa=";
+		
 		
 
 		List<Invoice> invoices= Invoice.get(sql, db);
 		for ( Invoice in : invoices){
-			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" +in.getID_fa() +" AND ID_professional=" +in.g;
-			
+			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" +in.getID_fa() +" AND ID_professional=" +in.getID_professional();
+			String queryFee = "SELECT * FROM Fee WHERE ID_fa="+in.getID_fa() + " AND category=";
 			Data d = new Data() ;
 			d.invoice= in;
 			d.formativeAction = FormativeAction.getOne(queryFa + in.getID_fa(), db);
-			d.fee= Fee.getOne(queryFee + in.getID_fa(), db);
-			d.enrollment=Enrollment.getOne(query, db)
+			d.professional=Professional.getOne(queryProf + in.getID_professional(), db);
+			d.enrollment=Enrollment.getOne(queryEnr, db);
+			d.fee= Fee.getOne(queryFee + d.enrollment.getGroup(), db).getAmount();
+			data.add(d);
+
 			
 		}
 		
 
-		Data data2[] = new Data[data1.size()];
-		return data1.toArray(data2);
+		Data data2[] = new Data[data.size()];
+		return data.toArray(data2);
 		
 	}
 
@@ -93,12 +99,14 @@ public class Model {
 		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
 	}
 
-	void updateStatus(int id_pay ,int id_fa, int id_professional , float amount , Date datePay) {
+	void createPayment(int id_pay ,int id_invoice,  float amount , Date datePay ) {
 		String query = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?"; 
 		String quer= "UPDATE Payment SET confirmed= true, amount=? ,datePay=? WHERE ID_payment=? "; 
-		db.executeUpdateQuery(query, id_fa, id_professional);
+		db.executeUpdateQuery(query, id_pay, id_invoice);
 		db.executeUpdate(quer, amount, datePay, id_pay);
 	}
+
+
 	
 	
 }

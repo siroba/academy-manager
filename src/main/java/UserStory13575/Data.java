@@ -11,7 +11,7 @@ public class Data {
 	public FormativeAction formativeAction;
 	public Enrollment enrollment;
 	public Professional professional;
-	public Fee fee;
+	public float fee;
 	public Invoice invoice;
 	
 }

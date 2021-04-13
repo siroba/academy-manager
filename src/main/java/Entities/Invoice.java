@@ -197,15 +197,20 @@ public class Invoice {
 			
 			pstmt.executeUpdate(); // statement execution
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setDate(1, this.getDateIn().toSQL());
-			pstmt.setInt(2, this.getID_fa());
-			pstmt.setInt(3, this.getID_professional());
+			pstmt.setString(2,this.getSender());
+			pstmt.setString(3, this.getReceiver());
+			
+			pstmt.setString(4, this.getAddress());
+			pstmt.setString(5, this.getFiscalNumber());
+			pstmt.setInt(6, this.getID_fa());
+			pstmt.setInt(7, this.getID_professional());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();

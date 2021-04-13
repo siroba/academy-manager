@@ -67,19 +67,24 @@ public class Controller implements PL53.util.Controller {
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
 			public void actionPerformed(ActionEvent e) {
+			
 
+				
+				if (selectedRow == null) {
+					JOptionPane.showMessageDialog(null, "You have to select one payment");
+					return;
+				} else if (selectedRow.fee != selectedRow.formativeAction.getFee(selectedRow.enrollment.getGroup())) {
+					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
+					return;
+
+				}
+				
 				int calcTime= DateTime.daysSince(
 						view.getDateTextPane().getDate() ,selectedRow.enrollment.getTimeEn());
 
 
-				if (selectedRow == null) {
-					JOptionPane.showMessageDialog(null, "You have to select one payment");
-				} else if (selectedRow.payment.getAmount() != selectedRow.formativeAction.getFee(selectedRow.enrollment.getGroup())) {
-					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
 
-				}
-
-				else if (calcTime > 2|| calcTime<0) { 
+				 if (calcTime > 2|| calcTime<0) { 
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours after the enrollmet");
 
@@ -90,7 +95,7 @@ public class Controller implements PL53.util.Controller {
 					float amount = view.getAmountPaidTextField();
 					Date payDate = view.getDateTextPane().getDate();
 
-					model.updateStatus(selectedRow.payment.getID(), selectedRow.formativeAction.getID(),
+					model.createPayment( selectedRow.formativeAction.getID(),
 							selectedRow.professional.getID(), amount, payDate);
 					JOptionPane.showMessageDialog(null,
 							"The payment has been register");
@@ -118,16 +123,16 @@ public class Controller implements PL53.util.Controller {
 
 	public TableModel getTableModel(UserStory13575.Data[] datas) {
 
-		String header[] = { "Payment Id", "Course name", "Professional name", "Professional email", "Fee",
+		String header[] = {  "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
 				"Date of the registration" };
 
 		String body[][] = new String[datas.length][header.length];
 
 		for (int i = 0; i < datas.length; i++) {
 			UserStory13575.Data d = datas[i];
-			body[i] = new String[] { Integer.toString(d.payment.getID()), d.formativeAction.getName(),
+			body[i] = new String[] {  d.formativeAction.getName(),
 					//d.professional.getName(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
-					d.professional.getName(), d.professional.getEmail(), Float.toString(d.fee.getAmount()),
+					d.professional.getName(),d.professional.getSurname(), d.professional.getEmail(), Float.toString(d.fee),
 
 					d.enrollment.getTimeEn().toString() };
 		}
