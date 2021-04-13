@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS Teacher (
 );
 
 CREATE TABLE IF NOT EXISTS InvoiceTeacher (
-	ID_invoice 		INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	ID_invoice 		text PRIMARY KEY NOT NULL,
 	dateIn     		date NOT NULL,
 	sender          text NOT NULL,
 	receiver        text NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS PaymentTeacher (
 	amount       real NOT NULL,
 	datePay      date NOT NULL,
 	confirmed    boolean NOT NULL,
-	ID_invoice   integer NOT NULL,
+	ID_invoice   text NOT NULL,
 	CONSTRAINT FK_158 FOREIGN KEY ( ID_invoice ) REFERENCES InvoiceTeacher ( ID_invoice )
 );
 
