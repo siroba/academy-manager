@@ -65,10 +65,9 @@ public class Controller implements PL53.util.Controller {
 						JOptionPane.WARNING_MESSAGE);
 				// 0=yes, 1=no
 				
-				if(input == 0) {					
-					model.deleteEnrollment(selected);
-
+				if(input == 0) {
 					try {
+						model.deleteEnrollment(selected, view.getDateIn(), "COIIPA", selected.professional.getName(), view.getAddress(), view.getFiscalNumber(), view.getIsCash());
 						model.initModel();
 					} catch (SQLException | ParseException e1) {
 						// TODO Auto-generated catch block
