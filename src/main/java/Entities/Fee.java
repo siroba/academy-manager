@@ -92,6 +92,8 @@ public class Fee {
 			pstmt.setFloat(4, getAmount());
 
 			pstmt.executeUpdate(); // statement execution
+
+			pstmt.close();
 		} else {
 			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?)";
 
@@ -107,6 +109,8 @@ public class Fee {
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
+			pstmt.close();
+			tableKeys.close();
 		}
 
 		conn.close();

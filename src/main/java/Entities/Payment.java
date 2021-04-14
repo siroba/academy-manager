@@ -205,6 +205,7 @@ public class Payment {
 			pstmt.setBoolean(6, this.isCash());
 
 			pstmt.executeUpdate(); // statement execution
+			pstmt.close();
 		}else {
 			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?)";
 
@@ -222,6 +223,8 @@ public class Payment {
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
+			pstmt.close();
+			tableKeys.close();
 		}
 
 		conn.close();

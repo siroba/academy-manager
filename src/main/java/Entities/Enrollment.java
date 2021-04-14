@@ -68,6 +68,7 @@ public class Enrollment {
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 
 		pstmt.executeUpdate();
+		pstmt.close();
 		conn.close();
 	}
 
@@ -194,6 +195,7 @@ public class Enrollment {
 
 		pstmt.executeUpdate(); // statement execution
 
+		pstmt.close();
 		conn.close();
 	}
 
