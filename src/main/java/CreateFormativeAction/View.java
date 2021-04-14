@@ -247,7 +247,8 @@ public class View {
 		sessionsPanel.add(LabelHours);
 
 		TFHours = new JIntField(2);
-		TFHours.setBound(0, 24);
+		TFHours.setBound(1, Integer.MAX_VALUE);
+		TFHours.setDefaultValue(1);
 		TFHours.setBounds(362, 228, 39, 19);
 		sessionsPanel.add(TFHours);
 
