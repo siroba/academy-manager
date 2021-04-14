@@ -47,7 +47,7 @@ public class Model {
 			int ret;
 			Connection cn = db.getConnection();
 			
-			PreparedStatement ps = cn.prepareStatement("select sum(amount) as confirmed \n"
+			PreparedStatement ps = cn.prepareStatement("select sum(p.amount) as confirmed \n"
 					+ "from FormativeAction fa \n"
 					+ "inner join Enrollment e on fa.ID_fa=e.ID_fa \n"
 					+ "inner join Invoice i on i.ID_fa=e.ID_fa AND i.ID_professional=e.ID_professional \n"
@@ -100,7 +100,7 @@ public class Model {
 			int ret;
 			Connection cn = db.getConnection();
 			
-			PreparedStatement ps = cn.prepareStatement("select sum(amount) as confirmed from FormativeAction fa \n"
+			PreparedStatement ps = cn.prepareStatement("select sum(p.amount) as confirmed from FormativeAction fa \n"
 					+ "inner join InvoiceTeacher i ON fa.ID_fa=i.ID_fa \n"
 					+ "inner join PaymentTeacher p ON p.ID_invoice=i.ID_invoice \n"
 					+ "where fa.nameFa = ? and p.confirmed = 1;");
@@ -124,7 +124,7 @@ public class Model {
 			int ret;
 			Connection cn = db.getConnection();
 			
-			PreparedStatement ps = cn.prepareStatement("select sum(s.remuneration) as remuneration from Session s \n"
+			PreparedStatement ps = cn.prepareStatement("select sum(s.remuneration) as remuneration from TeacherTeaches s \n"
 					+ "inner join FormativeAction fa on s.ID_fa=fa.ID_fa\n"
 					+ "where fa.nameFa = ?;");
 			ps.setString(1, nameFa);
