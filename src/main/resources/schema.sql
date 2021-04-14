@@ -111,5 +111,3 @@ CREATE TABLE TeacherTeaches (
 	CONSTRAINT FK_244 FOREIGN KEY ( ID_teacher ) REFERENCES Teacher ( ID_teacher ),
 	CONSTRAINT FK_249 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa )
 );
-
-

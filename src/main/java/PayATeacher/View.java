@@ -50,14 +50,14 @@ public class View extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Record Payments");
+		JLabel lblNewLabel = new JLabel("Record Payments made to the teachers");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel.setBounds(247, 10, 163, 31);
+		lblNewLabel.setBounds(247, 10, 454, 31);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Pending Payments");
+		JLabel lblNewLabel_1 = new JLabel("Record payments");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1.setBounds(32, 61, 153, 13);
+		lblNewLabel_1.setBounds(32, 61, 251, 30);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Data of the invoice");

@@ -30,13 +30,14 @@ public class Model {
 	 */
 	public void setFormativeAction(FormativeAction fA, String teacherName, float remuneration) throws SQLException {
 		fA.insert(db);
-		
+
 		Teacher teacher = new Teacher(teacherName);
 		teacher.insert(db); // This also assigns an ID to the teacher, so that it can be used in the TeacherTeaches table
 		
 		TeacherTeaches t = fA.teach(teacher, remuneration);
 		t.insert(db);
 		
+
 		
 		for(Session s: fA.getSessions()) {
 			s.insert(db);

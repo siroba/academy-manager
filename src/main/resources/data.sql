@@ -14,14 +14,14 @@ insert into Session(ID_session, ID_fa, location, duration, sessionStart) values
 	(4, 1001, 'online', 3, '2021-02-11 09:00:00.0'),
 	(5, 1002, 'online', 3, '2021-04-10 12:00:00.0'),
 	(6, 1003, 'online', 4, '2021-05-01 10:00:00.0');
-	
+
 insert into Fee(ID_fee, amount, category, ID_fa) values
-	(1000, 15, 'Standard', 1000),	
-	(1001, 10, 'Standard', 1001),	
-	(1002, 30, 'Standard', 1002),	
-	(1003, 25, 'College Members', 1002),	
-	(1004, 20, 'UniOvi Members', 1002),	
-	(1005, 20, 'Standard', 1003);	
+	(1000, 15, 'Standard', 1000),
+	(1001, 10, 'Standard', 1001),
+	(1002, 30, 'Standard', 1002),
+	(1003, 25, 'College Members', 1002),
+	(1004, 20, 'UniOvi Members', 1002),
+	(1005, 20, 'Standard', 1003);
 
 insert into Professional(ID_professional, name, surname, phone, email) values
 	(2000, 'Pablo',	'Gonzales', 		'+341762568901', 	'pablo.gonzales@uniovi.es'),
@@ -77,15 +77,22 @@ insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
 	(3010, 10, '2021-02-01 15:00:00.0', true, 4010),
 	(3011, 30, '2021-03-22 13:00:00.0', false, 4011),
 	(3012, 30, '2021-03-03 13:00:00.0', false, 4012),
-	(3013, 30, '2021-03-05 10:00:00.0', true, 4013);    
-	
-insert into Teacher (ID_teacher, name) values 
+	(3013, 30, '2021-03-05 10:00:00.0', true, 4013);
+
+insert into Teacher (ID_teacher, name) values
 	(1000, "Fanjul"),
 	(1001, "Marcos"),
 	(1002, "Marek"),
 	(1003, "Vivien"),
 	(1004, "Silvia");
 	
+insert into TeacherTeaches (ID_teacher , ID_fa , remuneration) values
+	(1000,1000 ,2.0),
+	(1001, 1000,3.0),
+	(1002,1001 ,1.0),
+	(1003,1001 ,1.0),
+	(1004, 1002,2.0);
+
 insert into InvoiceTeacher (Id_invoice , amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa, ID_teacher) values
 
 	('4000', 10, '2021-01-02' , 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 1000),
@@ -96,9 +103,3 @@ insert into PaymentTeacher( ID_payment, amount, datePay,  confirmed, ID_invoice)
 	(3000, 15, '2021-01-02 ', true, '4000'),
 	(3001, 15, '2021-01-04 ', false, '4001'),
 	(3002, 15, '2021-01-07 ', false, '4002');
-
-	
-
-
-
-
