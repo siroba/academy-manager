@@ -31,8 +31,7 @@ public class Invoice {
 	 * @param ID_fa
 	 * @param ID_professional
 	 */
-	public Invoice(int ID_invoice, float amount, Date dateIn, String sender, String receiver, String address,
-			String fiscalNumber, int ID_fa, int ID_professional) {
+	public Invoice(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID = ID_invoice;
@@ -57,8 +56,7 @@ public class Invoice {
 	 * @param ID_fa
 	 * @param ID_professional
 	 */
-	public Invoice(float amount, Date dateIn, String sender, String receiver, String address, String fiscalNumber,
-			int ID_fa, int ID_professional) {
+	public Invoice(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.dateIn = dateIn;
@@ -114,10 +112,17 @@ public class Invoice {
 			} catch (ParseException e) {
 				dateIn = Date.fromMillis(rs.getLong("dateIn"));
 			}
-
-			Invoice e = new Invoice(rs.getInt("ID_invoice"), rs.getFloat("amount"), dateIn, rs.getString("sender"),
-					rs.getString("receiver"), rs.getString("fiscalNumber"), rs.getString("address"), rs.getInt("ID_fa"),
-					rs.getInt("ID_professional"));
+			Invoice e = new Invoice(
+					rs.getInt("ID_invoice"),
+					rs.getFloat("amount"),
+					dateIn,
+					rs.getString("sender"),
+					rs.getString("receiver"),
+					rs.getString("fiscalNumber"),
+					rs.getString("address"),
+					rs.getInt("ID_fa"),
+					rs.getInt("ID_professional")
+					);
 
 			invoices.add(e);
 		}
@@ -152,11 +157,19 @@ public class Invoice {
 			dateIn = Date.parseString(rs.getString("dateIn"));
 		} catch (ParseException e) {
 			dateIn = Date.fromMillis(rs.getLong("dateIn"));
-		}
-
-		Invoice e = new Invoice(rs.getInt("ID_invoice"), rs.getFloat("amount"), dateIn, rs.getString("sender"),
-				rs.getString("receiver"), rs.getString("fiscalNumber"), rs.getString("address"), rs.getInt("ID_fa"),
-				rs.getInt("ID_professional"));
+    }
+    
+		Invoice e = new Invoice(
+				rs.getInt("ID_invoice"),
+				rs.getFloat("amount"),
+				dateIn,
+				rs.getString("sender"),
+				rs.getString("receiver"),
+				rs.getString("fiscalNumber"),
+				rs.getString("address"),
+				rs.getInt("ID_fa"),
+				rs.getInt("ID_professional")
+				);
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -181,9 +194,8 @@ public class Invoice {
 		 */
 		Connection conn = db.getConnection(); // Obtain the connection
 
-		if (this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName()
-					+ "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		if(this.getID() != -1) {
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -194,7 +206,6 @@ public class Invoice {
 			pstmt.setDate(3, this.getDateIn().toSQL());
 			pstmt.setString(4, this.getSender());
 			pstmt.setString(5, this.getReceiver());
-
 			pstmt.setString(6, this.getAddress());
 			pstmt.setString(7, this.getFiscalNumber());
 			pstmt.setInt(8, this.getID_fa());
@@ -212,9 +223,8 @@ public class Invoice {
 
 			pstmt.setFloat(1, this.getAmount());
 			pstmt.setDate(2, this.getDateIn().toSQL());
-			pstmt.setString(3, this.getSender());
+			pstmt.setString(3,this.getSender());
 			pstmt.setString(4, this.getReceiver());
-
 			pstmt.setString(5, this.getAddress());
 			pstmt.setString(6, this.getFiscalNumber());
 			pstmt.setInt(7, this.getID_fa());
@@ -231,15 +241,14 @@ public class Invoice {
 
 		conn.close();
 	}
-
+	
 	public float getAmount() {
 		return amount;
 	}
-
 	public void setAmount(float amount) {
 		this.amount = amount;
 	}
-
+  
 	public int getID_professional() {
 		return ID_professional;
 	}
