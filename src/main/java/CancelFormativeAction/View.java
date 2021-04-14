@@ -4,12 +4,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
+import PL53.swing.CheckboxTableModel;
 
 import Utils.SwingUtil;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JButton;
 
 public class View extends JFrame {
@@ -24,13 +29,14 @@ public class View extends JFrame {
 	private JPanel panel_1;
 	private JTable tableRefunds;
 	private JScrollPane scrollPane_2;
+	private JButton btnRefund;
 
 	/**
 	 * Create the frame.
 	 */
 	public View() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1118, 356);
+		setBounds(100, 100, 1118, 378);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -80,6 +86,10 @@ public class View extends JFrame {
 		
 		tableRefunds = new JTable();
 		scrollPane_2.setViewportView(tableRefunds);
+		
+		btnRefund = new JButton("Refund selected professionals");
+		btnRefund.setBounds(739, 292, 211, 23);
+		contentPane.add(btnRefund);
 	}
 
 	public void setTable(TableModel tm) {
@@ -101,6 +111,18 @@ public class View extends JFrame {
 		SwingUtil.autoAdjustColumns(tableCancelledFA);
 	}
 
+	public Integer[] getCheckedProfessionals() {
+		List<Integer> l = new ArrayList<Integer>();
+		
+		for(int i = 0; i<tableRefunds.getRowCount(); i++) {
+			if(((CheckboxTableModel) tableRefunds.getModel()).isChecked(i))
+				l.add(i);
+		}
+		
+		Integer[] list = new Integer[l.size()];
+		return l.toArray(list);
+	}
+	
 	public JTable getTableRefunds() {
 		return tableCancelledFA;
 	}
@@ -111,5 +133,9 @@ public class View extends JFrame {
 	
 	public void enableRefundsScroll() {
 		this.scrollPane_2.setEnabled(true);
+	}
+	
+	public JButton getBtnRefund() {
+		return btnRefund;
 	}
 }
