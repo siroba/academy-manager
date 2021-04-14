@@ -13,7 +13,7 @@ import PL53.util.Date;
 import Utils.Database;
 
 public class InvoiceTeacher {
-	private int ID_fa;
+	private int ID_fa ,ID_teacher;
 	private Date dateIn;
 	private String sender, receiver, fiscalNumber, address , ID="";
 	private float amount;
@@ -23,7 +23,7 @@ public class InvoiceTeacher {
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(String ID_invoice, float amount, int ID_fa,  Date dateIn , String sender , String receiver, String fiscalNumber, String address) {
+	public InvoiceTeacher(String ID_invoice, float amount, int ID_fa,  Date dateIn , String sender , String receiver, String fiscalNumber, String address , int ID_teacher) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
@@ -32,13 +32,14 @@ public class InvoiceTeacher {
 		this.receiver = receiver;
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
+		this.ID_teacher=ID_teacher;
 		
 	}
 	/**Default Constructor
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(int ID_fa, float amount,  Date dateIn,String sender , String receiver, String fiscalNumber, String address) {
+	public InvoiceTeacher(int ID_fa, float amount,  Date dateIn,String sender , String receiver, String fiscalNumber, String address, int ID_teacher) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.dateIn=dateIn;
@@ -46,6 +47,7 @@ public class InvoiceTeacher {
 		this.receiver = receiver;
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
+		this.ID_teacher=ID_teacher;
 	
 	}
 	public static String tableName() {
@@ -102,7 +104,8 @@ public class InvoiceTeacher {
 					rs.getString("sender"),
 					rs.getString("receiver"),
 					rs.getString("fiscalNumber"),
-					rs.getString("address")
+					rs.getString("address"),
+					rs.getInt("ID_teacher")
 					);
 					
 
@@ -115,6 +118,12 @@ public class InvoiceTeacher {
 		conn.close();
 
 		return invoices;
+	}
+	public int getID_teacher() {
+		return ID_teacher;
+	}
+	public void setID_teacher(int iD_teacher) {
+		ID_teacher = iD_teacher;
 	}
 	/**
 	 * Does the query you specify and returns the first result
@@ -149,7 +158,8 @@ public class InvoiceTeacher {
 				rs.getString("sender"),
 				rs.getString("receiver"),
 				rs.getString("fiscalNumber"),
-				rs.getString("address")
+				rs.getString("address"),
+				rs.getInt("ID_teacher")
 				);
 				
 
@@ -176,8 +186,8 @@ public class InvoiceTeacher {
 		 */
 		Connection conn = db.getConnection(); // Obtain the connection
 
-		if(this.getID().compareTo("")==0) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, ID_fa,  dateIn, sender, receiver , fiscalNumber , address) VALUES(?,?,?,?,?,?,?,?)";
+		
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, ID_fa,  dateIn, sender, receiver , fiscalNumber , address , ID_teacher) VALUES(?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -191,8 +201,10 @@ public class InvoiceTeacher {
 			pstmt.setString(6, this.getReceiver());
 			pstmt.setString(7, this.getFiscalNumber());
 			pstmt.setString(8, this.getAddress());
+			pstmt.setInt(9, this.getID_teacher());
 			
 			pstmt.executeUpdate(); // statement execution
+<<<<<<< Updated upstream
 			pstmt.close();
 		}else {
 			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?)";
@@ -217,6 +229,9 @@ public class InvoiceTeacher {
 			pstmt.close();
 			tableKeys.close();
 		}
+=======
+		
+>>>>>>> Stashed changes
 
 		conn.close();
 	}

@@ -10,6 +10,7 @@ import Entities.FormativeAction;
 import Entities.InvoiceTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
+import Entities.TeacherTeaches;
 import PayATeacher.Data;
 import Utils.Database;
 
@@ -62,10 +63,14 @@ public class Model {
 		List<FormativeAction> formativeActions = FormativeAction.get(sql, db);
 		for  (FormativeAction fa: formativeActions) {
 			fa.setSessions(Session.get("Select * From Session WHERE ID_fa = "+ fa.getID(), db));
+			fa.setTeacherTeaches(TeacherTeaches.get(fa, db));
 		}
+		
+		
 
 		FormativeAction data2[] = new FormativeAction[formativeActions.size()];
-		return formativeActions.toArray(data2);
+		data2= formativeActions.toArray(data2);
+		return data2;
 	}
 
 	public void insertInvoice ( InvoiceTeacher invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {

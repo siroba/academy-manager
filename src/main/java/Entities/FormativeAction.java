@@ -311,8 +311,7 @@ public class FormativeAction {
 
 		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
 		List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
-		List<TeacherTeaches> teachers = TeacherTeaches.get("SELECT * FROM TeacherTeaches WHERE ID_fa=" + id_fa, db);
-
+		
 		FormativeAction fa = new FormativeAction(
 				id_fa,
 				rs.getString("nameFa"),
@@ -324,7 +323,9 @@ public class FormativeAction {
 				dend,
 				sessions,
 				fees,
-				teachers);
+				null);
+		List<TeacherTeaches> teachers = TeacherTeaches.get(fa, db);
+		fa.setTeacherTeaches(teachers);
 
 		// Very important to always close all the objects related to the database
 		rs.close();

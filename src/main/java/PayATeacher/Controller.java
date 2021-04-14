@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +16,7 @@ import Entities.FormativeAction;
 import Entities.InvoiceTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
+import Entities.TeacherTeaches;
 import PL53.util.Date;
 import PL53.util.DateTime;
 import PayATeacher.Data;
@@ -63,9 +65,7 @@ public class Controller implements PL53.util.Controller {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
 				}
 
-				else {
-
-				}
+				
 
 			}
 		});
@@ -108,9 +108,11 @@ public class Controller implements PL53.util.Controller {
 					boolean confirmed = true;
 					Date dateInvoice = view.getDateTextField();
 					String IDInvoice = view.getIDInvoice();
+					int ID_teacher = selectedRow.getID();
 					
 					// TODO: The amount of the invoice and the payment can differ
-					InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice, amount, ID_fa, dateInvoice,sender,receiver, address, fiscalNumber);
+					
+					InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice, amount, ID_fa, dateInvoice,sender,receiver,  fiscalNumber,address,ID_teacher );
 
 					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer,  confirmed);
 
@@ -144,16 +146,27 @@ public class Controller implements PL53.util.Controller {
 
 		String header[] = { "Course name", "status", "Teacher name", "Due amount" };
 
-		String body[][] = new String[formativeActions.length][header.length];
+	
+		
+		ArrayList<String[]> rows = new ArrayList<String[]>();
 
 		for (int i = 0; i < formativeActions.length; i++) {
 			FormativeAction d = formativeActions[i];
 
 
-			for (Session s : d.getSessions()) {
-				body[i] = new String[] { d.getName(), d.getStatus().toString(), s.getTeacherName(),
-						Float.toString(s.getRemuneration()) };
-			}
+				for( TeacherTeaches tt: d.getTeacherTeaches()) {
+					
+				
+				rows.add( new String[] { d.getName(), d.getStatus().toString(), tt.getTeacher().getName(),
+						Float.toString(tt.getRemuneration()) });
+				}
+			
+		}
+		
+		String body[][] = new String[rows.size()][header.length];
+		
+		for(int i =0 ; i<rows.size();i++) {
+			body[i] = rows.get(i);
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
