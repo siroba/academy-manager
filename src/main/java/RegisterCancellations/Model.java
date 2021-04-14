@@ -6,8 +6,11 @@ import java.util.*;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
+import Entities.Invoice;
+import Entities.Payment;
 import Entities.Professional;
 import Utils.Database;
+import  PL53.util.Date;
 
 /**
  * Access to course data, used as a model for the swing example and for unit and
@@ -69,9 +72,43 @@ public class Model {
 		return data.toArray(data2);
 	}
 
-	public void deleteEnrollment(Data selected) {
-		String query = "DELETE FROM Enrollment WHERE ID_fa=? AND ID_professional=?";
+	public void deleteEnrollment(Data selected, Date dateIn, String sender, String receiver, String address, String fiscalNumber, boolean cash) throws SQLException, ParseException {
 		
+		// 1 - Cancel the enrollment
+		String query = "UPDATE Enrollment SET status='CANCELLED' WHERE ID_fa=? AND ID_professional=?";
 		db.executeUpdateQuery(query, selected.formativeAction.getID(), selected.professional.getID());
+		
+		// 2 - Create a new invoice for the refund
+			// 2.1 - Get the amount payed by the professional
+		float payedAmount = getPayedAmount(selected.professional.getID());
+		
+			// 2.2 - Get the appropiate percentage to refund
+		float refundPercentage = getRefundPercentage(Date.daysSince(selected.formativeAction.getEnrollmentEnd(), dateIn));
+		
+		if(refundPercentage > 0) { // If there is nothing to return, do not proceed			
+				// 2.3 - Create the Invoice for the same value payed
+			Invoice refundInvoice = new Invoice(payedAmount * refundPercentage, dateIn, sender, receiver, address, fiscalNumber, selected.formativeAction.getID(), selected.professional.getID());
+			refundInvoice.insert(db); // Insert it to update its ID
+	
+				// 2.4 - Generate a Payment for the amount due
+			Payment p = new Payment(refundInvoice.getID(), payedAmount * refundPercentage, dateIn, true, cash);
+			p.insert(db); // Insert it into the database
+		}
+	}
+	
+	public float getPayedAmount(int ID_professional) {
+		String query = "SELECT SUM(Payment.amount) FROM Payment " + 
+				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
+				"WHERE ID_professional=?;";
+		return (float)((double)(db.executeQueryArray(query, ID_professional).get(0)[0]));
+	}
+	
+	public float getRefundPercentage(int days) {
+		if(days >= 7)
+			return 1;
+		else if(days < 7 && days >= 3)
+			return 0.5f;
+		else
+			return 0;
 	}
 }

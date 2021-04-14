@@ -50,6 +50,8 @@ public class Teacher {
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
+			pstmt.close();
+			tableKeys.close();
 		}else {
 			String sql = "INSERT INTO " + tableName() + " (ID_teacher, name) VALUES (?, ?)";
 	
@@ -60,7 +62,10 @@ public class Teacher {
 			pstmt.setString(2, this.getName());
 
 			pstmt.executeUpdate();
+			pstmt.close();
 		}
+		
+		conn.close();
 	}
 
 	public static List<Teacher> get(String sql, Database db) throws SQLException {
@@ -78,6 +83,9 @@ public class Teacher {
 			list.add(t);
 		}
 
+		conn.close();
+		st.close();
+		rs.close();
 		return list;
 	}
 
@@ -92,6 +100,10 @@ public class Teacher {
 
 		Teacher t = new Teacher(rs.getInt("ID_teacher"), rs.getString("name"));
 
+		
+		st.close();
+		rs.close();
+		conn.close();
 		return t;
 	}
 

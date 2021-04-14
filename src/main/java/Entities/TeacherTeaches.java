@@ -36,6 +36,9 @@ public class TeacherTeaches {
 		pstmt.setInt(2, this.getFaID());
 		pstmt.setFloat(3, this.getRemuneration());
 		pstmt.executeUpdate();
+
+		pstmt.close();
+		conn.close();
 	}
 	
 	public static List<TeacherTeaches> get(String sql, Database db) throws SQLException, ParseException {
@@ -48,7 +51,7 @@ public class TeacherTeaches {
 		ResultSet rs = st.executeQuery(sql);
 
 		String sqlTeacher = "SELECT * FROM Teacher WHERE ID_teacher=";
-		String sqlFa = "SELECT * FROM Teacher WHERE ID_Fa=";
+		String sqlFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		
 		while(rs.next()) {
 			TeacherTeaches t = new TeacherTeaches(
@@ -58,7 +61,11 @@ public class TeacherTeaches {
 			
 			list.add(t);
 		}
-		
+
+		rs.close();
+		st.close();
+		conn.close();
+
 		return list;
 	}
 	
@@ -81,8 +88,14 @@ public class TeacherTeaches {
 			
 			list.add(t);
 		}
+		rs.close();
+		st.close();
+		conn.close();
+		
+		
 		
 		return list;
+		
 	}
 	
 	public static TeacherTeaches getOne(String sql, Database db) throws SQLException, ParseException {
@@ -101,6 +114,12 @@ public class TeacherTeaches {
 				Teacher.getOne(sqlTeacher + rs.getInt("ID_teacher"), db), 
 				FormativeAction.getOne(sqlFa + rs.getInt("ID_fa"), db), 
 				rs.getFloat("remuneration"));
+
+
+		rs.close();
+		st.close();
+
+		conn.close();
 		
 		return t;
 	}
