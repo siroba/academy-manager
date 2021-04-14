@@ -38,21 +38,21 @@ import Utils.Database;
 public class Model {
 
 	private Database db = new Database();
-	private FormativeAction[] data;
+	private Data[] data;
 
 	public void initModel() throws SQLException, ParseException {
 		data = initData();
 	}
 
-	public FormativeAction getData(int i) {
+	public Data getData(int i) {
 		return this.data[i];
 	}
 
-	public FormativeAction[] getAllData() {
+	public Data[] getAllData() {
 		return this.data;
 	}
 
-	private FormativeAction[] initData() throws SQLException, ParseException {
+	private Data[] initData() throws SQLException, ParseException {
 		//TODO
 
 
@@ -61,15 +61,22 @@ public class Model {
 
 
 		List<FormativeAction> formativeActions = FormativeAction.get(sql, db);
+		List<Data> data4 = new ArrayList<Data>();
 		for  (FormativeAction fa: formativeActions) {
 			fa.setSessions(Session.get("Select * From Session WHERE ID_fa = "+ fa.getID(), db));
 			fa.setTeacherTeaches(TeacherTeaches.get(fa, db));
+			for ( TeacherTeaches tt : fa.getTeacherTeaches()) {
+				Data data3 = new Data();
+				data3.formativeAction=fa;
+				data3.teacher=tt.getTeacher();
+				data4.add(data3);
+			}
 		}
 		
 		
 
-		FormativeAction data2[] = new FormativeAction[formativeActions.size()];
-		data2= formativeActions.toArray(data2);
+		Data data2[] = new Data[data4.size()];
+		data2= data4.toArray(data2);
 		return data2;
 	}
 

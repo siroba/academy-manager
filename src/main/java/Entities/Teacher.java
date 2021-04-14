@@ -100,10 +100,10 @@ public class Teacher {
 
 		Teacher t = new Teacher(rs.getInt("ID_teacher"), rs.getString("name"));
 
-		conn.close();
+		
 		st.close();
 		rs.close();
-		
+		conn.close();
 		return t;
 	}
 

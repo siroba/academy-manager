@@ -36,10 +36,7 @@ public class TeacherTeaches {
 		pstmt.setInt(2, this.getFaID());
 		pstmt.setFloat(3, this.getRemuneration());
 		pstmt.executeUpdate();
-<<<<<<< Updated upstream
-		
-=======
->>>>>>> Stashed changes
+
 		pstmt.close();
 		conn.close();
 	}
@@ -64,17 +61,11 @@ public class TeacherTeaches {
 			
 			list.add(t);
 		}
-<<<<<<< Updated upstream
-		
+
 		rs.close();
 		st.close();
 		conn.close();
-		
-=======
-		rs.close();
-		st.close();
-		conn.close();
->>>>>>> Stashed changes
+
 		return list;
 	}
 	
@@ -101,9 +92,7 @@ public class TeacherTeaches {
 		st.close();
 		conn.close();
 		
-		rs.close();
-		st.close();
-		conn.close();
+		
 		
 		return list;
 		
@@ -125,12 +114,11 @@ public class TeacherTeaches {
 				Teacher.getOne(sqlTeacher + rs.getInt("ID_teacher"), db), 
 				FormativeAction.getOne(sqlFa + rs.getInt("ID_fa"), db), 
 				rs.getFloat("remuneration"));
-<<<<<<< Updated upstream
+
 
 		rs.close();
 		st.close();
-=======
->>>>>>> Stashed changes
+
 		conn.close();
 		
 		return t;

@@ -36,6 +36,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
+import javax.swing.JSeparator;
 
 
 
@@ -63,10 +64,11 @@ public class View extends JFrame {
 	private JTable table;
 	private JScrollPane scrollPane;
 	private JCheckBox isCash;
+	private JTable movementsTable;
 	
 	public View() {
 		
-		setBounds(100, 100, 822, 581);
+		setBounds(100, 100, 1602, 581);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -97,7 +99,7 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel_4 = new JLabel("Date");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_4.setBounds(334, 359, 45, 13);
+		lblNewLabel_4.setBounds(294, 359, 45, 13);
 		contentPane.add(lblNewLabel_4);
 		
 	
@@ -109,11 +111,11 @@ public class View extends JFrame {
 			dateTextPane = new DateInput();
 			Border blackline = BorderFactory.createLineBorder(Color.black);
 			dateTextPane.setBorder(blackline);
-			dateTextPane.setBounds(368, 359, 408, 67);
+			dateTextPane.setBounds(344, 359, 408, 67);
 			contentPane.add(dateTextPane);
 			
 		 
-		confirmButton.setBounds(264, 470, 149, 21);
+		confirmButton.setBounds(264, 470, 164, 46);
 		contentPane.add(confirmButton);
 		
 		amountPaidTextField = new JDecimalField(2);
@@ -132,6 +134,49 @@ public class View extends JFrame {
 		isCash = new JCheckBox("Cash payment");
 		isCash.setBounds(34, 393, 212, 21);
 		contentPane.add(isCash);
+		
+		JLabel lblNewLabel_5 = new JLabel("Movements");
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_5.setBounds(860, 70, 140, 13);
+		contentPane.add(lblNewLabel_5);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(812, 92, 788, 224);
+		contentPane.add(scrollPane_1);
+		
+		movementsTable = new JTable();
+		scrollPane_1.setRowHeaderView(movementsTable);
+		
+		JButton addPayment = new JButton("Add new payment");
+		addPayment.setBounds(1024, 470, 183, 34);
+		contentPane.add(addPayment);
+		
+		DateInput dateTextPane_1 = new DateInput();
+		dateTextPane_1.setBounds(1158, 359, 311, 67);
+		contentPane.add(dateTextPane_1);
+		
+		JDecimalField amountPaidTextField_1 = new JDecimalField(2);
+		amountPaidTextField_1.setBounds(989, 356, 99, 19);
+		contentPane.add(amountPaidTextField_1);
+		
+		JLabel lblNewLabel_3_1 = new JLabel("Amonut paid");
+		lblNewLabel_3_1.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_3_1.setBounds(874, 359, 87, 13);
+		contentPane.add(lblNewLabel_3_1);
+		
+		JCheckBox isCash_1 = new JCheckBox("Cash payment");
+		isCash_1.setBounds(874, 405, 159, 21);
+		contentPane.add(isCash_1);
+		
+		JLabel lblNewLabel_4_1 = new JLabel("Date");
+		lblNewLabel_4_1.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_4_1.setBounds(1109, 359, 45, 13);
+		contentPane.add(lblNewLabel_4_1);
+		
+		JSeparator separator = new JSeparator();
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setBounds(810, 0, 2, 560);
+		contentPane.add(separator);
 	}
 
 	public Window getFrame() {
@@ -178,5 +223,8 @@ public class View extends JFrame {
 	
 	public boolean isCash() {
 		return isCash.isSelected();
+	}
+	public JTable getMovementsTable() {
+		return movementsTable;
 	}
 }

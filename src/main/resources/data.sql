@@ -87,11 +87,11 @@ insert into Teacher (ID_teacher, name) values
 	(1004, "Silvia");
 	
 insert into TeacherTeaches (ID_teacher , ID_fa , remuneration) values
-	(1000,100 ,"Fanjul"),
-	(1001, 1000,"Marcos"),
-	(1002,1001 ,"Marek"),
-	(1003,1001 ,"Vivien"),
-	(1004, 1002,"Silvia");
+	(1000,1000 ,2.0),
+	(1001, 1000,3.0),
+	(1002,1001 ,1.0),
+	(1003,1001 ,1.0),
+	(1004, 1002,2.0);
 
 insert into InvoiceTeacher (Id_invoice , amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa, ID_teacher) values
 
