@@ -15,6 +15,7 @@ public class View {
 	private JTable tabRegistration;
 	private JLabel lblActive;
 	private JTable tabFormativeActions;
+	private JTable tabPayments;
 	
 	
 	public View() {
@@ -25,10 +26,10 @@ public class View {
 		frame = new JFrame();
 		frame.setTitle("Status of Formative Actions");
 		frame.setName("Status of Formative Actions");
-		frame.setBounds(0, 0, 600, 500);
+		frame.setBounds(0, 0, 600, 700);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][200:250:][200:250:]"));
+		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][200:250:][200:250:][200:250:]"));
 		
 		lblActive = new JLabel();
 		lblActive.setText(" ");
@@ -44,9 +45,16 @@ public class View {
 		
 		tabRegistration = new JTable();
 		tabRegistration.setDefaultEditor(Object.class, null);
-		tabRegistration.setPreferredScrollableViewportSize(null);
+		//tabRegistration.setPreferredScrollableViewportSize(null);
+		tabRegistration.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane tableRegPanel = new JScrollPane(tabRegistration);
 		frame.getContentPane().add(tableRegPanel, "cell 0 2, grow");
+		
+		tabPayments = new JTable();
+		tabPayments.setDefaultEditor(Object.class, null);
+		tabPayments.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane tablePayments = new JScrollPane(tabPayments);
+		frame.getContentPane().add(tablePayments, "cell 0 3, grow");
 	}
 	
 	//Getters to access from the controller (compact representation)
@@ -54,4 +62,5 @@ public class View {
 	public JTable getTableRegistrations() { return this.tabRegistration; }
 	public JLabel getLabelActive() { return this.lblActive; }
 	public JTable getTableFormativeActions() { return this.tabFormativeActions; }
+	public JTable getTablePayments() { return this.tabPayments; }
 }
