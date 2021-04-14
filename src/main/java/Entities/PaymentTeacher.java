@@ -199,6 +199,7 @@ public class PaymentTeacher {
 	
 				pstmt.setBoolean(5, this.isConfirmed());
 				pstmt.executeUpdate(); // statement execution
+				pstmt.close();
 			}else {
 				String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
 
@@ -216,6 +217,8 @@ public class PaymentTeacher {
 				ResultSet tableKeys = pstmt.getGeneratedKeys();
 				tableKeys.next();
 				this.ID = tableKeys.getInt(1);
+				pstmt.close();
+				tableKeys.close();
 			}
 
 			conn.close();
