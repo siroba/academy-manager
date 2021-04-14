@@ -1,18 +1,18 @@
 package StatusOfFormativeAction;
 
-import java.sql.Date;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
+import Entities.FormativeAction;
 import Utils.SwingUtil;
 
 public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
+	private String lastSelectedKey = ""; // remembers the last selected row to restore it when changing the race table
 
 	public Controller() {
 		this.model = new Model();
@@ -25,14 +25,12 @@ public class Controller implements PL53.util.Controller {
 	 * Init Controller
 	 */
 	public void initController() {
-		view.getListFormativeActions().addListSelectionListener(new ListSelectionListener() {
-
+		view.getTableFormativeActions().addMouseListener(new MouseAdapter() {
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				showDetails();
+			public void mouseReleased(MouseEvent e) {
+				SwingUtil.exceptionWrapper(() -> showDetails());
 			}
 		});
-
 	}
 
 	/**
@@ -40,7 +38,7 @@ public class Controller implements PL53.util.Controller {
 	 */
 	public void initView() {
 		// Updates the view date
-		getListFormativeActionList();
+		showListFormativeActionList();
 		view.getFrame().setVisible(true);
 	}
 
@@ -49,47 +47,40 @@ public class Controller implements PL53.util.Controller {
 	 * from the model and use SwingUtil method to create a table model which is
 	 * finally assigned to the table.
 	 */
-	public void getListFormativeActionList() {
-		List<String> listFormativActions = model.getListFormativeAction();
-		DefaultListModel<String> m = (DefaultListModel<String>) view.getListFormativeActions().getModel();
-
-		for (int i = 0; i < listFormativActions.size(); i++) {
-			m.addElement(listFormativActions.get(i));
-		}
+	public void showListFormativeActionList() {
+		List<FormativeActionDetails> formativeActionList = model.getListFormativeAction();
+		TableModel tmodel = SwingUtil.getTableModelFromPojos(formativeActionList,
+				new String[] { "name", "status", "enrollmentPeriodStart", "enrollmentPeriodEnd", "totalPlaces",
+						"leftPlaces" },
+				new String[] { "Name", "Status", "Enrollment Start", "Enrollment End", "Total places", "Places left" },
+				false);
+		view.getTableFormativeActions().setModel(tmodel);
+		SwingUtil.autoAdjustColumns(view.getTableFormativeActions());
 	}
 
 	/**
 	 * Method to display details about a selected formative action
 	 */
 	public void showDetails() {
-		showFormativeActionDetails();
 		showRegistrationList();
 	}
 
-	public void showFormativeActionDetails() {
-		FormativeActionDetails fs = model.getFormativeActionDetails(view.getListFormativeActions().getSelectedValue());
-
-		TableModel tmodel = SwingUtil.getRecordModelFromPojo(fs,
-				new String[] { "name", "status", "enrollmentPeriodStart", "enrollmentPeriodEnd", "totalPlaces",
-						"leftPlaces" },
-				new String[] { "Name", "Status", "Enrollment Start", "Enrollment End", "Total places", "Left places" });
-		view.getTableFormativeActionDetails().setModel(tmodel);
-
-		if (fs.getEnrollmentPeriodStart().before(new Date(System.currentTimeMillis()))
-				&& fs.getEnrollmentPeriodEnd().after(new Date(System.currentTimeMillis()))) {
-			view.getLabelActive().setText("OPEN");
-		} else {
-			view.getLabelActive().setText(" ");
-		}
-	}
-
 	public void showRegistrationList() {
-		List<Registration> registrationList = model
-				.getRegistrationList(view.getListFormativeActions().getSelectedValue());
+		this.lastSelectedKey = SwingUtil.getSelectedKey(view.getTableFormativeActions());
+		List<Registration> registrationList = model.getRegistrationList(lastSelectedKey);
 		TableModel tmodel = SwingUtil.getTableModelFromPojos(registrationList,
 				new String[] { "name", "surnames", "enrollmentDate", "amount", "status" },
 				new String[] { "Name", "Surname", "Date of the registration", "Fee", "Status" }, true);
 		view.getTableRegistrations().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTableRegistrations());
+		
+		FormativeAction fa = model.getFormativeAction(lastSelectedKey);
+		if (fa.getEnrollmentStart().toMillis() < PL53.util.DateTime.now().toMillis()
+				&& fa.getEnrollmentEnd().toMillis() > PL53.util.DateTime.now().toMillis()) {
+			view.getLabelActive().setText("OPEN");
+			
+		} else {
+			view.getLabelActive().setText(" ");
+		}
 	}
 }
