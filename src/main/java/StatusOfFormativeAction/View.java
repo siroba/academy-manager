@@ -27,8 +27,8 @@ public class View {
 	
 	private void initComponents() {
 		frame = new JFrame();
-		frame.setTitle("Courses");
-		frame.setName("Courses");
+		frame.setTitle("List of Formative Actions");
+		frame.setName("List of Formative Actions");
 		frame.setBounds(0, 0, 1000, 350);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
