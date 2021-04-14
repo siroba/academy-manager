@@ -60,7 +60,7 @@ public class View extends JFrame {
 		contentPane.add(btnCancelRegistration);
 		
 		JLabel lblNewLabel_1 = new JLabel("COIIPA's address:");
-		lblNewLabel_1.setBounds(20, 149, 96, 14);
+		lblNewLabel_1.setBounds(20, 149, 170, 14);
 		contentPane.add(lblNewLabel_1);
 		
 		address = new JTextField();
@@ -78,7 +78,7 @@ public class View extends JFrame {
 		contentPane.add(fiscalNumber);
 		
 		JLabel lblNewLabel = new JLabel("Date of the invoice:");
-		lblNewLabel.setBounds(452, 147, 113, 14);
+		lblNewLabel.setBounds(452, 147, 132, 14);
 		contentPane.add(lblNewLabel);
 		
 		dateIn = new DateInput();
@@ -89,7 +89,7 @@ public class View extends JFrame {
 		contentPane.add(dateIn);
 		
 		isCash = new JCheckBox("Cash payment");
-		isCash.setBounds(703, 173, 97, 23);
+		isCash.setBounds(703, 173, 138, 23);
 		contentPane.add(isCash);
 	}
 	
