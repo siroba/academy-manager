@@ -14,16 +14,20 @@ import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import Utils.Database;
 import Utils.UnexpectedException;
 import Entities.Enrollment;
+import Entities.Fee;
 import Entities.FormativeAction;
+import Entities.Invoice;
 import Entities.Payment;
+import Entities.PaymentTeacher;
 //import Entities.FormativeAction;
 import Entities.Professional;
+import PL53.util.Date;
 import RegisterPayment.Data;
 
 /**
  * Access to course data, used as a model for the swing example and for unit and
  * user interface testing.
- * 
+ *
  * <br/>
  * In the methods of this example all the business logic is performed by a
  * single sql query, so we always use the utility methods in the Database class
@@ -32,7 +36,7 @@ import RegisterPayment.Data;
  * control the connection are always used. In case different queries are
  * performed in the same method, the connection should be controlled from this
  * class. (see as example the implementation in Database).
- * 
+ *
  * <br/>
  * If you use any other framework to manage persistence, the functionality
  * provided by this class would be the one assigned to the Services,
@@ -51,6 +55,9 @@ public class Model {
 	}
 
 	public Data getData(int i) {
+		if(i<0 || i> this.data.length-1) {
+			return null;
+		}
 		return this.data[i];
 	}
 
@@ -59,39 +66,45 @@ public class Model {
 	}
 
 	private Data[] initData() throws SQLException, ParseException {
-		String sql = "SELECT DISTINCT Payment.* FROM Payment "
-				+ "INNER JOIN  Enrollment  on  Enrollment.ID_fa=Payment.ID_fa "
-				+ "INNER JOIN FormativeAction on FormativeAction.ID_fa=Enrollment.ID_fa "
-				+ "WHERE   Enrollment.status='RECEIVED' AND FormativeAction.status = 'ACTIVE' AND Payment.confirmed=0 ; ";
-
+		List<Data> data = new ArrayList<Data>();
+		String sql = "	SELECT DISTINCT Invoice.* FROM Invoice\r\n"
+				+ "		WHERE Invoice.ID_invoice NOT IN ( SELECT ID_invoice From Payment);";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
 
-		List<Payment> pendingPayments = Payment.get(sql, db);
-		List<Data> data = new ArrayList<Data>();
 
-		for (Payment p : pendingPayments) {
-			Data d = new Data();
 
-			d.payment = p;
-			d.formativeAction = FormativeAction.getOne(queryFa + p.getID_fa() + ";", db);
-			d.professional = Professional.getOne(queryProf + p.getID_professional() + ";", db);
-			d.enrollment = Enrollment.getOne(queryEnroll(d.formativeAction.getID(), d.professional.getID()), db);
+		List<Invoice> invoices= Invoice.get(sql, db);
+		for ( Invoice in : invoices){
+			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" +in.getID_fa() +" AND ID_professional=" +in.getID_professional();
+			String queryFee = "SELECT * FROM Fee WHERE ID_fa="+in.getID_fa() + " AND category='";
+			Data d = new Data() ;
+			d.invoice= in;
+			d.formativeAction = FormativeAction.getOne(queryFa + in.getID_fa(), db);
+			d.professional=Professional.getOne(queryProf + in.getID_professional(), db);
+			d.enrollment=Enrollment.getOne(queryEnr, db);
+			d.fee= Fee.getOne(queryFee + d.enrollment.getGroup() + "'", db).getAmount();
 			data.add(d);
+
+
 		}
+
 
 		Data data2[] = new Data[data.size()];
 		return data.toArray(data2);
+
 	}
 
 	private String queryEnroll(int ID_fa, int ID_prof) {
 		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
 	}
 
-	void updateStatus(int id_pay ,int id_fa, int id_professional) {
-		String query = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?"; 
-		String quer= "UPDATE Payment SET confirmed= true WHERE ID_payment=? "; 
-		db.executeUpdateQuery(query, id_fa, id_professional);
-		db.executeUpdate(quer, id_pay);
+	void createPayment(int id_pay ,int id_invoice,  float amount , Date datePay, boolean isCash ) throws SQLException, ParseException {
+		Payment p = new Payment(id_invoice,  amount,  datePay, true, isCash);
+		p.insert(db);
 	}
+
+
+
+
 }

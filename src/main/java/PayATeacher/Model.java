@@ -7,15 +7,16 @@ import java.util.List;
 
 
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.InvoiceTeacher;
 import Entities.PaymentTeacher;
+import Entities.Session;
 import PayATeacher.Data;
 import Utils.Database;
 
 /**
  * Access to course data, used as a model for the swing example and for unit and
  * user interface testing.
- * 
+ *
  * <br/>
  * In the methods of this example all the business logic is performed by a
  * single sql query, so we always use the utility methods in the Database class
@@ -24,7 +25,7 @@ import Utils.Database;
  * control the connection are always used. In case different queries are
  * performed in the same method, the connection should be controlled from this
  * class. (see as example the implementation in Database).
- * 
+ *
  * <br/>
  * If you use any other framework to manage persistence, the functionality
  * provided by this class would be the one assigned to the Services,
@@ -53,26 +54,29 @@ public class Model {
 	private FormativeAction[] initData() throws SQLException, ParseException {
 		//TODO
 
-		
+
 		String sql = "SELECT  FormativeAction.* FROM FormativeAction\r\n"
-				+ "WHERE ID_fa NOT IN ( SELECT ID_fa FROM Invoice);";
-		
+				+ "WHERE ID_fa NOT IN ( SELECT ID_fa FROM InvoiceTeacher);";
+
 
 		List<FormativeAction> formativeActions = FormativeAction.get(sql, db);
-		
+		for  (FormativeAction fa: formativeActions) {
+			fa.setSessions(Session.get("Select * From Session WHERE ID_fa = "+ fa.getID(), db));
+		}
+
 		FormativeAction data2[] = new FormativeAction[formativeActions.size()];
 		return formativeActions.toArray(data2);
 	}
-	
-	public void insertInvoice ( Invoice invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
+
+	public void insertInvoice ( InvoiceTeacher invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
 		invoice.insert(db);
 		paymentTeacher.setInvoiceID(invoice.getID());
 		paymentTeacher.insert(db);
-		
-		
+
+
 	}
 
-	
 
-	
+
+
 }

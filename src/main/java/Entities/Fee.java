@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import PL53.util.Date;
 import Utils.Database;
 
 public class Fee {
@@ -18,17 +20,17 @@ public class Fee {
 	public Fee(String group) {
 		this.group = group;
 	}
-	
+
 	public Fee(String group, float amount) {
 		this.group = group;
-		this.amount = amount; 
+		this.amount = amount;
 	}
 
 	public Fee(int ID, int ID_fa, String group, float amount) {
 		this.ID = ID;
 		this.ID_fa = ID_fa;
 		this.group = group;
-		this.amount = amount; 
+		this.amount = amount;
 	}
 
 	public static String tableName() {
@@ -96,7 +98,7 @@ public class Fee {
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
-			
+
 			pstmt.setFloat(1, getAmount());
 			pstmt.setString(2, getGroup());
 			pstmt.setInt(3, getID_fa());
