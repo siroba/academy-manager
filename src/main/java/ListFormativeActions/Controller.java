@@ -89,10 +89,10 @@ public class Controller implements PL53.util.Controller {
 				view.getCheckBoxFilterStatus().isSelected());
 
 		TableModel tmodel = SwingUtil.getTableModelFromPojos(formativeActions,
-				new String[] { "nameOfAction", "sessionNumber", "status", "enrollmentPeriodStart",
-						"enrollmentPeriodEnd", "totalPlaces", "leftPlaces", "date" },
-				new String[] { "Formative Action", "Session Number", "Status", "Start of enrollment period",
-						"End of enrollment period", "Total places", "Left places", "Date" },
+				new String[] { "nameOfAction", "status", "enrollmentPeriodStart",
+						"enrollmentPeriodEnd", "totalPlaces", "leftPlaces", "dateOfFirstSession", "dateOfLastSession" },
+				new String[] { "Formative Action", "Status", "Start of enrollment period",
+						"End of enrollment period", "Total places", "Places left", "Date of first session", "Date of last session" },
 				false);
 		view.getTableFormativeActions().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTableFormativeActions());
