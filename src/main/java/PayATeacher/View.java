@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JSeparator;
 
 public class View extends JFrame {
 	// Auto generated serial ID
@@ -34,6 +35,7 @@ public class View extends JFrame {
 	private DateInput dateTransferTextField;
 	private JTable table;
 	private JButton registerButton;
+	private JTextField IDInvoice;
 
 	/**
 	 * Create the frame.
@@ -41,7 +43,7 @@ public class View extends JFrame {
 	public View() {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		
-		setBounds(100, 100, 691, 651);
+		setBounds(100, 100, 1073, 583);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -60,33 +62,33 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel_2 = new JLabel("Data of the invoice");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_2.setBounds(50, 225, 170, 13);
+		lblNewLabel_2.setBounds(10, 279, 170, 13);
 		contentPane.add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_3 = new JLabel("Date of the invoice:");
-		lblNewLabel_3.setBounds(227, 250, 123, 13);
+		JLabel lblNewLabel_3 = new JLabel("Date of the invoice");
+		lblNewLabel_3.setBounds(10, 302, 123, 13);
 		contentPane.add(lblNewLabel_3);
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		dateTextField = new DateInput();
-		dateTextField.setBounds(227, 275, 211, 69);
+		dateTextField.setBounds(8, 325, 211, 69);
 		dateTextField.setBorder(blackline);
 		dateTextField.getYearsTextField().setBound(2000, 3000);
 		contentPane.add(dateTextField);
 		
 		dateTransferTextField = new DateInput();
-		dateTransferTextField.setBounds(208, 467, 230, 65);
+		dateTransferTextField.setBounds(10, 453, 230, 65);
 		dateTransferTextField.setBorder(blackline);
 		dateTransferTextField.getYearsTextField().setBound(2000, 3000);
 		contentPane.add(dateTransferTextField);
 		
 		JLabel lblNewLabel_5 = new JLabel("Issuer tax data");
-		lblNewLabel_5.setBounds(50, 343, 93, 13);
+		lblNewLabel_5.setBounds(236, 302, 93, 13);
 		contentPane.add(lblNewLabel_5);
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JPanel taxDataPanel = new JPanel();
-		taxDataPanel.setBounds(41, 366, 612, 59);
+		taxDataPanel.setBounds(229, 325, 806, 69);
 		taxDataPanel.setBorder(blackline);
 		contentPane.add(taxDataPanel);
 		taxDataPanel.setLayout(null);
@@ -121,9 +123,19 @@ public class View extends JFrame {
 		taxDataPanel.add(addressTextField);
 		addressTextField.setColumns(10);
 		
+		JLabel lblNewLabel_4 = new JLabel("ID Invoice");
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_4.setBounds(612, 20, 81, 13);
+		taxDataPanel.add(lblNewLabel_4);
+		
+		IDInvoice = new JTextField();
+		IDInvoice.setBounds(609, 36, 163, 19);
+		taxDataPanel.add(IDInvoice);
+		IDInvoice.setColumns(10);
+		
 		JLabel lblNewLabel_9 = new JLabel("Date of the transfer");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_9.setBounds(227, 444, 115, 13);
+		lblNewLabel_9.setBounds(10, 427, 115, 13);
 		contentPane.add(lblNewLabel_9);
 		
 		
@@ -131,16 +143,24 @@ public class View extends JFrame {
 		registerButton = new JButton("Register");
 		
 		registerButton.setFont(new Font("Tahoma", Font.BOLD, 12));
-		registerButton.setBounds(288, 563, 115, 41);
+		registerButton.setBounds(368, 469, 115, 41);
 		contentPane.add(registerButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 657, 117);
+		scrollPane.setBounds(10, 101, 1025, 117);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
 		
 		scrollPane.setViewportView(table);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(0, 404, 1085, 13);
+		contentPane.add(separator);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(0, 239, 1085, 13);
+		contentPane.add(separator_1);
 	}
 	
 	public String getAddressTextField() {
@@ -194,4 +214,12 @@ public class View extends JFrame {
 	public JButton getRegisterButton() {
 		return registerButton;
 	}
+	public String getIDInvoice(){
+		return IDInvoice.getText();
+	}
+
+	public void setIDInvoice(JTextField IDInvoice) {
+		this.IDInvoice=IDInvoice;
+	}
+
 }

@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.InvoiceTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
 import PL53.util.Date;
@@ -78,17 +78,11 @@ public class Controller implements PL53.util.Controller {
 				try {
 					if (selectedRow == null) {
 						JOptionPane.showMessageDialog(null, "You have to select one pending payment");
-					}
-					else if (view.getNameTextField().length()==0 )
-					{
+					} else if (view.getNameTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the name of the teacher");
-					}
-					else if (view.getFiscalNumberTextField().length()==0 )
-					{
+					} else if (view.getFiscalNumberTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the fiscal number");
-					}
-					else if (view.getAddressTextField().length()==0 )
-					{
+					} else if (view.getAddressTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the address");
 					}
 					else if (view.getDateTransferTextField().getYear()==0 )
@@ -98,6 +92,9 @@ public class Controller implements PL53.util.Controller {
 					else if (view.getDateTextField().getYear()==0 )
 					{
 						JOptionPane.showMessageDialog(null, "You have to introduce a valid year for the date of the invoice (ex: 2021)");
+					}
+					else if(view.getIDInvoice().length()==0){
+						JOptionPane.showMessageDialog(null, "You have to introduce the ID of the invoice");
 					}
 					else{
 					String name = view.getNameTextField();
@@ -110,11 +107,12 @@ public class Controller implements PL53.util.Controller {
 					String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2);
 					boolean confirmed = true;
 					Date dateInvoice = view.getDateTextField();
+					String IDInvoice = view.getIDInvoice();
+					
+					// TODO: The amount of the invoice and the payment can differ
+					InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice, amount, ID_fa, dateInvoice,sender,receiver, address, fiscalNumber);
 
-					Invoice invoice = new Invoice(ID_fa, dateInvoice);
-
-					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer, sender, receiver,
-							fiscalNumber, address, confirmed);
+					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer,  confirmed);
 
 					model.insertInvoice(invoice, paymentTeacher);
 					if (paymentTeacher != null) {
@@ -127,7 +125,7 @@ public class Controller implements PL53.util.Controller {
 					JOptionPane.showMessageDialog(null, "Error creating the invoice");
 					e1.printStackTrace();
 				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
+
 					e1.printStackTrace();
 				}
 
@@ -150,6 +148,7 @@ public class Controller implements PL53.util.Controller {
 
 		for (int i = 0; i < formativeActions.length; i++) {
 			FormativeAction d = formativeActions[i];
+
 
 			for (Session s : d.getSessions()) {
 				body[i] = new String[] { d.getName(), d.getStatus().toString(), s.getTeacherName(),
