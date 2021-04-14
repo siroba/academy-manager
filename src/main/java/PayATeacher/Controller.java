@@ -108,8 +108,9 @@ public class Controller implements PL53.util.Controller {
 					boolean confirmed = true;
 					Date dateInvoice = view.getDateTextField();
 					String IDInvoice = view.getIDInvoice();
-
-					InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice,ID_fa, dateInvoice,sender,receiver, address, fiscalNumber);
+					
+					// TODO: The amount of the invoice and the payment can differ
+					InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice, amount, ID_fa, dateInvoice,sender,receiver, address, fiscalNumber);
 
 					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer,  confirmed);
 

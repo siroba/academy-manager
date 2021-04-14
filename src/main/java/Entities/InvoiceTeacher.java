@@ -10,20 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PL53.util.Date;
-import PL53.util.DateTime;
 import Utils.Database;
 
 public class InvoiceTeacher {
 	private int ID_fa;
 	private Date dateIn;
 	private String sender, receiver, fiscalNumber, address , ID="";
+	private float amount;
 
 	/** Constructor with ID_invoice
 	 * @param ID_invoice
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(String ID_invoice,int ID_fa,  Date dateIn , String sender , String receiver, String fiscalNumber, String address) {
+	public InvoiceTeacher(String ID_invoice, float amount, int ID_fa,  Date dateIn , String sender , String receiver, String fiscalNumber, String address) {
+		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
 		this.dateIn=dateIn;
@@ -37,7 +38,8 @@ public class InvoiceTeacher {
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(int ID_fa,  Date dateIn,String sender , String receiver, String fiscalNumber, String address) {
+	public InvoiceTeacher(int ID_fa, float amount,  Date dateIn,String sender , String receiver, String fiscalNumber, String address) {
+		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.dateIn=dateIn;
 		this.sender = sender;
@@ -94,6 +96,7 @@ public class InvoiceTeacher {
 
 			InvoiceTeacher e = new InvoiceTeacher(
 					rs.getString("ID_invoice"),
+					rs.getFloat("amount"),
 					rs.getInt("ID_fa"),
 					dateIn,
 					rs.getString("sender"),
@@ -140,6 +143,7 @@ public class InvoiceTeacher {
 
 		InvoiceTeacher e = new InvoiceTeacher(
 				rs.getString("ID_invoice"),
+				rs.getFloat("amount"),
 				rs.getInt("ID_fa"),
 				dateIn,
 				rs.getString("sender"),
@@ -173,34 +177,36 @@ public class InvoiceTeacher {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if(this.getID().compareTo("")==0) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, ID_fa,  dateIn, sender, receiver , fiscalNumber , address) VALUES(?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, ID_fa,  dateIn, sender, receiver , fiscalNumber , address) VALUES(?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setString(1, this.getID());
-			pstmt.setInt(2, this.getID_fa());
-			pstmt.setDate(3, this.getDateIn().toSQL());
-			pstmt.setString(4,this.getSender());
-			pstmt.setString(5, this.getReceiver());
-			pstmt.setString(6, this.getFiscalNumber());
-			pstmt.setString(7, this.getAddress());
+			pstmt.setFloat(2, this.getAmount());
+			pstmt.setInt(3, this.getID_fa());
+			pstmt.setDate(4, this.getDateIn().toSQL());
+			pstmt.setString(5,this.getSender());
+			pstmt.setString(6, this.getReceiver());
+			pstmt.setString(7, this.getFiscalNumber());
+			pstmt.setString(8, this.getAddress());
 			
 			pstmt.executeUpdate(); // statement execution
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
-
-			pstmt.setDate(1, this.getDateIn().toSQL());
-			pstmt.setInt(6, this.getID_fa());
+			
+			pstmt.setFloat(1, this.getAmount());
+			pstmt.setDate(2, this.getDateIn().toSQL());
 			pstmt.setString(2,this.getSender());
 			pstmt.setString(3, this.getReceiver());
-			pstmt.setString(5, this.getFiscalNumber());
 			pstmt.setString(4, this.getAddress());
+			pstmt.setString(5, this.getFiscalNumber());
+			pstmt.setInt(6, this.getID_fa());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -209,6 +215,14 @@ public class InvoiceTeacher {
 		}
 
 		conn.close();
+	}
+	
+	
+	public float getAmount() {
+		return amount;
+	}
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 	public Date getDateIn() {
 		return dateIn;
