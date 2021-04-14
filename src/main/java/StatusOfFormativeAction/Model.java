@@ -20,7 +20,10 @@ public class Model {
 	public Model() {
 		db = new Database();
 	}
-
+	
+	/*
+	 * TODO Description of Function, parameter and return value
+	 */
 	public List<FormativeActionDetails> getListFormativeAction() {
 		try {
 			Connection cn = db.getConnection();
@@ -84,7 +87,10 @@ public class Model {
 			throw new UnexpectedException(e);
 		}
 	}
-
+	
+	/*
+	 * TODO Description of Function, parameter and return value
+	 */
 	public FormativeAction getFormativeAction(String name) {
 		String query = "SELECT * from FormativeAction fa WHERE fa.nameFa = '" + name + "';";
 		try {
@@ -93,7 +99,10 @@ public class Model {
 			throw new UnexpectedException(e);
 		}
 	}
-
+	
+	/*
+	 * TODO Description of Function, parameter and return value
+	 */
 	public List<Payment> getPayments(String formativeAction, String professional) {
 		try {
 			Connection cn = db.getConnection();
@@ -119,7 +128,6 @@ public class Model {
 			
 			return listPayments;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			throw new UnexpectedException(e);
 		}
 	}
