@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Session;
+import Entities.Teacher;
+import Entities.TeacherTeaches;
 import Utils.Database;
 
 
@@ -26,8 +28,15 @@ public class Model {
 	 * @throws  
 	 * @throws SQLException 
 	 */
-	public void setFormativeAction(FormativeAction fA) throws SQLException {
+	public void setFormativeAction(FormativeAction fA, String teacherName, float remuneration) throws SQLException {
+		Teacher teacher = new Teacher(teacherName);
+		teacher.insert(db); // This also assigns an ID to the teacher, so that it can be used in the TeacherTeaches table
+		
+		TeacherTeaches t = fA.teach(teacher, remuneration);
+		t.insert(db);
+		
 		fA.insert(db);
+		
 		for(Session s: fA.getSessions()) {
 			s.insert(db);
 		}

@@ -2,13 +2,18 @@ package CancelFormativeAction;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
+import PL53.swing.CheckboxTableModel;
+import RegisterCancellations.Data;
 
 public class Controller implements PL53.util.Controller {
 	private Model model;
@@ -19,7 +24,7 @@ public class Controller implements PL53.util.Controller {
 
 		try {
 			this.model.initModel();
-		} catch (SQLException e) {
+		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
 		}
 
@@ -52,11 +57,25 @@ public class Controller implements PL53.util.Controller {
 						model.initModel();
 
 						view.setTable(getTableModel(model.getAllData()));
-					} catch (SQLException e1) {
+						view.setTableCancelledFA(getTableModel(model.getCancelled()));
+					} catch (SQLException | ParseException e1) {
 						e1.printStackTrace();
 					}
 				}
 				
+			}
+		});
+		
+		view.getTableCancelledFA().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				view.enableRefundsScroll();
+				
+				try {
+					view.setTableRefunds(getCheckboxTableModel(model.getSolicitedRefunds(model.getCancelled()[view.getTableRefunds().getSelectedRow()])));
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 	}
@@ -65,6 +84,7 @@ public class Controller implements PL53.util.Controller {
 	public void initView() {
 		view.setVisible(true);
 		view.setTable(getTableModel(model.getAllData()));
+		view.setTableCancelledFA(getTableModel(model.getCancelled()));
 	}
 
 	public TableModel getTableModel(FormativeAction data[]) {
@@ -74,7 +94,8 @@ public class Controller implements PL53.util.Controller {
 
 		for (int i = 0; i < data.length; i++) {
 			FormativeAction d = data[i];
-			body[i] = new String[] { d.getName(), d.getEnrollmentEnd().toString(), d.getSessions().get(0).getTeacherName(),
+			// TODO: Fix this
+			body[i] = new String[] { d.getName(), d.getEnrollmentEnd().toString(), "Teacher name" /*d.getTeacherName()*/,
 					Integer.toString(d.getTotalPlaces()) };
 		}
 
@@ -85,6 +106,24 @@ public class Controller implements PL53.util.Controller {
 				tm.setValueAt(body[i][j], i, j);
 			}
 		}
+
+		return tm;
+	}
+	
+	public CheckboxTableModel getCheckboxTableModel(Data data[]) {
+		CheckboxTableModel tm = new CheckboxTableModel();
+		
+		String header[] = { "Name", "Refund amount", "Enrolled date" };
+		tm.addColumns(header);
+		
+		String body[][] = new String[data.length][header.length];
+		
+		for (int i = 0; i < data.length; i++) {
+			Data d = data[i];
+			body[i] = new String[] { d.professional.getName(), Float.toString(d.payment.getAmount()), d.enrollment.getTimeEn().toString() };
+		}
+
+		tm.addRows(body);
 
 		return tm;
 	}

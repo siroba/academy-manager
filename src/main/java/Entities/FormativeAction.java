@@ -21,11 +21,11 @@ public class FormativeAction {
 	private int ID = -1;
 	private String name, objectives, mainContents;
 	private Status status;
-
 	private int totalPlaces;
 	private DateTime enrollmentStart, enrollmentEnd;
 	private List<Session> sessions = new ArrayList<Session>();
 	private List<Fee> fees = new ArrayList<Fee>();
+	private List<TeacherTeaches> teachers = new ArrayList<TeacherTeaches>();
 
 	/**
 	 * Constructor that assigns random values
@@ -33,7 +33,6 @@ public class FormativeAction {
 	public FormativeAction() {
 		Random r = new Random();
 		this.name = r.name(3, 10);
-
 		this.totalPlaces = r.nextInt(100);
 		this.objectives = r.name(3, 20);
 		this.mainContents = r.name(3, 10);
@@ -63,7 +62,6 @@ public class FormativeAction {
 			DateTime enrollmentEnd) {
 
 		this.name = name;
-
 		this.totalPlaces = totalPlaces;
 		this.objectives = objectives;
 		this.mainContents = mainContents;
@@ -86,15 +84,15 @@ public class FormativeAction {
 	 * @param enrollmentStart
 	 * @param enrollmentEnd
 	 * @param faStart
+	 * @param teachers
 	 */
 
-	public FormativeAction(int ID_fa, String name,  int totalPlaces,
+	public FormativeAction(int ID_fa, String name, int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
-			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees) {
+			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees, List<TeacherTeaches> teachers) {
 
 		this.ID = ID_fa;
 		this.name = name;
-
 		this.totalPlaces = totalPlaces;
 		this.objectives = objectives;
 		this.mainContents = mainContents;
@@ -103,6 +101,7 @@ public class FormativeAction {
 		this.enrollmentEnd = enrollmentEnd;
 		this.sessions = sessions;
 		this.fees = fees;
+		this.teachers = teachers;
 	}
 
 	public static List<FormativeAction> create(int n) {
@@ -219,7 +218,7 @@ public class FormativeAction {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<FormativeAction> get(String query, Database db) throws SQLException {
+	public static List<FormativeAction> get(String query, Database db) throws SQLException, ParseException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -247,6 +246,7 @@ public class FormativeAction {
 
 			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
 			List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
+			List<TeacherTeaches> teachers = TeacherTeaches.get("SELECT * FROM TeacherTeaches WHERE ID_fa=" + id_fa, db);
 
 			FormativeAction f = new FormativeAction(
 					id_fa,
@@ -258,7 +258,8 @@ public class FormativeAction {
 					dstart,
 					dend,
 					sessions,
-					fees);
+					fees,
+					teachers);
 
 			fa.add(f);
 		}
@@ -307,6 +308,7 @@ public class FormativeAction {
 
 		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
 		List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
+		List<TeacherTeaches> teachers = TeacherTeaches.get("SELECT * FROM TeacherTeaches WHERE ID_fa=" + id_fa, db);
 
 		FormativeAction fa = new FormativeAction(
 				id_fa,
@@ -318,7 +320,8 @@ public class FormativeAction {
 				dstart,
 				dend,
 				sessions,
-				fees);
+				fees,
+				teachers);
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -326,6 +329,21 @@ public class FormativeAction {
 		conn.close();
 
 		return fa;
+	}
+
+	public TeacherTeaches teach(Teacher t, float remuneration) {
+		TeacherTeaches tt = new TeacherTeaches(t, this, remuneration);
+		teachers.add(tt);
+
+		return tt;
+	}
+
+	public List<TeacherTeaches> getTeacherTeaches(){
+		return teachers;
+	}
+
+	public void setTeacherTeaches(List<TeacherTeaches> t) {
+		this.teachers = t;
 	}
 
 	public float refund(String group) {
