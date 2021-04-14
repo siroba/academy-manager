@@ -6,9 +6,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 import PL53.swing.CheckboxTableModel;
 import PL53.swing.DateInput;
-import PL53.swing.DateTimeInput;
 import PL53.util.Date;
-import Utils.SwingUtil;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
