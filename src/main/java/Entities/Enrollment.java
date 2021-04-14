@@ -18,6 +18,7 @@ public class Enrollment {
 	private int ID_fa, ID_professional;
 	private Status status;
 	private DateTime timeEn;
+	private String group; 
 
 	/**
 	 * Enrollment default constructor. The date and time are assumed to be today and now.
@@ -27,11 +28,12 @@ public class Enrollment {
 	 * @param status
 	 * @param timeEn
 	 */
-	public Enrollment(int ID_fa, int ID_professional, Status status, DateTime timeEn) {
+	public Enrollment(int ID_fa, int ID_professional, Status status, DateTime timeEn, String group) {
 		this.status = status;
 		this.timeEn = timeEn;
 		this.ID_fa = ID_fa;
 		this.ID_professional = ID_professional;
+		this.group = group;
 	}
 
 	/**
@@ -44,6 +46,7 @@ public class Enrollment {
 		this.timeEn = new DateTime(Date.random());
 		this.ID_fa = -1;
 		this.ID_professional = -1;
+		this.group = "Standard";
 	}
 
 	/**
@@ -65,6 +68,7 @@ public class Enrollment {
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 
 		pstmt.executeUpdate();
+		pstmt.close();
 		conn.close();
 	}
 
@@ -97,7 +101,8 @@ public class Enrollment {
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					d); // TODO: Fix parse
+					d,
+					rs.getString("category")); // TODO: Fix parse
 
 			enrollments.add(e);
 		}
@@ -137,7 +142,8 @@ public class Enrollment {
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional"),
 					Status.valueOf(rs.getString("status").toUpperCase()),
-					d); // TODO: Fix parse
+					d,
+					rs.getString("category")); // TODO: Fix parse
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -150,13 +156,14 @@ public class Enrollment {
 	/**
 	 * Inserts all the given enrollments into the given database
 	 *
-	 * @param professionals
+	 * @param enrollments
 	 * @param db
 	 * @throws SQLException
+	 * @throws ParseException 
 	 */
-	public static void insert(List<Professional> professionals, Database db) throws SQLException {
-		for (Professional p : professionals)
-			p.insert(db);
+	public static void insert(List<Enrollment> enrollments, Database db) throws SQLException, ParseException {
+		for (Enrollment e : enrollments)
+			e.insert(db);
 	}
 
 	/**
@@ -173,7 +180,7 @@ public class Enrollment {
 		 * ID_student INTEGER NOT NULL UNIQUE,
 		 */
 
-		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_professional, status, timeEn) VALUES(?,?,?,?)";
+		String SQL = "INSERT INTO " + tableName() + "(ID_fa, ID_professional, status, timeEn, category) VALUES(?,?,?,?,?)";
 
 		Connection conn = db.getConnection(); // Obtain the connection
 		// Prepared Statement initialized with the INSERT statement
@@ -184,9 +191,11 @@ public class Enrollment {
 		pstmt.setInt(2, this.getID_professional());
 		pstmt.setString(3, this.getStatus().toString().toUpperCase());
 		pstmt.setTimestamp(4, this.getTimeEn().toTimestamp());
+		pstmt.setString(5, this.getGroup());
 
 		pstmt.executeUpdate(); // statement execution
 
+		pstmt.close();
 		conn.close();
 	}
 
@@ -222,6 +231,14 @@ public class Enrollment {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
 	}
 
 	public enum Status {
