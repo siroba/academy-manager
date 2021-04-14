@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS Fee(
 
 CREATE TABLE IF NOT EXISTS Invoice (
 	ID_invoice 			INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	amount				real NOT NULL,
 	dateIn     	 		date NOT NULL,
 	sender          	text NOT NULL,
 	receiver        	text NOT NULL,
@@ -74,6 +75,7 @@ CREATE TABLE IF NOT EXISTS Teacher (
 
 CREATE TABLE IF NOT EXISTS InvoiceTeacher (
 	ID_invoice 		text PRIMARY KEY NOT NULL,
+	amount			real NOT NULL,
 	dateIn     		date NOT NULL,
 	sender          text NOT NULL,
 	receiver        text NOT NULL,

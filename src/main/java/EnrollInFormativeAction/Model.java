@@ -43,11 +43,11 @@ public class Model {
         return p;
     }
 
-    public void doEnrollment(Professional p, Enrollment en , String address , String fiscalNumber) throws SQLException, ParseException {
+    public void doEnrollment(FormativeAction fa, String group, Professional p, Enrollment en , String address , String fiscalNumber) throws SQLException, ParseException {
         p.insert(db);
         en.setID_professional(p.getID());
         en.insert(db);
-        Invoice i = new Invoice(en.getTimeEn(), p.getName(), "COIIPA" , address, fiscalNumber, en.getID_fa(), p.getID());
+        Invoice i = new Invoice(fa.getFee(group), en.getTimeEn(), p.getName(), "COIIPA" , address, fiscalNumber, en.getID_fa(), p.getID());
         i.insert(db);
         
         

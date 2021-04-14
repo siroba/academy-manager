@@ -16,13 +16,15 @@ public class Invoice {
 	private int ID = -1, ID_fa , ID_professional;
 	private Date dateIn;
 	private String sender, receiver, fiscalNumber, address;
+	private float amount;
 
 	/** Constructor with ID_invoice
 	 * @param ID_invoice
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(int ID_invoice,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public Invoice(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID=ID_invoice;
 		this.dateIn=dateIn;
@@ -37,7 +39,8 @@ public class Invoice {
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public Invoice(Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public Invoice(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.dateIn=dateIn;
 		this.sender = sender;
@@ -95,7 +98,7 @@ public class Invoice {
 
 			Invoice e = new Invoice(
 					rs.getInt("ID_invoice"),
-					
+					rs.getFloat("amount"),
 					dateIn,
 					rs.getString("sender"),
 					rs.getString("receiver"),
@@ -143,7 +146,7 @@ public class Invoice {
 
 		Invoice e = new Invoice(
 				rs.getInt("ID_invoice"),
-				
+				rs.getFloat("amount"),
 				dateIn,
 				rs.getString("sender"),
 				rs.getString("receiver"),
@@ -178,14 +181,33 @@ public class Invoice {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if(this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, ID_fa,  dateIn) VALUES(?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
 			pstmt.setInt(1, this.getID());
+			pstmt.setFloat(2, this.getAmount());
+			pstmt.setDate(3, this.getDateIn().toSQL());
+			pstmt.setString(4,this.getSender());
+			pstmt.setString(5, this.getReceiver());
 			
+			pstmt.setString(6, this.getAddress());
+			pstmt.setString(7, this.getFiscalNumber());
+			pstmt.setInt(8, this.getID_fa());
+			pstmt.setInt(9, this.getID_professional());
+			pstmt.setInt(10, this.getID_professional());
+			
+			pstmt.executeUpdate(); // statement execution
+		}else {
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?)";
+
+			// Prepared Statement initialized with the INSERT statement
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			// Sets of the parameters of the prepared statement
+
+			pstmt.setFloat(1, this.getAmount());
 			pstmt.setDate(2, this.getDateIn().toSQL());
 			pstmt.setString(3,this.getSender());
 			pstmt.setString(4, this.getReceiver());
@@ -194,23 +216,6 @@ public class Invoice {
 			pstmt.setString(6, this.getFiscalNumber());
 			pstmt.setInt(7, this.getID_fa());
 			pstmt.setInt(8, this.getID_professional());
-			
-			pstmt.executeUpdate(); // statement execution
-		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?)";
-
-			// Prepared Statement initialized with the INSERT statement
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			// Sets of the parameters of the prepared statement
-
-			pstmt.setDate(1, this.getDateIn().toSQL());
-			pstmt.setString(2,this.getSender());
-			pstmt.setString(3, this.getReceiver());
-			
-			pstmt.setString(4, this.getAddress());
-			pstmt.setString(5, this.getFiscalNumber());
-			pstmt.setInt(6, this.getID_fa());
-			pstmt.setInt(7, this.getID_professional());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -219,6 +224,13 @@ public class Invoice {
 		}
 
 		conn.close();
+	}
+	
+	public float getAmount() {
+		return amount;
+	}
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 	public int getID_professional() {
 		return ID_professional;

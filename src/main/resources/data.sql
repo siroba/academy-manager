@@ -47,21 +47,21 @@ insert into Enrollment(ID_fa, ID_professional, status, timeEn, category) values
 	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00.0', 'Standard'),
 	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00.0', 'Standard');
 
-insert into Invoice (Id_invoice , dateIn , sender, receiver, address, fiscalNumber, ID_fa, ID_professional) values
-        (4000, '2021-01-02', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2000 ),
-        (4001, '2021-01-04', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2001 ),
-        (4002, '2021-01-07', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2002 ),
-        (4003, '2021-01-11', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2003 ),
-        (4004, '2021-01-14', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2004 ),
-        (4005, '2021-01-16', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2005 ),
-        (4006, '2021-01-02', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2000 ),
-        (4007, '2021-01-13', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2001 ),
-        (4008, '2021-01-24', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2002 ),
-        (4009, '2021-02-04', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2003 ),
-        (4010, '2021-02-01', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2004 ),
-        (4011, '2021-03-22', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1002, 2000 ),
-        (4012, '2021-03-03', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1002, 2005 ),
-        (4013, '2021-03-05', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1002, 2001 );
+insert into Invoice (Id_invoice , amount, dateIn , sender, receiver, address, fiscalNumber, ID_fa, ID_professional) values
+        (4000, 20, '2021-01-02', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2000 ),
+        (4001, 30, '2021-01-04', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2001 ),
+        (4002, 40, '2021-01-07', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2002 ),
+        (4003, 50, '2021-01-11', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2003 ),
+        (4004, 60, '2021-01-14', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2004 ),
+        (4005, 70, '2021-01-16', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 2005 ),
+        (4006, 80, '2021-01-02', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2000 ),
+        (4007, 90, '2021-01-13', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2001 ),
+        (4008, 10, '2021-01-24', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2002 ),
+        (4009, 20, '2021-02-04', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2003 ),
+        (4010, 30, '2021-02-01', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 2004 ),
+        (4011, 40, '2021-03-22', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1002, 2000 ),
+        (4012, 50, '2021-03-03', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1002, 2005 ),
+        (4013, 60, '2021-03-05', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1002, 2001 );
 
 insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
 	(3000, 15, '2021-01-02 17:00:00.0', true, 4000),
@@ -86,11 +86,11 @@ insert into Teacher (ID_teacher, name) values
 	(1003, "Vivien"),
 	(1004, "Silvia");
 
-insert into InvoiceTeacher (Id_invoice , dateIn, sender, receiver, address, fiscalNumber, ID_fa, ID_teacher) values
+insert into InvoiceTeacher (Id_invoice , amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa, ID_teacher) values
 
-	('4000', '2021-01-02' , 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 1000),
-	('4001', '2021-01-03 ', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 1001),
-	('4002', '2021-01-04 ', 'senderName', 'recieverName', 'address', 'fiscalNumber',  1002, 1002);
+	('4000', 10, '2021-01-02' , 'senderName', 'recieverName', 'address', 'fiscalNumber', 1000, 1000),
+	('4001', 20, '2021-01-03 ', 'senderName', 'recieverName', 'address', 'fiscalNumber', 1001, 1001),
+	('4002', 30, '2021-01-04 ', 'senderName', 'recieverName', 'address', 'fiscalNumber',  1002, 1002);
 
 insert into PaymentTeacher( ID_payment, amount, datePay,  confirmed, ID_invoice) values
 	(3000, 15, '2021-01-02 ', true, '4000'),
