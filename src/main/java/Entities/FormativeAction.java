@@ -177,6 +177,7 @@ public class FormativeAction {
 			pstmt.setString(8,  this.getEnrollmentStart().toSQLiteString());
 			pstmt.setString(9,  this.getEnrollmentEnd().toSQLiteString());
 			pstmt.executeUpdate(); // statement execution
+			pstmt.close();
 		} else {
 			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?)";
 
@@ -196,16 +197,18 @@ public class FormativeAction {
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
+			tableKeys.close();
+			pstmt.close();
+			
+			for(Session s: this.sessions) {
+				s.setID_fa(this.getID());
+			}
+			
+			for(Fee f: this.fees) {
+				f.setID_fa(this.getID());
+			}
 		}
 		
-		for(Session s: this.sessions) {
-			s.setID_fa(this.getID());
-		}
-		
-		for(Fee f: this.fees) {
-			f.setID_fa(this.getID());
-		}
-
 		conn.close();
 	}
 

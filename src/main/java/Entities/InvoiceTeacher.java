@@ -193,6 +193,7 @@ public class InvoiceTeacher {
 			pstmt.setString(8, this.getAddress());
 			
 			pstmt.executeUpdate(); // statement execution
+			pstmt.close();
 		}else {
 			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?)";
 
@@ -212,6 +213,9 @@ public class InvoiceTeacher {
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.ID = tableKeys.getString(1);
+
+			pstmt.close();
+			tableKeys.close();
 		}
 
 		conn.close();
