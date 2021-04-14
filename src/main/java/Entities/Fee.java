@@ -8,31 +8,33 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import PL53.util.DateTime;
+
+import PL53.util.Date;
 import Utils.Database;
 
-public class Session {
+public class Fee {
 	private int ID = -1, ID_fa = -1;
-	private String location;
-	private int numberOfHours;
-	private DateTime sessionStart;
+	private String group;
+	private float amount;
 
-	public Session(String location, int numberOfHours, DateTime sessionStart) {
-		this.location = location;
-		this.numberOfHours = numberOfHours;
-		this.sessionStart = sessionStart;
+	public Fee(String group) {
+		this.group = group;
 	}
 
-	public Session(int ID, int ID_fa, String location, int numberOfHours, DateTime sessionStart) {
+	public Fee(String group, float amount) {
+		this.group = group;
+		this.amount = amount;
+	}
+
+	public Fee(int ID, int ID_fa, String group, float amount) {
 		this.ID = ID;
 		this.ID_fa = ID_fa;
-		this.location = location;
-		this.numberOfHours = numberOfHours;
-		this.sessionStart = sessionStart;
+		this.group = group;
+		this.amount = amount;
 	}
 
 	public static String tableName() {
-		return "Session";
+		return "Fee";
 	}
 
 	/**
@@ -51,16 +53,16 @@ public class Session {
 	}
 
 	/**
-	 * Inserts all the given Sessions into the given database
+	 * Inserts all the given Fees into the given database
 	 *
-	 * @param sessions
+	 * @param fees
 	 * @param db
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static void insert(List<Session> sessions, Database db) throws SQLException, ParseException {
-		for (Session s : sessions)
-			s.insert(db);
+	public static void insert(List<Fee> fees, Database db) throws SQLException, ParseException {
+		for (Fee f : fees)
+			f.insert(db);
 	}
 
 	/**
@@ -79,29 +81,27 @@ public class Session {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if (this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 
 			pstmt.setInt(1, getID());
 			pstmt.setInt(2, getID_fa());
-			pstmt.setString(3, getLocation());
-			pstmt.setInt(4, getNumberOfHours());
-			pstmt.setString(5,  getSessionStart().toSQLiteString());
+			pstmt.setString(3, getGroup());
+			pstmt.setFloat(4, getAmount());
 
 			pstmt.executeUpdate(); // statement execution
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			// Sets of the parameters of the prepared statement
 
-			pstmt.setInt(1, getID_fa());
-			pstmt.setString(2, getLocation());
-			pstmt.setInt(3, getNumberOfHours());
-			pstmt.setString(4,  getSessionStart().toSQLiteString());
+			pstmt.setFloat(1, getAmount());
+			pstmt.setString(2, getGroup());
+			pstmt.setInt(3, getID_fa());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -121,27 +121,19 @@ public class Session {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<Session> get(String query, Database db) throws SQLException {
+	public static List<Fee> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 
-		List<Session> sessions = new ArrayList<Session>();
+		List<Fee> fees = new ArrayList<Fee>();
 
 		while (rs.next()) {
-			DateTime dstart;
+			Fee f = new Fee(rs.getInt("ID_fee"), rs.getInt("ID_fa"), rs.getString("category"), rs.getFloat("amount"));
 
-			try {
-				dstart = DateTime.parseString(rs.getString("sessionStart"));
-			} catch (ParseException e) {
-				dstart = DateTime.fromMillis(rs.getLong("sessionStart"));
-			}
-
-			Session s = new Session(rs.getInt("ID_session"), rs.getInt("ID_fa"), rs.getString("location"), rs.getInt("duration"), dstart);
-
-			sessions.add(s);
+			fees.add(f);
 		}
 
 		// Very important to always close all the objects related to the database
@@ -149,7 +141,7 @@ public class Session {
 		st.close();
 		conn.close();
 
-		return sessions;
+		return fees;
 	}
 
 	/**
@@ -161,7 +153,7 @@ public class Session {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static Session getOne(String query, Database db) throws SQLException {
+	public static Fee getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -170,22 +162,14 @@ public class Session {
 
 		rs.next();
 
-		DateTime dstart;
-
-		try {
-			dstart = DateTime.parseString(rs.getString("sessionStart"));
-		} catch (ParseException e) {
-			dstart = DateTime.fromMillis(rs.getLong("sessionStart"));
-		}
-
-		Session s = new Session(rs.getInt("ID_session"), rs.getInt("ID_fa"), rs.getString("location"), rs.getInt("duration"), dstart);
+		Fee f = new Fee(rs.getInt("ID_fee"), rs.getInt("ID_fa"), rs.getString("category"), rs.getFloat("amount"));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
 		st.close();
 		conn.close();
 
-		return s;
+		return f;
 	}
 
 	public int getID() {
@@ -200,27 +184,19 @@ public class Session {
 		this.ID_fa = ID_fa;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getGroup() {
+		return group;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setGroup(String group) {
+		this.group = group;
 	}
 
-	public int getNumberOfHours() {
-		return numberOfHours;
+	public float getAmount() {
+		return amount;
 	}
 
-	public void setNumberOfHours(int numberOfHours) {
-		this.numberOfHours = numberOfHours;
-	}
-
-	public DateTime getSessionStart() {
-		return sessionStart;
-	}
-
-	public void setSessionStart(DateTime sessionStart) {
-		this.sessionStart = sessionStart;
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 }
