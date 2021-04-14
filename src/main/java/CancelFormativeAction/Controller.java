@@ -11,7 +11,9 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import BaseProject.SwingUtil;
 import Entities.FormativeAction;
+import Entities.Invoice;
 import PL53.swing.CheckboxTableModel;
 import RegisterCancellations.Data;
 
@@ -78,6 +80,29 @@ public class Controller implements PL53.util.Controller {
 				}
 			}
 		});
+		
+		view.getBtnRefund().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Integer[] selected = view.getChecked();
+				
+				for(int i: selected) {
+					try {
+						Invoice in = new Invoice(
+								Float.parseFloat((String)view.getTableRefunds().getValueAt(i, 1)), 
+								view.getDateIn(), "COIIPA", 
+								(String) view.getTableRefunds().getValueAt(i, 0), 
+								view.getAddress(), view.getFiscalNumber(), 
+								model.getCancelled()[view.getSelectedCanceled()].getID(), 
+								model.getSolicitedRefunds(model.getCancelled()[view.getSelectedCanceled()])[i].professional.getID());
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 
 	@Override
@@ -100,7 +125,6 @@ public class Controller implements PL53.util.Controller {
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
-
 		for (int i = 0; i < body.length; i++) {
 			for (int j = 0; j < header.length; j++) {
 				tm.setValueAt(body[i][j], i, j);
