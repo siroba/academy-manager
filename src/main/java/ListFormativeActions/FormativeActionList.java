@@ -9,19 +9,19 @@ public class FormativeActionList {
 	private Date enrollmentPeriodEnd;
 	private int totalPlaces;
 	private int leftPlaces;
-	private Date date;
-	private int sessionNumber;
+	private Date dateOfFirstSession;
+	private Date dateOfLastSession;
 
 	public FormativeActionList(String nameOfAction, String status, Date enrollmentPeriodStart, Date enrollmentPeriodEnd,
-			int totalPlaces, int leftPlaces, Date date, int sessionNumber) {
+			int totalPlaces, int leftPlaces, Date dateOfFirstSession, Date dateOfLastSession) {
 		this.nameOfAction = nameOfAction;
 		this.status = status;
 		this.enrollmentPeriodStart = enrollmentPeriodStart;
 		this.enrollmentPeriodEnd = enrollmentPeriodEnd;
 		this.totalPlaces = totalPlaces;
 		this.leftPlaces = leftPlaces;
-		this.date = date;
-		this.sessionNumber = sessionNumber;
+		this.dateOfFirstSession = dateOfFirstSession;
+		this.dateOfLastSession = dateOfLastSession;
 	}
 
 	public String getNameOfAction() {
@@ -72,19 +72,19 @@ public class FormativeActionList {
 		this.leftPlaces = leftPlaces;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getDateOfFirstSession() {
+		return dateOfFirstSession;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDateOfFirstSession(Date date) {
+		this.dateOfFirstSession = date;
 	}
 
-	public int getSessionNumber() {
-		return sessionNumber;
+	public Date getDateOfLastSession() {
+		return dateOfLastSession;
 	}
 
-	public void setSessionNumber(int sessionNumber) {
-		this.sessionNumber = sessionNumber;
+	public void setDateOfLastSession(Date dateOfLastSession) {
+		this.dateOfLastSession = dateOfLastSession;
 	}
 }

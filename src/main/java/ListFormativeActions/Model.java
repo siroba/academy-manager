@@ -13,54 +13,74 @@ import Utils.UnexpectedException;
 
 public class Model {
 
-	private final String WITH_STATUS_FILTER = "SELECT fa.nameFa, s.ID_session, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces,(fa.totalPlaces - count(e.ID_fa)) AS leftPlaces, s.sessionStart "
-			+ "FROM FormativeAction fa " + "INNER JOIN Session s ON fa.ID_fa = s.ID_fa "
-			+ "LEFT JOIN Enrollment e ON e.ID_fa = fa.ID_fa " + "WHERE lower(fa.status) = ? "
-			+ "AND date(s.sessionStart) BETWEEN ? AND ?" + "GROUP BY s.ID_session;";
-	private final String WITHOUT_STATUS_FILTER = "SELECT fa.nameFa, s.ID_session, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces,(fa.totalPlaces - count(e.ID_fa)) AS leftPlaces, s.sessionStart "
-			+ "FROM FormativeAction fa " + "INNER JOIN Session s ON fa.ID_fa = s.ID_fa "
-			+ "LEFT JOIN Enrollment e ON e.ID_fa = fa.ID_fa " + "WHERE date(s.sessionStart) BETWEEN ? AND ?"
-			+ "GROUP BY s.ID_session;";
+	private final String WITH_STATUS_FILTER = "select fa.nameFa, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces "
+			+ "from FormativeAction fa left join Enrollment e on e.ID_fa = fa.ID_fa "
+			+ "INNER JOIN Session s on fa.ID_fa = s.ID_fa "
+			+ "WHERE lower(fa.status) = ? AND date(s.sessionStart) BETWEEN ? AND ? group by fa.ID_fa; ";
+	private final String WITHOUT_STATUS_FILTER = "select fa.nameFa, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces "
+			+ "from FormativeAction fa left join Enrollment e on e.ID_fa = fa.ID_fa "
+			+ "INNER JOIN Session s on fa.ID_fa = s.ID_fa "
+			+ "WHERE date(s.sessionStart) BETWEEN ? AND ?group by fa.ID_fa; ";
 
 	public List<FormativeActionList> getListFormativeAction(String filterStatusString, String filterDateBegin,
 			String filterDateEnd, boolean filterStatus) {
 		try {
 			Database db = new Database();
 			Connection cn = db.getConnection();
-			PreparedStatement ps;
+			PreparedStatement psFormativeActions;
 			if (filterStatus) {
-				ps = cn.prepareStatement(WITH_STATUS_FILTER);
-				ps.setString(1, filterStatusString);
-				ps.setString(2, filterDateBegin);
-				ps.setString(3, filterDateEnd);
-
+				psFormativeActions = cn.prepareStatement(WITH_STATUS_FILTER);
+				psFormativeActions.setString(1, filterStatusString);
+				psFormativeActions.setString(2, filterDateBegin);
+				psFormativeActions.setString(3, filterDateEnd);
 			} else {
-				ps = cn.prepareStatement(WITHOUT_STATUS_FILTER);
-				ps.setString(1, filterDateBegin);
-				ps.setString(2, filterDateEnd);
+				psFormativeActions = cn.prepareStatement(WITHOUT_STATUS_FILTER);
+				psFormativeActions.setString(1, filterDateBegin);
+				psFormativeActions.setString(2, filterDateEnd);
 			}
-			ResultSet rs = ps.executeQuery();
+			ResultSet rsFormativeActions = psFormativeActions.executeQuery();
 
 			List<FormativeActionList> formativeActionList = new ArrayList<>();
 
-			String checkName = "";
-			int index = 1;
-			while (rs.next()) {
-				if (!checkName.equals(rs.getString("nameFa"))) {
-					index = 1;
-					checkName = rs.getString("nameFa");
-				} else {
-					index++;
+			while (rsFormativeActions.next()) {
+				PreparedStatement psLeftPlaces = cn
+						.prepareStatement("select totalPlaces, (totalPlaces  - count(e.ID_fa)) as leftPlaces "
+								+ "from FormativeAction fa " + "left join Enrollment e on fa.ID_fa = e.ID_fa "
+								+ "where fa.nameFa = ?;");
+				psLeftPlaces.setString(1, rsFormativeActions.getString("nameFa"));
 
-				}
-				FormativeActionList fs = new FormativeActionList(rs.getString("nameFa"), rs.getString("status"),
-						Date.parse(rs.getTimestamp("enrollmentStart")), Date.parse(rs.getTimestamp("enrollmentEnd")),
-						rs.getInt("totalPlaces"), rs.getInt("leftPlaces"), Date.parse(rs.getTimestamp("sessionStart")),
-						index);
+				PreparedStatement psFirstSessionStart = cn.prepareStatement(
+						"select s.sessionStart " + "from Session s inner join FormativeAction fa on fa.ID_fa = s.ID_fa "
+								+ "where fa.nameFa = ? order by s.ID_session ASC LIMIT 1;");
+				psFirstSessionStart.setString(1, rsFormativeActions.getString("nameFa"));
+
+				PreparedStatement psLastSessionStart = cn.prepareStatement(
+						"select s.sessionStart " + "from Session s inner join FormativeAction fa on fa.ID_fa = s.ID_fa "
+								+ "where fa.nameFa = ? order by s.ID_session DESC LIMIT 1;");
+				psLastSessionStart.setString(1, rsFormativeActions.getString("nameFa"));
+
+				ResultSet leftPlaces = psLeftPlaces.executeQuery();
+				ResultSet firstSession = psFirstSessionStart.executeQuery();
+				ResultSet lastSession = psLastSessionStart.executeQuery();
+
+				FormativeActionList fs = new FormativeActionList(rsFormativeActions.getString("nameFa"),
+						rsFormativeActions.getString("status"),
+						Date.parse(rsFormativeActions.getTimestamp("enrollmentStart")),
+						Date.parse(rsFormativeActions.getTimestamp("enrollmentEnd")),
+						rsFormativeActions.getInt("totalPlaces"), leftPlaces.getInt("leftPlaces"),
+						Date.parse(firstSession.getTimestamp("sessionStart")),
+						Date.parse(lastSession.getTimestamp("sessionStart")));
 				formativeActionList.add(fs);
+
+				psLeftPlaces.close();
+				psFirstSessionStart.close();
+				psLastSessionStart.close();
+				leftPlaces.close();
+				firstSession.close();
+				lastSession.close();
 			}
-			rs.close();
-			ps.close();
+			rsFormativeActions.close();
+			psFormativeActions.close();
 			cn.close();
 			return formativeActionList;
 		} catch (SQLException e) {
