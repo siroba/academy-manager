@@ -68,9 +68,9 @@ public class View extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel lblSelectACancelled = new JLabel("Select a cancelled Formative Action:");
-		lblSelectACancelled.setBounds(8, 5, 273, 15);
-		panel_1.add(lblSelectACancelled);
+		JLabel lblSelectACanceled = new JLabel("Select a canceled Formative Action:");
+		lblSelectACanceled.setBounds(8, 5, 273, 15);
+		panel_1.add(lblSelectACanceled);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(0, 27, 489, 112);
