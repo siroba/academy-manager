@@ -7,6 +7,7 @@ import java.util.List;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
+import Entities.Invoice;
 import Entities.Payment;
 import Entities.Professional;
 import RegisterCancellations.Data;
@@ -68,10 +69,11 @@ public class Model {
 
 	public Data[] getSolicitedRefunds(FormativeAction fa) throws SQLException {
 		String queryEnrollments = "SELECT Enrollment.* FROM Enrollment "
-								+ "INNER JOIN Payment on Payment.ID_fa=Enrollment.ID_fa AND Payment.ID_professional=Enrollment.ID_professional "
-								+ "WHERE Enrollment.ID_fa=" + fa.getID() + ";";
-
-		String queryPayments = "SELECT * FROM Payment WHERE ID_fa=" + fa.getID() + " AND ID_professional=";
+								+ "INNER JOIN Invoice ON Invoice.ID_fa=Enrollment.ID_fa AND Invoice.ID_professional=Enrollment.ID_professional "
+								+ "WHERE Invoice.receiver='COIIPA' AND ID_invoice IN (SELECT ID_invoice FROM Payment) AND ID_invoice NOT IN (SELECT ID_invoice FROM Invoice WHERE sender='COIIPA') AND Enrollment.ID_fa=" + fa.getID() + ";";
+		
+		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + fa.getID() + " AND ID_professional=";
+		String queryPayments = "SELECT * FROM Payment WHERE ID_invoice=";
 		String queryProfessional = "SELECT * FROM Professional WHERE ID_professional=";
 		
 		List<Data> allData = new ArrayList<Data>();
@@ -80,8 +82,9 @@ public class Model {
 			Data d = new Data();
 			d.formativeAction = fa;
 			d.enrollment = en;
-			d.professional = Professional.getOne(queryProfessional + en.getID_professional(), db);
-			d.payment = Payment.getOne(queryPayments + en.getID_professional(), db);
+			d.invoice = Invoice.getOne(queryInvoice + en.getID_professional(), db);
+			d.professional = Professional.getOne(queryProfessional + d.invoice.getID_professional(), db);
+			d.payment = Payment.getOne(queryPayments + d.invoice.getID(), db);
 			
 			allData.add(d);
 		}

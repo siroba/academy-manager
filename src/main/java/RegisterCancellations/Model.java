@@ -70,7 +70,7 @@ public class Model {
 	}
 
 	public void deleteEnrollment(Data selected) {
-		String query = "DELETE FROM Enrollment WHERE ID_fa=? AND ID_professional=?";
+		String query = "UPDATE Enrollment SET status='CANCELLED' WHERE ID_fa=? AND ID_professional=?";
 		
 		db.executeUpdateQuery(query, selected.formativeAction.getID(), selected.professional.getID());
 	}
