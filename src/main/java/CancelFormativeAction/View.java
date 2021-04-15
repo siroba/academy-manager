@@ -255,4 +255,8 @@ public class View extends JFrame {
 	public void setCoiipaInfoRed() {
 		coiipaPanel.setBorder(BorderFactory.createLineBorder(Color.red));
 	}
+
+	public void setCoiipaInfoNormal() {
+		coiipaPanel.setBorder(null);
+	}
 }

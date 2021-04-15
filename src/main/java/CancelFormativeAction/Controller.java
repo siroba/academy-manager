@@ -46,10 +46,20 @@ public class Controller implements PL53.util.Controller {
 						    "Information empty",
 						    JOptionPane.ERROR_MESSAGE);
 					return;
+				}else {
+					view.setCoiipaInfoNormal();
 				}
 				
 				int index = view.getSelected();
 
+				if(index == -1) {
+					JOptionPane.showMessageDialog(null,
+						    "Please, select at least one formative action.",
+						    "Did not select a formative action",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				double payments = model.getPayments(index);
 				double teachers = model.getInvoices(index);
         
