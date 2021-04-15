@@ -94,5 +94,11 @@ public class Controller implements PL53.util.Controller {
 		view.getTablePayments().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTablePayments());
 		
+		float amount = 0;
+		for (Payment payment : paymentList) {
+			amount += payment.getAmount();
+		}
+		view.getLabelSummary().setText("" + amount);
+		
 	}
 }
