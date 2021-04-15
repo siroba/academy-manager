@@ -4,7 +4,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.beans.BeanProperty;
 import java.text.DecimalFormat;
 
 /**
@@ -17,7 +16,7 @@ import java.text.DecimalFormat;
  *         This is used in the {@link DateTimeInput} and {@link DateInput}
  *         classes.
  */
-public abstract class JNumberField <T extends Number> extends javax.swing.JFormattedTextField {
+public class JNumberField extends javax.swing.JFormattedTextField {
 	/** Auto generated Serial ID */
 	protected static final long serialVersionUID = 374166271716319247L;
 
@@ -80,10 +79,10 @@ public abstract class JNumberField <T extends Number> extends javax.swing.JForma
 
 					e.consume();
 				} else {
-					T newval = parse(getText() + e.getKeyChar());
+					float newval = Float.parseFloat(getText() + e.getKeyChar());
 
-					if (newval.floatValue() > maxValue) {
-						setText(getMaxValue());
+					if (newval > maxValue) {
+						setText(Float.toString(maxValue));
 						e.consume();
 					}
 				}
@@ -98,10 +97,10 @@ public abstract class JNumberField <T extends Number> extends javax.swing.JForma
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				T newval = getInternalValue();
+				float newval = getInternalValue();
 
-				if (newval.floatValue() < minValue) {
-					setText(getMinValue());
+				if (newval < minValue) {
+					setText(Float.toString(minValue));
 				}
 			}
 		});
@@ -119,26 +118,39 @@ public abstract class JNumberField <T extends Number> extends javax.swing.JForma
 		return n;
 	}
 
-	protected abstract boolean isAllowed(char c);
-	protected abstract T getInternalValue();
-	protected abstract T parse(String str);
+	protected boolean isAllowed(char c) {
+		return  (c == '-' && getText().length() == 0) || 
+				(c == '.' && !getText().contains("."));
+	}
+
+	protected float getInternalValue() {
+		if (numberDigits(getText()) > 0)
+			return Float.parseFloat(this.getText());
+		else
+			return 0;
+	}
+
 	/**
 	 * If the text field is empty, it returns 0. Otherwise, it parses the text
-	 * ({@link #getText()}) to a Float.
+	 * ({@link #getText()}) to an Float.
 	 */
-	public abstract T getValue();
+	public Float getValue() {
+		if (numberDigits(getText()) > 0)
+			return Float.parseFloat(this.getText());
+		else
+			return minValue;
+	}
 
-	public int getMaxLength() {
+	public float getMaxLength() {
 		return maxLength;
 	}
-	
-	@BeanProperty(preferred = true, bound = false, description = "The maximum number of digits this NumberField can have")
+
 	public void setMaxLength(int maxLength) {
 		this.maxLength = maxLength;
 	}
 	
 	protected void initialValue() {
-		this.setText(getDefaultValue());
+		this.setText(defaultValue);
 	}
 
 	/**
@@ -147,23 +159,18 @@ public abstract class JNumberField <T extends Number> extends javax.swing.JForma
 	 * @param min
 	 * @param max
 	 */
-	@BeanProperty(preferred = true, bound = false, description = "The maximum and minimum value (constraints) of this NumberField")
-	public void setBound(T min, T max) {
-		this.maxValue = max.floatValue();
-		this.minValue = min.floatValue();
+	public void setBound(float min, float max) {
+		this.maxValue = max;
+		this.minValue = min;
 	}
 
-	public abstract T getDefaultValue();
-	public abstract T getMinValue();
-	public abstract T getMaxValue();
-	
-	@BeanProperty(preferred = true, bound = false, visualUpdate = true, description = "Default value on creation")
-	public void setDefaultValue(T value) {
-		defaultValue = value.floatValue();
+	public void setDefaultValue(float value) {
+		defaultValue = value;
 		
-		this.setText(getDefaultValue());
+		this.setText(defaultValue);
 	}
 	
-	@BeanProperty(hidden = true)
-	public abstract void setText(T f);
+	public void setText(float f) {
+		this.setText(Float.toString(f));
+	}
 }
