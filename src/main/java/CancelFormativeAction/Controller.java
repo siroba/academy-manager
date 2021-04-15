@@ -39,23 +39,41 @@ public class Controller implements PL53.util.Controller {
 		view.getBtnCancel().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!view.filledCoiipasInfo()) {
+					view.setCoiipaInfoRed();
+					JOptionPane.showMessageDialog(null,
+						    "Please, fill the information of COIIPA.",
+						    "Information empty",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}else {
+					view.setCoiipaInfoNormal();
+				}
+				
 				int index = view.getSelected();
+
+				if(index == -1) {
+					JOptionPane.showMessageDialog(null,
+						    "Please, select at least one formative action.",
+						    "Did not select a formative action",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				
 				double payments = model.getPayments(index);
 				double teachers = model.getInvoices(index);
-				
+        
 				int option = JOptionPane.showConfirmDialog(null, 
-						payments + "€ will be refunded to Professionals and " + teachers + "€ will be returned from the teachers.",
+						payments + "â‚¬ will be refunded to Professionals and " + teachers + "â‚¬ will be returned from the teachers.",
 						"Are you sure you want to continue?",
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 				
 				if(option == 0) {
 					model.cancel(index);
-					model.refund(index);
-					model.invoiceTeachers(index);
-					
+
 					try {
+						model.invoiceTeachers(index, view.getDateIn(), view.getFiscalNumber(), view.getAddress());
 						model.initModel();
 
 						view.setTable(getTableModel(model.getAllData()));
@@ -64,42 +82,59 @@ public class Controller implements PL53.util.Controller {
 						e1.printStackTrace();
 					}
 				}
-				
+
 			}
 		});
-		
+
 		view.getTableCancelledFA().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				view.enableRefundsScroll();
-				
+
 				try {
-					view.setTableRefunds(getCheckboxTableModel(model.getSolicitedRefunds(model.getCancelled()[view.getTableRefunds().getSelectedRow()])));
+					view.setTableRefunds(getCheckboxTableModel(
+							model.getSolicitedRefunds(model.getCancelled()[view.getSelectedCanceled()])));
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
-		
+
+    
 		view.getBtnRefund().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Integer[] selected = view.getChecked();
+				FormativeAction cancelledSelected = model.getCancelled()[view.getSelectedCanceled()];
 				
-				for(int i: selected) {
-					try {
-						Invoice in = new Invoice(
-								Float.parseFloat((String)view.getTableRefunds().getValueAt(i, 1)), 
-								view.getDateIn(), "COIIPA", 
-								(String) view.getTableRefunds().getValueAt(i, 0), 
-								view.getAddress(), view.getFiscalNumber(), 
-								model.getCancelled()[view.getSelectedCanceled()].getID(), 
-								model.getSolicitedRefunds(model.getCancelled()[view.getSelectedCanceled()])[i].professional.getID());
+				try {
+					Data[] d = model.getSolicitedRefunds(cancelledSelected);
+					
+					for (int i : selected) {
+						if(i>=d.length)
+							continue;
 						
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						Invoice in = new Invoice(
+								Float.parseFloat((String) view.getTableRefunds().getValueAt(i, 2)),
+								view.getDateIn(),
+								"COIIPA", 
+								(String) view.getTableRefunds().getValueAt(i, 1),
+								view.getAddress(), 
+								view.getFiscalNumber(),
+								cancelledSelected.getID(), 
+								d[i].professional.getID());
+						
+						model.payRefund(in, view.getIsCash());
 					}
+
+					model.initModel();
+
+					view.setTable(getTableModel(model.getAllData()));
+					view.setTableCancelledFA(getTableModel(model.getCancelled()));
+					view.setTableRefunds(getCheckboxTableModel(new Data[]{}));
+				} catch (SQLException | ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -113,15 +148,19 @@ public class Controller implements PL53.util.Controller {
 	}
 
 	public TableModel getTableModel(FormativeAction data[]) {
-		String header[] = { "Formative Action", "End of Enrollment", "Teacher", "Total places" };
+		String header[] = { "Formative Action", "End of Enrollment", "Filled places", "Total places" };
 
 		String body[][] = new String[data.length][header.length];
 
 		for (int i = 0; i < data.length; i++) {
 			FormativeAction d = data[i];
 			// TODO: Fix this
-			body[i] = new String[] { d.getName(), d.getEnrollmentEnd().toString(), "Teacher name" /*d.getTeacherName()*/,
-					Integer.toString(d.getTotalPlaces()) };
+			body[i] = new String[] { 
+										d.getName(), 
+										d.getEnrollmentEnd().toString(),
+										Integer.toString(model.getUsedPlaces(d.getID())), 
+										Integer.toString(d.getTotalPlaces())
+									};
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
@@ -133,18 +172,21 @@ public class Controller implements PL53.util.Controller {
 
 		return tm;
 	}
-	
+
 	public CheckboxTableModel getCheckboxTableModel(Data data[]) {
 		CheckboxTableModel tm = new CheckboxTableModel();
-		
+
 		String header[] = { "Name", "Refund amount", "Enrolled date" };
 		tm.addColumns(header);
-		
+
 		String body[][] = new String[data.length][header.length];
-		
+
 		for (int i = 0; i < data.length; i++) {
 			Data d = data[i];
-			body[i] = new String[] { d.professional.getName(), Float.toString(d.payment.getAmount()), d.enrollment.getTimeEn().toString() };
+			body[i] = new String[] { 
+					d.professional.getName(), 
+					Float.toString(d.payment.getAmount()),
+					d.enrollment.getTimeEn().toString()};
 		}
 
 		tm.addRows(body);

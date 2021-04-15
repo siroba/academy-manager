@@ -6,7 +6,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 import PL53.swing.CheckboxTableModel;
 import PL53.swing.DateInput;
+import PL53.swing.DateTimeInput;
 import PL53.util.Date;
+import Utils.SwingUtil;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
@@ -19,6 +21,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.JCheckBox;
 
 public class View extends JFrame {
 
@@ -39,6 +42,8 @@ public class View extends JFrame {
 	private JTextField address;
 	private JLabel lblNewLabel_2;
 	private JTextField fiscalNumber;
+	private JPanel coiipaPanel;
+	private JCheckBox isCash;
 
 	/**
 	 * Create the frame.
@@ -46,7 +51,7 @@ public class View extends JFrame {
 	public View() {
 		setTitle("Cancel a Formative Action");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1094, 370);
+		setBounds(100, 100, 1102, 370);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -102,37 +107,48 @@ public class View extends JFrame {
 		scrollPane_2.setViewportView(tableRefunds);
 
 		btnRefund = new JButton("Refund selected professionals");
-		btnRefund.setBounds(528, 292, 211, 23);
+		btnRefund.setBounds(455, 298, 346, 23);
 		contentPane.add(btnRefund);
 		
+		coiipaPanel = new JPanel();
+		coiipaPanel.setBounds(862, 70, 220, 222);
+		contentPane.add(coiipaPanel);
+		coiipaPanel.setLayout(null);
+		
 		dateIn = new DateInput();
-		dateIn.setBorder(BorderFactory.createLineBorder(Color.black));
-		dateIn.getYearsTextField().setBound(2021, 3000);
+		dateIn.getYearsTextField().setBound(2000, Integer.MAX_VALUE);
 		dateIn.getYearsTextField().setDefaultValue(2021);
-		dateIn.setBounds(862, 223, 211, 55);
-		contentPane.add(dateIn);
+		dateIn.setBounds(10, 130, 201, 55);
+		coiipaPanel.add(dateIn);
+		dateIn.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		JLabel lblNewLabel = new JLabel("Date of the invoice:");
-		lblNewLabel.setBounds(862, 205, 113, 14);
-		contentPane.add(lblNewLabel);
+		lblNewLabel.setBounds(10, 115, 189, 14);
+		coiipaPanel.add(lblNewLabel);
 		
 		address = new JTextField();
-		address.setBounds(862, 115, 206, 20);
-		contentPane.add(address);
+		address.setBounds(10, 25, 196, 20);
+		coiipaPanel.add(address);
 		address.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("COIIPA's address:");
-		lblNewLabel_1.setBounds(862, 90, 96, 14);
-		contentPane.add(lblNewLabel_1);
+		lblNewLabel_1.setBounds(10, 0, 152, 14);
+		coiipaPanel.add(lblNewLabel_1);
 		
 		lblNewLabel_2 = new JLabel("COIIPA's fiscal number:");
-		lblNewLabel_2.setBounds(862, 146, 151, 14);
-		contentPane.add(lblNewLabel_2);
+		lblNewLabel_2.setBounds(12, 56, 199, 14);
+		coiipaPanel.add(lblNewLabel_2);
 		
 		fiscalNumber = new JTextField();
+		fiscalNumber.setBounds(10, 81, 196, 20);
+		coiipaPanel.add(fiscalNumber);
 		fiscalNumber.setColumns(10);
-		fiscalNumber.setBounds(862, 171, 206, 20);
-		contentPane.add(fiscalNumber);
+		
+		isCash = new JCheckBox("Cash payment");
+		isCash.setBounds(10, 192, 164, 23);
+		coiipaPanel.add(isCash);
+		dateIn.getYearsTextField().setBound(2021, 3000);
+		dateIn.getYearsTextField().setDefaultValue(2021);
 	}
 
 	public void setTable(TableModel tm) {
@@ -156,7 +172,7 @@ public class View extends JFrame {
 		
 		for(int row = 0; row<tableRefunds.getRowCount(); row++) {
 			if((boolean) tableRefunds.getValueAt(row, 0)) {
-				l.add(row+1);
+				l.add(row);
 			}
 		}
 		
@@ -186,7 +202,7 @@ public class View extends JFrame {
 	}
 
 	public JTable getTableRefunds() {
-		return tableCancelledFA;
+		return tableRefunds;
 	}
 
 	public void setTableRefunds(TableModel tm) {
@@ -225,5 +241,22 @@ public class View extends JFrame {
 	}
 	public String getFiscalNumber() {
 		return fiscalNumber.getText();
+	}
+	
+	public boolean getIsCash() {
+		return isCash.isSelected();
+	}
+	
+	public boolean filledCoiipasInfo() {
+		return  (address.getText().length()>0) &&
+				(fiscalNumber.getText().length()>0);
+	}
+
+	public void setCoiipaInfoRed() {
+		coiipaPanel.setBorder(BorderFactory.createLineBorder(Color.red));
+	}
+
+	public void setCoiipaInfoNormal() {
+		coiipaPanel.setBorder(null);
 	}
 }
