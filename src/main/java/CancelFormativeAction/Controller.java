@@ -88,7 +88,12 @@ public class Controller implements PL53.util.Controller {
 				FormativeAction cancelledSelected = model.getCancelled()[view.getSelectedCanceled()];
 				
 				try {
+					Data[] d = model.getSolicitedRefunds(cancelledSelected);
+					
 					for (int i : selected) {
+						if(i>=d.length)
+							continue;
+						
 						Invoice in = new Invoice(
 								Float.parseFloat((String) view.getTableRefunds().getValueAt(i, 2)),
 								view.getDateIn(),
@@ -96,8 +101,8 @@ public class Controller implements PL53.util.Controller {
 								(String) view.getTableRefunds().getValueAt(i, 1),
 								view.getAddress(), 
 								view.getFiscalNumber(),
-								model.getCancelled()[view.getSelectedCanceled()].getID(), 
-								model.getSolicitedRefunds(model.getCancelled()[view.getSelectedCanceled()])[i].professional.getID());
+								cancelledSelected.getID(), 
+								d[i].professional.getID());
 						
 						model.payRefund(in, view.getIsCash());
 					}
@@ -106,7 +111,7 @@ public class Controller implements PL53.util.Controller {
 
 					view.setTable(getTableModel(model.getAllData()));
 					view.setTableCancelledFA(getTableModel(model.getCancelled()));
-					view.setTableRefunds(getCheckboxTableModel(model.getSolicitedRefunds(model.getCancelled()[0])));
+					view.setTableRefunds(getCheckboxTableModel(new Data[]{}));
 				} catch (SQLException | ParseException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

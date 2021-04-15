@@ -68,10 +68,10 @@ public class Model {
 	}
 
 	public Data[] getSolicitedRefunds(FormativeAction fa) throws SQLException {
-		String queryEnrollments = "SELECT Enrollment.* FROM Enrollment "
+		String queryEnrollments = "SELECT Enrollment.* FROM Enrollment \n"
 				+ "INNER JOIN Invoice ON Invoice.ID_fa=Enrollment.ID_fa AND Invoice.ID_professional=Enrollment.ID_professional "
-				+ "WHERE Invoice.receiver='COIIPA' AND ID_invoice IN (SELECT ID_invoice FROM Payment) AND "
-				+ "ID_invoice NOT IN (SELECT ID_invoice FROM Invoice WHERE sender='COIIPA') AND Enrollment.ID_fa=" + fa.getID() + ";";
+				+ "WHERE Invoice.receiver='COIIPA' AND ID_invoice IN (SELECT ID_invoice FROM Payment) AND Enrollment.ID_fa=" + fa.getID()
+				+ " AND (Enrollment.ID_fa,Enrollment.ID_professional) NOT IN (SELECT ID_fa, ID_professional FROM Invoice WHERE sender='COIIPA');";
 				
 				/*+ "INNER JOIN FormativeAction ON FormativeAction.ID_fa=Enrollment.ID_fa " 
 				+ "WHERE FormativeAction.status='CANCELLED' AND "

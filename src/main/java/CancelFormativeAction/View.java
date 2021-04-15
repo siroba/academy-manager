@@ -107,7 +107,7 @@ public class View extends JFrame {
 		scrollPane_2.setViewportView(tableRefunds);
 
 		btnRefund = new JButton("Refund selected professionals");
-		btnRefund.setBounds(528, 292, 211, 23);
+		btnRefund.setBounds(455, 298, 346, 23);
 		contentPane.add(btnRefund);
 		
 		panel = new JPanel();
@@ -121,7 +121,7 @@ public class View extends JFrame {
 		dateIn.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		JLabel lblNewLabel = new JLabel("Date of the invoice:");
-		lblNewLabel.setBounds(0, 115, 113, 14);
+		lblNewLabel.setBounds(0, 115, 199, 14);
 		panel.add(lblNewLabel);
 		
 		address = new JTextField();
@@ -130,11 +130,11 @@ public class View extends JFrame {
 		address.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("COIIPA's address:");
-		lblNewLabel_1.setBounds(0, 0, 96, 14);
+		lblNewLabel_1.setBounds(0, 0, 152, 14);
 		panel.add(lblNewLabel_1);
 		
 		lblNewLabel_2 = new JLabel("COIIPA's fiscal number:");
-		lblNewLabel_2.setBounds(0, 56, 151, 14);
+		lblNewLabel_2.setBounds(0, 56, 199, 14);
 		panel.add(lblNewLabel_2);
 		
 		fiscalNumber = new JTextField();
