@@ -56,7 +56,7 @@ public class Model {
 	}
 
 	public double getInvoices(int index) {
-		String query = "SELECT SUM(amount) FROM InvoiceTeacher GROUP BY ID_fa HAVING ID_fa=?";
+		String query = "SELECT SUM(amount) FROM InvoiceTeacher GROUP BY ID_fa HAVING ID_fa=? AND ID_invoice IN (SELECT ID_Invoice FROM PaymentTeacher)";
 
 
 		List<Object[]> obj = db.executeQueryArray(query, data[index].getID());
