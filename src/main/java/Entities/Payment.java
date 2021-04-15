@@ -109,7 +109,7 @@ public class Payment {
 					
 					rs.getBoolean("confirmed"),
 					rs.getBoolean("cash"));
-			System.out.println(e.getAmount());
+		
 
 			enrollments.add(e);
 		}

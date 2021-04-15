@@ -112,6 +112,8 @@ public class Controller implements PL53.util.Controller {
 							e1.printStackTrace();
 						}
 
+					} else if (option == 1) {
+						return;
 					}
 
 				} else if (totalPayed < selectedRow.invoice.getAmount()) {
@@ -128,7 +130,6 @@ public class Controller implements PL53.util.Controller {
 				}
 
 				else {
-					
 
 					float amount = view.getAmountPaidTextField();
 					Date payDate = view.getDateTextPane().getDate();

@@ -44,7 +44,7 @@ public class View extends JFrame {
 	public View() {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		
-		setBounds(100, 100, 1450, 758);
+		setBounds(100, 100, 723, 758);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
