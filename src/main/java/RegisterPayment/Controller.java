@@ -59,13 +59,12 @@ public class Controller implements PL53.util.Controller {
 		view.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Data d = model.getData(view.getSelectedInvoice());
-				selectedRow = d;
+				selectedRow = model.getDataNoCoiipa(view.getSelectedInvoice());
 
-			showPayments();
-				
+				showPayments();
+
 			}
-				
+
 		});
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
@@ -78,13 +77,13 @@ public class Controller implements PL53.util.Controller {
 				}
 				float alreadyPayed = model.getAmountPayed(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
-				
+
 				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
 
 				if (calcTime > 2 || calcTime < -1) {
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours after the enrollmet");
-								return;
+					return;
 				}
 
 				if (totalPayed > selectedRow.invoice.getAmount()) {
@@ -104,11 +103,7 @@ public class Controller implements PL53.util.Controller {
 								selectedRow.invoice.getID_professional());
 						try {
 							model.createPayment(invoiceReturn, toReturn, payDate, view.isCash(), true);
-							JOptionPane.showMessageDialog(null, "The payment has been registered");
-						} catch (SQLException e1) {
-
-							e1.printStackTrace();
-						} catch (ParseException e1) {
+						} catch (SQLException | ParseException e1) {
 
 							e1.printStackTrace();
 						}
@@ -122,85 +117,67 @@ public class Controller implements PL53.util.Controller {
 					aux = false;
 				}
 
-				
+				float amount = view.getAmountPaidTextField();
+				Date payDate = view.getDateTextPane().getDate();
 
-				
+				try {
+					model.createPayment(selectedRow.invoice.getID(), amount, payDate, view.isCash(), aux);
+					JOptionPane.showMessageDialog(null, "The payment has been registered");
 
-					float amount = view.getAmountPaidTextField();
-					Date payDate = view.getDateTextPane().getDate();
-
-					try {
-						model.createPayment(selectedRow.invoice.getID(), amount, payDate, view.isCash(), aux);
-						JOptionPane.showMessageDialog(null, "The payment has been registered");
-
-						model.initModel();
-						view.setTable(getTableModel(model.getAllData()));
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					} catch (ParseException e1) {
-						e1.printStackTrace();
-					}
+					model.initModel();
+					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
+				} catch (SQLException | ParseException e1) {
+					e1.printStackTrace();
 				}
+			}
 
-			
 		});
 
 	}
 
 	public void initView() {
-
 		view.setVisible(true);
 
-		view.setTable(getTableModel(model.getAllData()));
+		view.setTable(getTableModel(model.getAllDataNoCoiipa()));
 	}
 
-	public TableModel getTableModel(RegisterPayment.Data[] datas) {
+	public TableModel getTableModel(List<Data> list) {
 
 		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
 				"Date of the registration" };
 
-		//String body[][] = new String[datas.length][header.length];
-		List <String[]> body = new ArrayList <String[]>();
-		
-
-		for (int i = 0; i < datas.length; i++) {
-			if(datas[i].invoice.getSender().equals("COIIPA")) {
-				model.removeThing(i);
-				continue;
-			}
-			RegisterPayment.Data d = datas[i];
-			body.add(new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
+		String body[][] = new String[list.size()][header.length];
+		for (int i = 0; i < list.size(); i++) {
+			Data d = list.get(i);
+			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
 					d.professional.getEmail(), Float.toString(d.invoice.getAmount()),
-					d.enrollment.getTimeEn().toString() });
+					d.enrollment.getTimeEn().toString() };
 		}
 
-		TableModel tm = new DefaultTableModel(header, body.size());
+		TableModel tm = new DefaultTableModel(header, body.length);
 		// loads each of the pojos values using PropertyUtils (from apache coommons
 		// beanutils)
-		for (int i = 0; i < body.size(); i++) {
+		for (int i = 0; i < body.length; i++) {
 			for (int j = 0; j < header.length; j++) {
-				tm.setValueAt(body.get(i)[j], i, j);
+				tm.setValueAt(body[i][j], i, j);
 			}
 		}
 
 		return tm;
 	}
 
-	
 	public void showPayments() {
-		String selectedProfessional = SwingUtil.getSelectedKey(view.getTable());
-		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(), model.getData(view.getTable().getSelectedRow()));
-		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList, new String[] { "sender", "receiver","date", "amount" });
+		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(), model.getDataNoCoiipa(view.getTable().getSelectedRow()));
+		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList,
+				new String[] { "sender", "receiver", "date", "amount" });
 		view.getMovementsTable().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getMovementsTable());
-		
-		
 
-	/*	float amount = 0;
-		for (AuxPayment payment : paymentList) {
-			amount += payment.getAmount();
-		}*/
-		//view.getLabelSummary().setText("" + amount);
+		/*
+		 * float amount = 0; for (AuxPayment payment : paymentList) { amount +=
+		 * payment.getAmount(); }
+		 */
+		// view.getLabelSummary().setText("" + amount);
 
 	}
 

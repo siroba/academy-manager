@@ -170,23 +170,33 @@ public class Model {
 	}
 
 	/**
-	 * removes the redundant invoices
-	 * @param i index
+	 * Returns all the data but the invoices that have COIIPA as the sender
 	 */
-	public void removeThing(int i) {
-		if(i>=data.length ) {
-			return;
+	public List<Data> getAllDataNoCoiipa() {
+		List<Data> dataAux = new ArrayList<Data>();
+
+		for (int i = 0; i < data.length; i++) {
+			if(!data[i].invoice.getSender().equals("COIIPA"))
+				dataAux.add(data[i]);
 		}
-		Data[] dataAux = new Data[data.length-1];
-		for(int j = 0 ; j< i;j++) {
-			dataAux[j]=data[j];
-		}
-		for(int j = i+1 ; j< data.length;j++) {
-			dataAux[j-1]=data[j];
+
+		return dataAux;
+	}
+	
+
+	public Data getDataNoCoiipa(int i) {
+		int count = 0;
+		
+		for(int j = 0; j<data.length; j++) {
+			if(!data[j].invoice.getSender().equals("COIIPA")) {
+				if(count==i)
+					return data[j];
+				
+				count++;
+			}
 		}
 		
-		data=dataAux;
-
+		return null;
 	}
 
 }
