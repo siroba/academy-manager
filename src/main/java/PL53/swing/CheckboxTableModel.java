@@ -49,4 +49,8 @@ public class CheckboxTableModel extends DefaultTableModel {
 	public void setChecked(boolean b, int row) {
 		super.setValueAt(b, row, 0);
 	}*/
+	
+	public boolean isChecked(int row) {
+		return (boolean) this.getValueAt(row, 0);
+	}
 }

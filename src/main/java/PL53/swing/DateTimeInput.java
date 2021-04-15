@@ -32,7 +32,7 @@ public class DateTimeInput extends JPanel {
 
 		setLayout(null);
 		JPanel timePanel = new JPanel();
-		timePanel.setBounds(42, 9, 120, 57);
+		timePanel.setBounds(10, 11, 120, 57);
 		this.add(timePanel);
 		timePanel.setLayout(null);
 
@@ -62,7 +62,7 @@ public class DateTimeInput extends JPanel {
 		datePanel.getLblYear().setFont(new Font("Dialog", Font.BOLD, 11));
 		datePanel.getLblYear().setText("day / month / year");
 		datePanel.setLayout(null);
-		datePanel.setBounds(180, 9, 208, 57);
+		datePanel.setBounds(148, 11, 208, 57);
 		this.add(datePanel);
 	}
 
