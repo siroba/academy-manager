@@ -21,7 +21,7 @@ public class Invoice {
 
 	/**
 	 * Constructor with ID_invoice
-	 * 
+	 *
 	 * @param ID_invoice
 	 * @param amount
 	 * @param dateIn
@@ -52,10 +52,9 @@ public class Invoice {
 	public void setPayments(List<Payment> payments) {
 		this.payments = payments;
 	}
-
 	/**
 	 * Default Constructor
-	 * 
+	 *
 	 * @param amount
 	 * @param dateIn
 	 * @param sender
@@ -134,7 +133,7 @@ public class Invoice {
 					rs.getString("address"),
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional")
-				
+
 					);
 			e.setPayments(payments);
 			invoices.add(e);
@@ -175,7 +174,6 @@ public class Invoice {
 
 		List<Payment> payments = Payment.get("SELECT * FROM Payment WHERE ID_invoice=" + id_invoice, db);
 
-    
 		Invoice e = new Invoice(
 				rs.getInt("ID_invoice"),
 				rs.getFloat("amount"),
@@ -192,7 +190,7 @@ public class Invoice {
 		rs.close();
 		st.close();
 		conn.close();
-		
+
 		e.setPayments(payments);
 
 		return e;
@@ -260,14 +258,14 @@ public class Invoice {
 
 		conn.close();
 	}
-	
+
 	public float getAmount() {
 		return amount;
 	}
 	public void setAmount(float amount) {
 		this.amount = amount;
 	}
-  
+
 	public int getID_professional() {
 		return ID_professional;
 	}

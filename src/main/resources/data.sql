@@ -22,7 +22,6 @@ insert into Fee(ID_fee, amount, category, ID_fa) values
 	(1003, 30, 'Standard', 1003),
 	(1004, 25, 'College Members', 1003),
 	(1005, 20, 'UniOvi Members', 1003);
-	
 
 insert into Professional(ID_professional, name, surname, phone, email) values
 	(2000, 'Pablo',	'Gonzales', 		'+341762568901', 	'pablo.gonzales@uniovi.es'),
@@ -79,7 +78,8 @@ insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
 	(3010, 10, '2021-02-01 15:00:00.0', true, 4010),
 	(3011, 30, '2021-03-22 13:00:00.0', false, 4011),
 	(3012, 10, '2021-03-03 13:00:00.0', false, 4012),
-	(3013, 20, '2021-03-05 10:00:00.0', true, 4013);
+	(3013, 20, '2021-03-05 10:00:00.0', true, 4013),
+	(3014, 10, '2021-03-05 10:00:00.0', true, 4014);
 
 insert into Teacher (ID_teacher, name) values
 	(1000, "Fanjul"),

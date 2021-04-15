@@ -109,7 +109,7 @@ public class Controller implements PL53.util.Controller {
 						InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice, amount, ID_fa, dateInvoice, sender,
 								receiver, fiscalNumber, address, ID_teacher);
 
-						PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer, confirmed);
+						PaymentTeacher paymentTeacher = new PaymentTeacher(IDInvoice, amount, dateTransfer, confirmed);
 
 						model.insertInvoice(invoice, paymentTeacher);
 						if (paymentTeacher != null) {
