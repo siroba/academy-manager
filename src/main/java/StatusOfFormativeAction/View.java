@@ -16,6 +16,7 @@ public class View {
 	private JLabel lblActive;
 	private JTable tabFormativeActions;
 	private JTable tabPayments;
+	private JLabel lblSummary;
 	
 	
 	public View() {
@@ -29,7 +30,7 @@ public class View {
 		frame.setBounds(0, 0, 600, 700);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][200:250:][200:250:][200:250:]"));
+		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][200:250:][200:250:][200:250:][40]"));
 		
 		lblActive = new JLabel();
 		lblActive.setText(" ");
@@ -55,6 +56,10 @@ public class View {
 		tabPayments.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane tablePayments = new JScrollPane(tabPayments);
 		frame.getContentPane().add(tablePayments, "cell 0 3, grow");
+		
+		frame.getContentPane().add(new JLabel("Summary: "), "cell 0 4");
+		lblSummary = new JLabel();
+		frame.getContentPane().add(lblSummary, "cell 0 4");
 	}
 	
 	//Getters to access from the controller (compact representation)
@@ -63,4 +68,5 @@ public class View {
 	public JLabel getLabelActive() { return this.lblActive; }
 	public JTable getTableFormativeActions() { return this.tabFormativeActions; }
 	public JTable getTablePayments() { return this.tabPayments; }
+	public JLabel getLabelSummary() { return this.lblSummary; }
 }
