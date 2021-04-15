@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -16,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import BaseProject.SwingUtil;
+import Entities.Invoice;
 import Entities.Payment;
 import PL53.util.Date;
 import PL53.util.DateTime;
@@ -57,49 +59,84 @@ public class Controller implements PL53.util.Controller {
 		view.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
-				RegisterPayment.Data d = model.getData(view.getSelected());
+				Data d = model.getData(view.getSelectedInvoice());
 				selectedRow = d;
+
+				List<Invoice> invoices;
+
+				try {
+					invoices = model.getPayments(d);
+					TableModel model = getMovementsTable(invoices);
+					view.setMovementsTable(model);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 
 			}
 		});
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
 			public void actionPerformed(ActionEvent e) {
-
-
+				boolean aux = true;
 
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
 					return;
-				} else if (selectedRow.fee != selectedRow.formativeAction.getFee(selectedRow.enrollment.getGroup())) {
-					JOptionPane.showMessageDialog(null, "The payment is different from the fee ");
-					return;
+				}
+				float alreadyPayed = model.getAmountPayed(selectedRow);
+				float totalPayed = alreadyPayed + view.getAmountPayed();
 
+				if (totalPayed > selectedRow.invoice.getAmount()) {
+					aux = false;
+					int option = JOptionPane.showConfirmDialog(null,
+							"The sum of payments (" + totalPayed
+									+ ") is hihger than the fee, Do you cant to return the diferrence ("
+									+ (totalPayed - selectedRow.invoice.getAmount()) + ")?",
+							"warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+					if (option == 0) {
+						float toReturn = totalPayed - selectedRow.invoice.getAmount();
+						Date payDate = view.getDateTextPane().getDate();
+						Invoice invoiceReturn = new Invoice(toReturn, payDate, selectedRow.invoice.getReceiver(),
+								selectedRow.invoice.getSender(), selectedRow.invoice.getAddress(),
+								selectedRow.invoice.getFiscalNumber(), selectedRow.invoice.getID_fa(),
+								selectedRow.invoice.getID_professional());
+						try {
+							model.createPayment(invoiceReturn, toReturn, payDate, view.isCash(), true);
+							JOptionPane.showMessageDialog(null, "The payment has been registered");
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+					}
+
+				} else if (totalPayed < selectedRow.invoice.getAmount()) {
+					JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
+					aux = false;
 				}
 
-				int calcTime= DateTime.daysSince(
-						view.getDateTextPane().getDate() ,selectedRow.enrollment.getTimeEn());
-				
+				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
 
-
-				 if (calcTime > 2|| calcTime<-1 ) {
+				if (calcTime > 2 || calcTime < -1) {
 					JOptionPane.showMessageDialog(null,
 							"The payment must be done with a margin of 48 hours after the enrollmet");
 
 				}
 
 				else {
+					
 
 					float amount = view.getAmountPaidTextField();
 					Date payDate = view.getDateTextPane().getDate();
 
 					try {
-						model.createPayment( selectedRow.formativeAction.getID(),
-								selectedRow.professional.getID(), amount, payDate, view.isCash());
-						JOptionPane.showMessageDialog(null,
-								"The payment has been registered");
-						
+						model.createPayment(selectedRow.invoice.getID(), amount, payDate, view.isCash(), aux);
+						JOptionPane.showMessageDialog(null, "The payment has been registered");
+
 						model.initModel();
 						view.setTable(getTableModel(model.getAllData()));
 					} catch (SQLException e1) {
@@ -123,15 +160,15 @@ public class Controller implements PL53.util.Controller {
 
 	public TableModel getTableModel(RegisterPayment.Data[] datas) {
 
-		String header[] = {  "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
+		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
 				"Date of the registration" };
 
 		String body[][] = new String[datas.length][header.length];
 
 		for (int i = 0; i < datas.length; i++) {
 			RegisterPayment.Data d = datas[i];
-			body[i] = new String[] {  d.formativeAction.getName(),
-					d.professional.getName(), d.professional.getSurname(), d.professional.getEmail(), Float.toString(d.formativeAction.getFee(d.enrollment.getGroup())),
+			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
+					d.professional.getEmail(), Float.toString(d.invoice.getAmount()),
 					d.enrollment.getTimeEn().toString() };
 		}
 
@@ -141,6 +178,29 @@ public class Controller implements PL53.util.Controller {
 		for (int i = 0; i < body.length; i++) {
 			for (int j = 0; j < header.length; j++) {
 				tm.setValueAt(body[i][j], i, j);
+			}
+		}
+
+		return tm;
+	}
+
+	public TableModel getMovementsTable(List<Invoice> invoices) {
+
+		String header[] = { "Sender", "Receiver", "amount" };
+
+		List<String[]> bodytmp = new ArrayList<String[]>();
+
+		for (Invoice i : invoices) {
+			for (Payment p : i.getPayments()) {
+				bodytmp.add(new String[] { i.getSender(), i.getReceiver(),
+						Integer.toString((int) ((i.getSender().equals("COIIPA") ? -1 : 1) * p.getAmount())) });
+			}
+		}
+
+		TableModel tm = new DefaultTableModel(header, bodytmp.size());
+		for (int i = 0; i < bodytmp.size(); i++) {
+			for (int j = 0; j < header.length; j++) {
+				tm.setValueAt(bodytmp.get(i)[j], i, j);
 			}
 		}
 

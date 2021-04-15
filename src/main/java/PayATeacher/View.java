@@ -22,6 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 public class View extends JFrame {
 	// Auto generated serial ID
@@ -43,7 +44,7 @@ public class View extends JFrame {
 	public View() {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		
-		setBounds(100, 100, 1073, 583);
+		setBounds(100, 100, 1450, 758);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -77,7 +78,7 @@ public class View extends JFrame {
 		contentPane.add(dateTextField);
 		
 		dateTransferTextField = new DateInput();
-		dateTransferTextField.setBounds(10, 453, 230, 65);
+		dateTransferTextField.setBounds(10, 580, 230, 65);
 		dateTransferTextField.setBorder(blackline);
 		dateTransferTextField.getYearsTextField().setBound(2000, 3000);
 		contentPane.add(dateTransferTextField);
@@ -88,7 +89,7 @@ public class View extends JFrame {
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JPanel taxDataPanel = new JPanel();
-		taxDataPanel.setBounds(229, 325, 806, 69);
+		taxDataPanel.setBounds(229, 325, 454, 143);
 		taxDataPanel.setBorder(blackline);
 		contentPane.add(taxDataPanel);
 		taxDataPanel.setLayout(null);
@@ -104,7 +105,7 @@ public class View extends JFrame {
 		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JLabel lblNewLabel_8 = new JLabel("Address");
-		lblNewLabel_8.setBounds(382, 20, 81, 13);
+		lblNewLabel_8.setBounds(13, 97, 81, 13);
 		taxDataPanel.add(lblNewLabel_8);
 		lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
@@ -119,23 +120,23 @@ public class View extends JFrame {
 		fiscalNumberTextField.setColumns(10);
 		
 		addressTextField = new JTextField();
-		addressTextField.setBounds(382, 36, 217, 19);
+		addressTextField.setBounds(13, 114, 217, 19);
 		taxDataPanel.add(addressTextField);
 		addressTextField.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("ID Invoice");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_4.setBounds(612, 20, 81, 13);
+		lblNewLabel_4.setBounds(255, 97, 81, 13);
 		taxDataPanel.add(lblNewLabel_4);
 		
 		IDInvoice = new JTextField();
-		IDInvoice.setBounds(609, 36, 163, 19);
+		IDInvoice.setBounds(255, 114, 163, 19);
 		taxDataPanel.add(IDInvoice);
 		IDInvoice.setColumns(10);
 		
 		JLabel lblNewLabel_9 = new JLabel("Date of the transfer");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_9.setBounds(10, 427, 115, 13);
+		lblNewLabel_9.setBounds(10, 545, 115, 13);
 		contentPane.add(lblNewLabel_9);
 		
 		
@@ -143,11 +144,11 @@ public class View extends JFrame {
 		registerButton = new JButton("Register");
 		
 		registerButton.setFont(new Font("Tahoma", Font.BOLD, 12));
-		registerButton.setBounds(368, 469, 115, 41);
+		registerButton.setBounds(378, 604, 115, 41);
 		contentPane.add(registerButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 1025, 117);
+		scrollPane.setBounds(10, 101, 695, 117);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -155,12 +156,26 @@ public class View extends JFrame {
 		scrollPane.setViewportView(table);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 404, 1085, 13);
+		separator.setBounds(0, 494, 718, 13);
 		contentPane.add(separator);
 		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(0, 239, 1085, 13);
+		separator_1.setBounds(0, 239, 718, 13);
 		contentPane.add(separator_1);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(750, 101, 631, 117);
+		contentPane.add(scrollPane_1);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setOrientation(SwingConstants.VERTICAL);
+		separator_2.setBounds(718, 0, 22, 739);
+		contentPane.add(separator_2);
+		
+		JLabel lblNewLabel_10 = new JLabel("Movements");
+		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_10.setBounds(755, 61, 115, 13);
+		contentPane.add(lblNewLabel_10);
 	}
 	
 	public String getAddressTextField() {

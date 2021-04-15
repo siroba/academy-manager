@@ -67,12 +67,12 @@ public class Model {
 
 	private Data[] initData() throws SQLException, ParseException {
 		List<Data> data = new ArrayList<Data>();
-		String sql = "	SELECT DISTINCT Invoice.* FROM Invoice\r\n"
-				+ "		WHERE Invoice.ID_invoice NOT IN ( SELECT ID_invoice From Payment);";
+		String sql = "	SELECT Invoice.* FROM Invoice "
+				+ "WHERE Invoice.amount <> ("
+				+ "	SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment GROUP BY Payment.ID_invoice "
+				+ "HAVING Payment.ID_invoice=Invoice.ID_fa), 0))";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
-
-
 
 		List<Invoice> invoices= Invoice.get(sql, db);
 		for ( Invoice in : invoices){
@@ -99,8 +99,38 @@ public class Model {
 		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
 	}
 
-	void createPayment(int id_pay ,int id_invoice,  float amount , Date datePay, boolean isCash ) throws SQLException, ParseException {
-		Payment p = new Payment(id_invoice,  amount,  datePay, true, isCash);
+	void createPayment(int id_invoice,  float amount , Date datePay, boolean isCash , boolean confirmed) throws SQLException, ParseException {
+		Payment p = new Payment(id_invoice,  amount,  datePay, confirmed, isCash);
+		p.insert(db);
+	}
+
+	public List<Invoice> getPayments(Data d) throws SQLException {
+		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + d.formativeAction.getID() + " AND ID_professional=" + d.professional.getID();
+		
+		return Invoice.get(queryInvoice, db);
+	}
+
+	public float getAmountPayed(Data selectedRow) {
+		String sqlRefund = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice "
+				+ " GROUP BY Payment.ID_invoice "
+				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender='COIIPA'), 0.0);";
+		
+		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice "
+				+ " GROUP BY Payment.ID_invoice "
+				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender<>'COIIPA'), 0.0);";
+		
+		float normalPayments = (float)((double)(db.executeQueryArray(sql, selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional()).get(0)[0]));
+		float refundPayments = -(float)((double)(db.executeQueryArray(sqlRefund, selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional()).get(0)[0]));
+		
+		return normalPayments+refundPayments;
+	}
+
+	public void createPayment(Invoice invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed) throws SQLException, ParseException {
+		invoiceReturn.insert(db);
+		 int id_invoice = invoiceReturn.getID();
+		 Payment p = new Payment(id_invoice,  toReturn,  payDate, confirmed, cash);
 		p.insert(db);
 	}
 

@@ -17,6 +17,7 @@ public class Invoice {
 	private Date dateIn;
 	private String sender, receiver, fiscalNumber, address;
 	private float amount;
+	private List<Payment> payments = new ArrayList<Payment>();
 
 	/**
 	 * Constructor with ID_invoice
@@ -42,6 +43,14 @@ public class Invoice {
 		this.address = address;
 		this.ID_professional = ID_professional;
 
+	}
+
+	public List<Payment> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(List<Payment> payments) {
+		this.payments = payments;
 	}
 
 	/**
@@ -104,6 +113,9 @@ public class Invoice {
 		ResultSet rs = st.executeQuery(query.toString());
 
 		List<Invoice> invoices = new ArrayList<>();
+		int id_invoice = rs.getInt("ID_invoice");
+
+		List<Payment> payments = Payment.get("SELECT * FROM Payment WHERE ID_invoice=" + id_invoice, db);
 
 		while (rs.next()) {
 			Date dateIn;
@@ -122,8 +134,9 @@ public class Invoice {
 					rs.getString("address"),
 					rs.getInt("ID_fa"),
 					rs.getInt("ID_professional")
+				
 					);
-
+			e.setPayments(payments);
 			invoices.add(e);
 		}
 
@@ -158,6 +171,10 @@ public class Invoice {
 		} catch (ParseException e) {
 			dateIn = Date.fromMillis(rs.getLong("dateIn"));
     }
+		int id_invoice = rs.getInt("ID_invoice");
+
+		List<Payment> payments = Payment.get("SELECT * FROM Payment WHERE ID_invoice=" + id_invoice, db);
+
     
 		Invoice e = new Invoice(
 				rs.getInt("ID_invoice"),
@@ -175,6 +192,8 @@ public class Invoice {
 		rs.close();
 		st.close();
 		conn.close();
+		
+		e.setPayments(payments);
 
 		return e;
 	}

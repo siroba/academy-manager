@@ -50,6 +50,7 @@ insert into Enrollment(ID_fa, ID_professional, status, timeEn, category) values
 
 insert into Invoice (Id_invoice , amount, dateIn , sender, receiver, address, fiscalNumber, ID_fa, ID_professional) values
         (4000, 15, '2021-01-02', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2000 ),
+        (4014, 10, '2021-01-03', 'COIIPA', 'senderName', 'address', 'fiscalNumber', 1000, 2000 ),
         (4001, 15, '2021-01-04', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2001 ),
         (4002, 15, '2021-01-07', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2002 ),
         (4003, 15, '2021-01-11', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2003 ),
