@@ -78,8 +78,8 @@ public class Professional {
 	 * @param FormativeAction
 	 * @param EnrollmentName
 	 */
-	public Enrollment enroll(FormativeAction fA, Professional p, Status status, DateTime date) {
-		Enrollment e = new Enrollment(fA.getID(), p.getID(), status, date);
+	public Enrollment enroll(FormativeAction fA, Professional p, Status status, DateTime date, String group) {
+		Enrollment e = new Enrollment(fA.getID(), p.getID(), status, date, group);
 		enrollments.add(e);
 
 		return e;
@@ -246,6 +246,7 @@ public class Professional {
 			pstmt.setString(4, this.getPhone());
 			pstmt.setString(5, this.getEmail());
 			pstmt.executeUpdate(); // statement execution
+			pstmt.close();
 		}else {
 			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
 
@@ -262,6 +263,8 @@ public class Professional {
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.id = tableKeys.getInt(1);
+			pstmt.close();
+			tableKeys.close();
 		}
 
 		conn.close();

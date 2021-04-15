@@ -127,7 +127,7 @@ public class DateTime extends Date {
 	 */
 	@Override
 	public long toMillis() {
-		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1)) * 1000l;
+		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(2)) * 1000l;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class DateTime extends Date {
 	 * @return
 	 */
 	public static DateTime fromMillis(long millis) {
-		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(1));
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(2));
 
 		return new DateTime(ldt.getMinute(), ldt.getHour(), ldt.getDayOfMonth(), ldt.getMonthValue(), ldt.getYear());
 	}
@@ -164,6 +164,32 @@ public class DateTime extends Date {
 		return new DateTime(d.getMinute(), d.getHour(), d.getDayOfMonth(), d.getMonthValue(), d.getYear());
 	}
 
+	/**
+	 * Gives the days passed between the two dates Uses the function
+	 * {@link #daysSince(Date, Date)} and assumes the other date to be today (uses
+	 * the function {@link #now()})
+	 *
+	 * @param date
+	 * @return days passed
+	 */
+	public static int daysSince(DateTime d) {
+		return daysSince(d, DateTime.now());
+	}
+
+	/**
+	 * Gives the days passed between the two given dates
+	 *
+	 * @param date1
+	 * @param date2
+	 * @return days passed
+	 */
+	public static int daysSince(DateTime date1, DateTime date2) {
+		long difference = date1.toMillis() - date2.toMillis();
+		int daysBetween = Math.round(difference / (1000.0f * 60.0f * 60.0f * 24.0f));
+
+		return daysBetween;
+	}
+	
 	/**
 	 * Same as {@link Date#daysSince(Date)}, but with minutes
 	 *
