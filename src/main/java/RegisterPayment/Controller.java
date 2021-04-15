@@ -59,20 +59,14 @@ public class Controller implements PL53.util.Controller {
 		view.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Data d = model.getData(view.getSelectedInvoice());
-				selectedRow = d;
 
-				List<Invoice> invoices;
+				selectedRow = model.getDataNoCoiipa(view.getSelectedInvoice());
 
-				try {
-					invoices = model.getPayments(d);
-					TableModel model = getMovementsTable(invoices);
-					view.setMovementsTable(model);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
+				showPayments();
 
 			}
+
+
 		});
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
@@ -86,11 +80,23 @@ public class Controller implements PL53.util.Controller {
 				float alreadyPayed = model.getAmountPayed(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
 
+
+				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
+
+				if (calcTime > 2 || calcTime < -1) {
+					JOptionPane.showMessageDialog(null,
+							"The payment must be done with a margin of 48 hours after the enrollmet");
+					return;
+				}
+
+
 				if (totalPayed > selectedRow.invoice.getAmount()) {
 					aux = false;
 					int option = JOptionPane.showConfirmDialog(null,
 							"The sum of payments (" + totalPayed
-									+ ") is hihger than the fee, Do you cant to return the diferrence ("
+
+									+ ") is hihger than the fee, Do you want to return the diferrence ("
+
 									+ (totalPayed - selectedRow.invoice.getAmount()) + ")?",
 							"warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
@@ -103,12 +109,10 @@ public class Controller implements PL53.util.Controller {
 								selectedRow.invoice.getID_professional());
 						try {
 							model.createPayment(invoiceReturn, toReturn, payDate, view.isCash(), true);
-							JOptionPane.showMessageDialog(null, "The payment has been registered");
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
+
+						} catch (SQLException | ParseException e1) {
+
+
 							e1.printStackTrace();
 						}
 
@@ -121,33 +125,22 @@ public class Controller implements PL53.util.Controller {
 					aux = false;
 				}
 
-				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
 
-				if (calcTime > 2 || calcTime < -1) {
-					JOptionPane.showMessageDialog(null,
-							"The payment must be done with a margin of 48 hours after the enrollmet");
+				float amount = view.getAmountPaidTextField();
+				Date payDate = view.getDateTextPane().getDate();
 
+				try {
+					model.createPayment(selectedRow.invoice.getID(), amount, payDate, view.isCash(), aux);
+					JOptionPane.showMessageDialog(null, "The payment has been registered");
+
+					model.initModel();
+					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
+				} catch (SQLException | ParseException e1) {
+					e1.printStackTrace();
 				}
-
-				else {
-
-					float amount = view.getAmountPaidTextField();
-					Date payDate = view.getDateTextPane().getDate();
-
-					try {
-						model.createPayment(selectedRow.invoice.getID(), amount, payDate, view.isCash(), aux);
-						JOptionPane.showMessageDialog(null, "The payment has been registered");
-
-						model.initModel();
-						view.setTable(getTableModel(model.getAllData()));
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					} catch (ParseException e1) {
-						e1.printStackTrace();
-					}
-				}
-
 			}
+
+
 		});
 
 	}
@@ -156,18 +149,20 @@ public class Controller implements PL53.util.Controller {
 
 		view.setVisible(true);
 
-		view.setTable(getTableModel(model.getAllData()));
+		view.setTable(getTableModel(model.getAllDataNoCoiipa()));
 	}
 
-	public TableModel getTableModel(RegisterPayment.Data[] datas) {
+	public TableModel getTableModel(List<Data> list) {
+
 
 		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
 				"Date of the registration" };
 
-		String body[][] = new String[datas.length][header.length];
 
-		for (int i = 0; i < datas.length; i++) {
-			RegisterPayment.Data d = datas[i];
+		String body[][] = new String[list.size()][header.length];
+		for (int i = 0; i < list.size(); i++) {
+			Data d = list.get(i);
+
 			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
 					d.professional.getEmail(), Float.toString(d.invoice.getAmount()),
 					d.enrollment.getTimeEn().toString() };
@@ -185,27 +180,21 @@ public class Controller implements PL53.util.Controller {
 		return tm;
 	}
 
-	public TableModel getMovementsTable(List<Invoice> invoices) {
 
-		String header[] = { "Sender", "Receiver", "amount" };
+	public void showPayments() {
+		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(), model.getDataNoCoiipa(view.getTable().getSelectedRow()));
+		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList,
+				new String[] { "sender", "receiver", "date", "amount" });
+		view.getMovementsTable().setModel(tmodel);
+		SwingUtil.autoAdjustColumns(view.getMovementsTable());
 
-		List<String[]> bodytmp = new ArrayList<String[]>();
+		/*
+		 * float amount = 0; for (AuxPayment payment : paymentList) { amount +=
+		 * payment.getAmount(); }
+		 */
+		// view.getLabelSummary().setText("" + amount);
 
-		for (Invoice i : invoices) {
-			for (Payment p : i.getPayments()) {
-				bodytmp.add(new String[] { i.getSender(), i.getReceiver(),
-						Integer.toString((int) ((i.getSender().equals("COIIPA") ? -1 : 1) * p.getAmount())) });
-			}
-		}
 
-		TableModel tm = new DefaultTableModel(header, bodytmp.size());
-		for (int i = 0; i < bodytmp.size(); i++) {
-			for (int j = 0; j < header.length; j++) {
-				tm.setValueAt(bodytmp.get(i)[j], i, j);
-			}
-		}
-
-		return tm;
 	}
 
 }

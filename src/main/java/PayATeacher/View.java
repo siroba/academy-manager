@@ -53,7 +53,9 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Record Payments made to the teachers");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel.setBounds(247, 10, 454, 31);
+
+		lblNewLabel.setBounds(147, 10, 454, 31);
+
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Record payments");
@@ -141,10 +143,12 @@ public class View extends JFrame {
 		
 		
 		
-		registerButton = new JButton("Register");
+
+		registerButton = new JButton("Pay the teacher");
 		
 		registerButton.setFont(new Font("Tahoma", Font.BOLD, 12));
-		registerButton.setBounds(378, 604, 115, 41);
+		registerButton.setBounds(338, 598, 158, 41);
+
 		contentPane.add(registerButton);
 		
 		JScrollPane scrollPane = new JScrollPane();

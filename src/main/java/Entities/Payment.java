@@ -55,6 +55,10 @@ public class Payment {
 	}
 
 
+
+	
+
+
 	public static String tableName() {
 		return "Payment";
 	}
@@ -229,6 +233,8 @@ public class Payment {
 
 		conn.close();
 	}
+
+
 
 
 
