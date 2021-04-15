@@ -80,7 +80,7 @@ public class Model {
 		
 		// 2 - Create a new invoice for the refund
 			// 2.1 - Get the amount payed by the professional
-		float payedAmount = getPayedAmount(selected.professional.getID());
+		float payedAmount = getPayedAmount(selected.professional.getID(), selected.formativeAction.getID());
 		
 			// 2.2 - Get the appropiate percentage to refund
 		float refundPercentage = getRefundPercentage(Date.daysSince(selected.formativeAction.getEnrollmentEnd(), dateIn));
@@ -96,11 +96,11 @@ public class Model {
 		}
 	}
 	
-	public float getPayedAmount(int ID_professional) {
+	public float getPayedAmount(int ID_professional, int ID_fa) {
 		String query = "SELECT SUM(Payment.amount) FROM Payment " + 
 				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
-				"WHERE ID_professional=?;";
-		return (float)((double)(db.executeQueryArray(query, ID_professional).get(0)[0]));
+				"WHERE ID_professional=? AND Invoice.ID_fa=?;";
+		return (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
 	}
 	
 	public float getRefundPercentage(int days) {

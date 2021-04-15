@@ -166,14 +166,14 @@ public class View {
 		LabelSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		TFSpaces = new JIntField(5);
-		TFSpaces.setBounds(60, 380, 69, 18);
+		TFSpaces.setBounds(58, 380, 69, 18);
 		panel.add(TFSpaces);
 		TFSpaces.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		TFSpaces.setColumns(10);
 		
 		LabelTeacher = new JLabel("Teacher:");
 		LabelTeacher.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		LabelTeacher.setBounds(139, 382, 50, 14);
+		LabelTeacher.setBounds(135, 382, 50, 14);
 		panel.add(LabelTeacher);
 		
 		TFTeacher = new JTextField();
@@ -184,7 +184,7 @@ public class View {
 		
 		LabelRemuneration = new JLabel("Remuneration:");
 		LabelRemuneration.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		LabelRemuneration.setBounds(338, 382, 83, 14);
+		LabelRemuneration.setBounds(334, 382, 83, 14);
 		panel.add(LabelRemuneration);
 		
 		TFRemuneration = new JDecimalField(4);
