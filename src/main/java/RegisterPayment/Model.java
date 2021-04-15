@@ -2,6 +2,7 @@ package RegisterPayment;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -67,7 +68,7 @@ public class Model {
 
 	private Data[] initData() throws SQLException, ParseException {
 		List<Data> data = new ArrayList<Data>();
-		String sql = "	SELECT Invoice.* FROM Invoice "
+		String sql = "	SELECT  Invoice.* FROM Invoice "
 				+ "WHERE Invoice.amount <> ("
 				+ "	SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment GROUP BY Payment.ID_invoice "
 				+ "HAVING Payment.ID_invoice=Invoice.ID_fa), 0))";
@@ -133,6 +134,39 @@ public class Model {
 		 Payment p = new Payment(id_invoice,  toReturn,  payDate, confirmed, cash);
 		p.insert(db);
 	}
+	
+	public List<AuxPayment> getPayments(String formativeAction, Data data2) {
+		try {
+			Connection cn = db.getConnection();
+			
+			PreparedStatement ps = cn.prepareStatement(
+					"select fa.nameFa, i.sender, i.receiver, pay.amount, pay.datePay from Professional p "
+							+ "inner join Enrollment e on p.ID_professional = e.ID_professional "
+							+ "inner join FormativeAction fa on e.ID_fa = fa.ID_fa "
+							+ "inner join Invoice i on e.ID_professional = i.ID_professional and e.ID_fa = i.ID_fa "
+							+ "inner join Payment pay on i.ID_invoice = pay.ID_invoice "
+							+ "where p.ID_professional=? AND fa.ID_fa=? ;");
+			ps.setInt(1, data2.professional.getID()); 
+			ps.setInt(2, data2.formativeAction.getID()); 
+
+			ResultSet rs = ps.executeQuery();
+
+			List<AuxPayment> listPayments = new ArrayList<>();
+
+			while (rs.next()) {
+				listPayments.add(new AuxPayment(Date.parse(rs.getTimestamp("datePay")),
+						rs.getString("sender").equals("COIIPA") ? -rs.getInt("amount") : rs.getInt("amount"), rs.getString("sender"), rs.getString("receiver")));
+			}
+			
+			return listPayments;
+		} catch (SQLException e) {
+			throw new UnexpectedException(e);
+		}
+	}
+
+
+
+	
 
 
 

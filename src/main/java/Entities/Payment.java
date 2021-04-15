@@ -55,6 +55,8 @@ public class Payment {
 	}
 
 
+	
+
 	public static String tableName() {
 		return "Payment";
 	}

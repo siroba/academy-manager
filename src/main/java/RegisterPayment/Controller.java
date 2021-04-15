@@ -62,17 +62,10 @@ public class Controller implements PL53.util.Controller {
 				Data d = model.getData(view.getSelectedInvoice());
 				selectedRow = d;
 
-				List<Invoice> invoices;
-
-				try {
-					invoices = model.getPayments(d);
-					TableModel model = getMovementsTable(invoices);
-					view.setMovementsTable(model);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-
+			showPayments();
+				
 			}
+				
 		});
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
@@ -90,7 +83,7 @@ public class Controller implements PL53.util.Controller {
 					aux = false;
 					int option = JOptionPane.showConfirmDialog(null,
 							"The sum of payments (" + totalPayed
-									+ ") is hihger than the fee, Do you cant to return the diferrence ("
+									+ ") is hihger than the fee, Do you want to return the diferrence ("
 									+ (totalPayed - selectedRow.invoice.getAmount()) + ")?",
 							"warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
@@ -105,10 +98,10 @@ public class Controller implements PL53.util.Controller {
 							model.createPayment(invoiceReturn, toReturn, payDate, view.isCash(), true);
 							JOptionPane.showMessageDialog(null, "The payment has been registered");
 						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
+
 							e1.printStackTrace();
 						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
+
 							e1.printStackTrace();
 						}
 
@@ -185,7 +178,7 @@ public class Controller implements PL53.util.Controller {
 		return tm;
 	}
 
-	public TableModel getMovementsTable(List<Invoice> invoices) {
+	/*public TableModel getMovementsTable(List<Invoice> invoices) {
 
 		String header[] = { "Sender", "Receiver", "amount" };
 
@@ -206,6 +199,23 @@ public class Controller implements PL53.util.Controller {
 		}
 
 		return tm;
+	}*/
+
+	public void showPayments() {
+		String selectedProfessional = SwingUtil.getSelectedKey(view.getTable());
+		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(), model.getData(view.getTable().getSelectedRow()));
+		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList, new String[] { "sender", "receiver","date", "amount" });
+		view.getMovementsTable().setModel(tmodel);
+		SwingUtil.autoAdjustColumns(view.getMovementsTable());
+		
+		
+
+	/*	float amount = 0;
+		for (AuxPayment payment : paymentList) {
+			amount += payment.getAmount();
+		}*/
+		//view.getLabelSummary().setText("" + amount);
+
 	}
 
 }
