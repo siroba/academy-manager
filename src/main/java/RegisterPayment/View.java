@@ -65,10 +65,11 @@ public class View extends JFrame {
 	private JScrollPane scrollPane;
 	private JCheckBox isCash;
 	private JTable movementsTable;
+	private JScrollPane scrollPane_1;
 	
 	public View() {
 		
-		setBounds(100, 100, 1602, 581);
+		setBounds(100, 100, 1511, 581);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -104,23 +105,24 @@ public class View extends JFrame {
 		
 	
 		
-		 confirmButton = new JButton("Confirm");
+		 confirmButton = new JButton("Add new payment");
 		
 	
 		 
 			dateTextPane = new DateInput();
+			dateTextPane.getYearsTextField().setBound(2000, Integer.MAX_VALUE);
+			dateTextPane.getYearsTextField().setDefaultValue(2021);
 			Border blackline = BorderFactory.createLineBorder(Color.black);
 			dateTextPane.setBorder(blackline);
-			dateTextPane.setBounds(344, 359, 408, 67);
+			dateTextPane.setBounds(344, 359, 212, 67);
 			contentPane.add(dateTextPane);
 			
 		 
-		confirmButton.setBounds(264, 470, 164, 46);
+		confirmButton.setBounds(274, 470, 164, 46);
 		contentPane.add(confirmButton);
 		
-		amountPaidTextField = new JDecimalField(2);
+		amountPaidTextField = new JDecimalField(9);
 		amountPaidTextField.setBounds(147, 353, 99, 19);
-		amountPaidTextField.setBound( 0.f,Float.MAX_VALUE);
 
 		contentPane.add(amountPaidTextField);
 		
@@ -140,43 +142,12 @@ public class View extends JFrame {
 		lblNewLabel_5.setBounds(860, 70, 140, 13);
 		contentPane.add(lblNewLabel_5);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(812, 92, 788, 224);
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(845, 93, 642, 223);
 		contentPane.add(scrollPane_1);
 		
 		movementsTable = new JTable();
-		scrollPane_1.setRowHeaderView(movementsTable);
-		
-		JButton addPayment = new JButton("Add new payment");
-		addPayment.setBounds(1024, 470, 183, 34);
-		contentPane.add(addPayment);
-		
-		DateInput dateTextPane_1 = new DateInput();
-		dateTextPane_1.setBounds(1158, 359, 311, 67);
-		contentPane.add(dateTextPane_1);
-		
-		JDecimalField amountPaidTextField_1 = new JDecimalField(2);
-		amountPaidTextField_1.setBounds(989, 356, 99, 19);
-		contentPane.add(amountPaidTextField_1);
-		
-		JLabel lblNewLabel_3_1 = new JLabel("Amonut paid");
-		lblNewLabel_3_1.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_3_1.setBounds(874, 359, 87, 13);
-		contentPane.add(lblNewLabel_3_1);
-		
-		JCheckBox isCash_1 = new JCheckBox("Cash payment");
-		isCash_1.setBounds(874, 405, 159, 21);
-		contentPane.add(isCash_1);
-		
-		JLabel lblNewLabel_4_1 = new JLabel("Date");
-		lblNewLabel_4_1.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_4_1.setBounds(1109, 359, 45, 13);
-		contentPane.add(lblNewLabel_4_1);
-		
-		JSeparator separator = new JSeparator();
-		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBounds(810, 0, 2, 560);
-		contentPane.add(separator);
+		scrollPane_1.setViewportView(movementsTable);
 	}
 
 	public Window getFrame() {
@@ -217,7 +188,7 @@ public class View extends JFrame {
 		this.table.setModel(tm);
 	}
 	
-	public int getSelected() {
+	public int getSelectedInvoice() {
 		return this.table.getSelectedRow();
 	}
 	
@@ -226,5 +197,13 @@ public class View extends JFrame {
 	}
 	public JTable getMovementsTable() {
 		return movementsTable;
+	}
+
+	public void setMovementsTable(TableModel model) {
+		movementsTable.setModel(model);
+	}
+
+	public float getAmountPayed() {
+		return amountPaidTextField.getValue();
 	}
 }

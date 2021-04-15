@@ -13,5 +13,6 @@ public class Data {
 	public Professional professional;
 	public float fee;
 	public Invoice invoice;
+	public Payment payment;
 	
 }
