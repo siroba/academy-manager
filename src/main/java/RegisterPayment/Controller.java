@@ -78,6 +78,14 @@ public class Controller implements PL53.util.Controller {
 				}
 				float alreadyPayed = model.getAmountPayed(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
+				
+				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
+
+				if (calcTime > 2 || calcTime < -1) {
+					JOptionPane.showMessageDialog(null,
+							"The payment must be done with a margin of 48 hours after the enrollmet");
+								return;
+				}
 
 				if (totalPayed > selectedRow.invoice.getAmount()) {
 					aux = false;
@@ -114,15 +122,9 @@ public class Controller implements PL53.util.Controller {
 					aux = false;
 				}
 
-				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
+				
 
-				if (calcTime > 2 || calcTime < -1) {
-					JOptionPane.showMessageDialog(null,
-							"The payment must be done with a margin of 48 hours after the enrollmet");
-
-				}
-
-				else {
+				
 
 					float amount = view.getAmountPaidTextField();
 					Date payDate = view.getDateTextPane().getDate();
@@ -140,7 +142,7 @@ public class Controller implements PL53.util.Controller {
 					}
 				}
 
-			}
+			
 		});
 
 	}
@@ -157,50 +159,34 @@ public class Controller implements PL53.util.Controller {
 		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
 				"Date of the registration" };
 
-		String body[][] = new String[datas.length][header.length];
+		//String body[][] = new String[datas.length][header.length];
+		List <String[]> body = new ArrayList <String[]>();
+		
 
 		for (int i = 0; i < datas.length; i++) {
+			if(datas[i].invoice.getSender().equals("COIIPA")) {
+				model.removeThing(i);
+				continue;
+			}
 			RegisterPayment.Data d = datas[i];
-			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
+			body.add(new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
 					d.professional.getEmail(), Float.toString(d.invoice.getAmount()),
-					d.enrollment.getTimeEn().toString() };
+					d.enrollment.getTimeEn().toString() });
 		}
 
-		TableModel tm = new DefaultTableModel(header, body.length);
+		TableModel tm = new DefaultTableModel(header, body.size());
 		// loads each of the pojos values using PropertyUtils (from apache coommons
 		// beanutils)
-		for (int i = 0; i < body.length; i++) {
+		for (int i = 0; i < body.size(); i++) {
 			for (int j = 0; j < header.length; j++) {
-				tm.setValueAt(body[i][j], i, j);
+				tm.setValueAt(body.get(i)[j], i, j);
 			}
 		}
 
 		return tm;
 	}
 
-	/*public TableModel getMovementsTable(List<Invoice> invoices) {
-
-		String header[] = { "Sender", "Receiver", "amount" };
-
-		List<String[]> bodytmp = new ArrayList<String[]>();
-
-		for (Invoice i : invoices) {
-			for (Payment p : i.getPayments()) {
-				bodytmp.add(new String[] { i.getSender(), i.getReceiver(),
-						Integer.toString((int) ((i.getSender().equals("COIIPA") ? -1 : 1) * p.getAmount())) });
-			}
-		}
-
-		TableModel tm = new DefaultTableModel(header, bodytmp.size());
-		for (int i = 0; i < bodytmp.size(); i++) {
-			for (int j = 0; j < header.length; j++) {
-				tm.setValueAt(bodytmp.get(i)[j], i, j);
-			}
-		}
-
-		return tm;
-	}*/
-
+	
 	public void showPayments() {
 		String selectedProfessional = SwingUtil.getSelectedKey(view.getTable());
 		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(), model.getData(view.getTable().getSelectedRow()));
