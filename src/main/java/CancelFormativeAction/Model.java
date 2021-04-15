@@ -5,11 +5,17 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import Entities.Enrollment;
 import Entities.FormativeAction;
 import Entities.Invoice;
+import Entities.InvoiceTeacher;
 import Entities.Payment;
+import Entities.PaymentTeacher;
 import Entities.Professional;
+import Entities.Teacher;
+import PL53.util.Date;
 import RegisterCancellations.Data;
 import Utils.Database;
 
@@ -104,26 +110,28 @@ public class Model {
 		dd = allData.toArray(dd);
 		return dd;
 	}
-	
-	/**
-	 * Refunds all the money to the professionals
-	 * 
-	 * @param index Selected formative action
-	 */
-	public void refund(int index) {
-		// TODO Auto-generated method stub
-
-	}
 
 	/**
 	 * Generates an invoice for the teachers of the formative action that have
 	 * already been payed.
 	 * 
 	 * @param index Selected formative action
+	 * @throws SQLException 
+	 * @throws ParseException 
 	 */
-	public void invoiceTeachers(int index) {
-		// TODO Auto-generated method stub
-
+	public void invoiceTeachers(int index, Date dateIn, String fiscalNumber, String address) throws SQLException, ParseException {
+		String query = "SELECT * FROM InvoiceTeacher WHERE ID_fa=" + data[index].getID();
+		
+		for(InvoiceTeacher inv: InvoiceTeacher.get(query, db)) {
+			Teacher t = Teacher.getOne("SELECT * FROM Teacher WHERE ID_teacher=" + inv.getID_teacher(), db);
+			String invoiceId = JOptionPane.showInputDialog(null, "What is the ID of the invoice for the teacher " + t.getName() + " for " + inv.getAmount() + "€?", null);
+			
+			InvoiceTeacher newInv = new InvoiceTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID());
+			newInv.insert(db);
+			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true);
+			p.insert(db);
+		}
+		
 	}
 
 	public FormativeAction[] getCancelled() {

@@ -39,6 +39,15 @@ public class Controller implements PL53.util.Controller {
 		view.getBtnCancel().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!view.filledCoiipasInfo()) {
+					view.setCoiipaInfoRed();
+					JOptionPane.showMessageDialog(null,
+						    "Please, fill the information of COIIPA.",
+						    "Information empty",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				int index = view.getSelected();
 
 				double payments = model.getPayments(index);
@@ -52,10 +61,9 @@ public class Controller implements PL53.util.Controller {
 				
 				if(option == 0) {
 					model.cancel(index);
-					model.refund(index);
-					model.invoiceTeachers(index);
 
 					try {
+						model.invoiceTeachers(index, view.getDateIn(), view.getFiscalNumber(), view.getAddress());
 						model.initModel();
 
 						view.setTable(getTableModel(model.getAllData()));

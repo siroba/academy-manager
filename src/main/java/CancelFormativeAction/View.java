@@ -42,7 +42,7 @@ public class View extends JFrame {
 	private JTextField address;
 	private JLabel lblNewLabel_2;
 	private JTextField fiscalNumber;
-	private JPanel panel;
+	private JPanel coiipaPanel;
 	private JCheckBox isCash;
 
 	/**
@@ -51,7 +51,7 @@ public class View extends JFrame {
 	public View() {
 		setTitle("Cancel a Formative Action");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1094, 370);
+		setBounds(100, 100, 1102, 370);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -110,41 +110,43 @@ public class View extends JFrame {
 		btnRefund.setBounds(455, 298, 346, 23);
 		contentPane.add(btnRefund);
 		
-		panel = new JPanel();
-		panel.setBounds(862, 70, 211, 222);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		coiipaPanel = new JPanel();
+		coiipaPanel.setBounds(862, 70, 220, 222);
+		contentPane.add(coiipaPanel);
+		coiipaPanel.setLayout(null);
 		
 		dateIn = new DateInput();
-		dateIn.setBounds(0, 133, 211, 55);
-		panel.add(dateIn);
+		dateIn.getYearsTextField().setBound(2000, Integer.MAX_VALUE);
+		dateIn.getYearsTextField().setDefaultValue(2021);
+		dateIn.setBounds(10, 130, 201, 55);
+		coiipaPanel.add(dateIn);
 		dateIn.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		JLabel lblNewLabel = new JLabel("Date of the invoice:");
-		lblNewLabel.setBounds(0, 115, 199, 14);
-		panel.add(lblNewLabel);
+		lblNewLabel.setBounds(10, 115, 189, 14);
+		coiipaPanel.add(lblNewLabel);
 		
 		address = new JTextField();
-		address.setBounds(0, 25, 206, 20);
-		panel.add(address);
+		address.setBounds(10, 25, 196, 20);
+		coiipaPanel.add(address);
 		address.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("COIIPA's address:");
-		lblNewLabel_1.setBounds(0, 0, 152, 14);
-		panel.add(lblNewLabel_1);
+		lblNewLabel_1.setBounds(10, 0, 152, 14);
+		coiipaPanel.add(lblNewLabel_1);
 		
 		lblNewLabel_2 = new JLabel("COIIPA's fiscal number:");
-		lblNewLabel_2.setBounds(0, 56, 199, 14);
-		panel.add(lblNewLabel_2);
+		lblNewLabel_2.setBounds(12, 56, 199, 14);
+		coiipaPanel.add(lblNewLabel_2);
 		
 		fiscalNumber = new JTextField();
-		fiscalNumber.setBounds(0, 81, 206, 20);
-		panel.add(fiscalNumber);
+		fiscalNumber.setBounds(10, 81, 196, 20);
+		coiipaPanel.add(fiscalNumber);
 		fiscalNumber.setColumns(10);
 		
 		isCash = new JCheckBox("Cash payment");
 		isCash.setBounds(10, 192, 164, 23);
-		panel.add(isCash);
+		coiipaPanel.add(isCash);
 		dateIn.getYearsTextField().setBound(2021, 3000);
 		dateIn.getYearsTextField().setDefaultValue(2021);
 	}
@@ -243,5 +245,14 @@ public class View extends JFrame {
 	
 	public boolean getIsCash() {
 		return isCash.isSelected();
+	}
+	
+	public boolean filledCoiipasInfo() {
+		return  (address.getText().length()>0) &&
+				(fiscalNumber.getText().length()>0);
+	}
+
+	public void setCoiipaInfoRed() {
+		coiipaPanel.setBorder(BorderFactory.createLineBorder(Color.red));
 	}
 }
