@@ -23,117 +23,101 @@ public class Model {
 	public List<FinancialBalance> getListFinancialBalance(Date startDate, Date endDate, String status) {
 		// Query all rows from the result of a SQL query
 		try {
-			// Setup connection & statements
-			Connection cn = db.getConnection(); // NOSONAR
-			Statement stmtIncomeConfirmed = cn.createStatement(); // NOSONAR
-			Statement stmtExpensesConfirmed = cn.createStatement(); // NOSONAR
-			Statement stmtIncomeEstimated = cn.createStatement(); // NOSONAR
-			Statement stmtExpensesEstimated = cn.createStatement(); // NOSONAR
-
-			// Income confirmed
-			StringBuilder queryIncomeConfirmed = new StringBuilder();
-			queryIncomeConfirmed.append("select distinct(T.ID_fa), T.nameFa, T.status, T.income_confirmed from ");
-			queryIncomeConfirmed.append(
-					"(select fA.ID_fa, fA.nameFa, fA.status, (ifnull(sum(CASE WHEN i.receiver='COIIPA' THEN p.amount END), 0) - ifnull(sum(CASE WHEN i.sender='COIIPA' THEN p.amount END), 0)) as income_confirmed ");
-			queryIncomeConfirmed.append(
-					"from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa left join Payment p on p.ID_invoice=i.ID_invoice group by fA.ID_fa) T ");
-			queryIncomeConfirmed.append("left join Session s on s.ID_fa=T.ID_fa ");
-			queryIncomeConfirmed.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				queryIncomeConfirmed.append("and T.status=\"" + status.toUpperCase() + "\" ");
-			queryIncomeConfirmed.append(";");
-			ResultSet rsIncomeConfirmed = stmtIncomeConfirmed.executeQuery(queryIncomeConfirmed.toString());
-
-			// Expenses confirmed
-			StringBuilder queryExpensesConfirmed = new StringBuilder();
-			queryExpensesConfirmed.append("select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_confirmed from ");
-			queryExpensesConfirmed.append(
-					"(select fA.ID_fa, fA.nameFa, fA.status,  (ifnull(sum(CASE WHEN iT.sender='COIIPA' THEN pT.amount END), 0) - ifnull(sum(CASE WHEN iT.receiver='COIIPA' THEN pT.amount END), 0)) as expenses_confirmed ");
-			queryExpensesConfirmed.append(
-					"from FormativeAction fA left join InvoiceTeacher iT on fA.ID_fa=iT.ID_fa left join PaymentTeacher pT on pT.ID_invoice=iT.ID_invoice group by fA.ID_fa) T ");
-			queryExpensesConfirmed.append("left join Session s on s.ID_fa=T.ID_fa ");
-			queryExpensesConfirmed.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				queryExpensesConfirmed.append("and T.status=\"" + status.toUpperCase() + "\" ");
-			queryExpensesConfirmed.append(";");
-			ResultSet rsExpensesConfirmed = stmtExpensesConfirmed.executeQuery(queryExpensesConfirmed.toString());
-
-			// Income estimated
-			StringBuilder queryIncomeEstimated = new StringBuilder();
-			queryIncomeEstimated.append("select distinct(T.ID_fa), T.nameFa, T.status, T.income_estimated from ");
-			queryIncomeEstimated.append(
-					"(select fA.ID_fa, fA.nameFa, fA.status,  (ifnull(sum(CASE WHEN i.receiver='COIIPA' THEN i.amount END), 0) - ifnull(sum(CASE WHEN i.sender='COIIPA' THEN i.amount END), 0)) as income_estimated ");
-			queryIncomeEstimated.append(
-					"from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa group by fA.ID_fa) T ");
-			queryIncomeEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
-			queryIncomeEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				queryIncomeEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
-			queryIncomeEstimated.append(";");
-			ResultSet rsIncomeEstimated = stmtIncomeEstimated.executeQuery(queryIncomeEstimated.toString());
-
-			// Expenses estimated
-			StringBuilder queryExpensesEstimated = new StringBuilder();
-			queryExpensesEstimated.append("select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_estimated from ");
-			queryExpensesEstimated.append(
-					"(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(tT.remuneration),0) as expenses_estimated ");
-			queryExpensesEstimated.append(
-					"from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa WHERE fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' group by fA.ID_fA) T ");
-			queryExpensesEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
-			queryExpensesEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				queryExpensesEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
-			queryExpensesEstimated.append(";");
-			ResultSet rsExpensesEstimated = stmtExpensesEstimated.executeQuery(queryExpensesEstimated.toString());
-
-			// Sessions
-			StringBuilder querySessions = new StringBuilder();
-			querySessions.append("select * from session s ");
-			querySessions.append("left join FormativeAction fa on fa.ID_fa=s.ID_fa ");
-			querySessions.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				querySessions.append("and fa.status=\"" + status.toUpperCase() + "\" ");
-			querySessions.append(";");
-			List<Session> sessions = Session.get(querySessions.toString(), db);
-			List<DateTime> ListFaFirstSessionLastSession = getListFirstSessionLastSession(sessions);
-
-			// Create list of Financial Balance objects
-			List<FinancialBalance> financialBalances = new ArrayList<>();
-			int counter = 0;
-			while (rsIncomeConfirmed.next()) {
-				rsExpensesConfirmed.next();
-				rsIncomeEstimated.next();
-				rsExpensesEstimated.next();
-				FinancialBalance fB = new FinancialBalance(rsIncomeConfirmed.getString("nameFa"),
-						rsIncomeConfirmed.getString("status"), ListFaFirstSessionLastSession.get(counter),
-						ListFaFirstSessionLastSession.get(counter + 1), rsIncomeConfirmed.getInt("income_confirmed"),
-						rsExpensesConfirmed.getInt("expenses_confirmed"),
-						(rsIncomeConfirmed.getInt("income_confirmed")
-								- rsExpensesConfirmed.getInt("expenses_confirmed")),
-						rsIncomeEstimated.getInt("income_estimated"), rsExpensesEstimated.getInt("expenses_estimated"),
-						(rsIncomeEstimated.getInt("income_estimated")
-								- rsExpensesEstimated.getInt("expenses_estimated")));
-				counter += 2;
-				financialBalances.add(fB);
-			}
-
-			// Close statement, result sets & connection
-			rsIncomeEstimated.close();
-			rsExpensesEstimated.close();
-			rsIncomeConfirmed.close();
-			rsExpensesConfirmed.close();
-			stmtIncomeConfirmed.close();
-			stmtExpensesConfirmed.close();
-			stmtIncomeEstimated.close();
-			stmtExpensesEstimated.close();
-			cn.close();
-			return financialBalances;
-		} catch (SQLException e) {
+		// Setup connection & statements 
+		Connection cn=db.getConnection(); //NOSONAR
+		Statement stmtIncomeConfirmed=cn.createStatement(); //NOSONAR
+		Statement stmtExpensesConfirmed=cn.createStatement(); //NOSONAR
+		Statement stmtIncomeEstimated=cn.createStatement(); //NOSONAR
+		Statement stmtExpensesEstimated=cn.createStatement(); //NOSONAR
+		
+		// Income confirmed
+		StringBuilder queryIncomeConfirmed = new StringBuilder();
+		queryIncomeConfirmed.append("select distinct(T.ID_fa), T.nameFa, T.status, T.income_confirmed from ");
+		queryIncomeConfirmed.append("(select fA.ID_fa, fA.nameFa, fA.status, (ifnull(sum(CASE WHEN i.receiver='COIIPA' THEN p.amount END), 0) - ifnull(sum(CASE WHEN i.sender='COIIPA' THEN p.amount END), 0)) as income_confirmed ");
+		queryIncomeConfirmed.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa left join Payment p on p.ID_invoice=i.ID_invoice group by fA.ID_fa) T ");
+		queryIncomeConfirmed.append("left join Session s on s.ID_fa=T.ID_fa ");
+		queryIncomeConfirmed.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) queryIncomeConfirmed.append("and T.status=\"" + status.toUpperCase() + "\" ");
+		queryIncomeConfirmed.append(";");
+		ResultSet rsIncomeConfirmed=stmtIncomeConfirmed.executeQuery(queryIncomeConfirmed.toString());
+		
+		// Expenses confirmed
+		StringBuilder queryExpensesConfirmed = new StringBuilder();
+		queryExpensesConfirmed.append("select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_confirmed from ");
+		queryExpensesConfirmed.append("(select fA.ID_fa, fA.nameFa, fA.status,  (ifnull(sum(CASE WHEN iT.sender='COIIPA' THEN pT.amount END), 0) - ifnull(sum(CASE WHEN iT.receiver='COIIPA' THEN pT.amount END), 0)) as expenses_confirmed ");
+		queryExpensesConfirmed.append("from FormativeAction fA left join InvoiceTeacher iT on fA.ID_fa=iT.ID_fa left join PaymentTeacher pT on pT.ID_invoice=iT.ID_invoice group by fA.ID_fa) T ");
+		queryExpensesConfirmed.append("left join Session s on s.ID_fa=T.ID_fa ");
+		queryExpensesConfirmed.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) queryExpensesConfirmed.append("and T.status=\"" + status.toUpperCase() + "\" ");
+		queryExpensesConfirmed.append(";");
+		ResultSet rsExpensesConfirmed=stmtExpensesConfirmed.executeQuery(queryExpensesConfirmed.toString());
+		
+		// Income estimated
+		StringBuilder queryIncomeEstimated = new StringBuilder();
+		queryIncomeEstimated.append("select distinct(T.ID_fa), T.nameFa, T.status, T.income_estimated from ");
+		queryIncomeEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status,  (ifnull(sum(CASE WHEN i.receiver='COIIPA' THEN i.amount END), 0) - ifnull(sum(CASE WHEN i.sender='COIIPA' THEN i.amount END), 0)) as income_estimated ");
+		queryIncomeEstimated.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa group by fA.ID_fa) T ");
+		queryIncomeEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
+		queryIncomeEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) queryIncomeEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
+		queryIncomeEstimated.append(";");
+		ResultSet rsIncomeEstimated=stmtIncomeEstimated.executeQuery(queryIncomeEstimated.toString());
+			
+		// Expenses estimated
+		StringBuilder queryExpensesEstimated = new StringBuilder();
+		queryExpensesEstimated.append("select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_estimated from ");
+		queryExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(CASE WHEN fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' THEN tT.remuneration END),0) as expenses_estimated ");
+		queryExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa group by fA.ID_fA) T ");
+		queryExpensesEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
+		queryExpensesEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) queryExpensesEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
+		queryExpensesEstimated.append(";");
+		ResultSet rsExpensesEstimated=stmtExpensesEstimated.executeQuery(queryExpensesEstimated.toString());
+		
+		// Sessions 
+		StringBuilder querySessions = new StringBuilder();
+		querySessions.append("select * from session s ");
+		querySessions.append("left join FormativeAction fa on fa.ID_fa=s.ID_fa ");
+		querySessions.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) querySessions.append("and fa.status=\"" + status.toUpperCase() + "\" ");
+		querySessions.append(";");
+		List<Session> sessions = Session.get(querySessions.toString(), db);
+		List<DateTime> ListFaFirstSessionLastSession = getListFirstSessionLastSession(sessions);
+		
+		// Create list of Financial Balance objects 
+		List<FinancialBalance> financialBalances = new ArrayList<>();
+		int counter = 0;
+		while(rsIncomeConfirmed.next()) {
+			rsExpensesConfirmed.next();
+			rsIncomeEstimated.next();
+			rsExpensesEstimated.next();
+			FinancialBalance fB = new FinancialBalance( 
+					rsIncomeConfirmed.getString("nameFa"),
+					rsIncomeConfirmed.getString("status"),
+					ListFaFirstSessionLastSession.get(counter),
+					ListFaFirstSessionLastSession.get(counter+1),
+					rsIncomeConfirmed.getInt("income_confirmed"),
+					rsExpensesConfirmed.getInt("expenses_confirmed"),
+					(rsIncomeConfirmed.getInt("income_confirmed") - rsExpensesConfirmed.getInt("expenses_confirmed")),
+					rsIncomeEstimated.getInt("income_estimated"),
+					rsExpensesEstimated.getInt("expenses_estimated"),
+					(rsIncomeEstimated.getInt("income_estimated") - rsExpensesEstimated.getInt("expenses_estimated")));
+			counter += 2; 
+			financialBalances.add(fB);
+		}
+		
+		// Close statement, result sets & connection
+		rsIncomeEstimated.close();
+		rsExpensesEstimated.close();
+		rsIncomeConfirmed.close();
+		rsExpensesConfirmed.close();
+		stmtIncomeConfirmed.close();
+		stmtExpensesConfirmed.close();
+		stmtIncomeEstimated.close();
+		stmtExpensesEstimated.close();
+		cn.close();
+		return financialBalances;
+		} catch (SQLException e) { 
 			throw new UnexpectedException(e);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -144,109 +128,88 @@ public class Model {
 	public List<TotalBalance> getListTotalBalance(Date startDate, Date endDate, String status) {
 		// Query all rows from the result of a SQL query
 		try {
+			
+		// Set up connection & statements
+		Connection cn=db.getConnection();
+		Statement stmtTotalIncomeConfirmed=cn.createStatement(); //NOSONAR
+		Statement stmtTotalExpensesConfirmed=cn.createStatement(); //NOSONAR
+		Statement stmtTotalIncomeEstimated=cn.createStatement(); //NOSONAR
+		Statement stmtTotalExpensesEstimated=cn.createStatement(); //NOSONAR
+		
+		// Total Income Confirmed 
+		StringBuilder queryTotalIncomeConfirmed = new StringBuilder();
+		queryTotalIncomeConfirmed.append("select sum(income_confirmed) as total_income_confirmed ");
+		queryTotalIncomeConfirmed.append("FROM ");
+		queryTotalIncomeConfirmed.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.income_confirmed from ");
+		queryTotalIncomeConfirmed.append("(select fA.ID_fa, fA.nameFa, fA.status, (ifnull(sum(CASE WHEN i.receiver='COIIPA' THEN p.amount END), 0) - ifnull(sum(CASE WHEN i.sender='COIIPA' THEN p.amount END), 0)) as income_confirmed ");
+		queryTotalIncomeConfirmed.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa left join Payment p on p.ID_invoice=i.ID_invoice group by fA.ID_fa) T ");
+		queryTotalIncomeConfirmed.append("left join Session s on s.ID_fa=T.ID_fa ");
+		queryTotalIncomeConfirmed.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) queryTotalIncomeConfirmed.append("and T.status=\"" + status.toUpperCase() + "\" ");
+		queryTotalIncomeConfirmed.append(");");
+		ResultSet rsTotalIncomeConfirmed=stmtTotalIncomeConfirmed.executeQuery(queryTotalIncomeConfirmed.toString());
+		
+		// Total Expenses Confirmed 
+		StringBuilder queryTotalExpensesConfirmed = new StringBuilder();
+		queryTotalExpensesConfirmed.append("select sum(expenses_confirmed) as total_expenses_confirmed ");
+		queryTotalExpensesConfirmed.append("FROM ");
+		queryTotalExpensesConfirmed.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_confirmed from ");
+		queryTotalExpensesConfirmed.append("(select fA.ID_fa, fA.nameFa, fA.status,  (ifnull(sum(CASE WHEN iT.sender='COIIPA' THEN pT.amount END), 0) - ifnull(sum(CASE WHEN iT.receiver='COIIPA' THEN pT.amount END), 0)) as expenses_confirmed ");
+		queryTotalExpensesConfirmed.append("from FormativeAction fA left join InvoiceTeacher iT on fA.ID_fa=iT.ID_fa left join PaymentTeacher pT on pT.ID_invoice=iT.ID_invoice group by fA.ID_fa) T ");
+		queryTotalExpensesConfirmed.append("left join Session s on s.ID_fa=T.ID_fa ");
+		queryTotalExpensesConfirmed.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) queryTotalExpensesConfirmed.append("and T.status=\"" + status.toUpperCase() + "\" ");
+		queryTotalExpensesConfirmed.append(");");
+		ResultSet rsTotalExpensesConfirmed=stmtTotalExpensesConfirmed.executeQuery(queryTotalExpensesConfirmed.toString());
+		
+		// Total Income Estimated
+		StringBuilder queryTotalIncomeEstimated = new StringBuilder();
+		queryTotalIncomeEstimated.append("select sum(income_estimated) as total_income_estimated ");
+		queryTotalIncomeEstimated.append("FROM ");
+		queryTotalIncomeEstimated.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.income_estimated from ");
+		queryTotalIncomeEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status,  (ifnull(sum(CASE WHEN i.receiver='COIIPA' THEN i.amount END), 0) - ifnull(sum(CASE WHEN i.sender='COIIPA' THEN i.amount END), 0)) as income_estimated ");
+		queryTotalIncomeEstimated.append("from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa group by fA.ID_fa) T ");
+		queryTotalIncomeEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
+		queryTotalIncomeEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) queryTotalIncomeEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
+		queryTotalIncomeEstimated.append(");");
+		ResultSet rsTotalIncomeEstimated=stmtTotalIncomeEstimated.executeQuery(queryTotalIncomeEstimated.toString());
+		
+		// Total Expenses Estimated
+		StringBuilder queryTotalExpensesEstimated = new StringBuilder();
+		queryTotalExpensesEstimated.append("select sum(expenses_estimated) as total_expenses_estimated ");
+		queryTotalExpensesEstimated.append("FROM ");
+		queryTotalExpensesEstimated.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_estimated from ");
+		queryTotalExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(CASE WHEN fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' THEN tT.remuneration END),0) as expenses_estimated  ");
+		queryTotalExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa group by fA.ID_fA) T ");
+		queryTotalExpensesEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
+		queryTotalExpensesEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
+		if (status != null) queryTotalExpensesEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
+		queryTotalExpensesEstimated.append(");");
+		ResultSet rsTotalExpensesEstimated=stmtTotalExpensesEstimated.executeQuery(queryTotalExpensesEstimated.toString());
+		
+		// Create Total Balance object 
+		TotalBalance tB = new TotalBalance(
+				rsTotalIncomeConfirmed.getInt("total_income_confirmed"),
+				rsTotalExpensesConfirmed.getInt("total_expenses_confirmed"),
+				rsTotalIncomeEstimated.getInt("total_income_estimated"),
+				rsTotalExpensesEstimated.getInt("total_expenses_estimated"));
 
-			// Set up connection & statements
-			Connection cn = db.getConnection();
-			Statement stmtTotalIncomeConfirmed = cn.createStatement(); // NOSONAR
-			Statement stmtTotalExpensesConfirmed = cn.createStatement(); // NOSONAR
-			Statement stmtTotalIncomeEstimated = cn.createStatement(); // NOSONAR
-			Statement stmtTotalExpensesEstimated = cn.createStatement(); // NOSONAR
+		List<TotalBalance> totalBalance = new ArrayList<>();
+		totalBalance.add(tB);
 
-			// Total Income Confirmed
-			StringBuilder queryTotalIncomeConfirmed = new StringBuilder();
-			queryTotalIncomeConfirmed.append("select sum(income_confirmed) as total_income_confirmed ");
-			queryTotalIncomeConfirmed.append("FROM ");
-			queryTotalIncomeConfirmed.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.income_confirmed from ");
-			queryTotalIncomeConfirmed.append(
-					"(select fA.ID_fa, fA.nameFa, fA.status, (ifnull(sum(CASE WHEN i.receiver='COIIPA' THEN p.amount END), 0) - ifnull(sum(CASE WHEN i.sender='COIIPA' THEN p.amount END), 0)) as income_confirmed ");
-			queryTotalIncomeConfirmed.append(
-					"from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa left join Payment p on p.ID_invoice=i.ID_invoice group by fA.ID_fa) T ");
-			queryTotalIncomeConfirmed.append("left join Session s on s.ID_fa=T.ID_fa ");
-			queryTotalIncomeConfirmed.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				queryTotalIncomeConfirmed.append("and T.status=\"" + status.toUpperCase() + "\" ");
-			queryTotalIncomeConfirmed.append(");");
-			ResultSet rsTotalIncomeConfirmed = stmtTotalIncomeConfirmed
-					.executeQuery(queryTotalIncomeConfirmed.toString());
-
-			// Total Expenses Confirmed
-			StringBuilder queryTotalExpensesConfirmed = new StringBuilder();
-			queryTotalExpensesConfirmed.append("select sum(expenses_confirmed) as total_expenses_confirmed ");
-			queryTotalExpensesConfirmed.append("FROM ");
-			queryTotalExpensesConfirmed
-					.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_confirmed from ");
-			queryTotalExpensesConfirmed.append(
-					"(select fA.ID_fa, fA.nameFa, fA.status,  (ifnull(sum(CASE WHEN iT.sender='COIIPA' THEN pT.amount END), 0) - ifnull(sum(CASE WHEN iT.receiver='COIIPA' THEN pT.amount END), 0)) as expenses_confirmed ");
-			queryTotalExpensesConfirmed.append(
-					"from FormativeAction fA left join InvoiceTeacher iT on fA.ID_fa=iT.ID_fa left join PaymentTeacher pT on pT.ID_invoice=iT.ID_invoice group by fA.ID_fa) T ");
-			queryTotalExpensesConfirmed.append("left join Session s on s.ID_fa=T.ID_fa ");
-			queryTotalExpensesConfirmed.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				queryTotalExpensesConfirmed.append("and T.status=\"" + status.toUpperCase() + "\" ");
-			queryTotalExpensesConfirmed.append(");");
-			ResultSet rsTotalExpensesConfirmed = stmtTotalExpensesConfirmed
-					.executeQuery(queryTotalExpensesConfirmed.toString());
-
-			// Total Income Estimated
-			StringBuilder queryTotalIncomeEstimated = new StringBuilder();
-			queryTotalIncomeEstimated.append("select sum(income_estimated) as total_income_estimated ");
-			queryTotalIncomeEstimated.append("FROM ");
-			queryTotalIncomeEstimated.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.income_estimated from ");
-			queryTotalIncomeEstimated.append(
-					"(select fA.ID_fa, fA.nameFa, fA.status,  (ifnull(sum(CASE WHEN i.receiver='COIIPA' THEN i.amount END), 0) - ifnull(sum(CASE WHEN i.sender='COIIPA' THEN i.amount END), 0)) as income_estimated ");
-			queryTotalIncomeEstimated.append(
-					"from FormativeAction fA left join Enrollment e on fA.ID_fa=e.ID_fa left join Invoice i on e.ID_professional=i.ID_professional AND e.ID_fa=i.ID_fa group by fA.ID_fa) T ");
-			queryTotalIncomeEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
-			queryTotalIncomeEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				queryTotalIncomeEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
-			queryTotalIncomeEstimated.append(");");
-			ResultSet rsTotalIncomeEstimated = stmtTotalIncomeEstimated
-					.executeQuery(queryTotalIncomeEstimated.toString());
-
-			// Total Expenses Estimated
-			StringBuilder queryTotalExpensesEstimated = new StringBuilder();
-			queryTotalExpensesEstimated.append("select sum(expenses_estimated) as total_expenses_estimated ");
-			queryTotalExpensesEstimated.append("FROM ");
-			queryTotalExpensesEstimated
-					.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_estimated from ");
-			queryTotalExpensesEstimated.append(
-					"(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(tT.remuneration),0) as expenses_estimated ");
-			queryTotalExpensesEstimated.append(
-					"from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa WHERE fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' group by fA.ID_fA) T ");
-			queryTotalExpensesEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
-			queryTotalExpensesEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \""
-					+ endDate.toSQL() + "\" ");
-			if (status != null)
-				queryTotalExpensesEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
-			queryTotalExpensesEstimated.append(");");
-			ResultSet rsTotalExpensesEstimated = stmtTotalExpensesEstimated
-					.executeQuery(queryTotalExpensesEstimated.toString());
-
-			// Create Total Balance object
-			TotalBalance tB = new TotalBalance(rsTotalIncomeConfirmed.getInt("total_income_confirmed"),
-					rsTotalExpensesConfirmed.getInt("total_expenses_confirmed"),
-					rsTotalIncomeEstimated.getInt("total_income_estimated"),
-					rsTotalExpensesEstimated.getInt("total_expenses_estimated"));
-
-			List<TotalBalance> totalBalance = new ArrayList<>();
-			totalBalance.add(tB);
-
-			// Close statements, result sets & connection
-			rsTotalIncomeConfirmed.close();
-			stmtTotalIncomeConfirmed.close();
-			rsTotalExpensesConfirmed.close();
-			stmtTotalExpensesConfirmed.close();
-			rsTotalIncomeEstimated.close();
-			stmtTotalIncomeEstimated.close();
-			rsTotalExpensesEstimated.close();
-			stmtTotalExpensesEstimated.close();
-			cn.close();
-			return totalBalance;
-		} catch (SQLException e) {
+		// Close statements, result sets & connection
+		rsTotalIncomeConfirmed.close();
+		stmtTotalIncomeConfirmed.close();
+		rsTotalExpensesConfirmed.close();
+		stmtTotalExpensesConfirmed.close();
+		rsTotalIncomeEstimated.close();
+		stmtTotalIncomeEstimated.close();
+		rsTotalExpensesEstimated.close();
+		stmtTotalExpensesEstimated.close();
+		cn.close();
+		return totalBalance;
+		} catch (SQLException e) { 
 			throw new UnexpectedException(e);
 		} catch (ParseException e) {
 			e.printStackTrace();

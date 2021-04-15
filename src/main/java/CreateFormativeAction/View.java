@@ -321,6 +321,7 @@ public class View {
 		
 		TFFee = new JDecimalField(6);
 		TFFee.setBounds(310, 312, 46, 19);
+		TFFee.setBound((float) 0, Float.MAX_VALUE);
 		feesPanel.add(TFFee);
 		TFFee.setColumns(10);
 		
