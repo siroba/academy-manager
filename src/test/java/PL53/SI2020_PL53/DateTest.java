@@ -100,38 +100,27 @@ public class DateTest {
 	public void testDbInsertion() {
 		//String sql = "INSERT INTO Payment VALUES(null,?,?,?,?,?,?,?,?,?)";
 		
-		Date insert = Date.random();
+		Random r = new Random();
+		
+		DateTime insert = new DateTime(Date.random());
 		System.out.println(insert);
 		
-		Payment p = new Payment(1000, 2000, 100, insert, true, false);
+		Payment p = new Payment(1000, 2000, r.nextFloat()*100f, insert, r.name(3, 10),r.name(3, 10),r.name(3, 10),r.name(3, 10), false);
 		try {
 			p.insert(db);
 			
 			Payment p2 = Payment.getOne("SELECT * FROM Payment WHERE ID_payment=" + p.getID(), db);
 			
-			Date read = p2.getPayDate();
+			DateTime read = p2.getPayDate();
 			System.out.println(read);
 			
 			assertEquals(insert.toString(), read.toString());
-		} catch (SQLException | ParseException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 *  @see <a href="https://www.calculator.net/time-duration-calculator.html?today=11%2F20%2F2021&starthour2=0&startmin2=30&startsec2=0&startunit2=a&ageat=12%2F21%2F2022&endhour2=1&endmin2=31&endsec2=0&endunit2=a&ctype=2&x=73&y=6#twodates"> this </a>
-	 */
-	@Test
-	public void testDateDifference() {
-		int minute = 30;
-		int hour = 00;
-		int day = 20;
-		int month = 11;
-		int year = 2021;
-		// '2011-12-03T10:15:30'
-		DateTime dt1 = new DateTime(minute, hour, day, month, year);
-		DateTime dt2 = new DateTime(minute+1, hour+1, day+1, month+1, year+1);
-
-		assertEquals(570301, DateTime.minutesSince(dt2, dt1));
+	
+	public void testDbExtraction() {
+		
 	}
 }

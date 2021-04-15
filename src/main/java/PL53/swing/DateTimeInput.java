@@ -32,29 +32,29 @@ public class DateTimeInput extends JPanel {
 
 		setLayout(null);
 		JPanel timePanel = new JPanel();
-		timePanel.setBounds(10, 11, 120, 57);
+		timePanel.setBounds(5, 9, 148, 57);
 		this.add(timePanel);
 		timePanel.setLayout(null);
 
 		lblHour = new JLabel("hour : minute");
 		lblHour.setFont(new Font("Dialog", Font.BOLD, 11));
-		lblHour.setBounds(24, 0, 86, 22);
+		lblHour.setBounds(29, 0, 120, 22);
 		timePanel.add(lblHour);
 
 		hoursTextField = new JIntField(2, format);
 		hoursTextField.setBound(0, 23);
 		hoursTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		hoursTextField.setBounds(21, 20, 34, 22);
+		hoursTextField.setBounds(25, 20, 34, 22);
 		timePanel.add(hoursTextField);
 
 		labelSep = new JLabel(":");
-		labelSep.setBounds(58, 23, 5, 15);
+		labelSep.setBounds(62, 23, 5, 15);
 		timePanel.add(labelSep);
 
 		minutesTextField = new JIntField(2, format);
 		minutesTextField.setBound(0, 59);
 		minutesTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		minutesTextField.setBounds(66, 20, 34, 22);
+		minutesTextField.setBounds(70, 20, 34, 22);
 		timePanel.add(minutesTextField);
 
 		datePanel = new DateInput();
@@ -62,16 +62,16 @@ public class DateTimeInput extends JPanel {
 		datePanel.getLblYear().setFont(new Font("Dialog", Font.BOLD, 11));
 		datePanel.getLblYear().setText("day / month / year");
 		datePanel.setLayout(null);
-		datePanel.setBounds(148, 11, 208, 57);
+		datePanel.setBounds(165, 9, 208, 57);
 		this.add(datePanel);
 	}
 
 	public int getHour() {
-		return this.hoursTextField.getValue();
+		return Math.round(this.hoursTextField.getValue());
 	}
 
 	public int getMinute() {
-		return this.minutesTextField.getValue();
+		return Math.round(this.minutesTextField.getValue());
 	}
 
 	public int getDay() {
@@ -85,6 +85,18 @@ public class DateTimeInput extends JPanel {
 	public int getYear() {
 		return datePanel.getYear();
 	}
+
+	public JIntField getDaysTextField() {
+		return datePanel.getDaysTextField();
+	}
+
+	public JIntField getYearsTextField() {
+		return datePanel.getYearsTextField();
+	}
+
+	public JIntField getMonthsTextField() {
+		return datePanel.getMonthsTextField();
+	}
   
 	public JIntField getHoursTextField() {
 		return hoursTextField;
@@ -93,6 +105,18 @@ public class DateTimeInput extends JPanel {
 	public JIntField getMinutesTextField() {
 		return minutesTextField;
 	}
+	
+	public JLabel getLblYear() {
+		return datePanel.getLblYear();
+	}
+
+	public JLabel getLabelSep1() {
+		return datePanel.getLabelSep1();
+	}
+
+	public JLabel getLabelSep2() {
+		return datePanel.getLabelSep2();
+	}	
 
 	public JLabel getLblHour() {
 		return lblHour;
@@ -102,10 +126,6 @@ public class DateTimeInput extends JPanel {
 		return labelSep;
 	}
 
-	public DateInput getDatePanel() {
-		return datePanel;
-	}
-	
 	/**
 	 * See {@link DateInput#getDate()}.
 	 * 

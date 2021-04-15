@@ -1,10 +1,8 @@
 package PL53.swing;
 
-import java.beans.JavaBean;
 import java.text.DecimalFormat;
 
-@JavaBean(defaultProperty = "UIClassID", description = "A component which allows for the editing of a single integer number with the possibility of adding constraints.")
-public class JIntField extends JNumberField<Integer>{
+public class JIntField extends JNumberField{
 	// Auto generated serial ID
 	private static final long serialVersionUID = 857421043933782945L;
 	
@@ -28,54 +26,33 @@ public class JIntField extends JNumberField<Integer>{
 		super(nDigits, format);
 	}
 	
-	@Override
 	protected boolean isAllowed(char c) {
 		return  (c == '-' && getText().length() == 0);
+	}
+	
+	/**
+	 * Set the bounds for the value of the field
+	 * 
+	 * @param min
+	 * @param max
+	 */
+	public void setBound(int min, int max) {
+		this.maxValue = max;
+		this.minValue = min;
+	}
+
+	public void setDefaultValue(int value) {
+		defaultValue = value;
+		
+		this.setText(Integer.toString(value));
+	}
+	
+	public int getIntValue() {
+		return Math.round(this.getValue());
 	}
 	
 	@Override
 	protected void initialValue() {
 		this.setText(Integer.toString(Math.round(defaultValue)));
-	}
-
-	
-	public Integer getValue()  {
-		if (numberDigits(getText()) > 0)
-			return Integer.parseInt(this.getText());
-		else
-			return (int) minValue;
-	}
-	
-	@Override
-	protected Integer getInternalValue() {
-		if (numberDigits(getText()) > 0)
-			return Integer.parseInt(this.getText());
-		else
-			return 0;
-	}
-
-	@Override
-	protected Integer parse(String str) {
-		return Integer.parseInt(str);
-	}
-
-	@Override
-	public Integer getDefaultValue() {
-		return (int) defaultValue;
-	}
-
-	@Override
-	public Integer getMinValue() {
-		return (int) minValue;
-	}
-
-	@Override
-	public Integer getMaxValue() {
-		return (int) maxValue;
-	}
-
-	@Override
-	public void setText(Integer f) {
-		this.setText(Integer.toString(f));
 	}
 }

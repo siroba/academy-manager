@@ -21,16 +21,28 @@ import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
+import PL53.util.DateTime;
+
 
 /**
+<<<<<<< HEAD
+ * Utility methods to simplify the queries performed in the classes. 
+=======
  * Utility methods to simplify the queries performed in the classes.
+>>>>>>> main
  * that implement the business logic:
  * It is implemented as an abstract class so that the derived class implements the details * related to the connection and to the database structure to be created, and at the same time
  * The derived class implements the details related to the connection and to the database structure to be created, and at the same time
  * can use the methods defined here.
+<<<<<<< HEAD
  * 
  <br>Most of the utility methods use apache commons-dbutils which handles all the handling of the resultsets, their mapping, and their * mapping.
  <br>Most of the utility methods use apache commons-dbutils which handles all the handling of resultsets, their mapping to objects and exceptions allowing a much cleaner code. 
+=======
+ *
+ <br>Most of the utility methods use apache commons-dbutils which handles all the handling of the resultsets, their mapping, and their * mapping.
+ <br>Most of the utility methods use apache commons-dbutils which handles all the handling of resultsets, their mapping to objects and exceptions allowing a much cleaner code.
+>>>>>>> main
  * in the business layer classes and DAOs.
  */
 public abstract class DbUtil {
