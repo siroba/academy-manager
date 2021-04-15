@@ -1,24 +1,21 @@
 package StatusOfFormativeAction;
 
 import java.awt.Dimension;
-import java.awt.SystemColor;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 import net.miginfocom.swing.MigLayout;
 
 public class View {
 	private JFrame frame;
-	private JTable tabFormativeActions;
-	private JTable tabFormativeActionsDetails;
 	private JTable tabRegistration;
-	private JList<String> listFormativeActions;
 	private JLabel lblActive;
+	private JTable tabFormativeActions;
+	private JTable tabPayments;
 	
 	
 	public View() {
@@ -27,44 +24,43 @@ public class View {
 	
 	private void initComponents() {
 		frame = new JFrame();
-		frame.setTitle("Courses");
-		frame.setName("Courses");
-		frame.setBounds(0, 0, 1000, 350);
+		frame.setTitle("Status of Formative Actions");
+		frame.setName("Status of Formative Actions");
+		frame.setBounds(0, 0, 600, 700);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow][grow]"));
+		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][200:250:][200:250:][200:250:]"));
 		
 		lblActive = new JLabel();
 		lblActive.setText(" ");
 		lblActive.setPreferredSize(new Dimension(100 ,22));
-		frame.getContentPane().add(lblActive, "cell 0 1, grow");
+		frame.getContentPane().add(lblActive, "cell 0 0, grow");
 		
-		listFormativeActions = new JList<String>();
-		listFormativeActions.setModel(new DefaultListModel<String>());
-		JScrollPane listPanel = new JScrollPane(listFormativeActions);
-		listPanel.setMinimumSize(new Dimension(100, 200));
-		frame.getContentPane().add(listPanel, "cell 0 2, grow, width 150!");
-				
-		tabFormativeActionsDetails = new JTable();
-		tabFormativeActionsDetails.setName("tabCourseDetails");
-		tabFormativeActionsDetails.setEnabled(false);
-		tabFormativeActionsDetails.setDefaultEditor(Object.class, null); //readonly
-		tabFormativeActionsDetails.setBackground(SystemColor.control);
-		JScrollPane tableDetailPanel = new JScrollPane(tabFormativeActionsDetails);
-		frame.getContentPane().add(tableDetailPanel, "cell 1 2, grow, width 250::");
+		tabFormativeActions = new JTable();
+		tabFormativeActions.setName("tabListFormativeActions");
+		tabFormativeActions.setDefaultEditor(Object.class, null);
+		tabFormativeActions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane tableListFormativeActions = new JScrollPane(tabFormativeActions);
+		frame.getContentPane().add(tableListFormativeActions, "cell 0 1, grow");
 		
 		tabRegistration = new JTable();
 		tabRegistration.setDefaultEditor(Object.class, null);
-		tabRegistration.setPreferredScrollableViewportSize(null);
+		//tabRegistration.setPreferredScrollableViewportSize(null);
+		tabRegistration.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane tableRegPanel = new JScrollPane(tabRegistration);
-		frame.getContentPane().add(tableRegPanel, "cell 2 2, grow, width 500::");
+		frame.getContentPane().add(tableRegPanel, "cell 0 2, grow");
+		
+		tabPayments = new JTable();
+		tabPayments.setDefaultEditor(Object.class, null);
+		tabPayments.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane tablePayments = new JScrollPane(tabPayments);
+		frame.getContentPane().add(tablePayments, "cell 0 3, grow");
 	}
 	
 	//Getters to access from the controller (compact representation)
 	public JFrame getFrame() { return this.frame; }
-	public JTable getTableFormativeActions() { return this.tabFormativeActions; }
-	public JTable getTableFormativeActionDetails() { return this.tabFormativeActionsDetails; }
 	public JTable getTableRegistrations() { return this.tabRegistration; }
-	public JList<String> getListFormativeActions() { return this.listFormativeActions; }
 	public JLabel getLabelActive() { return this.lblActive; }
+	public JTable getTableFormativeActions() { return this.tabFormativeActions; }
+	public JTable getTablePayments() { return this.tabPayments; }
 }

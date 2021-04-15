@@ -5,34 +5,17 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import java.awt.Dimension;
-import java.awt.SystemColor;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import PL53.swing.DateInput;
-import PL53.swing.DateTimeInput;
 import PL53.util.Date;
-import PL53.util.DateTime;
-
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
-import javax.swing.JRadioButton;
-import java.awt.Component;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 
 public class View {
@@ -148,6 +131,7 @@ public class View {
 		tableTotalBalance.setDefaultEditor(Object.class, null); //readonly
 		tableTotalBalance.setBackground(Color.WHITE);
 		JScrollPane tableTotalBalancePanel = new JScrollPane(tableTotalBalance);
+		tableTotalBalancePanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		frame.getContentPane().add(tableTotalBalancePanel, "cell 0 8, height 38!, width 654!");
 		
 		

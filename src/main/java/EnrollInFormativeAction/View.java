@@ -75,10 +75,12 @@ public class View extends JFrame {
 		registrationPanel.setVisible(false);
 		registrationPanel.setLayout(null);
 		
+		// Information 
 		JLabel lblFillYourInformation = new JLabel("Fill your information:");
 		lblFillYourInformation.setBounds(12, 18, 238, 15);
 		registrationPanel.add(lblFillYourInformation);
 
+		// Name 
 		JLabel lblName = new JLabel("Name:");
 		lblName.setBounds(12, 51, 70, 15);
 		registrationPanel.add(lblName);
@@ -88,6 +90,7 @@ public class View extends JFrame {
 		registrationPanel.add(profName);
 		profName.setColumns(10);
 
+		// Surename 
 		JLabel lblSurname = new JLabel("Surname:");
 		lblSurname.setBounds(12, 84, 70, 15);
 		registrationPanel.add(lblSurname);
@@ -97,6 +100,7 @@ public class View extends JFrame {
 		registrationPanel.add(textSurname);
 		textSurname.setColumns(10);
 
+		// Phone 
 		JLabel lblPhone = new JLabel("Phone:");
 		lblPhone.setBounds(12, 117, 70, 15);
 		registrationPanel.add(lblPhone);
@@ -106,6 +110,7 @@ public class View extends JFrame {
 		registrationPanel.add(textPhone);
 		textPhone.setColumns(10);
 
+		// Email 
 		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setBounds(12, 150, 70, 15);
 		registrationPanel.add(lblEmail);
@@ -115,6 +120,7 @@ public class View extends JFrame {
 		registrationPanel.add(textEmail);
 		textEmail.setColumns(10);
 
+		// Group 
 		JLabel lblGroup = new JLabel("Group:");
 		lblGroup.setBounds(12, 183, 70, 15);
 		registrationPanel.add(lblGroup);
@@ -122,38 +128,42 @@ public class View extends JFrame {
 		cbGroup = new JComboBox<String>();
 		cbGroup.setBounds(67, 181, 148, 19);
 		registrationPanel.add(cbGroup);
+		
+		// Address
+		JLabel lblNewLabel = new JLabel("Address: ");
+		lblNewLabel.setBounds(10, 216, 72, 13);
+		registrationPanel.add(lblNewLabel);
+		
+		Address = new JTextField();
+		Address.setBounds(80, 213, 179, 19);
+		registrationPanel.add(Address);
+		Address.setColumns(10);
+		
+		// Fiscal Number 
+		JLabel lblNewLabel_1 = new JLabel("Fiscal number: ");
+		lblNewLabel_1.setBounds(12, 247, 111, 13);
+		registrationPanel.add(lblNewLabel_1);
+		
+		FiscalNumber = new JTextField();
+		FiscalNumber.setBounds(122, 244, 165, 19);
+		registrationPanel.add(FiscalNumber);
+		FiscalNumber.setColumns(10);		
 
+		// Fee 
 		lblTheFeeWill = new JLabel("The Fee will be: ");
 		lblTheFeeWill.setBounds(12, 278, 135, 15);
 		registrationPanel.add(lblTheFeeWill);
 		
 		txtFee = new JTextField();
 		txtFee.setEditable(false);
-		txtFee.setBounds(116, 276, 121, 19);
+		txtFee.setBounds(130, 276, 121, 19);
 		registrationPanel.add(txtFee);
 		txtFee.setColumns(10);
 		
+		// Confirm and enroll button 
 		btnConfirmAndEnroll = new JButton("Confirm and enroll");
 		btnConfirmAndEnroll.setBounds(12, 311, 235, 25);
 		registrationPanel.add(btnConfirmAndEnroll);
-		
-		JLabel lblNewLabel = new JLabel("Address");
-		lblNewLabel.setBounds(10, 216, 72, 13);
-		registrationPanel.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("Fiscal number");
-		lblNewLabel_1.setBounds(12, 247, 101, 13);
-		registrationPanel.add(lblNewLabel_1);
-		
-		Address = new JTextField();
-		Address.setBounds(60, 213, 179, 19);
-		registrationPanel.add(Address);
-		Address.setColumns(10);
-		
-		FiscalNumber = new JTextField();
-		FiscalNumber.setBounds(110, 244, 165, 19);
-		registrationPanel.add(FiscalNumber);
-		FiscalNumber.setColumns(10);
 
 		JSeparator separator = new JSeparator();
 		separator.setBounds(441, -11, 18, 356);
@@ -175,8 +185,6 @@ public class View extends JFrame {
 	}
 
 	public void changeView(boolean change) {
-		//this.selectionPanel.setVisible(!change);
-
 		this.registrationPanel.setVisible(change);
 	}
 

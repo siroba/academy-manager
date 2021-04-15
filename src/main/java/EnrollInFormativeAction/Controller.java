@@ -86,6 +86,37 @@ public class Controller implements PL53.util.Controller {
 		view.getBtnConfirmAndEnroll().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				if (view.getProfName().isBlank()){
+					JOptionPane.showMessageDialog(null,
+						    "You need to provide a name to enroll.",
+						    "Name not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
+				if (view.getTextSurname().isBlank()){
+					JOptionPane.showMessageDialog(null,
+						    "You need to provide a surname to enroll.",
+						    "Name not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
+				if (view.getAddress().isBlank()){
+					JOptionPane.showMessageDialog(null,
+						    "You need to provide an address to enroll.",
+						    "Address not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
+				if (view.getFiscalNumber().isBlank()){
+					JOptionPane.showMessageDialog(null,
+						    "You need to provide a fiscal number to enroll.",
+						    "Fiscal number not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
+				
+				
 				String name = view.getProfName();
 				String surname = view.getTextSurname();
 				String phone = view.getTextPhone();
