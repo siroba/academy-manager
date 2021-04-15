@@ -113,7 +113,9 @@ public class Controller implements PL53.util.Controller {
 
 						model.insertInvoice(invoice, paymentTeacher);
 						if (paymentTeacher != null) {
+
 							JOptionPane.showMessageDialog(null, "The invoice has been successfully created anf the payment has been attached");
+
 							model.initModel();
 
 							initView();

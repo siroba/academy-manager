@@ -59,11 +59,13 @@ public class Controller implements PL53.util.Controller {
 		view.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+
 				selectedRow = model.getDataNoCoiipa(view.getSelectedInvoice());
 
 				showPayments();
 
 			}
+
 
 		});
 
@@ -78,6 +80,7 @@ public class Controller implements PL53.util.Controller {
 				float alreadyPayed = model.getAmountPayed(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
 
+
 				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
 
 				if (calcTime > 2 || calcTime < -1) {
@@ -86,11 +89,14 @@ public class Controller implements PL53.util.Controller {
 					return;
 				}
 
+
 				if (totalPayed > selectedRow.invoice.getAmount()) {
 					aux = false;
 					int option = JOptionPane.showConfirmDialog(null,
 							"The sum of payments (" + totalPayed
+
 									+ ") is hihger than the fee, Do you want to return the diferrence ("
+
 									+ (totalPayed - selectedRow.invoice.getAmount()) + ")?",
 							"warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
@@ -103,7 +109,9 @@ public class Controller implements PL53.util.Controller {
 								selectedRow.invoice.getID_professional());
 						try {
 							model.createPayment(invoiceReturn, toReturn, payDate, view.isCash(), true);
+
 						} catch (SQLException | ParseException e1) {
+
 
 							e1.printStackTrace();
 						}
@@ -116,6 +124,7 @@ public class Controller implements PL53.util.Controller {
 					JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
 					aux = false;
 				}
+
 
 				float amount = view.getAmountPaidTextField();
 				Date payDate = view.getDateTextPane().getDate();
@@ -131,11 +140,13 @@ public class Controller implements PL53.util.Controller {
 				}
 			}
 
+
 		});
 
 	}
 
 	public void initView() {
+
 		view.setVisible(true);
 
 		view.setTable(getTableModel(model.getAllDataNoCoiipa()));
@@ -143,12 +154,15 @@ public class Controller implements PL53.util.Controller {
 
 	public TableModel getTableModel(List<Data> list) {
 
+
 		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
 				"Date of the registration" };
+
 
 		String body[][] = new String[list.size()][header.length];
 		for (int i = 0; i < list.size(); i++) {
 			Data d = list.get(i);
+
 			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
 					d.professional.getEmail(), Float.toString(d.invoice.getAmount()),
 					d.enrollment.getTimeEn().toString() };
@@ -166,6 +180,7 @@ public class Controller implements PL53.util.Controller {
 		return tm;
 	}
 
+
 	public void showPayments() {
 		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(), model.getDataNoCoiipa(view.getTable().getSelectedRow()));
 		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList,
@@ -178,6 +193,7 @@ public class Controller implements PL53.util.Controller {
 		 * payment.getAmount(); }
 		 */
 		// view.getLabelSummary().setText("" + amount);
+
 
 	}
 

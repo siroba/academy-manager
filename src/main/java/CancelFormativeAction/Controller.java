@@ -64,7 +64,9 @@ public class Controller implements PL53.util.Controller {
 				double teachers = model.getInvoices(index);
         
 				int option = JOptionPane.showConfirmDialog(null, 
-						payments + "€ will be refunded to Professionals and " + teachers + "€ will be returned from the teachers.",
+
+						payments + "â‚¬ will be refunded to Professionals and " + teachers + "â‚¬ will be returned from the teachers.",
+
 						"Are you sure you want to continue?",
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.WARNING_MESSAGE);

@@ -2,7 +2,9 @@ package RegisterPayment;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -56,7 +58,9 @@ public class Model {
 	}
 
 	public Data getData(int i) {
+
 		if (i < 0 || i > this.data.length - 1) {
+
 			return null;
 		}
 		return this.data[i];
@@ -68,11 +72,14 @@ public class Model {
 
 	private Data[] initData() throws SQLException, ParseException {
 		List<Data> data = new ArrayList<Data>();
+
 		String sql = "	SELECT  Invoice.* FROM Invoice " + "WHERE Invoice.amount <> ("
+
 				+ "	SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment GROUP BY Payment.ID_invoice "
 				+ "HAVING Payment.ID_invoice=Invoice.ID_fa), 0))";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
+
 
 		List<Invoice> invoices = Invoice.get(sql, db);
 		for (Invoice in : invoices) {
@@ -89,6 +96,7 @@ public class Model {
 
 		}
 
+
 		Data data2[] = new Data[data.size()];
 		return data.toArray(data2);
 
@@ -98,21 +106,26 @@ public class Model {
 		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
 	}
 
+
 	void createPayment(int id_invoice, float amount, Date datePay, boolean isCash, boolean confirmed)
 			throws SQLException, ParseException {
 		Payment p = new Payment(id_invoice, amount, datePay, confirmed, isCash);
+
 		p.insert(db);
 	}
 
 	public List<Invoice> getPayments(Data d) throws SQLException {
+
 		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + d.formativeAction.getID() + " AND ID_professional="
 				+ d.professional.getID();
+
 
 		return Invoice.get(queryInvoice, db);
 	}
 
 	public float getAmountPayed(Data selectedRow) {
 		String sqlRefund = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+
 				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " + " GROUP BY Payment.ID_invoice "
 				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender='COIIPA'), 0.0);";
 
@@ -198,5 +211,6 @@ public class Model {
 		
 		return null;
 	}
+
 
 }
