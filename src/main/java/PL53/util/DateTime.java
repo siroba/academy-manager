@@ -127,7 +127,7 @@ public class DateTime extends Date {
 	 */
 	@Override
 	public long toMillis() {
-		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1)) * 1000l;
+		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(2)) * 1000l;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class DateTime extends Date {
 	 * @return
 	 */
 	public static DateTime fromMillis(long millis) {
-		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(1));
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(2));
 
 		return new DateTime(ldt.getMinute(), ldt.getHour(), ldt.getDayOfMonth(), ldt.getMonthValue(), ldt.getYear());
 	}

@@ -199,6 +199,28 @@ public class Controller implements PL53.util.Controller {
 		DateTime dateEnrollStart = view.getEnrollStart();
 		DateTime dateEnrollEnd = view.getEnrollEnd();
 
+		// Validate that all required information are provided
+		if (view.getName().isBlank()){
+			JOptionPane.showMessageDialog(null,
+				    "You need to provide a name to create a formative Action.",
+				    "Name not valid",
+				    JOptionPane.ERROR_MESSAGE);
+			return; 
+		}
+		if (view.getTeacher().isBlank()){
+			JOptionPane.showMessageDialog(null,
+				    "You need to provide a teacher to create a formative Action.",
+				    "Teacher not valid",
+				    JOptionPane.ERROR_MESSAGE);
+			return; 
+		}
+		if (view.getLocation().isBlank()){
+			JOptionPane.showMessageDialog(null,
+				    "You need to provide a location to create a formative Action.",
+				    "Location not valid",
+				    JOptionPane.ERROR_MESSAGE);
+			return; 
+		}
 		// Validate session dates
 		if (validateDates(datesFormativeAction, dateEnrollStart, dateEnrollEnd)) {
 			// Validate fees

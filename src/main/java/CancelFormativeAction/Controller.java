@@ -43,13 +43,14 @@ public class Controller implements PL53.util.Controller {
 
 				double payments = model.getPayments(index);
 				double teachers = model.getInvoices(index);
-
-				int option = JOptionPane.showConfirmDialog(null,
-						payments + "€ will be refunded to Professionals and " + teachers
-								+ "€ will be returned from the teachers.",
-						"Are you sure you want to continue?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-				if (option == 0) {
+        
+				int option = JOptionPane.showConfirmDialog(null, 
+						payments + "€ will be refunded to Professionals and " + teachers + "€ will be returned from the teachers.",
+						"Are you sure you want to continue?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+				
+				if(option == 0) {
 					model.cancel(index);
 					model.refund(index);
 					model.invoiceTeachers(index);
@@ -81,6 +82,7 @@ public class Controller implements PL53.util.Controller {
 			}
 		});
 
+    
 		view.getBtnRefund().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
