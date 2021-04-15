@@ -89,7 +89,7 @@ public class FormativeAction {
 
 	public FormativeAction(int ID_fa, String name, int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
-			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees, List<TeacherTeaches> teachers) {
+			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees) {
 
 		this.ID = ID_fa;
 		this.name = name;
@@ -249,7 +249,6 @@ public class FormativeAction {
 			
 			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
 			List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
-			List<TeacherTeaches> teachers = TeacherTeaches.get("SELECT * FROM TeacherTeaches WHERE ID_fa=" + id_fa, db);
 			
 			FormativeAction f = new FormativeAction(
 					id_fa,
@@ -261,9 +260,9 @@ public class FormativeAction {
 					dstart,
 					dend,
 					sessions, 
-					fees,
-					teachers);
+					fees);
 
+			f.setTeacherTeaches(TeacherTeaches.get(f, db));
 			fa.add(f);
 		}
 
@@ -311,7 +310,6 @@ public class FormativeAction {
 		
 		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
 		List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
-		List<TeacherTeaches> teachers = TeacherTeaches.get("SELECT * FROM TeacherTeaches WHERE ID_fa=" + id_fa, db);
 		
 		FormativeAction fa = new FormativeAction(
 				id_fa,
@@ -323,9 +321,9 @@ public class FormativeAction {
 				dstart,
 				dend,
 				sessions, 
-				fees,
-				teachers);
-
+				fees);
+		fa.setTeacherTeaches(TeacherTeaches.get(fa, db));
+		
 		// Very important to always close all the objects related to the database
 		rs.close();
 		st.close();

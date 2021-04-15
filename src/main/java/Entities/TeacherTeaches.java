@@ -92,12 +92,6 @@ public class TeacherTeaches {
 		st.close();
 		conn.close();
 		
-		
-		
-		rs.close();
-		st.close();
-		conn.close();
-		
 		return list;
 		
 	}

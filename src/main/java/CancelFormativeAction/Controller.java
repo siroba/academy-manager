@@ -39,8 +39,27 @@ public class Controller implements PL53.util.Controller {
 		view.getBtnCancel().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!view.filledCoiipasInfo()) {
+					view.setCoiipaInfoRed();
+					JOptionPane.showMessageDialog(null,
+						    "Please, fill the information of COIIPA.",
+						    "Information empty",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}else {
+					view.setCoiipaInfoNormal();
+				}
+				
 				int index = view.getSelected();
 
+				if(index == -1) {
+					JOptionPane.showMessageDialog(null,
+						    "Please, select at least one formative action.",
+						    "Did not select a formative action",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				double payments = model.getPayments(index);
 				double teachers = model.getInvoices(index);
         
@@ -52,10 +71,9 @@ public class Controller implements PL53.util.Controller {
 				
 				if(option == 0) {
 					model.cancel(index);
-					model.refund(index);
-					model.invoiceTeachers(index);
 
 					try {
+						model.invoiceTeachers(index, view.getDateIn(), view.getFiscalNumber(), view.getAddress());
 						model.initModel();
 
 						view.setTable(getTableModel(model.getAllData()));
