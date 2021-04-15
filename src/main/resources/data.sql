@@ -50,6 +50,7 @@ insert into Enrollment(ID_fa, ID_professional, status, timeEn, category) values
 
 insert into Invoice (Id_invoice , amount, dateIn , sender, receiver, address, fiscalNumber, ID_fa, ID_professional) values
         (4000, 15, '2021-01-02', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2000 ),
+        (4014, 10, '2021-01-03', 'COIIPA', 'senderName', 'address', 'fiscalNumber', 1000, 2000 ),
         (4001, 15, '2021-01-04', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2001 ),
         (4002, 15, '2021-01-07', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2002 ),
         (4003, 15, '2021-01-11', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2003 ),
@@ -85,14 +86,16 @@ insert into Teacher (ID_teacher, name) values
 	(1001, "Marcos"),
 	(1002, "Marek"),
 	(1003, "Vivien"),
-	(1004, "Silvia");
+	(1004, "Silvia"),
+	(1005, "Rosa");
 	
 insert into TeacherTeaches (ID_teacher , ID_fa , remuneration) values
 	(1000,1000, 50.0),
 	(1001,1000, 50.0),
 	(1002,1001, 60.0),
 	(1003,1001, 60.0),
-	(1004,1002, 100.0);
+	(1004,1002, 100.0),
+	(1005,1003, 80.0);
 
 insert into InvoiceTeacher (Id_invoice , amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa, ID_teacher) values
 

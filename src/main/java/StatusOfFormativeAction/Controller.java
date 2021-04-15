@@ -28,7 +28,14 @@ public class Controller implements PL53.util.Controller {
 		view.getTableFormativeActions().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				SwingUtil.exceptionWrapper(() -> showDetails());
+				SwingUtil.exceptionWrapper(() -> showRegistrationList());
+			}
+		});
+		
+		view.getTableRegistrations().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				SwingUtil.exceptionWrapper(() -> showPayments());
 			}
 		});
 	}
@@ -58,19 +65,12 @@ public class Controller implements PL53.util.Controller {
 		SwingUtil.autoAdjustColumns(view.getTableFormativeActions());
 	}
 
-	/**
-	 * Method to display details about a selected formative action
-	 */
-	public void showDetails() {
-		showRegistrationList();
-	}
-
 	public void showRegistrationList() {
 		this.lastSelectedKey = SwingUtil.getSelectedKey(view.getTableFormativeActions());
 		List<Registration> registrationList = model.getRegistrationList(lastSelectedKey);
 		TableModel tmodel = SwingUtil.getTableModelFromPojos(registrationList,
 				new String[] { "name", "surnames", "enrollmentDate", "amount", "status" },
-				new String[] { "Name", "Surname", "Date of the registration", "Fee", "Status" }, true);
+				new String[] { "Name", "Surname", "Date of the registration", "Fee", "Status" }, false);
 		view.getTableRegistrations().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTableRegistrations());
 		
@@ -82,5 +82,23 @@ public class Controller implements PL53.util.Controller {
 		} else {
 			view.getLabelActive().setText(" ");
 		}
+	}
+	
+	public void showPayments() {
+		String selectedProfessional = SwingUtil.getSelectedKey(view.getTableRegistrations());
+		List<Payment> paymentList = model.getPayments(lastSelectedKey, selectedProfessional);
+		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList, 
+				new String[] {"date", "amount"}, 
+				new String[] {"Date", "amount"}, 
+				false);
+		view.getTablePayments().setModel(tmodel);
+		SwingUtil.autoAdjustColumns(view.getTablePayments());
+		
+		float amount = 0;
+		for (Payment payment : paymentList) {
+			amount += payment.getAmount();
+		}
+		view.getLabelSummary().setText("" + amount);
+		
 	}
 }

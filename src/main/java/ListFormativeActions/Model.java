@@ -12,6 +12,8 @@ import Utils.Database;
 import Utils.UnexpectedException;
 
 public class Model {
+	
+	private Database db;
 
 	private final String WITH_STATUS_FILTER = "select fa.nameFa, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces "
 			+ "from FormativeAction fa left join Enrollment e on e.ID_fa = fa.ID_fa "
@@ -21,11 +23,14 @@ public class Model {
 			+ "from FormativeAction fa left join Enrollment e on e.ID_fa = fa.ID_fa "
 			+ "INNER JOIN Session s on fa.ID_fa = s.ID_fa "
 			+ "WHERE date(s.sessionStart) BETWEEN ? AND ?group by fa.ID_fa; ";
+	
+	public Model() {
+		db = new Database();
+	}
 
 	public List<FormativeActionList> getListFormativeAction(String filterStatusString, String filterDateBegin,
 			String filterDateEnd, boolean filterStatus) {
 		try {
-			Database db = new Database();
 			Connection cn = db.getConnection();
 			PreparedStatement psFormativeActions;
 			if (filterStatus) {
@@ -95,23 +100,40 @@ public class Model {
 	 */
 	public FormativeActionDetails getFormativeActionDetails(String lastSelectedKey) {
 		try {
-			Database db = new Database();
 			Connection cn = db.getConnection();
-			StringBuilder query = new StringBuilder();
-			query.append("SELECT fa.objectives, fa.mainContent, s.location, s.teacherName ");
-			query.append("from FormativeAction fa ");
-			query.append("INNER JOIN Session s ");
-			query.append("ON fa.ID_fa=s.ID_fa ");
-			query.append("where nameFa=?;");
-			PreparedStatement ps = cn.prepareStatement(query.toString());
+			PreparedStatement ps = cn.prepareStatement("SELECT fa.objectives, fa.mainContent, s.location, t.name "
+					+ "from FormativeAction fa "
+					+ "INNER JOIN Session s ON fa.ID_fa=s.ID_fa "
+					+ "LEFT join TeacherTeaches tt on tt.ID_fa=fa.ID_fa "
+					+ "LEFT join Teacher t on tt.ID_teacher = t.ID_teacher "
+					+ "where nameFa = ?;");
 			ps.setString(1, lastSelectedKey);
 			ResultSet rs = ps.executeQuery();
+			
+			FormativeActionDetails fs;
 
-			List<FormativeActionDetails> formativeActionDetails = new ArrayList<>();
+			List<String> locations = new ArrayList<>();
+			List<String> teachers = new ArrayList<>();
+			List<String> objectives = new ArrayList<>();
+			List<String> mainContents = new ArrayList<>();
+			while (rs.next()) {
+				if (!locations.contains(rs.getString("location"))) { 
+					locations.add(rs.getString("location"));
+				}
+				if (!teachers.contains(rs.getString("name")))
+					teachers.add(rs.getString("name"));
+				
+				if (!objectives.contains(rs.getString("objectives")))
+					objectives.add(rs.getString("objectives"));
+				
+				if (!mainContents.contains(rs.getString("mainContent")))
+					mainContents.add(rs.getString("mainContent"));
+			}
+			
+			fs = new FormativeActionDetails(String.join(", ", objectives),
+					String.join(", ", mainContents), String.join(", ", locations), String.join(", ", teachers));
 
-			FormativeActionDetails fs = new FormativeActionDetails(rs.getString("objectives"),
-					rs.getString("mainContent"), rs.getString("location"), rs.getString("teacherName"));
-			formativeActionDetails.add(fs);
+			
 
 			rs.close();
 			ps.close();

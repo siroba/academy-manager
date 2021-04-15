@@ -20,13 +20,17 @@ public class Model {
 	public Model() {
 		db = new Database();
 	}
-
+	
+	/*
+	 * TODO Description of Function, parameter and return value
+	 */
 	public List<FormativeActionDetails> getListFormativeAction() {
 		try {
 			Connection cn = db.getConnection();
-			PreparedStatement ps = cn.prepareStatement("SELECT  fa.nameFa, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces, (fa.totalPlaces - count(e.ID_fa)) as leftPlaces "
-					+ "FROM FormativeAction fa LEFT JOIN Enrollment e on e.ID_fa=fa.ID_fa "
-					+ "GROUP BY fa.ID_fa;");
+			PreparedStatement ps = cn.prepareStatement(
+					"SELECT  fa.nameFa, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces, (fa.totalPlaces - count(e.ID_fa)) as leftPlaces "
+							+ "FROM FormativeAction fa LEFT JOIN Enrollment e on e.ID_fa=fa.ID_fa "
+							+ "GROUP BY fa.ID_fa;");
 			ResultSet rs = ps.executeQuery();
 
 			List<FormativeActionDetails> formativeActionList = new ArrayList<FormativeActionDetails>();
@@ -84,11 +88,46 @@ public class Model {
 		}
 	}
 	
+	/*
+	 * TODO Description of Function, parameter and return value
+	 */
 	public FormativeAction getFormativeAction(String name) {
 		String query = "SELECT * from FormativeAction fa WHERE fa.nameFa = '" + name + "';";
 		try {
 			return FormativeAction.getOne(query, db);
 		} catch (SQLException | ParseException e) {
+			throw new UnexpectedException(e);
+		}
+	}
+	
+	/*
+	 * TODO Description of Function, parameter and return value
+	 */
+	public List<Payment> getPayments(String formativeAction, String professional) {
+		try {
+			Connection cn = db.getConnection();
+			
+			PreparedStatement ps = cn.prepareStatement(
+					"select fa.nameFa, i.sender, i.receiver, pay.amount, pay.datePay from Professional p "
+							+ "inner join Enrollment e on p.ID_professional = e.ID_professional "
+							+ "inner join FormativeAction fa on e.ID_fa = fa.ID_fa "
+							+ "inner join Invoice i on e.ID_professional = i.ID_professional and e.ID_fa = i.ID_fa "
+							+ "inner join Payment pay on i.ID_invoice = pay.ID_invoice "
+							+ "where lower(p.name) = ? and lower(fa.nameFa) = ?;");
+			ps.setString(1, professional.toLowerCase()); 
+			ps.setString(2, formativeAction.toLowerCase()); 
+
+			ResultSet rs = ps.executeQuery();
+
+			List<Payment> listPayments = new ArrayList<>();
+
+			while (rs.next()) {
+				listPayments.add(new Payment(Date.parse(rs.getTimestamp("datePay")),
+						rs.getString("sender").equals("COIIPA") ? -rs.getInt("amount") : rs.getInt("amount")));
+			}
+			
+			return listPayments;
+		} catch (SQLException e) {
 			throw new UnexpectedException(e);
 		}
 	}
