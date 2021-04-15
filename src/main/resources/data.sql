@@ -22,7 +22,6 @@ insert into Fee(ID_fee, amount, category, ID_fa) values
 	(1003, 30, 'Standard', 1003),
 	(1004, 25, 'College Members', 1003),
 	(1005, 20, 'UniOvi Members', 1003);
-	
 
 insert into Professional(ID_professional, name, surname, phone, email) values
 	(2000, 'Pablo',	'Gonzales', 		'+341762568901', 	'pablo.gonzales@uniovi.es'),

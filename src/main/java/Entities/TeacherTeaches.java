@@ -36,7 +36,7 @@ public class TeacherTeaches {
 		pstmt.setInt(2, this.getFaID());
 		pstmt.setFloat(3, this.getRemuneration());
 		pstmt.executeUpdate();
-
+    
 		pstmt.close();
 		conn.close();
 	}
@@ -61,11 +61,11 @@ public class TeacherTeaches {
 			
 			list.add(t);
 		}
-
+		
 		rs.close();
 		st.close();
 		conn.close();
-
+		
 		return list;
 	}
 	
@@ -94,6 +94,10 @@ public class TeacherTeaches {
 		
 		
 		
+		rs.close();
+		st.close();
+		conn.close();
+		
 		return list;
 		
 	}
@@ -115,10 +119,8 @@ public class TeacherTeaches {
 				FormativeAction.getOne(sqlFa + rs.getInt("ID_fa"), db), 
 				rs.getFloat("remuneration"));
 
-
 		rs.close();
 		st.close();
-
 		conn.close();
 		
 		return t;

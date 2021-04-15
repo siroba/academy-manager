@@ -68,9 +68,20 @@ public class Model {
 	}
 
 	public Data[] getSolicitedRefunds(FormativeAction fa) throws SQLException {
-		String queryEnrollments = "SELECT Enrollment.* FROM Enrollment "
-								+ "INNER JOIN Invoice ON Invoice.ID_fa=Enrollment.ID_fa AND Invoice.ID_professional=Enrollment.ID_professional "
-								+ "WHERE Invoice.receiver='COIIPA' AND ID_invoice IN (SELECT ID_invoice FROM Payment) AND ID_invoice NOT IN (SELECT ID_invoice FROM Invoice WHERE sender='COIIPA') AND Enrollment.ID_fa=" + fa.getID() + ";";
+		String queryEnrollments = "SELECT Enrollment.* FROM Enrollment \n"
+				+ "INNER JOIN Invoice ON Invoice.ID_fa=Enrollment.ID_fa AND Invoice.ID_professional=Enrollment.ID_professional "
+				+ "WHERE Invoice.receiver='COIIPA' AND ID_invoice IN (SELECT ID_invoice FROM Payment) AND Enrollment.ID_fa=" + fa.getID()
+				+ " AND (Enrollment.ID_fa,Enrollment.ID_professional) NOT IN (SELECT ID_fa, ID_professional FROM Invoice WHERE sender='COIIPA');";
+				
+				/*+ "INNER JOIN FormativeAction ON FormativeAction.ID_fa=Enrollment.ID_fa " 
+				+ "WHERE FormativeAction.status='CANCELLED' AND "
+				+ "		(SELECT inv.amount FROM Invoice as inv  "
+				+ "		WHERE inv.ID_professional=Enrollment.ID_professional AND  "
+				+ "				inv.ID_fa=Enrollment.ID_fa AND  "
+				+ "				sender='COIIPA')<>(SELECT inv.amount FROM Invoice as inv "
+				+ "		WHERE inv.ID_professional=Enrollment.ID_professional AND  "
+				+ "				inv.ID_fa=Enrollment.ID_fa AND  "
+				+ "				receiver='COIIPA');";*/
 		
 		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + fa.getID() + " AND ID_professional=";
 		String queryPayments = "SELECT * FROM Payment WHERE ID_invoice=";
@@ -117,6 +128,19 @@ public class Model {
 
 	public FormativeAction[] getCancelled() {
 		return cancelled;
+	}
+
+	public int getUsedPlaces(int ID_fa) {
+		String query = "SELECT COUNT(*) FROM Enrollment WHERE ID_fa=?;";
+		
+		return (int)(db.executeQueryArray(query, ID_fa).get(0)[0]);
+	}
+
+	public void payRefund(Invoice in, boolean cash) throws SQLException, ParseException {
+		in.insert(db);
+		
+		Payment p = new Payment(in.getID(), in.getAmount(), in.getDateIn(), true, cash);
+		p.insert(db);
 	}
 
 }

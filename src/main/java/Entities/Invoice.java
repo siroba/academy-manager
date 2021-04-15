@@ -52,7 +52,6 @@ public class Invoice {
 	public void setPayments(List<Payment> payments) {
 		this.payments = payments;
 	}
-
 	/**
 	 * Default Constructor
 	 * 
@@ -174,7 +173,6 @@ public class Invoice {
 		int id_invoice = rs.getInt("ID_invoice");
 
 		List<Payment> payments = Payment.get("SELECT * FROM Payment WHERE ID_invoice=" + id_invoice, db);
-
     
 		Invoice e = new Invoice(
 				rs.getInt("ID_invoice"),
