@@ -9,15 +9,17 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import PL53.util.Date;
 import PL53.util.DateTime;
 import Utils.Database;
 
 public class PaymentTeacher {
 	
-		private int ID = -1, ID_invoice=-1;
+		private int ID = -1;
 		private float amount;
-		private DateTime payDate;
-		private String sender, receiver, fiscalNumber, address;
+		private Date payDate;
+		private String ID_invoice;
+		
 		private boolean confirmed;
 
 		/** Default Constructor
@@ -29,15 +31,11 @@ public class PaymentTeacher {
 		 * @param address
 		 * @param confirmed
 		 */
-		public PaymentTeacher( float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
-				String address, boolean confirmed) {
+		public PaymentTeacher( float amount, Date payDate,  boolean confirmed) {
 			
 			this.amount = amount;
 			this.payDate = payDate;
-			this.sender = sender;
-			this.receiver = receiver;
-			this.fiscalNumber = fiscalNumber;
-			this.address = address;
+			
 			this.confirmed = confirmed;
 		}
 
@@ -54,17 +52,13 @@ public class PaymentTeacher {
 		 * @param address
 		 * @param confirmed
 		 */
-		public PaymentTeacher(int ID_payment, int ID_invoice,  float amount, DateTime payDate, String sender, String receiver, String fiscalNumber,
-				String address, boolean confirmed) {
+		public PaymentTeacher(int ID_payment, String ID_invoice,  float amount, Date payDate, boolean confirmed) {
 			this.ID = ID_payment;
 			this.ID_invoice = ID_invoice;
 			
 			this.amount = amount;
 			this.payDate = payDate;
-			this.sender = sender;
-			this.receiver = receiver;
-			this.fiscalNumber = fiscalNumber;
-			this.address = address;
+			
 			this.confirmed = confirmed;
 		}
 
@@ -106,23 +100,20 @@ public class PaymentTeacher {
 			List<PaymentTeacher> enrollments = new ArrayList<>();
 
 			while (rs.next()) {
-				DateTime datepay;
+				Date datepay;
 				try {
-					datepay = DateTime.parseString(rs.getString("datePay"));
+					datepay = Date.parseString(rs.getString("datePay"));
 				} catch (ParseException e) {
-					datepay = DateTime.fromMillis(rs.getLong("datePay"));
+					datepay = Date.fromMillis(rs.getLong("datePay"));
 				}
 
 				PaymentTeacher e = new PaymentTeacher(
 						rs.getInt("ID_payment"),
-						rs.getInt("ID_invoice"),
+						rs.getString("ID_invoice"),
 						
 						rs.getFloat("amount"),
 						datepay,
-						rs.getString("sender"),
-						rs.getString("receiver"),
-						rs.getString("fiscalNumber"),
-						rs.getString("address"),
+						
 						rs.getBoolean("confirmed"));
 
 				enrollments.add(e);
@@ -153,22 +144,19 @@ public class PaymentTeacher {
 			ResultSet rs = st.executeQuery(query.toString());
 			rs.next();
 
-			DateTime datepay;
+			Date datepay;
 			try {
-				datepay = DateTime.parseString(rs.getString("datePay"));
+				datepay = Date.parseString(rs.getString("datePay"));
 			} catch (ParseException e) {
-				datepay = DateTime.fromMillis(rs.getLong("datePay"));
+				datepay = Date.fromMillis(rs.getLong("datePay"));
 			}
 
 			PaymentTeacher e = new PaymentTeacher(
 					rs.getInt("ID_payment"),
-					rs.getInt("ID_invoice"),
+					rs.getString("ID_invoice"),
 					rs.getFloat("amount"),
 					datepay,
-					rs.getString("sender"),
-					rs.getString("receiver"),
-					rs.getString("fiscalNumber"),
-					rs.getString("address"),
+					
 					rs.getBoolean("confirmed"));
 
 			// Very important to always close all the objects related to the database
@@ -188,7 +176,7 @@ public class PaymentTeacher {
 		 * @throws SQLException
 		 * @throws ParseException
 		 */
-		public void insert(Database db) throws SQLException {
+		public void insert(Database db) throws SQLException, ParseException {
 			/*
 			 * status TEXT NOT NULL CHECK( status IN('received','confirmed','cancelled')),
 			 * dateEn DATE NOT NULL, name TEXT NOT NULL, ID_fa INTEGER NOT NULL UNIQUE,
@@ -197,44 +185,40 @@ public class PaymentTeacher {
 			Connection conn = db.getConnection(); // Obtain the connection
 
 			if(this.getID() != -1) {
-				String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_invoice, amount, payDate, sender, receiver, fiscalNumber,"
-						+ " address, confirmed) VALUES(?,?,?,?,?,?,?,?,?)";
+				String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_invoice, amount, payDate, confirmed) VALUES(?,?,?,?,?,?,?,?,?)";
 
 				// Prepared Statement initialized with the INSERT statement
 				PreparedStatement pstmt = conn.prepareStatement(SQL);
 				// Sets of the parameters of the prepared statement
 
 				pstmt.setInt(1, this.getID());
-				pstmt.setInt(2, this.getID_invoice());
+				pstmt.setString(2, this.getID_invoice());
 	
 				pstmt.setFloat(3, this.getAmount());
-				pstmt.setTimestamp(4, this.getPayDate().toTimestamp());
-				pstmt.setString(5,this.getSender());
-				pstmt.setString(6, this.getReceiver());
-				pstmt.setString(7, this.getFiscalNumber());
-				pstmt.setString(8, this.getAddress());
-				pstmt.setBoolean(9, this.isConfirmed());
+				pstmt.setDate(4, this.getPayDate().toSQL());
+	
+				pstmt.setBoolean(5, this.isConfirmed());
 				pstmt.executeUpdate(); // statement execution
+				pstmt.close();
 			}else {
-				String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?)";
+				String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?)";
 
 				// Prepared Statement initialized with the INSERT statement
 				PreparedStatement pstmt = conn.prepareStatement(SQL);
 				// Sets of the parameters of the prepared statement
 
 				pstmt.setFloat(1, this.getAmount());
-				pstmt.setTimestamp(2, this.getPayDate().toTimestamp());
-				pstmt.setString(3,this.getSender());
-				pstmt.setString(4, this.getReceiver());
-				pstmt.setString(5, this.getAddress());
-				pstmt.setString(6, this.getFiscalNumber());
-				pstmt.setBoolean(7, this.isConfirmed());
-				pstmt.setInt(8, this.getID_invoice());
+				pstmt.setDate(2, this.getPayDate().toSQL());
+			
+				pstmt.setBoolean(3, this.isConfirmed());
+				pstmt.setString(4, this.getID_invoice());
 				pstmt.executeUpdate(); // statement execution
 
 				ResultSet tableKeys = pstmt.getGeneratedKeys();
 				tableKeys.next();
 				this.ID = tableKeys.getInt(1);
+				pstmt.close();
+				tableKeys.close();
 			}
 
 			conn.close();
@@ -242,7 +226,7 @@ public class PaymentTeacher {
 
 
 
-		public int getID_invoice() {
+		public String getID_invoice() {
 			
 			return ID_invoice;
 		}
@@ -255,46 +239,15 @@ public class PaymentTeacher {
 			this.amount = amount;
 		}
 
-		public DateTime getPayDate() {
+		public Date getPayDate() {
 			return payDate;
 		}
 
-		public void setPayDate(DateTime payDate) {
+		public void setPayDate(Date payDate) {
 			this.payDate = payDate;
 		}
 
-		public String getSender() {
-			return sender;
-		}
-
-		public void setSender(String sender) {
-			this.sender = sender;
-		}
-
-		public String getReceiver() {
-			return receiver;
-		}
-
-		public void setReceiver(String receiver) {
-			this.receiver = receiver;
-		}
-
-		public String getFiscalNumber() {
-			return fiscalNumber;
-		}
-
-		public void setFiscalNumber(String fiscalNumber) {
-			this.fiscalNumber = fiscalNumber;
-		}
-
-		public String getAddress() {
-			return address;
-		}
-
-		public void setAddress(String address) {
-			this.address = address;
-		}
-
+		
 		public boolean isConfirmed() {
 			return confirmed;
 		}
@@ -307,8 +260,8 @@ public class PaymentTeacher {
 			return ID;
 		}
 
-		public void setInvoiceID(int ID_invoice) {
-			this.ID_invoice= ID_invoice; 
+		public void setInvoiceID(String ID) {
+			this.ID_invoice= ID; 
 		}
 
 		
