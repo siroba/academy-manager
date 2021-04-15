@@ -66,8 +66,8 @@ public class Model {
 		// Expenses estimated
 		StringBuilder queryExpensesEstimated = new StringBuilder();
 		queryExpensesEstimated.append("select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_estimated from ");
-		queryExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(tT.remuneration),0) as expenses_estimated ");
-		queryExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa WHERE fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' group by fA.ID_fA) T ");
+		queryExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(CASE WHEN fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' THEN tT.remuneration END),0) as expenses_estimated ");
+		queryExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa group by fA.ID_fA) T ");
 		queryExpensesEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
 		queryExpensesEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
 		if (status != null) queryExpensesEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
@@ -181,8 +181,8 @@ public class Model {
 		queryTotalExpensesEstimated.append("select sum(expenses_estimated) as total_expenses_estimated ");
 		queryTotalExpensesEstimated.append("FROM ");
 		queryTotalExpensesEstimated.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_estimated from ");
-		queryTotalExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(tT.remuneration),0) as expenses_estimated ");
-		queryTotalExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa WHERE fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' group by fA.ID_fA) T ");
+		queryTotalExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(CASE WHEN fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' THEN tT.remuneration END),0) as expenses_estimated  ");
+		queryTotalExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa group by fA.ID_fA) T ");
 		queryTotalExpensesEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
 		queryTotalExpensesEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
 		if (status != null) queryTotalExpensesEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
