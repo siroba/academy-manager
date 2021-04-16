@@ -36,6 +36,12 @@ public class Controller implements PL53.util.Controller {
 
 	@Override
 	public void initController() {
+		view.getIsCashCheckBox().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				view.hideInvoiceData(!view.getIsCash());
+			}
+		});
+		
 		view.getBtnCancel().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

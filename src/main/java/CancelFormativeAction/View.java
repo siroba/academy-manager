@@ -22,6 +22,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class View extends JFrame {
 
@@ -44,6 +46,7 @@ public class View extends JFrame {
 	private JTextField fiscalNumber;
 	private JPanel coiipaPanel;
 	private JCheckBox isCash;
+	private JPanel invoicePanel;
 
 	/**
 	 * Create the frame.
@@ -126,22 +129,27 @@ public class View extends JFrame {
 		lblNewLabel.setBounds(10, 115, 189, 14);
 		coiipaPanel.add(lblNewLabel);
 		
+		invoicePanel = new JPanel();
+		invoicePanel.setBounds(10, 0, 201, 101);
+		coiipaPanel.add(invoicePanel);
+		invoicePanel.setLayout(null);
+		
 		address = new JTextField();
-		address.setBounds(10, 25, 196, 20);
-		coiipaPanel.add(address);
+		address.setBounds(0, 25, 196, 20);
+		invoicePanel.add(address);
 		address.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("COIIPA's address:");
-		lblNewLabel_1.setBounds(10, 0, 152, 14);
-		coiipaPanel.add(lblNewLabel_1);
+		lblNewLabel_1.setBounds(0, 0, 152, 14);
+		invoicePanel.add(lblNewLabel_1);
 		
 		lblNewLabel_2 = new JLabel("COIIPA's fiscal number:");
-		lblNewLabel_2.setBounds(12, 56, 199, 14);
-		coiipaPanel.add(lblNewLabel_2);
+		lblNewLabel_2.setBounds(2, 56, 199, 14);
+		invoicePanel.add(lblNewLabel_2);
 		
 		fiscalNumber = new JTextField();
-		fiscalNumber.setBounds(10, 81, 196, 20);
-		coiipaPanel.add(fiscalNumber);
+		fiscalNumber.setBounds(0, 81, 196, 20);
+		invoicePanel.add(fiscalNumber);
 		fiscalNumber.setColumns(10);
 		
 		isCash = new JCheckBox("Cash payment");
@@ -258,5 +266,13 @@ public class View extends JFrame {
 
 	public void setCoiipaInfoNormal() {
 		coiipaPanel.setBorder(null);
+	}
+
+	public JCheckBox getIsCashCheckBox() {
+		return isCash;
+	}
+
+	public void hideInvoiceData(boolean isCash2) {
+		invoicePanel.setVisible(isCash2);
 	}
 }

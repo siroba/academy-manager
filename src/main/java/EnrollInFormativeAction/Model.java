@@ -21,7 +21,7 @@ public class Model {
         String query ="SELECT * FROM FormativeAction "
                     + "WHERE enrollmentEnd>datetime('now','localtime') "
                     + "GROUP BY FormativeAction.nameFa "
-                    + "HAVING (SELECT COUNT(Enrollment.ID_fa) FROM Enrollment WHERE Enrollment.ID_fa=FormativeAction.ID_fa)<totalPlaces;";
+                    + "HAVING (SELECT COUNT(Enrollment.ID_fa) FROM Enrollment WHERE Enrollment.ID_fa=FormativeAction.ID_fa AND status<>'CANCELLED')<totalPlaces;";
 
         this.formativeActions = FormativeAction.get(query, db);
     }
