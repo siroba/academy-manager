@@ -122,6 +122,7 @@ public class View extends JFrame {
 		contentPane.add(confirmButton);
 		
 		amountPaidTextField = new JDecimalField(9);
+		amountPaidTextField.setBound(0.1f, Float.MAX_VALUE);
 		amountPaidTextField.setBounds(147, 353, 99, 19);
 
 		contentPane.add(amountPaidTextField);
