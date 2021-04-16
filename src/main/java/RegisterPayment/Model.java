@@ -73,7 +73,7 @@ public class Model {
 	private Data[] initData() throws SQLException, ParseException {
 		List<Data> data = new ArrayList<Data>();
 
-		String sql = "	SELECT  Invoice.* FROM Invoice " + "WHERE Invoice.amount <> ("
+		String sql = "	SELECT  Invoice.* FROM Invoice WHERE Invoice.amount <> ("
 				+ "	SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment GROUP BY Payment.ID_invoice "
 				+ "HAVING Payment.ID_invoice=Invoice.ID_fa), 0))";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
