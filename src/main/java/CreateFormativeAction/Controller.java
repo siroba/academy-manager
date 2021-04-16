@@ -66,6 +66,8 @@ public class Controller implements PL53.util.Controller {
 				for (int i=0; i<sessions.size(); i++) {
 					datesFormativeAction.add(sessions.get(i).getSessionStart());
 				}
+				datesFormativeAction.add(view.getSessionDatetime());
+				
 				// Validate dates 
 				if (validateDates(datesFormativeAction, view.getEnrollStart(), view.getEnrollEnd())) {
 					// Add session to table 
@@ -291,7 +293,7 @@ public class Controller implements PL53.util.Controller {
 		// Check that the session dates are valid 
 		for (int i=0; i<formativeActionDates.size(); i++) {
 			
-			// Get date of current formative action 
+			// Get date of each session start
 			DateTime formativeActionDate = formativeActionDates.get(i);
 			
 			long daysBetweenNowAction = DateTime.daysSince(formativeActionDate, now);
@@ -304,13 +306,13 @@ public class Controller implements PL53.util.Controller {
 					    "Session date not valid",
 					    JOptionPane.ERROR_MESSAGE);
 				return false;
-			} 
+			}
+			
 			if (daysBetweenStartAction < 21) {
 				JOptionPane.showMessageDialog(null,
 					    "Enrollment period should begin at least 3 weeks before formative action",
 					    "Start of enrollment period not valid",
-					    JOptionPane.ERROR_MESSAGE);
-				return false;
+					    JOptionPane.WARNING_MESSAGE);
 			} 
 			
 			if (daysBetweenEndAction <= 0) {

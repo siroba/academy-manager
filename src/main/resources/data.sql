@@ -87,7 +87,7 @@ insert into Teacher (ID_teacher, name) values
 	(1002, "Marek"),
 	(1003, "Vivien"),
 	(1004, "Silvia"),
-	(1005, "Rosa");
+	(1005, "Rosalina");
 	
 insert into TeacherTeaches (ID_teacher , ID_fa , remuneration) values
 	(1000,1000, 50.0),

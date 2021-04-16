@@ -49,6 +49,13 @@ public class Controller implements PL53.util.Controller {
 	 * a problem or controlled exception occurs.
 	 */
 	public void initController() {
+		view.getChckbxNewCheckBox().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				view.enableInvoice(view.getWantInvoice());
+			}
+		});
+		
+		
 		view.getFAList().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!view.getFAList().getValueIsAdjusting()) {
@@ -101,14 +108,14 @@ public class Controller implements PL53.util.Controller {
 						    JOptionPane.ERROR_MESSAGE);
 					return; 
 				}
-				if (view.getAddress().isBlank()){
+				if (view.getAddress().isBlank() && view.getWantInvoice()){
 					JOptionPane.showMessageDialog(null,
 						    "You need to provide an address to enroll.",
 						    "Address not valid",
 						    JOptionPane.ERROR_MESSAGE);
 					return; 
 				}
-				if (view.getFiscalNumber().isBlank()){
+				if (view.getFiscalNumber().isBlank() && view.getWantInvoice()){
 					JOptionPane.showMessageDialog(null,
 						    "You need to provide a fiscal number to enroll.",
 						    "Fiscal number not valid",
