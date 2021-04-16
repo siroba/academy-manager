@@ -108,7 +108,7 @@ public class Controller implements PL53.util.Controller {
 								selectedRow.invoice.getFiscalNumber(), selectedRow.invoice.getID_fa(),
 								selectedRow.invoice.getID_professional());
 						try {
-							model.createPayment(invoiceReturn, toReturn, payDate, view.isCash(), true);
+							model.createPaymentRefund(invoiceReturn, toReturn, payDate, view.isCash(), true);
 
 						} catch (SQLException | ParseException e1) {
 
@@ -130,7 +130,7 @@ public class Controller implements PL53.util.Controller {
 				Date payDate = view.getDateTextPane().getDate();
 
 				try {
-					model.createPayment(selectedRow.invoice.getID(), amount, payDate, view.isCash(), aux);
+					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
 					JOptionPane.showMessageDialog(null, "The payment has been registered");
 
 					model.initModel();

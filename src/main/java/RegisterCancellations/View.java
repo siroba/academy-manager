@@ -71,6 +71,8 @@ public class View extends JFrame {
 		panel.add(lblNewLabel);
 		
 		dateIn = new DateInput();
+		dateIn.getYearsTextField().setBound(2000, Integer.MAX_VALUE);
+		dateIn.getYearsTextField().setDefaultValue(2021);
 		dateIn.setBounds(0, 18, 211, 55);
 		panel.add(dateIn);
 		dateIn.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -103,6 +105,10 @@ public class View extends JFrame {
 		fiscalNumber.setBounds(216, 25, 206, 20);
 		invoiceInfoPanel.add(fiscalNumber);
 		fiscalNumber.setColumns(10);
+		
+		JLabel lblNewLabel_3 = new JLabel("Press the button to know the due amount:");
+		lblNewLabel_3.setBounds(61, 235, 258, 14);
+		contentPane.add(lblNewLabel_3);
 	}
 	
 	public JButton getBtnCancelRegistration() {

@@ -32,7 +32,7 @@ insert into Professional(ID_professional, name, surname, phone, email) values
 	(2005, 'Paul', 	'Bauer', 		'+4917064578933', 	'paul.bauer@rub.de');
 
 insert into Enrollment(ID_fa, ID_professional, status, timeEn, category) values
-	(1000, 2000, 'CONFIRMED', '2021-01-02 16:00:00.0', 'Standard'),
+	(1000, 2000, 'RECEIVED', '2021-01-02 16:00:00.0', 'Standard'),
 	(1000, 2001, 'CONFIRMED', '2021-01-04 17:00:00.0', 'Standard'),
 	(1000, 2002, 'CONFIRMED', '2021-01-07 18:00:00.0', 'Standard'),
 	(1000, 2003, 'CONFIRMED', '2021-01-10 19:00:00.0', 'Standard'),

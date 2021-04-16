@@ -73,8 +73,7 @@ public class Model {
 	private Data[] initData() throws SQLException, ParseException {
 		List<Data> data = new ArrayList<Data>();
 
-		String sql = "	SELECT  Invoice.* FROM Invoice " + "WHERE Invoice.amount <> ("
-
+		String sql = "	SELECT  Invoice.* FROM Invoice WHERE Invoice.amount <> ("
 				+ "	SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment GROUP BY Payment.ID_invoice "
 				+ "HAVING Payment.ID_invoice=Invoice.ID_fa), 0))";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
@@ -83,8 +82,7 @@ public class Model {
 
 		List<Invoice> invoices = Invoice.get(sql, db);
 		for (Invoice in : invoices) {
-			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" + in.getID_fa() + " AND ID_professional="
-					+ in.getID_professional();
+			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" + in.getID_fa() + " AND ID_professional=" + in.getID_professional();
 			String queryFee = "SELECT * FROM Fee WHERE ID_fa=" + in.getID_fa() + " AND category='";
 			Data d = new Data();
 			d.invoice = in;
@@ -107,17 +105,16 @@ public class Model {
 	}
 
 
-	void createPayment(int id_invoice, float amount, Date datePay, boolean isCash, boolean confirmed)
+	/*void createPayment(int id_invoice, float amount, Date datePay, boolean isCash, boolean confirmed)
 			throws SQLException, ParseException {
 		Payment p = new Payment(id_invoice, amount, datePay, confirmed, isCash);
 
 		p.insert(db);
-	}
+	}*/
 
 	public List<Invoice> getPayments(Data d) throws SQLException {
 
-		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + d.formativeAction.getID() + " AND ID_professional="
-				+ d.professional.getID();
+		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + d.formativeAction.getID() + " AND ID_professional=" + d.professional.getID();
 
 
 		return Invoice.get(queryInvoice, db);
@@ -143,7 +140,19 @@ public class Model {
 		return normalPayments + refundPayments;
 	}
 
-	public void createPayment(Invoice invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed)
+	public void createPayment(Invoice invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
+			throws SQLException, ParseException {
+		if(totalAmountPayed == invoiceReturn.getAmount()) {
+			String sql = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?";
+			db.executeUpdateQuery(sql, invoiceReturn.getID_fa(), invoiceReturn.getID_professional());
+		}
+		//invoiceReturn.insert(db);
+		int id_invoice = invoiceReturn.getID();
+		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash);
+		p.insert(db);
+	}
+	
+	public void createPaymentRefund(Invoice invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed) // TODO: OH GOD PLEASE NO
 			throws SQLException, ParseException {
 		invoiceReturn.insert(db);
 		int id_invoice = invoiceReturn.getID();

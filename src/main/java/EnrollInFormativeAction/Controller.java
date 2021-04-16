@@ -123,6 +123,14 @@ public class Controller implements PL53.util.Controller {
 					return; 
 				}
 				
+				String regex = "^[A-Z]?[0-9]{8,8}[A-Z]$";
+				if(!view.getFiscalNumber().matches(regex)) {
+					JOptionPane.showMessageDialog(null,
+						    "That fiscal number is not valid. E.g. \"55566677R\"",
+						    "Fiscal number not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
 				
 				String name = view.getProfName();
 				String surname = view.getTextSurname();
