@@ -99,8 +99,15 @@ public class Model {
 	public float getPayedAmount(int ID_professional, int ID_fa) {
 		String query = "SELECT SUM(Payment.amount) FROM Payment " + 
 				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
-				"WHERE ID_professional=? AND Invoice.ID_fa=?;";
-		return (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
+				"WHERE ID_professional=? AND Invoice.ID_fa=? AND sender<>'COIIPA';";
+		float payed = (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
+		
+		query = "SELECT SUM(Payment.amount) FROM Payment " + 
+				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
+				"WHERE ID_professional=? AND Invoice.ID_fa=? AND sender='COIIPA';";
+		float received = (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
+		
+		return payed-received;
 	}
 	
 	public float getRefundPercentage(int days) {
