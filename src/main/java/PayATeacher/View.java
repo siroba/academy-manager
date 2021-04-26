@@ -11,6 +11,9 @@ import javax.swing.table.TableModel;
 
 import PL53.swing.DateInput;
 import PL53.swing.DateTimeInput;
+import PL53.swing.JDecimalField;
+import PL53.swing.JIntField;
+import PL53.swing.JNumberField;
 import PL53.util.Date;
 import PL53.util.DateTime;
 
@@ -38,10 +41,10 @@ public class View extends JFrame {
 	private JTable table;
 	private JButton registerButton;
 	private JTextField IDInvoice;
-	private JTextField amount;
+	private JDecimalField amount;
 	private DateInput dateTransferTextField_1;
 	private JButton addPayment;
-	private JTextField amoundRefound;
+	private JDecimalField amoundRefound;
 
 	/**
 	 * Create the frame.
@@ -146,7 +149,7 @@ public class View extends JFrame {
 		lblNewLabel_11.setBounds(415, 20, 59, 13);
 		taxDataPanel.add(lblNewLabel_11);
 		
-		amount = new JTextField();
+		amount = new JDecimalField(2);
 		amount.setBounds(415, 36, 163, 19);
 		taxDataPanel.add(amount);
 		amount.setColumns(10);
@@ -196,7 +199,7 @@ public class View extends JFrame {
 		separator_3.setBounds(659, 494, 12, 239);
 		contentPane.add(separator_3);
 		
-		JLabel lblNewLabel_12 = new JLabel("Payments to refound money by the teachers");
+		JLabel lblNewLabel_12 = new JLabel("Payments to refound money to the teachers");
 		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNewLabel_12.setBounds(699, 517, 330, 31);
 		contentPane.add(lblNewLabel_12);
@@ -221,7 +224,7 @@ public class View extends JFrame {
 		addPayment.setBounds(989, 620, 170, 41);
 		contentPane.add(addPayment);
 		
-		amoundRefound = new JTextField();
+		amoundRefound = new JDecimalField(2);
 		amoundRefound.setColumns(10);
 		amoundRefound.setBounds(996, 555, 163, 19);
 		contentPane.add(amoundRefound);
@@ -291,10 +294,10 @@ public class View extends JFrame {
 	public JButton getAddPayment() {
 		return addPayment;
 	}
-	public JTextField getAmount() {
-		return amount;
+	public float getAmount() {
+		return  amount.getValue();
 	}
-	public JTextField getAmoundRefound() {
-		return amoundRefound;
+	public float getAmoundRefound() {
+		return amoundRefound.getValue();
 	}
 }

@@ -74,6 +74,8 @@ public class Controller implements PL53.util.Controller {
 
 				// INPUT THE INVOICE
 				try {
+					DateTime now = DateTime.now();
+					long daysBetweenNowAction = DateTime.daysSince(view.getDateTransferTextField(), now);
 					if (selectedRow == null) {
 						JOptionPane.showMessageDialog(null, "You have to select one pending payment");
 					} else if (view.getNameTextField().length() == 0) {
@@ -90,31 +92,43 @@ public class Controller implements PL53.util.Controller {
 								"You have to introduce a valid year for the date of the invoice (ex: 2021)");
 					} else if (view.getIDInvoice().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the ID of the invoice");
+					} else if (view.getAmount() < 0) {
+						JOptionPane.showMessageDialog(null, "You have to introduce the amount of the invoice");
+
+					} else if (daysBetweenNowAction > 0) {
+
+						JOptionPane.showMessageDialog(null, "Tranfers cannot be made in the future.",
+								"date not valid ( the date must be on the current date or in the past)",
+								JOptionPane.ERROR_MESSAGE);
+
 					} else {
 						String name = view.getNameTextField();
 						String fiscalNumber = view.getFiscalNumberTextField();
 						String address = view.getAddressTextField();
 						Date dateTransfer = view.getDateTransferTextField();
 						int ID_fa = selectedRow.formativeAction.getID();
-						float amount = Float.parseFloat((String) view.getTable().getValueAt(view.getSelected(), 3));
+						float amountAgreed = Float
+								.parseFloat((String) view.getTable().getValueAt(view.getSelected(), 3));
 						String sender = "COIIPA";
 						String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2);
 						boolean confirmed = true;
 						Date dateInvoice = view.getDateTextField();
 						String IDInvoice = view.getIDInvoice();
 						int ID_teacher = selectedRow.teacher.getID();
+						float amount = view.getAmount();
 
 						// TODO: The amount of the invoice and the payment can differ
 
 						InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice, amount, ID_fa, dateInvoice, sender,
-								receiver, fiscalNumber, address, ID_teacher);
+								name, fiscalNumber, address, ID_teacher);
 
 						PaymentTeacher paymentTeacher = new PaymentTeacher(IDInvoice, amount, dateTransfer, confirmed);
 
 						model.insertInvoice(invoice, paymentTeacher);
 						if (paymentTeacher != null) {
 
-							JOptionPane.showMessageDialog(null, "The invoice has been successfully created anf the payment has been attached");
+							JOptionPane.showMessageDialog(null,
+									"The invoice has been successfully created anf the payment has been attached");
 
 							model.initModel();
 
@@ -153,8 +167,8 @@ public class Controller implements PL53.util.Controller {
 
 			for (TeacherTeaches tt : d.formativeAction.getTeacherTeaches()) {
 
-				rows.add(new String[] { d.formativeAction.getName(), d.formativeAction.getStatus().toString(), tt.getTeacher().getName(),
-						Float.toString(tt.getRemuneration()) });
+				rows.add(new String[] { d.formativeAction.getName(), d.formativeAction.getStatus().toString(),
+						tt.getTeacher().getName(), Float.toString(tt.getRemuneration()) });
 			}
 
 		}
