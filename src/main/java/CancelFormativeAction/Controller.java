@@ -11,10 +11,10 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import BaseProject.SwingUtil;
 import Entities.FormativeAction;
 import Entities.Movement;
 import PL53.swing.CheckboxTableModel;
+import PL53.util.Constants;
 import RegisterCancellations.Data;
 
 public class Controller implements PL53.util.Controller {
@@ -35,27 +35,10 @@ public class Controller implements PL53.util.Controller {
 	}
 
 	@Override
-	public void initController() {
-		view.getIsCashCheckBox().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				view.hideInvoiceData(!view.getIsCash());
-			}
-		});
-		
+	public void initController() {		
 		view.getBtnCancel().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!view.filledCoiipasInfo() && !view.getIsCash()) {
-					view.setCoiipaInfoRed();
-					JOptionPane.showMessageDialog(null,
-						    "Please, fill the information of COIIPA.",
-						    "Information empty",
-						    JOptionPane.ERROR_MESSAGE);
-					return;
-				}else {
-					view.setCoiipaInfoNormal();
-				}
-				
 				int index = view.getSelected();
 
 				if(index == -1) {
@@ -81,9 +64,9 @@ public class Controller implements PL53.util.Controller {
 					model.cancel(index);
 
 					try {
-						if(teachers > 0) {
+						/*if(teachers > 0) {
 							model.invoiceTeachers(index, view.getDateIn(), view.getFiscalNumber(), view.getAddress());
-						}
+						}*/
 						model.initModel();
 
 						view.setTable(getTableModel(model.getAllData()));
@@ -138,11 +121,11 @@ public class Controller implements PL53.util.Controller {
 								view.getDateIn(),
 								"COIIPA", 
 								(String) view.getTableRefunds().getValueAt(i, 1),
-								view.getAddress(), 
-								view.getFiscalNumber(),
+								Constants.COIIPAadress, 
+								Constants.COIIPAfiscalNumber,
 								cancelledSelected.getID(), 
 								d[i].professional.getID(),
-								""); // TODO: Description
+								"Refund because the formative action " + cancelledSelected.getName() + " was cancelled.");
 						
 						model.payRefund(in, view.getIsCash());
 					}
@@ -153,7 +136,6 @@ public class Controller implements PL53.util.Controller {
 					view.setTableCancelledFA(getTableModel(model.getCancelled()));
 					view.setTableRefunds(getCheckboxTableModel(new Data[]{}));
 				} catch (SQLException | ParseException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -176,10 +158,10 @@ public class Controller implements PL53.util.Controller {
 			FormativeAction d = data[i];
 			// TODO: Fix this
 			body[i] = new String[] { 
-										d.getName(), 
-										d.getEnrollmentEnd().toString(),
-										Integer.toString(model.getUsedPlaces(d.getID())), 
-										Integer.toString(d.getTotalPlaces())
+									d.getName(), 
+									d.getEnrollmentEnd().toString(),
+									Integer.toString(model.getUsedPlaces(d.getID())), 
+									Integer.toString(d.getTotalPlaces())
 									};
 		}
 
