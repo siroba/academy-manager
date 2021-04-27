@@ -15,17 +15,14 @@ import Utils.Database;
 public class Invoice {
 	private int ID = -1, ID_fa, ID_professional;
 	private Date dateIn;
-	private String sender, receiver, fiscalNumber, address;
+	private String sender, receiver, fiscalNumber, address, description = "";
 	private float amount;
 	private List<Payment> payments = new ArrayList<Payment>();
 
-	/**
-	 * Constructor with ID_invoice
-
 	
-
+	/**
+	 * Constructor with ID
 	 * 
-
 	 * @param ID_invoice
 	 * @param amount
 	 * @param dateIn
@@ -35,8 +32,9 @@ public class Invoice {
 	 * @param fiscalNumber
 	 * @param ID_fa
 	 * @param ID_professional
+	 * @param description
 	 */
-	public Invoice(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public Invoice(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID = ID_invoice;
@@ -46,7 +44,34 @@ public class Invoice {
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
 		this.ID_professional = ID_professional;
+		this.description = description;
 
+	}
+
+	
+	/**
+	 * Default constructor
+	 * 
+	 * @param amount
+	 * @param dateIn
+	 * @param sender
+	 * @param receiver
+	 * @param address
+	 * @param fiscalNumber
+	 * @param ID_fa
+	 * @param ID_professional
+	 * @param description
+	 */
+	public Invoice(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
+		this.amount = amount;
+		this.ID_fa = ID_fa;
+		this.dateIn = dateIn;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.fiscalNumber = fiscalNumber;
+		this.address = address;
+		this.ID_professional = ID_professional;
+		this.description = description;
 	}
 
 	public List<Payment> getPayments() {
@@ -56,32 +81,7 @@ public class Invoice {
 	public void setPayments(List<Payment> payments) {
 		this.payments = payments;
 	}
-	/**
-	 * Default Constructor
-
-	 *
-
-	 * @param amount
-	 * @param dateIn
-	 * @param sender
-	 * @param receiver
-	 * @param address
-	 * @param fiscalNumber
-	 * @param ID_fa
-	 * @param ID_professional
-	 */
-	public Invoice(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
-		this.amount = amount;
-		this.ID_fa = ID_fa;
-		this.dateIn = dateIn;
-		this.sender = sender;
-		this.receiver = receiver;
-		this.fiscalNumber = fiscalNumber;
-		this.address = address;
-		this.ID_professional = ID_professional;
-
-	}
-
+	
 	public static String tableName() {
 		return "Invoice";
 	}
@@ -138,11 +138,8 @@ public class Invoice {
 					rs.getString("fiscalNumber"),
 					rs.getString("address"),
 					rs.getInt("ID_fa"),
-					rs.getInt("ID_professional")
-
-
-
-					);
+					rs.getInt("ID_professional"),
+					rs.getString("description"));
 			e.setPayments(payments);
 			invoices.add(e);
 		}
@@ -193,8 +190,8 @@ public class Invoice {
 				rs.getString("fiscalNumber"),
 				rs.getString("address"),
 				rs.getInt("ID_fa"),
-				rs.getInt("ID_professional")
-				);
+				rs.getInt("ID_professional"),
+				rs.getString("description"));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -222,7 +219,7 @@ public class Invoice {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if(this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional) VALUES(?,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional, description) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -238,11 +235,12 @@ public class Invoice {
 			pstmt.setInt(8, this.getID_fa());
 			pstmt.setInt(9, this.getID_professional());
 			pstmt.setInt(10, this.getID_professional());
+			pstmt.setString(11, this.getDescription());
 
 			pstmt.executeUpdate(); // statement execution
 			pstmt.close();
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -256,6 +254,7 @@ public class Invoice {
 			pstmt.setString(6, this.getFiscalNumber());
 			pstmt.setInt(7, this.getID_fa());
 			pstmt.setInt(8, this.getID_professional());
+			pstmt.setString(9, this.getDescription());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -342,5 +341,15 @@ public class Invoice {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

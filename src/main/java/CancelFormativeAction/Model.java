@@ -126,9 +126,9 @@ public class Model {
 			Teacher t = Teacher.getOne("SELECT * FROM Teacher WHERE ID_teacher=" + inv.getID_teacher(), db);
 			String invoiceId = JOptionPane.showInputDialog(null, "What is the ID of the invoice for the teacher " + t.getName() + " for " + inv.getAmount() + "€?", null);
 			
-			InvoiceTeacher newInv = new InvoiceTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID());
+			InvoiceTeacher newInv = new InvoiceTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID(), ""); // TODO: Description
 			newInv.insert(db);
-			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true);
+			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true, ""); // TODO: Description
 			p.insert(db);
 		}
 		
@@ -147,7 +147,7 @@ public class Model {
 	public void payRefund(Invoice in, boolean cash) throws SQLException, ParseException {
 		in.insert(db);
 		
-		Payment p = new Payment(in.getID(), in.getAmount(), in.getDateIn(), true, cash);
+		Payment p = new Payment(in.getID(), in.getAmount(), in.getDateIn(), true, cash, ""); // TODO: Description
 		p.insert(db);
 	}
 
