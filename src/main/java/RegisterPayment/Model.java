@@ -7,12 +7,7 @@ import java.sql.ResultSet;
 
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.*;
-
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ArrayListHandler;
 
 import Utils.Database;
 import Utils.UnexpectedException;
@@ -21,11 +16,9 @@ import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Invoice;
 import Entities.Payment;
-import Entities.PaymentTeacher;
 //import Entities.FormativeAction;
 import Entities.Professional;
 import PL53.util.Date;
-import RegisterPayment.Data;
 
 /**
  * Access to course data, used as a model for the swing example and for unit and
@@ -171,7 +164,7 @@ public class Model {
 																													// NO
 			throws SQLException, ParseException {
 
-		Payment p = new Payment(invoiceID, toReturn, payDate, confirmed, cash);
+		Payment p = new Payment(invoiceID, toReturn, payDate, confirmed, cash, ""); // TODO: Add description
 		p.insert(db);
 	}
 
