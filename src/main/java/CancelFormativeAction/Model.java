@@ -123,11 +123,21 @@ public class Model {
 		String query = "SELECT * FROM InvoiceTeacher WHERE ID_fa=" + data[index].getID();
 		
 		for(InvoiceTeacher inv: InvoiceTeacher.get(query, db)) {
+			// Get the teacher involved in the payment
 			Teacher t = Teacher.getOne("SELECT * FROM Teacher WHERE ID_teacher=" + inv.getID_teacher(), db);
+			
+			// As for the ID of the new invoice 
+			// TODO: PO does not want this
 			String invoiceId = JOptionPane.showInputDialog(null, "What is the ID of the invoice for the teacher " + t.getName() + " for " + inv.getAmount() + "€?", null);
 			
-			InvoiceTeacher newInv = new InvoiceTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID(), ""); // TODO: Description
+			// A simple description for the transaction
+			String description = "The formative action " + data[index].getName() + " was cancelled.";
+			
+			// Create the new invoice and insert it into the DB
+			InvoiceTeacher newInv = new InvoiceTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID(), description);
 			newInv.insert(db);
+			
+			// Create a new Payment for that Invoice and insert it
 			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true, ""); // TODO: Description
 			p.insert(db);
 		}
