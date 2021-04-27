@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import BaseProject.SwingUtil;
-import Entities.Invoice;
+import Entities.Movement;
 import Entities.Payment;
 import PL53.util.Date;
 import PL53.util.DateTime;
@@ -103,7 +103,7 @@ public class Controller implements PL53.util.Controller {
 					if (option == 0) {
 						float toReturn = totalPayed - selectedRow.invoice.getAmount();
 						Date payDate = view.getDateTextPane().getDate();
-						Invoice invoiceReturn = new Invoice(toReturn, payDate, selectedRow.invoice.getReceiver(),
+						Movement invoiceReturn = new Movement(toReturn, payDate, selectedRow.invoice.getReceiver(),
 								selectedRow.invoice.getSender(), selectedRow.invoice.getAddress(),
 								selectedRow.invoice.getFiscalNumber(), selectedRow.invoice.getID_fa(),
 								selectedRow.invoice.getID_professional(), 

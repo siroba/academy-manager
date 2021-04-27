@@ -6,7 +6,7 @@ import java.util.*;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.Movement;
 import Entities.Payment;
 import Entities.Professional;
 import Utils.Database;
@@ -87,7 +87,7 @@ public class Model {
 		
 		if(refundPercentage > 0) { // If there is nothing to return, do not proceed			
 				// 2.3 - Create the Invoice for the same value payed
-			Invoice refundInvoice = new Invoice(payedAmount * refundPercentage, dateIn, sender, receiver, address, fiscalNumber, selected.formativeAction.getID(), selected.professional.getID(), ""); // TODO: Description
+			Movement refundInvoice = new Movement(payedAmount * refundPercentage, dateIn, sender, receiver, address, fiscalNumber, selected.formativeAction.getID(), selected.professional.getID(), ""); // TODO: Description
 			refundInvoice.insert(db); // Insert it to update its ID
 	
 				// 2.4 - Generate a Payment for the amount due

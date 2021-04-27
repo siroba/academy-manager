@@ -9,8 +9,8 @@ import javax.swing.JOptionPane;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
-import Entities.Invoice;
-import Entities.InvoiceTeacher;
+import Entities.Movement;
+import Entities.MovementTeacher;
 import Entities.Payment;
 import Entities.PaymentTeacher;
 import Entities.Professional;
@@ -99,7 +99,7 @@ public class Model {
 			Data d = new Data();
 			d.formativeAction = fa;
 			d.enrollment = en;
-			d.invoice = Invoice.getOne(queryInvoice + en.getID_professional(), db);
+			d.invoice = Movement.getOne(queryInvoice + en.getID_professional(), db);
 			d.professional = Professional.getOne(queryProfessional + d.invoice.getID_professional(), db);
 			d.payment = Payment.getOne(queryPayments + d.invoice.getID(), db);
 			
@@ -122,11 +122,11 @@ public class Model {
 	public void invoiceTeachers(int index, Date dateIn, String fiscalNumber, String address) throws SQLException, ParseException {
 		String query = "SELECT * FROM InvoiceTeacher WHERE ID_fa=" + data[index].getID();
 		
-		for(InvoiceTeacher inv: InvoiceTeacher.get(query, db)) {
+		for(MovementTeacher inv: MovementTeacher.get(query, db)) {
 			Teacher t = Teacher.getOne("SELECT * FROM Teacher WHERE ID_teacher=" + inv.getID_teacher(), db);
 			String invoiceId = JOptionPane.showInputDialog(null, "What is the ID of the invoice for the teacher " + t.getName() + " for " + inv.getAmount() + "€?", null);
 			
-			InvoiceTeacher newInv = new InvoiceTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID(), ""); // TODO: Description
+			MovementTeacher newInv = new MovementTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID(), ""); // TODO: Description
 			newInv.insert(db);
 			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true, ""); // TODO: Description
 			p.insert(db);
@@ -144,7 +144,7 @@ public class Model {
 		return (int)(db.executeQueryArray(query, ID_fa).get(0)[0]);
 	}
 
-	public void payRefund(Invoice in, boolean cash) throws SQLException, ParseException {
+	public void payRefund(Movement in, boolean cash) throws SQLException, ParseException {
 		in.insert(db);
 		
 		Payment p = new Payment(in.getID(), in.getAmount(), in.getDateIn(), true, cash, ""); // TODO: Description
