@@ -54,7 +54,7 @@ public class DateTimeInput extends JPanel {
 		timePanel.add(hoursTextField);
 
 		hoursTextField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) { // TODO: The "ActionPerformed" is not working
 				if(allTimeFieldsModified()) {
 					fireTimeEvent();
 					
@@ -75,7 +75,7 @@ public class DateTimeInput extends JPanel {
 		timePanel.add(minutesTextField);
 
 		minutesTextField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) { // TODO: The "ActionPerformed" is not working
 				if(allTimeFieldsModified()) {
 					fireTimeEvent();
 					
@@ -194,7 +194,7 @@ public class DateTimeInput extends JPanel {
 		}
 	}
 	
-	interface DateTimeModifiedListener extends EventListener {
+	public interface DateTimeModifiedListener extends EventListener {
 		public void timeModified();
 		public void dateTimeModified();
 	}
