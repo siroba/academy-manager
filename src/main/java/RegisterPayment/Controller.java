@@ -99,12 +99,14 @@ public class Controller implements PL53.util.Controller {
 					if (option == 0) {
 						float toReturn = totalPayed - selectedRow.invoice.getAmount();
 						Date payDate = view.getDateTextPane().getDate();
-						Invoice invoiceReturn = new Invoice(toReturn, payDate, selectedRow.invoice.getReceiver(),
+						
+						// From now on, the same invoice is used to return the money and do the movements
+						/*Invoice invoiceReturn = new Invoice(toReturn, payDate, selectedRow.invoice.getReceiver(),
 								selectedRow.invoice.getSender(), selectedRow.invoice.getAddress(),
 								selectedRow.invoice.getFiscalNumber(), selectedRow.invoice.getID_fa(),
-								selectedRow.invoice.getID_professional());
+								selectedRow.invoice.getID_professional());*/
 						try {
-							model.createPaymentRefund(invoiceReturn, toReturn, payDate, view.isCash(), true);
+							model.createPaymentRefund(selectedRow.invoice.getID(), -toReturn, payDate, view.isCash(), true);
 
 						} catch (SQLException | ParseException e1) {
 
