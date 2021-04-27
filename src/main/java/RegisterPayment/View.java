@@ -66,10 +66,12 @@ public class View extends JFrame {
 	private JCheckBox isCash;
 	private JTable movementsTable;
 	private JScrollPane scrollPane_1;
+	private JTextPane descriptionPane;
+	private JPanel descriptionPanel;
 	
 	public View() {
 		
-		setBounds(100, 100, 1511, 581);
+		setBounds(100, 100, 1428, 581);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -144,11 +146,29 @@ public class View extends JFrame {
 		contentPane.add(lblNewLabel_5);
 		
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(845, 93, 642, 223);
+		scrollPane_1.setBounds(845, 93, 370, 223);
 		contentPane.add(scrollPane_1);
 		
 		movementsTable = new JTable();
 		scrollPane_1.setViewportView(movementsTable);
+		
+		descriptionPanel = new JPanel();
+		descriptionPanel.setVisible(false);
+		descriptionPanel.setEnabled(false);
+		descriptionPanel.setBounds(1238, 93, 169, 118);
+		contentPane.add(descriptionPanel);
+		descriptionPanel.setLayout(null);
+		
+		JLabel lblNewLabel_6 = new JLabel("Description");
+		lblNewLabel_6.setBounds(0, 0, 99, 14);
+		descriptionPanel.add(lblNewLabel_6);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(0, 21, 169, 97);
+		descriptionPanel.add(scrollPane_2);
+		
+		descriptionPane = new JTextPane();
+		scrollPane_2.setViewportView(descriptionPane);
 	}
 
 	public Window getFrame() {
@@ -206,5 +226,15 @@ public class View extends JFrame {
 
 	public float getAmountPayed() {
 		return amountPaidTextField.getValue();
+	}
+
+	public void setDescription(String str) {
+		boolean blank = str == null || str.isBlank();
+		
+		this.descriptionPanel.setVisible(!blank);
+		this.descriptionPanel.setEnabled(!blank);
+		
+		if(!blank)
+			this.descriptionPane.setText(str);
 	}
 }

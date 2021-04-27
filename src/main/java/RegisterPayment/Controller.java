@@ -63,7 +63,6 @@ public class Controller implements PL53.util.Controller {
 				selectedRow = model.getDataNoCoiipa(view.getSelectedInvoice());
 
 				showPayments();
-
 			}
 
 		});
@@ -190,6 +189,13 @@ public class Controller implements PL53.util.Controller {
 				new String[] { "sender", "receiver", "date", "amount" });
 		view.getMovementsTable().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getMovementsTable());
+
+		view.setDescription(selectedRow.invoice.getDescription());
+		/*
+		 * float amount = 0; for (AuxPayment payment : paymentList) { amount +=
+		 * payment.getAmount(); }
+		 */
+		// view.getLabelSummary().setText("" + amount);
 
 	}
 
