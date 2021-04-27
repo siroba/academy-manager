@@ -45,7 +45,7 @@ public class Controller implements PL53.util.Controller {
 		view.getBtnCancel().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!view.filledCoiipasInfo()) {
+				if(!view.filledCoiipasInfo() && !view.getIsCash()) {
 					view.setCoiipaInfoRed();
 					JOptionPane.showMessageDialog(null,
 						    "Please, fill the information of COIIPA.",
@@ -141,7 +141,8 @@ public class Controller implements PL53.util.Controller {
 								view.getAddress(), 
 								view.getFiscalNumber(),
 								cancelledSelected.getID(), 
-								d[i].professional.getID());
+								d[i].professional.getID(),
+								""); // TODO: Description
 						
 						model.payRefund(in, view.getIsCash());
 					}

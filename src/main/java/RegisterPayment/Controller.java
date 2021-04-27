@@ -106,7 +106,8 @@ public class Controller implements PL53.util.Controller {
 						Invoice invoiceReturn = new Invoice(toReturn, payDate, selectedRow.invoice.getReceiver(),
 								selectedRow.invoice.getSender(), selectedRow.invoice.getAddress(),
 								selectedRow.invoice.getFiscalNumber(), selectedRow.invoice.getID_fa(),
-								selectedRow.invoice.getID_professional());
+								selectedRow.invoice.getID_professional(), 
+								""); // TODO: Description
 						try {
 							model.createPaymentRefund(invoiceReturn, toReturn, payDate, view.isCash(), true);
 

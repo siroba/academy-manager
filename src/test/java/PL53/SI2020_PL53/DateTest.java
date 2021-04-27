@@ -103,7 +103,7 @@ public class DateTest {
 		Date insert = Date.random();
 		System.out.println(insert);
 		
-		Payment p = new Payment(1000, 2000, 100, insert, true, false);
+		Payment p = new Payment(1000, 2000, 100, insert, true, false, "");
 		try {
 			p.insert(db);
 			
