@@ -83,9 +83,9 @@ public class Teacher {
 			list.add(t);
 		}
 
-		conn.close();
 		st.close();
 		rs.close();
+		conn.close();
 		return list;
 	}
 
