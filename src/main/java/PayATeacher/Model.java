@@ -7,7 +7,7 @@ import java.util.List;
 
 
 import Entities.FormativeAction;
-import Entities.InvoiceTeacher;
+import Entities.MovementTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
 import Entities.TeacherTeaches;
@@ -80,7 +80,7 @@ public class Model {
 		return data2;
 	}
 
-	public void insertInvoice ( InvoiceTeacher invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
+	public void insertInvoice ( MovementTeacher invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
 		invoice.insert(db);
 		paymentTeacher.setInvoiceID(invoice.getID());
 		paymentTeacher.insert(db);

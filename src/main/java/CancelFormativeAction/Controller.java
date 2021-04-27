@@ -13,7 +13,7 @@ import javax.swing.table.TableModel;
 
 import BaseProject.SwingUtil;
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.Movement;
 import PL53.swing.CheckboxTableModel;
 import RegisterCancellations.Data;
 
@@ -133,7 +133,7 @@ public class Controller implements PL53.util.Controller {
 						if(i>=d.length)
 							continue;
 						
-						Invoice in = new Invoice(
+						Movement in = new Movement(
 								Float.parseFloat((String) view.getTableRefunds().getValueAt(i, 2)),
 								view.getDateIn(),
 								"COIIPA", 

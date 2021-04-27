@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
-import Entities.InvoiceTeacher;
+import Entities.MovementTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
 import Entities.TeacherTeaches;
@@ -119,7 +119,7 @@ public class Controller implements PL53.util.Controller {
 
 						// TODO: The amount of the invoice and the payment can differ
 
-						InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice, amount, ID_fa, dateInvoice, sender,
+						MovementTeacher invoice = new MovementTeacher(IDInvoice, amount, ID_fa, dateInvoice, sender,
 								receiver, fiscalNumber, address, ID_teacher, ""); // TODO: Description
 
 						PaymentTeacher paymentTeacher = new PaymentTeacher(IDInvoice, amount, dateTransfer, confirmed, ""); // TODO: Description

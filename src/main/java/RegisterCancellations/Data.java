@@ -2,7 +2,7 @@ package RegisterCancellations;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.Movement;
 import Entities.Payment;
 import Entities.Professional;
 
@@ -11,5 +11,5 @@ public class Data {
 	public Enrollment enrollment;
 	public Professional professional;
 	public Payment payment;
-	public Invoice invoice;
+	public Movement invoice;
 }

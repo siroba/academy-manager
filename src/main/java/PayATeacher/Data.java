@@ -3,7 +3,7 @@ package PayATeacher;
 
 
 import Entities.FormativeAction;
-import Entities.InvoiceTeacher;
+import Entities.MovementTeacher;
 
 import Entities.PaymentTeacher;
 import Entities.Teacher;
@@ -12,7 +12,7 @@ import Entities.Teacher;
 
 public class Data {
 	public FormativeAction formativeAction;
-	public InvoiceTeacher invoice;
+	public MovementTeacher invoice;
 	public PaymentTeacher paymentTeacher;
 	public Teacher teacher;
 	

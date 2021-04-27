@@ -14,7 +14,7 @@ import Utils.UnexpectedException;
 import Entities.Enrollment;
 import Entities.Fee;
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.Movement;
 import Entities.Payment;
 //import Entities.FormativeAction;
 import Entities.Professional;
@@ -72,10 +72,10 @@ public class Model {
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
 
-		List<Invoice> invoices = Invoice.get(sql, db);
-		for (Invoice in : invoices) {
-			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" + in.getID_fa() + " AND ID_professional="
-					+ in.getID_professional();
+
+		List<Movement> invoices = Movement.get(sql, db);
+		for (Movement in : invoices) {
+			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" + in.getID_fa() + " AND ID_professional=" + in.getID_professional();
 			String queryFee = "SELECT * FROM Fee WHERE ID_fa=" + in.getID_fa() + " AND category='";
 			Data d = new Data();
 			d.invoice = in;
@@ -100,34 +100,34 @@ public class Model {
 	 * void createPayment(int id_invoice, float amount, Date datePay, boolean
 	 * isCash, boolean confirmed) throws SQLException, ParseException { Payment p =
 	 * new Payment(id_invoice, amount, datePay, confirmed, isCash);
-	 * 
+	 *
 	 * p.insert(db); }
 	 */
 
-	public List<Invoice> getPayments(Data d) throws SQLException {
+	public List<Movement> getPayments(Data d) throws SQLException {
 
 		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + d.formativeAction.getID() + " AND ID_professional="
 				+ d.professional.getID();
 
-		return Invoice.get(queryInvoice, db);
+		return Movement.get(queryInvoice, db);
 	}
 
 	public float getAmountPayed(Data selectedRow) {
 		/*
 		 * String sqlRefund =
 		 * "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
-		 * 
+		 *
 		 * + "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " +
 		 * " GROUP BY Payment.ID_invoice " +
 		 * "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender='COIIPA'), 0.0);"
 		 * ;
-		 * 
+		 *
 		 * String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment " +
 		 * "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " +
 		 * " GROUP BY Payment.ID_invoice " +
 		 * "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender<>'COIIPA'), 0.0);"
 		 * ;
-		 * 
+		 *
 		 * float normalPayments = (float) ((double) (db .executeQueryArray(sql,
 		 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional())
 		 * .get(0)[0])); float refundPayments = -(float) ((double) (db
@@ -145,9 +145,9 @@ public class Model {
 		return sumPayments;
 	}
 
-	public void createPayment(Invoice invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed,
-			float totalAmountPayed) throws SQLException, ParseException {
-		if (totalAmountPayed == invoiceReturn.getAmount()) {
+	public void createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
+			throws SQLException, ParseException {
+		if(totalAmountPayed == invoiceReturn.getAmount()) {
 			String sql = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?";
 			db.executeUpdateQuery(sql, invoiceReturn.getID_fa(), invoiceReturn.getID_professional());
 		}
@@ -157,11 +157,7 @@ public class Model {
 		p.insert(db);
 	}
 
-	public void createPaymentRefund(int invoiceID, float toReturn, Date payDate, boolean cash, boolean confirmed) // TODO:
-																													// OH
-																													// GOD
-																													// PLEASE
-																													// NO
+	public void createPaymentRefund(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed) // TODO: OH GOD PLEASE NO
 			throws SQLException, ParseException {
 
 		Payment p = new Payment(invoiceID, toReturn, payDate, confirmed, cash, ""); // TODO: Add description
@@ -189,19 +185,19 @@ public class Model {
 			while (rs.next()) {
 				String sender = rs.getString("sender");
 				String receiver = rs.getString("receiver");
-				float amount = rs.getFloat("amount"); 
-				
+				float amount = rs.getFloat("amount");
+
 				// If the amount is negative, the payment was from COIIPA
 				if(amount < 0) {
 					String tmp = sender;
 					sender = receiver;
 					receiver = tmp;
-					
+
 				// Otherwise, if the sender is COIIPA, just set the amount to be negative
 				}else if(sender.equals("COIIPA")){
 					amount *= -1;
 				}
-				
+
 				listPayments.add(new AuxPayment(Date.parse(rs.getTimestamp("datePay")),
 						amount, sender, receiver));
 			}

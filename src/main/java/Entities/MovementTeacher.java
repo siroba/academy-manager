@@ -12,7 +12,7 @@ import java.util.List;
 import PL53.util.Date;
 import Utils.Database;
 
-public class InvoiceTeacher {
+public class MovementTeacher {
 	private int ID_fa, ID_teacher;
 	private Date dateIn;
 	private String sender, receiver, fiscalNumber, address, ID = "", description="";
@@ -25,7 +25,7 @@ public class InvoiceTeacher {
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(String ID_invoice, float amount, int ID_fa, Date dateIn, String sender, String receiver,
+	public MovementTeacher(String ID_invoice, float amount, int ID_fa, Date dateIn, String sender, String receiver,
 			String fiscalNumber, String address, int ID_teacher, String description) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
@@ -46,7 +46,7 @@ public class InvoiceTeacher {
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(int ID_fa, float amount, Date dateIn, String sender, String receiver, String fiscalNumber,
+	public MovementTeacher(int ID_fa, float amount, Date dateIn, String sender, String receiver, String fiscalNumber,
 			String address, int ID_teacher, String description) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
@@ -87,14 +87,14 @@ public class InvoiceTeacher {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<InvoiceTeacher> get(String query, Database db) throws SQLException {
+	public static List<MovementTeacher> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 
-		List<InvoiceTeacher> invoices = new ArrayList<>();
+		List<MovementTeacher> invoices = new ArrayList<>();
 
 		while (rs.next()) {
 			Date dateIn;
@@ -104,7 +104,7 @@ public class InvoiceTeacher {
 				dateIn = Date.fromMillis(rs.getLong("dateIn"));
 			}
 
-			InvoiceTeacher e = new InvoiceTeacher(rs.getString("ID_invoice"), rs.getFloat("amount"), rs.getInt("ID_fa"),
+			MovementTeacher e = new MovementTeacher(rs.getString("ID_invoice"), rs.getFloat("amount"), rs.getInt("ID_fa"),
 					dateIn, rs.getString("sender"), rs.getString("receiver"), rs.getString("fiscalNumber"),
 					rs.getString("address"), rs.getInt("ID_teacher"), rs.getString("description"));
 
@@ -136,7 +136,7 @@ public class InvoiceTeacher {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static InvoiceTeacher getOne(String query, Database db) throws SQLException {
+	public static MovementTeacher getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -151,7 +151,7 @@ public class InvoiceTeacher {
 			dateIn = Date.fromMillis(rs.getLong("dateIn"));
 		}
 
-		InvoiceTeacher e = new InvoiceTeacher(rs.getString("ID_invoice"), rs.getFloat("amount"), rs.getInt("ID_fa"),
+		MovementTeacher e = new MovementTeacher(rs.getString("ID_invoice"), rs.getFloat("amount"), rs.getInt("ID_fa"),
 				dateIn, rs.getString("sender"), rs.getString("receiver"), rs.getString("fiscalNumber"),
 				rs.getString("address"), rs.getInt("ID_teacher"), rs.getString("description"));
 
