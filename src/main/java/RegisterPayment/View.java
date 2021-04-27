@@ -168,6 +168,7 @@ public class View extends JFrame {
 		descriptionPanel.add(scrollPane_2);
 		
 		descriptionPane = new JTextPane();
+		descriptionPane.setEditable(false);
 		scrollPane_2.setViewportView(descriptionPane);
 	}
 
