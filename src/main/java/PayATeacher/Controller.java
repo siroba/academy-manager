@@ -120,9 +120,9 @@ public class Controller implements PL53.util.Controller {
 						// TODO: The amount of the invoice and the payment can differ
 
 						InvoiceTeacher invoice = new InvoiceTeacher(IDInvoice, amount, ID_fa, dateInvoice, sender,
-								name, fiscalNumber, address, ID_teacher);
+								receiver, fiscalNumber, address, ID_teacher, ""); // TODO: Description
 
-						PaymentTeacher paymentTeacher = new PaymentTeacher(IDInvoice, amount, dateTransfer, confirmed);
+						PaymentTeacher paymentTeacher = new PaymentTeacher(IDInvoice, amount, dateTransfer, confirmed, ""); // TODO: Description
 
 						model.insertInvoice(invoice, paymentTeacher);
 						if (paymentTeacher != null) {
