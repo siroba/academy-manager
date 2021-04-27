@@ -155,7 +155,7 @@ public class View extends JFrame {
 		descriptionPanel = new JPanel();
 		descriptionPanel.setVisible(false);
 		descriptionPanel.setEnabled(false);
-		descriptionPanel.setBounds(1238, 93, 169, 118);
+		descriptionPanel.setBounds(1225, 92, 169, 118);
 		contentPane.add(descriptionPanel);
 		descriptionPanel.setLayout(null);
 		
