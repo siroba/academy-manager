@@ -66,7 +66,6 @@ public class Controller implements PL53.util.Controller {
 
 			}
 
-
 		});
 
 		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
@@ -80,7 +79,6 @@ public class Controller implements PL53.util.Controller {
 				float alreadyPayed = model.getAmountPayed(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
 
-
 				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
 
 				if (calcTime > 2 || calcTime < -1) {
@@ -89,16 +87,14 @@ public class Controller implements PL53.util.Controller {
 					return;
 				}
 
-
 				if (totalPayed > selectedRow.invoice.getAmount()) {
 					aux = false;
-					int option = JOptionPane.showConfirmDialog(null,
-							"The sum of payments (" + totalPayed
+					int option = JOptionPane.showConfirmDialog(null, "The sum of payments (" + totalPayed
 
-									+ ") is hihger than the fee, Do you want to return the diferrence ("
+							+ ") is hihger than the fee, Do you want to return the diferrence ("
 
-									+ (totalPayed - selectedRow.invoice.getAmount()) + ")?",
-							"warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+							+ (totalPayed - selectedRow.invoice.getAmount()) + ")?", "warning",
+							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					if (option == 0) {
 						float toReturn = totalPayed - selectedRow.invoice.getAmount();
@@ -112,11 +108,19 @@ public class Controller implements PL53.util.Controller {
 
 						} catch (SQLException | ParseException e1) {
 
-
 							e1.printStackTrace();
 						}
 
 					} else if (option == 1) {
+						float amount = view.getAmountPaidTextField();
+						Date payDate = view.getDateTextPane().getDate();
+						try {
+							model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+						} catch (SQLException | ParseException e1) {
+							e1.printStackTrace();
+						}
+						JOptionPane.showMessageDialog(null, "The payment has been registered");
+						view.setAmountPaidTextField(null);
 						return;
 					}
 
@@ -125,13 +129,13 @@ public class Controller implements PL53.util.Controller {
 					aux = false;
 				}
 
-
 				float amount = view.getAmountPaidTextField();
 				Date payDate = view.getDateTextPane().getDate();
 
 				try {
 					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
 					JOptionPane.showMessageDialog(null, "The payment has been registered");
+					view.setAmountPaidTextField(null);
 
 					model.initModel();
 					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
@@ -139,7 +143,6 @@ public class Controller implements PL53.util.Controller {
 					e1.printStackTrace();
 				}
 			}
-
 
 		});
 
@@ -154,10 +157,8 @@ public class Controller implements PL53.util.Controller {
 
 	public TableModel getTableModel(List<Data> list) {
 
-
 		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
 				"Date of the registration" };
-
 
 		String body[][] = new String[list.size()][header.length];
 		for (int i = 0; i < list.size(); i++) {
@@ -180,20 +181,13 @@ public class Controller implements PL53.util.Controller {
 		return tm;
 	}
 
-
 	public void showPayments() {
-		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(), model.getDataNoCoiipa(view.getTable().getSelectedRow()));
+		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(),
+				model.getDataNoCoiipa(view.getTable().getSelectedRow()));
 		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList,
 				new String[] { "sender", "receiver", "date", "amount" });
 		view.getMovementsTable().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getMovementsTable());
-
-		/*
-		 * float amount = 0; for (AuxPayment payment : paymentList) { amount +=
-		 * payment.getAmount(); }
-		 */
-		// view.getLabelSummary().setText("" + amount);
-
 
 	}
 
