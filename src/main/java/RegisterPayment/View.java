@@ -124,7 +124,7 @@ public class View extends JFrame {
 		contentPane.add(confirmButton);
 		
 		amountPaidTextField = new JDecimalField(9);
-		amountPaidTextField.setBound(0.1f, Float.MAX_VALUE);
+		amountPaidTextField.setBound(0.0f, Float.MAX_VALUE);
 		amountPaidTextField.setBounds(147, 353, 99, 19);
 
 		contentPane.add(amountPaidTextField);
@@ -193,8 +193,8 @@ public class View extends JFrame {
 	}
 
 	
-	public void setAmountPaidTextField(String string) {
-		this.amountPaidTextField.setText(string);
+	public void resetAmountPaid() {
+		this.amountPaidTextField.setValue(0);
 	}
 	
 	public void setDateTextPane(DateTime datetime) {

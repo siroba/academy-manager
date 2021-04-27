@@ -77,6 +77,11 @@ public class Controller implements PL53.util.Controller {
 				}
 				float alreadyPayed = model.getAmountPayed(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
+				
+				if(view.getAmountPayed() <= 0) {
+					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
+					return;
+				}
 
 				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
 
@@ -92,7 +97,7 @@ public class Controller implements PL53.util.Controller {
 
 							+ ") is hihger than the fee, Do you want to return the diferrence ("
 
-							+ (totalPayed - selectedRow.invoice.getAmount()) + ")?", "warning",
+							+  String.format("%.2f",(totalPayed - selectedRow.invoice.getAmount())) + ")?", "warning",
 							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					if (option == 0) {
@@ -121,7 +126,7 @@ public class Controller implements PL53.util.Controller {
 							e1.printStackTrace();
 						}
 						JOptionPane.showMessageDialog(null, "The payment has been registered");
-						view.setAmountPaidTextField(null);
+						view.resetAmountPaid();
 						return;
 					}
 
@@ -136,7 +141,7 @@ public class Controller implements PL53.util.Controller {
 				try {
 					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
 					JOptionPane.showMessageDialog(null, "The payment has been registered");
-					view.setAmountPaidTextField(null);
+					view.resetAmountPaid();
 
 					model.initModel();
 					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
