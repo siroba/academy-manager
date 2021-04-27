@@ -157,7 +157,7 @@ public class Model {
 		p.insert(db);
 	}
 
-	public void createPaymentRefund(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed) // TODO: OH GOD PLEASE NO
+	public void createPaymentRefund(int invoiceID, float toReturn, Date payDate, boolean cash, boolean confirmed) 
 			throws SQLException, ParseException {
 
 		Payment p = new Payment(invoiceID, toReturn, payDate, confirmed, cash, ""); // TODO: Add description
@@ -237,5 +237,11 @@ public class Model {
 
 		return null;
 	}
+	
+	public int getFreePlaces(int ID_fa) throws SQLException, ParseException {
+        String sql ="SELECT FormativeAction.totalPlaces- COUNT(Enrollment.ID_fa) FROM Enrollment INNER JOIN FormativeAction ON FormativeAction.ID_fa = Enrollment.ID_fa WHERE Enrollment.ID_fa=? AND Enrollment.status<>'CANCELLED';";
+
+        return (int)db.executeQueryArray(sql, ID_fa).get(0)[0];
+    }
 
 }

@@ -35,6 +35,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
+import javax.swing.border.LineBorder;
+import javax.swing.JTextField;
 
 public class View extends JFrame {
 
@@ -63,10 +65,11 @@ public class View extends JFrame {
 	private JScrollPane scrollPane_1;
 	private JTextPane descriptionPane;
 	private JPanel descriptionPanel;
+	private JTextField textField;
 
 	public View() {
 
-		setBounds(100, 100, 1428, 581);
+		setBounds(100, 100, 1428, 602);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -160,6 +163,41 @@ public class View extends JFrame {
 		descriptionPane = new JTextPane();
 		descriptionPane.setEditable(false);
 		scrollPane_2.setViewportView(descriptionPane);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel.setBounds(675, 359, 719, 179);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel_7 = new JLabel("Refund money to the professionals");
+		lblNewLabel_7.setBounds(153, 10, 216, 22);
+		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 10));
+		panel.add(lblNewLabel_7);
+		
+		DateInput dateTextPane_1 = new DateInput();
+		dateTextPane_1.setBounds(48, 75, 212, 67);
+		panel.add(dateTextPane_1);
+		
+		JLabel lblNewLabel_8 = new JLabel("Date");
+		lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_8.setBounds(48, 49, 45, 13);
+		panel.add(lblNewLabel_8);
+		
+		JLabel lblNewLabel_9 = new JLabel("Amount");
+		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_9.setBounds(295, 49, 74, 13);
+		panel.add(lblNewLabel_9);
+		
+		textField = new JTextField();
+		textField.setBounds(295, 80, 136, 19);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnNewButton = new JButton("Add movement");
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnNewButton.setBounds(499, 75, 136, 44);
+		panel.add(btnNewButton);
 	}
 
 	public Window getFrame() {
@@ -177,6 +215,7 @@ public class View extends JFrame {
 	}
 
 	public float getAmountPaidTextField() {
+		
 		return this.amountPaidTextField.getValue();
 	}
 
@@ -225,4 +264,5 @@ public class View extends JFrame {
 		if (!blank)
 			this.descriptionPane.setText(str);
 	}
+	
 }

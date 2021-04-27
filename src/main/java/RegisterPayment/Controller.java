@@ -1,5 +1,6 @@
 package RegisterPayment;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -75,20 +76,47 @@ public class Controller implements PL53.util.Controller {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
 					return;
 				}
+				if (view.isCash() && view.getAmountPaidTextField() > 1000) {
+					JOptionPane.showMessageDialog(null, "With cash the payments has to be lower than 1000€");
+					return;
+				}
+
 				float alreadyPayed = model.getAmountPayed(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
 
-				if(view.getAmountPayed() <= 0) {
-					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "â‚¬");
+				if (view.getAmountPayed() <= 0) {
+					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
 					return;
 				}
 
 				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
 
 				if (calcTime > 2 || calcTime < -1) {
-					JOptionPane.showMessageDialog(null,
-							"The payment must be done with a margin of 48 hours after the enrollmet");
-					return;
+					DateTime now = DateTime.now();
+					long daysBetweenNowAction = DateTime.daysSince(now, view.getDateTextPane().getDate());
+
+					if (daysBetweenNowAction < 0) {
+
+						JOptionPane.showMessageDialog(null,
+								"Payments cannot be made in the future( the date must be on the current date or in the past).",
+								"date not valid ", JOptionPane.ERROR_MESSAGE);
+						return;
+					} else {
+						try {
+							if (model.getFreePlaces(selectedRow.formativeAction.getID()) > 0) {
+								JOptionPane.showMessageDialog(null,
+										"The payment has been made after the extipulated period, any way as there are still free places the enrollment is confirmed");
+
+							} else {
+								JOptionPane.showMessageDialog(null,
+										"The payment must be done with a margin of 48 hours after the enrollmet");
+								return;
+							}
+						} catch (HeadlessException | SQLException | ParseException e1) {
+							e1.printStackTrace();
+						}
+						
+					}
 				}
 
 				if (totalPayed > selectedRow.invoice.getAmount()) {
@@ -97,18 +125,21 @@ public class Controller implements PL53.util.Controller {
 
 							+ ") is hihger than the fee, Do you want to return the diferrence ("
 
-							+  String.format("%.2f",(totalPayed - selectedRow.invoice.getAmount())) + ")?", "warning",
+							+ String.format("%.2f", (totalPayed - selectedRow.invoice.getAmount())) + ")?", "warning",
 							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					if (option == 0) {
 						float toReturn = totalPayed - selectedRow.invoice.getAmount();
 						Date payDate = view.getDateTextPane().getDate();
-						Movement invoiceReturn = new Movement(toReturn, payDate, selectedRow.invoice.getReceiver(),
-								selectedRow.invoice.getSender(), selectedRow.invoice.getAddress(),
-								selectedRow.invoice.getFiscalNumber(), selectedRow.invoice.getID_fa(),
-								selectedRow.invoice.getID_professional());*/
+						/*
+						 * Movement invoiceReturn = new Movement(toReturn, payDate,
+						 * selectedRow.invoice.getReceiver(), selectedRow.invoice.getSender(),
+						 * selectedRow.invoice.getAddress(), selectedRow.invoice.getFiscalNumber(),
+						 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional());
+						 */
 						try {
-							model.createPaymentRefund(selectedRow.invoice.getID(), -toReturn, payDate, view.isCash(), true);
+							model.createPaymentRefund(selectedRow.invoice.getID(), -toReturn, payDate, view.isCash(),
+									true);
 
 						} catch (SQLException | ParseException e1) {
 
