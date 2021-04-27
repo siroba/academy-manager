@@ -47,7 +47,7 @@ public class Model {
         p.insert(db);
         en.setID_professional(p.getID());
         en.insert(db);
-        Invoice i = new Invoice(fa.getFee(group), en.getTimeEn(), p.getName(), "COIIPA" , address, fiscalNumber, en.getID_fa(), p.getID());
+        Invoice i = new Invoice(fa.getFee(group), en.getTimeEn(), p.getName(), "COIIPA" , address, fiscalNumber, en.getID_fa(), p.getID(), ""); // TODO: Description
         i.insert(db);
         
         

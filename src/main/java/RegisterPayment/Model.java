@@ -148,7 +148,7 @@ public class Model {
 		}
 		//invoiceReturn.insert(db);
 		int id_invoice = invoiceReturn.getID();
-		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash);
+		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
 		p.insert(db);
 	}
 	
@@ -156,7 +156,7 @@ public class Model {
 			throws SQLException, ParseException {
 		invoiceReturn.insert(db);
 		int id_invoice = invoiceReturn.getID();
-		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash);
+		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
 		p.insert(db);
 	}
 
