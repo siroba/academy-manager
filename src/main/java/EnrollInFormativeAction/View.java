@@ -79,13 +79,13 @@ public class View extends JFrame {
 		contentPane.add(registrationPanel);
 		registrationPanel.setVisible(false);
 		registrationPanel.setLayout(null);
-		
-		// Information 
+
+		// Information
 		JLabel lblFillYourInformation = new JLabel("Fill your information:");
 		lblFillYourInformation.setBounds(12, 18, 238, 15);
 		registrationPanel.add(lblFillYourInformation);
 
-		// Name 
+		// Name
 		JLabel lblName = new JLabel("Name:");
 		lblName.setBounds(12, 51, 70, 15);
 		registrationPanel.add(lblName);
@@ -95,7 +95,7 @@ public class View extends JFrame {
 		registrationPanel.add(profName);
 		profName.setColumns(10);
 
-		// Surename 
+		// Surename
 		JLabel lblSurname = new JLabel("Surname:");
 		lblSurname.setBounds(12, 84, 70, 15);
 		registrationPanel.add(lblSurname);
@@ -105,7 +105,7 @@ public class View extends JFrame {
 		registrationPanel.add(textSurname);
 		textSurname.setColumns(10);
 
-		// Phone 
+		// Phone
 		JLabel lblPhone = new JLabel("Phone:");
 		lblPhone.setBounds(12, 117, 70, 15);
 		registrationPanel.add(lblPhone);
@@ -115,17 +115,17 @@ public class View extends JFrame {
 		registrationPanel.add(textPhone);
 		textPhone.setColumns(10);
 
-		// Email 
+		// Email
 		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setBounds(12, 150, 70, 15);
 		registrationPanel.add(lblEmail);
 
 		textEmail = new JTextField();
-		textEmail.setBounds(67,148, 148, 19);
+		textEmail.setBounds(67, 148, 148, 19);
 		registrationPanel.add(textEmail);
 		textEmail.setColumns(10);
 
-		// Group 
+		// Group
 		JLabel lblGroup = new JLabel("Group:");
 		lblGroup.setBounds(12, 183, 70, 15);
 		registrationPanel.add(lblGroup);
@@ -133,49 +133,49 @@ public class View extends JFrame {
 		cbGroup = new JComboBox<String>();
 		cbGroup.setBounds(67, 181, 148, 19);
 		registrationPanel.add(cbGroup);
-		
+
 		invoiceInfoPanel = new JPanel();
 		invoiceInfoPanel.setVisible(false);
 		invoiceInfoPanel.setBounds(12, 237, 277, 54);
 		registrationPanel.add(invoiceInfoPanel);
 		invoiceInfoPanel.setLayout(null);
-		
+
 		// Address
 		JLabel lblNewLabel = new JLabel("Address: ");
 		lblNewLabel.setBounds(0, 3, 72, 13);
 		invoiceInfoPanel.add(lblNewLabel);
-		
+
 		Address = new JTextField();
 		Address.setBounds(70, 0, 197, 19);
 		invoiceInfoPanel.add(Address);
 		Address.setColumns(10);
-		
-		// Fiscal Number 
+
+		// Fiscal Number
 		JLabel lblNewLabel_1 = new JLabel("Fiscal number: ");
 		lblNewLabel_1.setBounds(2, 34, 111, 13);
 		invoiceInfoPanel.add(lblNewLabel_1);
-		
+
 		FiscalNumber = new JTextField();
 		FiscalNumber.setBounds(99, 31, 168, 19);
 		invoiceInfoPanel.add(FiscalNumber);
-		FiscalNumber.setColumns(10);		
+		FiscalNumber.setColumns(10);
 
-		// Fee 
+		// Fee
 		lblTheFeeWill = new JLabel("The Fee will be: ");
 		lblTheFeeWill.setBounds(11, 302, 135, 15);
 		registrationPanel.add(lblTheFeeWill);
-		
+
 		txtFee = new JTextField();
 		txtFee.setEditable(false);
 		txtFee.setBounds(129, 300, 121, 19);
 		registrationPanel.add(txtFee);
 		txtFee.setColumns(10);
-		
-		// Confirm and enroll button 
+
+		// Confirm and enroll button
 		btnConfirmAndEnroll = new JButton("Confirm and enroll");
 		btnConfirmAndEnroll.setBounds(31, 330, 235, 25);
 		registrationPanel.add(btnConfirmAndEnroll);
-		
+
 		chckbxNewCheckBox = new JCheckBox("Do you want an invoice?");
 		chckbxNewCheckBox.setBounds(12, 205, 169, 23);
 		registrationPanel.add(chckbxNewCheckBox);
@@ -210,7 +210,7 @@ public class View extends JFrame {
 	public String getProfName() {
 		return profName.getText();
 	}
-	
+
 	public void setProfName(String text) {
 		profName.setText(text);
 	}
@@ -218,7 +218,7 @@ public class View extends JFrame {
 	public String getTextSurname() {
 		return textSurname.getText();
 	}
-	
+
 	public void setTextSurname(String text) {
 		textSurname.setText(text);
 	}
@@ -226,7 +226,7 @@ public class View extends JFrame {
 	public String getTextPhone() {
 		return textPhone.getText();
 	}
-	
+
 	public void setTextPhone(String text) {
 		textPhone.setText(text);
 	}
@@ -234,22 +234,23 @@ public class View extends JFrame {
 	public String getTextEmail() {
 		return textEmail.getText();
 	}
-	
+
 	public void setTextEmail(String text) {
 		textEmail.setText(text);
-	} 
-	
+	}
+
 	public JTextField getTxtFee() {
 		return txtFee;
 	}
-	
+
 	public void setTextFee(String text) {
 		txtFee.setText(text);
-	} 
-	
+	}
+
 	public JComboBox<String> getCBGroup() {
 		return this.cbGroup;
 	}
+
 	public String getGroup() {
 		return String.valueOf(cbGroup.getSelectedItem());
 	}
@@ -257,21 +258,27 @@ public class View extends JFrame {
 	public void setTxtFee(String string) {
 		txtFee.setText(string);
 	}
+
 	public void addCbGroup(String group) {
 		cbGroup.addItem(group);
 	}
+
 	public void clearCbGroup() {
 		cbGroup.removeAllItems();
 	}
+
 	public String getAddress() {
 		return Address.getText();
 	}
+
 	public String getFiscalNumber() {
 		return FiscalNumber.getText();
 	}
+
 	protected JPanel getInvoiceInfoPanel() {
 		return invoiceInfoPanel;
 	}
+
 	public boolean getWantInvoice() {
 		return chckbxNewCheckBox.isSelected();
 	}
@@ -283,5 +290,5 @@ public class View extends JFrame {
 	public void enableInvoice(boolean b) {
 		invoiceInfoPanel.setVisible(b);
 	}
-	
+
 }
