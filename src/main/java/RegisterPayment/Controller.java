@@ -125,8 +125,7 @@ public class Controller implements PL53.util.Controller {
 						} catch (SQLException | ParseException e1) {
 							e1.printStackTrace();
 						}
-						JOptionPane.showMessageDialog(null, "The payment has been registered");
-						view.resetAmountPaid();
+
 						return;
 					}
 
