@@ -19,7 +19,7 @@ import Utils.UnexpectedException;
 import Entities.Enrollment;
 import Entities.Fee;
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.Movement;
 import Entities.Payment;
 import Entities.PaymentTeacher;
 //import Entities.FormativeAction;
@@ -80,8 +80,8 @@ public class Model {
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
 
 
-		List<Invoice> invoices = Invoice.get(sql, db);
-		for (Invoice in : invoices) {
+		List<Movement> invoices = Movement.get(sql, db);
+		for (Movement in : invoices) {
 			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" + in.getID_fa() + " AND ID_professional=" + in.getID_professional();
 			String queryFee = "SELECT * FROM Fee WHERE ID_fa=" + in.getID_fa() + " AND category='";
 			Data d = new Data();
@@ -112,12 +112,12 @@ public class Model {
 		p.insert(db);
 	}*/
 
-	public List<Invoice> getPayments(Data d) throws SQLException {
+	public List<Movement> getPayments(Data d) throws SQLException {
 
 		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + d.formativeAction.getID() + " AND ID_professional=" + d.professional.getID();
 
 
-		return Invoice.get(queryInvoice, db);
+		return Movement.get(queryInvoice, db);
 	}
 
 	public float getAmountPayed(Data selectedRow) {
@@ -140,7 +140,7 @@ public class Model {
 		return normalPayments + refundPayments;
 	}
 
-	public void createPayment(Invoice invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
+	public void createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
 			throws SQLException, ParseException {
 		if(totalAmountPayed == invoiceReturn.getAmount()) {
 			String sql = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?";
@@ -152,7 +152,7 @@ public class Model {
 		p.insert(db);
 	}
 	
-	public void createPaymentRefund(Invoice invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed) // TODO: OH GOD PLEASE NO
+	public void createPaymentRefund(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed) // TODO: OH GOD PLEASE NO
 			throws SQLException, ParseException {
 		invoiceReturn.insert(db);
 		int id_invoice = invoiceReturn.getID();

@@ -12,7 +12,7 @@ import java.util.List;
 import PL53.util.Date;
 import Utils.Database;
 
-public class Invoice {
+public class Movement {
 	private int ID = -1, ID_fa, ID_professional;
 	private Date dateIn;
 	private String sender, receiver, fiscalNumber, address, description = "";
@@ -34,7 +34,8 @@ public class Invoice {
 	 * @param ID_professional
 	 * @param description
 	 */
-	public Invoice(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
+	public Movement(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
+
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID = ID_invoice;
@@ -62,7 +63,7 @@ public class Invoice {
 	 * @param ID_professional
 	 * @param description
 	 */
-	public Invoice(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
+	public Movement(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.dateIn = dateIn;
@@ -110,14 +111,14 @@ public class Invoice {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<Invoice> get(String query, Database db) throws SQLException {
+	public static List<Movement> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 
-		List<Invoice> invoices = new ArrayList<>();
+		List<Movement> invoices = new ArrayList<>();
 		int id_invoice = rs.getInt("ID_invoice");
 
 		List<Payment> payments = Payment.get("SELECT * FROM Payment WHERE ID_invoice=" + id_invoice, db);
@@ -129,7 +130,7 @@ public class Invoice {
 			} catch (ParseException e) {
 				dateIn = Date.fromMillis(rs.getLong("dateIn"));
 			}
-			Invoice e = new Invoice(
+			Movement e = new Movement(
 					rs.getInt("ID_invoice"),
 					rs.getFloat("amount"),
 					dateIn,
@@ -161,7 +162,7 @@ public class Invoice {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static Invoice getOne(String query, Database db) throws SQLException {
+	public static Movement getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -181,7 +182,7 @@ public class Invoice {
 
 
 
-		Invoice e = new Invoice(
+		Movement e = new Movement(
 				rs.getInt("ID_invoice"),
 				rs.getFloat("amount"),
 				dateIn,
