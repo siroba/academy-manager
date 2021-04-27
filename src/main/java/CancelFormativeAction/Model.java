@@ -127,6 +127,7 @@ public class Model {
 			String invoiceId = JOptionPane.showInputDialog(null, "What is the ID of the invoice for the teacher " + t.getName() + " for " + inv.getAmount() + "€?", null);
 			
 			MovementTeacher newInv = new MovementTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID(), ""); // TODO: Description
+
 			newInv.insert(db);
 			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true, ""); // TODO: Description
 			p.insert(db);

@@ -35,6 +35,7 @@ public class Movement {
 	 * @param description
 	 */
 	public Movement(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
+
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID = ID_invoice;
