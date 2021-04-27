@@ -53,7 +53,6 @@ public class Controller implements PL53.util.Controller {
 				double teachers = model.getInvoices(index);
         
 				int option = JOptionPane.showConfirmDialog(null, 
-
 						payments + "€ will be refunded to Professionals and " + teachers + "€ will be returned from the teachers.",
 
 						"Are you sure you want to continue?",
@@ -64,9 +63,9 @@ public class Controller implements PL53.util.Controller {
 					model.cancel(index);
 
 					try {
-						/*if(teachers > 0) {
+						if(teachers > 0) {
 							model.invoiceTeachers(index, view.getDateIn(), view.getFiscalNumber(), view.getAddress());
-						}*/
+						}
 						model.initModel();
 
 						view.setTable(getTableModel(model.getAllData()));
