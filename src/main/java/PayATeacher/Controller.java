@@ -103,6 +103,7 @@ public class Controller implements PL53.util.Controller {
 
 					} else {
 						String name = view.getNameTextField();
+						String surname = view.getSurname().getText();
 						String fiscalNumber = view.getFiscalNumberTextField();
 						String address = view.getAddressTextField();
 						Date dateTransfer = view.getDateTransferTextField();
