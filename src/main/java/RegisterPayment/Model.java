@@ -75,7 +75,7 @@ public class Model {
 
 		String sql = "	SELECT  Invoice.* FROM Invoice WHERE Invoice.amount <> ("
 				+ "	SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment GROUP BY Payment.ID_invoice "
-				+ "HAVING Payment.ID_invoice=Invoice.ID_fa), 0))";
+				+ "HAVING Payment.ID_invoice=Invoice.ID_invoice), 0))";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
 
