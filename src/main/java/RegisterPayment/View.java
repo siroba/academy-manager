@@ -70,6 +70,8 @@ public class View extends JFrame {
 	private JButton btnNewButton;
 	private DateInput dateTextPaneRefund;
 	private JTextField dueAmountLabel;
+	private JLabel lblNewLabel_11;
+	private JTextField dueAmountProfessionalLabel;
 
 	public View() {
 
@@ -207,15 +209,25 @@ public class View extends JFrame {
 		btnNewButton.setBounds(499, 75, 136, 44);
 		panel.add(btnNewButton);
 		
-		JLabel lblNewLabel_10 = new JLabel("Due amount");
+		JLabel lblNewLabel_10 = new JLabel("Due amount of COIIPA ");
+		lblNewLabel_10.setBounds(1157, 220, 169, 13);
+		contentPane.add(lblNewLabel_10);
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_10.setBounds(295, 106, 74, 13);
-		panel.add(lblNewLabel_10);
 		
 		dueAmountLabel = new JTextField();
-		dueAmountLabel.setBounds(295, 129, 152, 19);
-		panel.add(dueAmountLabel);
+		dueAmountLabel.setBounds(1157, 243, 152, 19);
+		contentPane.add(dueAmountLabel);
 		dueAmountLabel.setColumns(10);
+		
+		lblNewLabel_11 = new JLabel("Due amount of the professional");
+		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_11.setBounds(1157, 272, 169, 13);
+		contentPane.add(lblNewLabel_11);
+		
+		dueAmountProfessionalLabel = new JTextField();
+		dueAmountProfessionalLabel.setBounds(1157, 297, 152, 19);
+		contentPane.add(dueAmountProfessionalLabel);
+		dueAmountProfessionalLabel.setColumns(10);
 	}
 
 	public Window getFrame() {
@@ -299,5 +311,17 @@ public class View extends JFrame {
 	}
 	public JTextField getDueAmountLabel() {
 		return dueAmountLabel;
+	}
+	
+	
+	public void setDueAmountLabel(String s) {
+		this.dueAmountLabel.setText(s);
+	}
+	public JTextField getDueAmountProfessionalLabel() {
+		return dueAmountProfessionalLabel;
+	}
+	
+	public void setDueAmountProfessinalLabel(String s) {
+		this.dueAmountProfessionalLabel.setText(s);
 	}
 }

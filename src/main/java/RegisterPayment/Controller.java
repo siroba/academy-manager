@@ -71,7 +71,7 @@ public class Controller implements PL53.util.Controller {
 		view.getConfirmButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean aux = true;
-
+				
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
 					return;
@@ -83,6 +83,12 @@ public class Controller implements PL53.util.Controller {
 
 				float alreadyPayed = model.getAmountPayed(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
+				float toReturn = totalPayed - selectedRow.invoice.getAmount();
+				Date payDate = view.getDateTextPane().getDate();
+				
+				float currentDueAmountProf= selectedRow.fee - totalPayed;
+				
+				view.setDueAmountProfessinalLabel(String.valueOf(currentDueAmountProf));
 
 				if (view.getAmountPayed() <= 0) {
 					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
@@ -129,8 +135,7 @@ public class Controller implements PL53.util.Controller {
 							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					if (option == 0) {
-						float toReturn = totalPayed - selectedRow.invoice.getAmount();
-						Date payDate = view.getDateTextPane().getDate();
+						
 						/*
 						 * Movement invoiceReturn = new Movement(toReturn, payDate,
 						 * selectedRow.invoice.getReceiver(), selectedRow.invoice.getSender(),
@@ -148,9 +153,10 @@ public class Controller implements PL53.util.Controller {
 
 					} else if (option == 1) {
 						float amount = view.getAmountPaidTextField();
-						Date payDate = view.getDateTextPane().getDate();
+						
 						try {
 							model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+							view.setDueAmountLabel(String.valueOf(toReturn));
 						} catch (SQLException | ParseException e1) {
 							e1.printStackTrace();
 						}
@@ -164,7 +170,7 @@ public class Controller implements PL53.util.Controller {
 				}
 
 				float amount = view.getAmountPaidTextField();
-				Date payDate = view.getDateTextPane().getDate();
+			
 
 				try {
 					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
