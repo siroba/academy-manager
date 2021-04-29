@@ -47,9 +47,10 @@ insert into Enrollment(ID_fa, ID_professional, status, timeEn, category) values
 	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00.0', 'Standard'),
 	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00.0', 'Standard');
 
+insert into Invoice (Id_invoice , amount, dateIn , sender, receiver, address, fiscalNumber, ID_fa, ID_professional, description) values
+        (4000, 15, '2021-01-02', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2000, "This is a test of the functionality");
+		
 insert into Invoice (Id_invoice , amount, dateIn , sender, receiver, address, fiscalNumber, ID_fa, ID_professional) values
-        (4000, 15, '2021-01-02', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2000 ),
-        (4014, 10, '2021-01-03', 'COIIPA', 'senderName', 'address', 'fiscalNumber', 1000, 2000 ),
         (4001, 15, '2021-01-04', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2001 ),
         (4002, 15, '2021-01-07', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2002 ),
         (4003, 15, '2021-01-11', 'senderName', 'COIIPA', 'address', 'fiscalNumber', 1000, 2003 ),
@@ -78,8 +79,8 @@ insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
 	(3010, 10, '2021-02-01 15:00:00.0', true, 4010),
 	(3011, 30, '2021-03-22 13:00:00.0', false, 4011),
 	(3012, 10, '2021-03-03 13:00:00.0', false, 4012),
-	(3013, 20, '2021-03-05 10:00:00.0', true, 4013),
-	(3014, 10, '2021-03-05 10:00:00.0', true, 4014);
+	(3013, 20, '2021-03-05 10:00:00.0', true,  4013),
+	(3014, -10, '2021-03-05 10:00:00.0', true, 4000);
 
 insert into Teacher (ID_teacher, name) values
 	(1000, "Fanjul"),
