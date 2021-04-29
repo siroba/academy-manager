@@ -370,8 +370,8 @@ public class Controller implements PL53.util.Controller {
 		for (int i = 0; i < formativeActionDates.size(); i++) {
 
 			// Get date of each session start
-			DateTime formativeActionDate = formativeActionDates.get(i);
-
+			DateTime formativeActionDate = formativeActionDates.get(formativeActionDates.size()-1);
+			
 			long daysBetweenNowAction = DateTime.daysSince(formativeActionDate, now);
 			long daysBetweenStartAction = DateTime.daysSince(formativeActionDate, enrollStart);
 			long daysBetweenEndAction = DateTime.daysSince(formativeActionDate, enrollEnd);
