@@ -68,7 +68,7 @@ public class Controller implements PL53.util.Controller {
 
 		});
 
-		view.getConfirmButton().addActionListener(new ActionListener() { // TODO
+		view.getConfirmButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean aux = true;
 
@@ -115,7 +115,7 @@ public class Controller implements PL53.util.Controller {
 						} catch (HeadlessException | SQLException | ParseException e1) {
 							e1.printStackTrace();
 						}
-						
+
 					}
 				}
 
@@ -165,6 +165,96 @@ public class Controller implements PL53.util.Controller {
 
 				float amount = view.getAmountPaidTextField();
 				Date payDate = view.getDateTextPane().getDate();
+
+				try {
+					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+					JOptionPane.showMessageDialog(null, "The payment has been registered");
+					view.resetAmountPaid();
+
+					model.initModel();
+					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
+				} catch (SQLException | ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
+
+		view.getBtnNewButton().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean aux = true;
+
+				if (selectedRow == null) {
+					JOptionPane.showMessageDialog(null, "You have to select one payment");
+					return;
+				}
+
+				float alreadyPayed = model.getAmountPayed(selectedRow);
+				float totalPayed = alreadyPayed + view.getAmountPayed();
+
+				if (view.getAmountPayed() <= 0) {
+					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
+					return;
+				}
+
+				DateTime now = DateTime.now();
+				long daysBetweenNowAction = DateTime.daysSince(now, view.getdateTextPaneRefund().getDate());
+
+				if (daysBetweenNowAction < 0) {
+
+					JOptionPane.showMessageDialog(null,
+							"Payments cannot be made in the future( the date must be on the current date or in the past).",
+							"date not valid ", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				if (totalPayed > selectedRow.invoice.getAmount()) {
+					aux = false;
+					int option = JOptionPane.showConfirmDialog(null, "The sum of payments (" + totalPayed
+
+							+ ") is hihger than the amount that has to bee returned to the professional, Do you want to return the diferrence ("
+
+							+ String.format("%.2f", (totalPayed - selectedRow.invoice.getAmount())) + ")?", "warning",
+							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+					if (option == 0) {
+						float toReturn = totalPayed - selectedRow.invoice.getAmount();
+						Date payDate = view.getDateTextPane().getDate();
+						/*
+						 * Movement invoiceReturn = new Movement(toReturn, payDate,
+						 * selectedRow.invoice.getReceiver(), selectedRow.invoice.getSender(),
+						 * selectedRow.invoice.getAddress(), selectedRow.invoice.getFiscalNumber(),
+						 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional());
+						 */
+						try {
+							model.createPaymentRefund(selectedRow.invoice.getID(), -toReturn, payDate, view.isCash(),
+									true);
+
+						} catch (SQLException | ParseException e1) {
+
+							e1.printStackTrace();
+						}
+
+					} else if (option == 1) {
+						float amount = view.getAmountRefund();
+						Date payDate = view.getdateTextPaneRefund().getDate();
+						try {
+							model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+						} catch (SQLException | ParseException e1) {
+							e1.printStackTrace();
+						}
+
+						return;
+					}
+
+				} else if (totalPayed < selectedRow.invoice.getAmount()) {
+					JOptionPane.showMessageDialog(null,
+							"The payment is lower than  the amount that has to be returned to the professional ");
+					aux = false;
+				}
+
+				float amount = view.getAmountRefund();
+				Date payDate = view.getdateTextPaneRefund().getDate();
 
 				try {
 					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
