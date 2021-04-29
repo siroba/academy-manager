@@ -289,9 +289,9 @@ public class Controller implements PL53.util.Controller {
 		 * "You need to provide a teacher to create a formative Action.",
 		 * "Teacher not valid", JOptionPane.ERROR_MESSAGE); return; }
 		 */
-		if (view.getLocation().isBlank()) {
-			JOptionPane.showMessageDialog(null, "You need to provide a location to create a formative Action.",
-					"Location not valid", JOptionPane.ERROR_MESSAGE);
+		if (sessions.size()<=0) {
+			JOptionPane.showMessageDialog(null, "You need add at least one session.",
+					"There are no sessions!", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		// Validate session dates
