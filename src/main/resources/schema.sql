@@ -108,10 +108,11 @@ CREATE TABLE IF NOT EXISTS Professional(
     email           text NOT NULL
 );
 
-CREATE TABLE TeacherTeaches (
-	ID_teacher   	INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE IF NOT EXISTS TeacherTeaches (
+	ID_teacher   	INTEGER NOT NULL,
 	ID_fa        	integer NOT NULL,
 	remuneration 	real NOT NULL,
+	CONSTRAINT PK_TeacherTeaches PRIMARY KEY (ID_teacher, ID_fa),
 	CONSTRAINT FK_244 FOREIGN KEY ( ID_teacher ) REFERENCES Teacher ( ID_teacher ),
 	CONSTRAINT FK_249 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa )
 );
