@@ -51,7 +51,7 @@ public class Model {
 	}
 
 	private Data[] initData() throws SQLException, ParseException {
-		String query = "SELECT * FROM Enrollment INNER JOIN FormativeAction ON Enrollment.ID_fa=FormativeAction.ID_fa WHERE Enrollment.status='RECEIVED' AND FormativeAction.status<>'CANCELLED';"; // TODO: "WHERE status='received';"
+		String query = "SELECT * FROM Enrollment INNER JOIN FormativeAction ON Enrollment.ID_fa=FormativeAction.ID_fa WHERE Enrollment.status<>'CANCELLED' AND (FormativeAction.status='ACTIVE' OR FormativeAction.status='DELAYED');"; // TODO: "WHERE status='received';"
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
 
