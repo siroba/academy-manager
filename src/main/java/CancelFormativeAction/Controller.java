@@ -186,11 +186,11 @@ public class Controller implements PL53.util.Controller {
 		for (int i = 0; i < data.length; i++) {
 			Data d = data[i];
 			
-			int daysLeft = Date.daysSince(d.formativeAction.getEnrollmentEnd(), Date.now());
+			//int daysLeft = Date.daysSince(d.formativeAction.getEnrollmentEnd(), Date.now());
 			
 			body[i] = new String[] { 
 					d.professional.getName(), 
-					Float.toString(this.getRefund(daysLeft, model.getPayedAmount(d.professional.getID(), d.formativeAction.getID()))),
+					Float.toString(model.getPayedAmount(d.professional.getID(), d.formativeAction.getID())),
 					d.enrollment.getTimeEn().toString()};
 		}
 
@@ -200,6 +200,8 @@ public class Controller implements PL53.util.Controller {
 	}
 	
 	/**
+	 * This is from another user story... oh well
+	 * 
 	 * If a registered person wishes to make a cancellation 7 calendar days or more before the course, 100% of the amount paid will be refunded. 
 	 * If he resigns with between 3 calendar days and 6 calendar days missing, 50% of the amount of the course will be returned. 
 	 * If he resigns with less than 3 calendar days left, the amount of the course will not be refunded.

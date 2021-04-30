@@ -350,6 +350,14 @@ public class FormativeAction {
 	public float refund(String group) {
         return this.refundPercentage()*this.getFee(group);
     }
+	
+	public float refundPercentage(Date date) {
+        int days = Date.daysSince(this.sessions.get(0).getSessionStart(), date);
+
+        if(days > 7) return 1f;
+        else if (days <= 6 && days >=3) return 0.5f;
+        else return 0f;
+	}
   
     public float refundPercentage() {
         int days = Date.daysSince(this.sessions.get(0).getSessionStart());
