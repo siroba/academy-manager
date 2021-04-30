@@ -145,9 +145,21 @@ public class Model {
 		return sumPayments;
 	}
 
+	/**
+	 * It confirms the enrollment if the totalAmountPayed >= the fee
+	 * 
+	 * @param invoiceReturn
+	 * @param toReturn
+	 * @param payDate
+	 * @param cash
+	 * @param confirmed
+	 * @param totalAmountPayed
+	 * @throws SQLException
+	 * @throws ParseException
+	 */
 	public void createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
 			throws SQLException, ParseException {
-		if(totalAmountPayed == invoiceReturn.getAmount()) {
+		if(totalAmountPayed >= invoiceReturn.getAmount()) {
 			String sql = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?";
 			db.executeUpdateQuery(sql, invoiceReturn.getID_fa(), invoiceReturn.getID_professional());
 		}
