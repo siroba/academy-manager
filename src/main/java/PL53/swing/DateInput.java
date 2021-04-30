@@ -15,6 +15,8 @@ import javax.swing.event.EventListenerList;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class DateInput extends JPanel {
 	/** Auto generated serial ID */
@@ -57,8 +59,9 @@ public class DateInput extends JPanel {
 		daysTextField.setBounds(9, 21, 34, 22);
 		add(daysTextField);
 		
-		daysTextField.addActionListener(new ActionListener() { // TODO: The "ActionPerformed" is not working
-			public void actionPerformed(ActionEvent e) {
+		daysTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
 				if(allDateFieldsModified())
 					fireMyEvent();
 			}
@@ -75,8 +78,9 @@ public class DateInput extends JPanel {
 		monthsTextField.setBounds(66, 21, 34, 22);
 		add(monthsTextField);
 
-		monthsTextField.addActionListener(new ActionListener() { // TODO: The "ActionPerformed" is not working
-			public void actionPerformed(ActionEvent e) {
+		monthsTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
 				if(allDateFieldsModified())
 					fireMyEvent();
 			}
@@ -92,8 +96,9 @@ public class DateInput extends JPanel {
 		yearsTextField.setBounds(123, 21, 70, 22);
 		add(yearsTextField);
 		
-		yearsTextField.addActionListener(new ActionListener() { // TODO: The "ActionPerformed" is not working
-			public void actionPerformed(ActionEvent e) {
+		yearsTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
 				if(allDateFieldsModified())
 					fireMyEvent();
 			}
@@ -168,7 +173,7 @@ public class DateInput extends JPanel {
 		}
 	}
 
-	interface DateModifiedListener extends EventListener {
+	public interface DateModifiedListener extends EventListener {
 		public void dateModified();
 	}
 }

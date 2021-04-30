@@ -15,6 +15,7 @@ import Entities.FormativeAction;
 import Entities.Movement;
 import PL53.swing.CheckboxTableModel;
 import PL53.util.Constants;
+import PL53.util.Date;
 import RegisterCancellations.Data;
 
 public class Controller implements PL53.util.Controller {
@@ -53,8 +54,7 @@ public class Controller implements PL53.util.Controller {
 				double teachers = model.getInvoices(index);
         
 				int option = JOptionPane.showConfirmDialog(null, 
-
-						payments + "€ will be refunded to Professionals and " + teachers + "€ will be returned from the teachers.",
+						payments + "€ will be owed to Professionals" + (teachers>0?(" and " + teachers + "€ will be returned from the teachers."):""),
 
 						"Are you sure you want to continue?",
 						JOptionPane.YES_NO_OPTION,
@@ -64,9 +64,10 @@ public class Controller implements PL53.util.Controller {
 					model.cancel(index);
 
 					try {
-						/*if(teachers > 0) {
-							model.invoiceTeachers(index, view.getDateIn(), view.getFiscalNumber(), view.getAddress());
-						}*/
+						if(teachers > 0) {
+							//model.invoiceTeachers(index, view.getDateIn(), Constants.COIIPAfiscalNumber, Constants.COIIPAadress);
+							// TODO: Do we need an invoice or not??
+						}
 						model.initModel();
 
 						view.setTable(getTableModel(model.getAllData()));
@@ -185,14 +186,38 @@ public class Controller implements PL53.util.Controller {
 
 		for (int i = 0; i < data.length; i++) {
 			Data d = data[i];
+			
+			//int daysLeft = Date.daysSince(d.formativeAction.getEnrollmentEnd(), Date.now());
+			
 			body[i] = new String[] { 
 					d.professional.getName(), 
-					Float.toString(d.payment.getAmount()),
+					Float.toString(model.getPayedAmount(d.professional.getID(), d.formativeAction.getID())),
 					d.enrollment.getTimeEn().toString()};
 		}
 
 		tm.addRows(body);
 
 		return tm;
+	}
+	
+	/**
+	 * This is from another user story... oh well
+	 * 
+	 * If a registered person wishes to make a cancellation 7 calendar days or more before the course, 100% of the amount paid will be refunded. 
+	 * If he resigns with between 3 calendar days and 6 calendar days missing, 50% of the amount of the course will be returned. 
+	 * If he resigns with less than 3 calendar days left, the amount of the course will not be refunded.
+	 * 
+	 * @param daysLeft
+	 * @param payedAmount
+	 * @return
+	 */
+	public float getRefund(int daysLeft, float payedAmount) {
+		if(daysLeft<3)
+			return 0;
+		
+		if(daysLeft<=6)
+			return payedAmount * 0.5f;
+		
+		return payedAmount;
 	}
 }
