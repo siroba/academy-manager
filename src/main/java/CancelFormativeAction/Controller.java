@@ -54,7 +54,7 @@ public class Controller implements PL53.util.Controller {
 				double teachers = model.getInvoices(index);
         
 				int option = JOptionPane.showConfirmDialog(null, 
-						payments + "€ will be refunded to Professionals and " + teachers + "€ will be returned from the teachers.",
+						payments + "€ will be owed to Professionals" + (teachers>0?(" and " + teachers + "€ will be returned from the teachers."):""),
 
 						"Are you sure you want to continue?",
 						JOptionPane.YES_NO_OPTION,
@@ -65,7 +65,8 @@ public class Controller implements PL53.util.Controller {
 
 					try {
 						if(teachers > 0) {
-							model.invoiceTeachers(index, view.getDateIn(), Constants.COIIPAfiscalNumber, Constants.COIIPAadress);
+							//model.invoiceTeachers(index, view.getDateIn(), Constants.COIIPAfiscalNumber, Constants.COIIPAadress);
+							// TODO: Do we need an invoice or not??
 						}
 						model.initModel();
 
