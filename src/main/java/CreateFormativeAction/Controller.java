@@ -19,7 +19,7 @@ import Entities.FormativeAction;
 import Entities.Session;
 import Entities.Teacher;
 import Entities.TeacherTeaches;
-import PL53.swing.DateTimeInput.DateTimeModifiedListener;
+import PL53.swing.DateInput.DateModifiedListener;
 import PL53.util.DateTime;
 import Utils.SwingUtil;
 
@@ -140,12 +140,8 @@ public class Controller implements PL53.util.Controller {
 		
 		// Does not work because I don't know what "EventListener" to put in the Date/DateTime Input's textfields. 
 		// It does not seem to be working with an ActionPerformed
-		view.getEnrollEndDateTimeInput().addDateTimeListener(new DateTimeModifiedListener() {
-			public void timeModified() {
-				
-			}
-			
-			public void dateTimeModified() {
+		view.getEnrollEndDateTimeInput().getDatePanel().addDateListener(new DateModifiedListener() {
+			public void dateModified() {
 				validateDates(new ArrayList<DateTime>(), view.getEnrollStart(), view.getEnrollEnd());
 			}
 		});
