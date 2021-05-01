@@ -64,18 +64,13 @@ public class View extends JFrame {
 	private JCheckBox isCash;
 	private JTable movementsTable;
 	private JScrollPane scrollPane_1;
-	private JTextPane descriptionPane;
-	private JPanel descriptionPanel;
 	private JDecimalField AmountRefund;
 	private JButton btnNewButton;
 	private DateInput dateTextPaneRefund;
-	private JTextField dueAmountLabel;
-	private JLabel lblNewLabel_11;
-	private JTextField dueAmountProfessionalLabel;
 
 	public View() {
 
-		setBounds(100, 100, 1352, 602);
+		setBounds(100, 100, 1166, 602);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -150,29 +145,10 @@ public class View extends JFrame {
 
 		movementsTable = new JTable();
 		scrollPane_1.setViewportView(movementsTable);
-
-		descriptionPanel = new JPanel();
-		descriptionPanel.setVisible(false);
-		descriptionPanel.setEnabled(false);
-		descriptionPanel.setBounds(1157, 92, 169, 118);
-		contentPane.add(descriptionPanel);
-		descriptionPanel.setLayout(null);
-
-		JLabel lblNewLabel_6 = new JLabel("Description");
-		lblNewLabel_6.setBounds(0, 0, 99, 14);
-		descriptionPanel.add(lblNewLabel_6);
-
-		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(0, 21, 169, 97);
-		descriptionPanel.add(scrollPane_2);
-
-		descriptionPane = new JTextPane();
-		descriptionPane.setEditable(false);
-		scrollPane_2.setViewportView(descriptionPane);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(572, 349, 754, 179);
+		panel.setBounds(667, 349, 475, 179);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -206,28 +182,8 @@ public class View extends JFrame {
 		
 		
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btnNewButton.setBounds(499, 75, 136, 44);
+		btnNewButton.setBounds(295, 107, 136, 44);
 		panel.add(btnNewButton);
-		
-		JLabel lblNewLabel_10 = new JLabel("Due amount of COIIPA ");
-		lblNewLabel_10.setBounds(1157, 220, 169, 13);
-		contentPane.add(lblNewLabel_10);
-		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
-		
-		dueAmountLabel = new JTextField();
-		dueAmountLabel.setBounds(1157, 243, 152, 19);
-		contentPane.add(dueAmountLabel);
-		dueAmountLabel.setColumns(10);
-		
-		lblNewLabel_11 = new JLabel("Due amount of the professional");
-		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_11.setBounds(1157, 272, 169, 13);
-		contentPane.add(lblNewLabel_11);
-		
-		dueAmountProfessionalLabel = new JTextField();
-		dueAmountProfessionalLabel.setBounds(1157, 297, 152, 19);
-		contentPane.add(dueAmountProfessionalLabel);
-		dueAmountProfessionalLabel.setColumns(10);
 	}
 
 	public Window getFrame() {
@@ -293,15 +249,7 @@ public class View extends JFrame {
 		return amountPaidTextField.getValue();
 	}
 
-	public void setDescription(String str) {
-		boolean blank = str == null || str.isBlank();
-
-		this.descriptionPanel.setVisible(!blank);
-		this.descriptionPanel.setEnabled(!blank);
-
-		if (!blank)
-			this.descriptionPane.setText(str);
-	}
+	
 	
 	public float getAmountRefund() {
 		return AmountRefund.getValue();
@@ -309,19 +257,5 @@ public class View extends JFrame {
 	public JButton getBtnNewButton() {
 		return btnNewButton;
 	}
-	public JTextField getDueAmountLabel() {
-		return dueAmountLabel;
-	}
 	
-	
-	public void setDueAmountLabel(String s) {
-		this.dueAmountLabel.setText(s);
-	}
-	public JTextField getDueAmountProfessionalLabel() {
-		return dueAmountProfessionalLabel;
-	}
-	
-	public void setDueAmountProfessinalLabel(String s) {
-		this.dueAmountProfessionalLabel.setText(s);
-	}
 }

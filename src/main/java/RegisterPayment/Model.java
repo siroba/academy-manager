@@ -112,28 +112,8 @@ public class Model {
 		return Movement.get(queryInvoice, db);
 	}
 
-	public float getAmountPayed(Data selectedRow) {
-		/*
-		 * String sqlRefund =
-		 * "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
-		 *
-		 * + "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " +
-		 * " GROUP BY Payment.ID_invoice " +
-		 * "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender='COIIPA'), 0.0);"
-		 * ;
-		 *
-		 * String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment " +
-		 * "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " +
-		 * " GROUP BY Payment.ID_invoice " +
-		 * "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender<>'COIIPA'), 0.0);"
-		 * ;
-		 *
-		 * float normalPayments = (float) ((double) (db .executeQueryArray(sql,
-		 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional())
-		 * .get(0)[0])); float refundPayments = -(float) ((double) (db
-		 * .executeQueryArray(sqlRefund, selectedRow.invoice.getID_fa(),
-		 * selectedRow.invoice.getID_professional()) .get(0)[0]));
-		 */
+	public float getAmountTotalPaid(Data selectedRow) {
+		
 
 		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
 				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " + " GROUP BY Payment.ID_invoice "
@@ -168,6 +148,7 @@ public class Model {
 		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
 		p.insert(db);
 	}
+
 
 	public void createPaymentRefund(int invoiceID, float toReturn, Date payDate, boolean cash, boolean confirmed) 
 			throws SQLException, ParseException {
@@ -255,5 +236,28 @@ public class Model {
 
         return (int)db.executeQueryArray(sql, ID_fa).get(0)[0];
     }
+
+	public float getAmountReturned(Data d) {
+
+		String sql = "SELECT COALESCE((SELECT SUM ( CASE WHEN Payment.amount <0 THEN Payment.amount ELSE 0 END) FROM Payment "
+				+ "				INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice GROUP BY Payment.ID_invoice "
+				+ "				HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND Payment.amount < 0 ), 0.0);";
+
+		float sumPayments = (float) ((double) (db
+				.executeQueryArray(sql, d.invoice.getID_fa(), d.invoice.getID_professional())
+				.get(0)[0]));
+		return sumPayments;
+	}
+
+	public float getAmountPaid(Data d) {
+		String sql = "SELECT COALESCE((SELECT SUM ( CASE WHEN Payment.amount >0 THEN Payment.amount ELSE 0 END) FROM Payment"
+				+ "				INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice GROUP BY Payment.ID_invoice "
+				+ "				HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND Payment.amount >0 ), 0.0);";
+
+		float sumPayments = (float) ((double) (db
+				.executeQueryArray(sql, d.invoice.getID_fa(), d.invoice.getID_professional())
+				.get(0)[0]));
+		return sumPayments;
+	}
 
 }

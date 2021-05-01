@@ -62,6 +62,10 @@ public class Controller implements PL53.util.Controller {
 			public void mouseClicked(MouseEvent e) {
 
 				selectedRow = model.getDataNoCoiipa(view.getSelectedInvoice());
+				float alreadyPayed = model.getAmountTotalPaid(selectedRow);
+				float totalPayed = alreadyPayed + view.getAmountPayed();
+				float currentDueAmountProf = selectedRow.fee - totalPayed;
+			
 
 				showPayments();
 			}
@@ -71,7 +75,7 @@ public class Controller implements PL53.util.Controller {
 		view.getConfirmButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean aux = true;
-				
+
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
 					return;
@@ -81,14 +85,10 @@ public class Controller implements PL53.util.Controller {
 					return;
 				}
 
-				float alreadyPayed = model.getAmountPayed(selectedRow);
+				float alreadyPayed = model.getAmountTotalPaid(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
 				float toReturn = totalPayed - selectedRow.invoice.getAmount();
 				Date payDate = view.getDateTextPane().getDate();
-				
-				float currentDueAmountProf= selectedRow.fee - totalPayed;
-				
-				view.setDueAmountProfessinalLabel(String.valueOf(currentDueAmountProf));
 
 				if (view.getAmountPayed() <= 0) {
 					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
@@ -135,7 +135,7 @@ public class Controller implements PL53.util.Controller {
 							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					if (option == 0) {
-						
+
 						/*
 						 * Movement invoiceReturn = new Movement(toReturn, payDate,
 						 * selectedRow.invoice.getReceiver(), selectedRow.invoice.getSender(),
@@ -153,10 +153,10 @@ public class Controller implements PL53.util.Controller {
 
 					} else if (option == 1) {
 						float amount = view.getAmountPaidTextField();
-						
+
 						try {
 							model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
-							view.setDueAmountLabel(String.valueOf(toReturn));
+						
 						} catch (SQLException | ParseException e1) {
 							e1.printStackTrace();
 						}
@@ -170,7 +170,6 @@ public class Controller implements PL53.util.Controller {
 				}
 
 				float amount = view.getAmountPaidTextField();
-			
 
 				try {
 					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
@@ -195,10 +194,11 @@ public class Controller implements PL53.util.Controller {
 					return;
 				}
 
-				float alreadyPayed = model.getAmountPayed(selectedRow);
-				float totalPayed = alreadyPayed + view.getAmountPayed();
+				float alreadyPaid = model.getAmountTotalPaid(selectedRow);
+				float totalPaid = alreadyPaid - view.getAmountRefund();
+				float dueAmountCOIIPA = selectedRow.fee - alreadyPaid;
 
-				if (view.getAmountPayed() <= 0) {
+				if (view.getAmountRefund() <= 0) {
 					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
 					return;
 				}
@@ -214,17 +214,17 @@ public class Controller implements PL53.util.Controller {
 					return;
 				}
 
-				if (totalPayed > selectedRow.invoice.getAmount()) {
+				if (dueAmountCOIIPA > view.getAmountRefund()) {
 					aux = false;
-					int option = JOptionPane.showConfirmDialog(null, "The sum of payments (" + totalPayed
+					int option = JOptionPane.showConfirmDialog(null, "The amount of the movement (" + dueAmountCOIIPA
 
 							+ ") is hihger than the amount that has to bee returned to the professional, Do you want to return the diferrence ("
 
-							+ String.format("%.2f", (totalPayed - selectedRow.invoice.getAmount())) + ")?", "warning",
+							+ String.format("%.2f", (totalPaid - selectedRow.invoice.getAmount())) + ")?", "warning",
 							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					if (option == 0) {
-						float toReturn = totalPayed - selectedRow.invoice.getAmount();
+						float toReturn = dueAmountCOIIPA - view.getAmountRefund();
 						Date payDate = view.getDateTextPane().getDate();
 						/*
 						 * Movement invoiceReturn = new Movement(toReturn, payDate,
@@ -233,6 +233,7 @@ public class Controller implements PL53.util.Controller {
 						 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional());
 						 */
 						try {
+
 							model.createPaymentRefund(selectedRow.invoice.getID(), -toReturn, payDate, view.isCash(),
 									true);
 
@@ -243,9 +244,12 @@ public class Controller implements PL53.util.Controller {
 
 					} else if (option == 1) {
 						float amount = view.getAmountRefund();
+
 						Date payDate = view.getdateTextPaneRefund().getDate();
 						try {
-							model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+							model.createPaymentRefund(selectedRow.invoice.getID(), -amount, payDate, view.isCash(),true);
+
+							
 						} catch (SQLException | ParseException e1) {
 							e1.printStackTrace();
 						}
@@ -253,7 +257,7 @@ public class Controller implements PL53.util.Controller {
 						return;
 					}
 
-				} else if (totalPayed < selectedRow.invoice.getAmount()) {
+				} else if (totalPaid < selectedRow.invoice.getAmount()) {
 					JOptionPane.showMessageDialog(null,
 							"The payment is lower than  the amount that has to be returned to the professional ");
 					aux = false;
@@ -263,7 +267,7 @@ public class Controller implements PL53.util.Controller {
 				Date payDate = view.getdateTextPaneRefund().getDate();
 
 				try {
-					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPaid);
 					JOptionPane.showMessageDialog(null, "The payment has been registered");
 					view.resetAmountPaid();
 
@@ -288,7 +292,7 @@ public class Controller implements PL53.util.Controller {
 	public TableModel getTableModel(List<Data> list) {
 
 		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
-				"Date of the registration" };
+				"Date of the registration" , "Amount paid", "Amount returned" };
 
 		String body[][] = new String[list.size()][header.length];
 		for (int i = 0; i < list.size(); i++) {
@@ -296,7 +300,7 @@ public class Controller implements PL53.util.Controller {
 
 			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
 					d.professional.getEmail(), Float.toString(d.invoice.getAmount()),
-					d.enrollment.getTimeEn().toString() };
+					d.enrollment.getTimeEn().toString(), Float.toString(model.getAmountPaid(d)), Float.toString(model.getAmountReturned(d)) };
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
@@ -319,7 +323,7 @@ public class Controller implements PL53.util.Controller {
 		view.getMovementsTable().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getMovementsTable());
 
-		view.setDescription(selectedRow.invoice.getDescription());
+	
 		/*
 		 * float amount = 0; for (AuxPayment payment : paymentList) { amount +=
 		 * payment.getAmount(); }
