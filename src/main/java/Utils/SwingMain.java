@@ -56,10 +56,10 @@ public class SwingMain {
 		frame = new JFrame();
 		frame.setTitle("Main");
 
-		frame.setBounds(0, 0, 840, 323);
+		frame.setBounds(0, 0, 840, 376);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(8, 3, 10, 10));
+		frame.getContentPane().setLayout(new GridLayout(9, 3, 10, 10));
 
 		// Initialize the DB and fill it with data
 		Database db = new Database();
@@ -114,13 +114,13 @@ public class SwingMain {
 			}
 		});
 
-		/*JButton btnDelayFA = new JButton("Delay a Formative Action");
+		JButton btnDelayFA = new JButton("Delay a Formative Action");
 		btnDelayFA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserStory13729.Controller controller = new UserStory13729.Controller();
+				DelayFormativeAction.Controller controller = new DelayFormativeAction.Controller();
 				controller.initController();
 			}
-		});*/
+		});
 
 		JButton btnNewButton = new JButton("Cancel a Formative Action");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -208,9 +208,9 @@ public class SwingMain {
 		frame.getContentPane().add(labelEmpty7);
 		
 		// Row 7
-		//frame.getContentPane().add(btnDelayFA);
-//		frame.getContentPane().add(new JLabel(""));
-//		frame.getContentPane().add(new JLabel(""));
+		frame.getContentPane().add(btnDelayFA);
+		frame.getContentPane().add(new JLabel(""));
+		frame.getContentPane().add(new JLabel(""));
 		
 		// Row 8
 		frame.getContentPane().add(btnNewButton);
