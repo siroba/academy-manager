@@ -7,9 +7,10 @@ import java.util.List;
 
 
 import Entities.FormativeAction;
-import Entities.InvoiceTeacher;
+import Entities.MovementTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
+import Entities.Teacher;
 import Entities.TeacherTeaches;
 import PayATeacher.Data;
 import Utils.Database;
@@ -80,12 +81,20 @@ public class Model {
 		return data2;
 	}
 
-	public void insertInvoice ( InvoiceTeacher invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
+	public void insertInvoice ( MovementTeacher invoice, PaymentTeacher paymentTeacher) throws SQLException, ParseException {
 		invoice.insert(db);
 		paymentTeacher.setInvoiceID(invoice.getID());
 		paymentTeacher.insert(db);
+	}
 
+	// Get fiscal number of teacher
+	public String getFiscalNumber(Teacher t) throws SQLException {
+		return t.getTeacherByName(db).getFiscalNumber();
+	}
 
+	// Update fiscal number of teacher 
+	public void updateFiscalNumber(Teacher t, String fN) throws SQLException {
+		t.updateTeacherFiscalNumber(db, fN);
 	}
 
 
