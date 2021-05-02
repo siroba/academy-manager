@@ -32,7 +32,7 @@ public class View extends JFrame {
 	public View() {
 		setTitle("Delay a Formative Action");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 473, 383);
+		setBounds(100, 100, 473, 375);
 		setLocationRelativeTo(null);
     
 		contentPane = new JPanel();
@@ -41,7 +41,7 @@ public class View extends JFrame {
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 38, 441, 163);
+		scrollPane.setBounds(16, 40, 441, 163);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -52,14 +52,13 @@ public class View extends JFrame {
 		contentPane.add(lblSelectTheFormative);
 		
 		JLabel lblDelay = new JLabel("Delay amount:");
-		lblDelay.setBounds(10, 214, 166, 15);
+		lblDelay.setBounds(10, 215, 166, 15);
 		contentPane.add(lblDelay);
 		
 		datetimeOffsetPanel = new DateTimeInput();
-		datetimeOffsetPanel.setBounds(10, 230, 437, 72);
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		datetimeOffsetPanel.setBorder(blackline);
-		//datetimeOffsetPanel.setBounds(32, 235, 408, 67);
+		datetimeOffsetPanel.setBounds(32, 235, 408, 67);
 		contentPane.add(datetimeOffsetPanel);
 		
 		btnConfirm = new JButton("Confirm");

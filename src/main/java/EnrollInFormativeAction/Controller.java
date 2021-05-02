@@ -108,35 +108,29 @@ public class Controller implements PL53.util.Controller {
 						    JOptionPane.ERROR_MESSAGE);
 					return; 
 				}
-
-				if(view.getWantInvoice()) {
-					if (view.getAddress().isBlank()){
-						JOptionPane.showMessageDialog(null,
-							    "You need to provide an address to enroll.",
-							    "Address not valid",
-							    JOptionPane.ERROR_MESSAGE);
-						return; 
-					}
-					
-					if (view.getFiscalNumber().isBlank()){
-						JOptionPane.showMessageDialog(null,
-							    "You need to provide a fiscal number to enroll.",
-							    "Fiscal number not valid",
-							    JOptionPane.ERROR_MESSAGE);
-						return; 
-					}else {
-						String regex = "^[A-Z]?[0-9]{8,8}[A-Z]$";
-						if(!view.getFiscalNumber().matches(regex)) {
-							JOptionPane.showMessageDialog(null,
-								    "That fiscal number is not valid. E.g. \"55566677R\"",
-								    "Fiscal number not valid",
-								    JOptionPane.ERROR_MESSAGE);
-							return; 
-						}
-					}
+				if (view.getAddress().isBlank() && view.getWantInvoice()){
+					JOptionPane.showMessageDialog(null,
+						    "You need to provide an address to enroll.",
+						    "Address not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
+				if (view.getFiscalNumber().isBlank() && view.getWantInvoice()){
+					JOptionPane.showMessageDialog(null,
+						    "You need to provide a fiscal number to enroll.",
+						    "Fiscal number not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
 				}
 				
-				
+				String regex = "^[A-Z]?[0-9]{8,8}[A-Z]$";
+				if(!view.getFiscalNumber().matches(regex)) {
+					JOptionPane.showMessageDialog(null,
+						    "That fiscal number is not valid. E.g. \"55566677R\"",
+						    "Fiscal number not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
 				
 				String name = view.getProfName();
 				String surname = view.getTextSurname();

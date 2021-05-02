@@ -54,7 +54,6 @@ CREATE TABLE IF NOT EXISTS Invoice (
 	fiscalNumber    	text,
 	ID_fa      			integer NOT NULL,
 	ID_professional     integer NOT NULL,
-	description     	text,
 	CONSTRAINT FK_161 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa ),
 	CONSTRAINT FK_162 FOREIGN KEY ( ID_professional ) REFERENCES Professional ( ID_professional )
 );
@@ -66,17 +65,12 @@ CREATE TABLE IF NOT EXISTS Payment(
     confirmed       boolean default 1,
     cash 	     	boolean default 0,
     ID_invoice      integer NOT NULL,
-	description     text,
     CONSTRAINT FK_104 FOREIGN KEY ( ID_invoice ) REFERENCES Invoice ( ID_invoice )
 );
 
 CREATE TABLE IF NOT EXISTS Teacher (
-	ID_teacher 	 integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	name            text NOT NULL,
-   	surname         text NOT NULL,
-   	phone           text NOT NULL,
-    	email           text NOT NULL,
-    	fiscalNumber	 text NOT NULL	
+	ID_teacher 		integer PRIMARY KEY AUTOINCREMENT,
+	name       		text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS InvoiceTeacher (
@@ -89,7 +83,6 @@ CREATE TABLE IF NOT EXISTS InvoiceTeacher (
 	fiscalNumber    text NOT NULL,
 	ID_fa      		integer NOT NULL,
 	ID_teacher   	integer NOT NULL,
-	description     text,
 	CONSTRAINT FK_163 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa ),
 	CONSTRAINT FK_256 FOREIGN KEY ( ID_teacher ) REFERENCES Teacher ( ID_teacher )
 );
@@ -100,7 +93,6 @@ CREATE TABLE IF NOT EXISTS PaymentTeacher (
 	datePay      date NOT NULL,
 	confirmed    boolean NOT NULL,
 	ID_invoice   text NOT NULL,
-	description  text,
 	CONSTRAINT FK_158 FOREIGN KEY ( ID_invoice ) REFERENCES InvoiceTeacher ( ID_invoice )
 );
 
@@ -112,11 +104,10 @@ CREATE TABLE IF NOT EXISTS Professional(
     email           text NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS TeacherTeaches (
-	ID_teacher   	INTEGER NOT NULL,
+CREATE TABLE TeacherTeaches (
+	ID_teacher   	INTEGER PRIMARY KEY AUTOINCREMENT,
 	ID_fa        	integer NOT NULL,
 	remuneration 	real NOT NULL,
-	CONSTRAINT PK_TeacherTeaches PRIMARY KEY (ID_teacher, ID_fa),
 	CONSTRAINT FK_244 FOREIGN KEY ( ID_teacher ) REFERENCES Teacher ( ID_teacher ),
 	CONSTRAINT FK_249 FOREIGN KEY ( ID_fa ) REFERENCES FormativeAction ( ID_fa )
 );

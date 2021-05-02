@@ -127,7 +127,6 @@ public abstract class JNumberField <T extends Number> extends javax.swing.JForma
 	 * ({@link #getText()}) to a Float.
 	 */
 	public abstract T getValue();
-	public abstract void setValue(T val);
 
 	public int getMaxLength() {
 		return maxLength;
