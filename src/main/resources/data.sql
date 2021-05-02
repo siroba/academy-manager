@@ -43,7 +43,7 @@ insert into Enrollment(ID_fa, ID_professional, status, timeEn, category) values
 	(1001, 2002, 'CONFIRMED', '2021-01-23 22:00:00.0', 'Standard'),
 	(1001, 2003, 'CONFIRMED', '2021-02-03 20:00:00.0', 'Standard'),
 	(1001, 2004, 'CONFIRMED', '2021-02-01 08:00:00.0', 'Standard'),
-	(1002, 2000, 'RECEIVED', '2021-03-02 12:00:00.0', 'Standard'),
+	(1002, 2000, 'CONFIRMED', '2021-03-02 12:00:00.0', 'Standard'),
 	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00.0', 'Standard'),
 	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00.0', 'Standard');
 
