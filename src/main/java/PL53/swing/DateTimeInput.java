@@ -14,6 +14,8 @@ import PL53.util.DateTime;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class DateTimeInput extends JPanel {
 	/** Auto generated serial ID */
@@ -53,8 +55,9 @@ public class DateTimeInput extends JPanel {
 		hoursTextField.setBounds(21, 20, 34, 22);
 		timePanel.add(hoursTextField);
 
-		hoursTextField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { // TODO: The "ActionPerformed" is not working
+		hoursTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
 				if(allTimeFieldsModified()) {
 					fireTimeEvent();
 					
@@ -74,8 +77,9 @@ public class DateTimeInput extends JPanel {
 		minutesTextField.setBounds(66, 20, 34, 22);
 		timePanel.add(minutesTextField);
 
-		minutesTextField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { // TODO: The "ActionPerformed" is not working
+		minutesTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
 				if(allTimeFieldsModified()) {
 					fireTimeEvent();
 					

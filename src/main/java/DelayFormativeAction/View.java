@@ -57,6 +57,12 @@ public class View extends JFrame {
 		
 		datetimeOffsetPanel = new DateTimeInput();
 		datetimeOffsetPanel.setBounds(10, 230, 437, 72);
+		datetimeOffsetPanel.getHoursTextField().setBound(Integer.MIN_VALUE, Integer.MAX_VALUE);
+		datetimeOffsetPanel.getMinutesTextField().setBound(Integer.MIN_VALUE, Integer.MAX_VALUE);
+		datetimeOffsetPanel.getDatePanel().getDaysTextField().setBound(Integer.MIN_VALUE, Integer.MAX_VALUE);
+		datetimeOffsetPanel.getDatePanel().getMonthsTextField().setBound(Integer.MIN_VALUE, Integer.MAX_VALUE);
+		datetimeOffsetPanel.getDatePanel().getYearsTextField().setBound(Integer.MIN_VALUE, Integer.MAX_VALUE);
+		
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		datetimeOffsetPanel.setBorder(blackline);
 		//datetimeOffsetPanel.setBounds(32, 235, 408, 67);
