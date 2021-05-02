@@ -3,7 +3,7 @@ package RegisterPayment;
 import Entities.Enrollment;
 import Entities.Fee;
 import Entities.FormativeAction;
-import Entities.Movement;
+import Entities.Invoice;
 import Entities.Payment;
 import Entities.Professional;
 
@@ -12,7 +12,7 @@ public class Data {
 	public Enrollment enrollment;
 	public Professional professional;
 	public float fee;
-	public Movement invoice;
+	public Invoice invoice;
 	public Payment payment;
 	
 }

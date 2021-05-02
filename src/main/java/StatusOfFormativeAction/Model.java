@@ -29,8 +29,7 @@ public class Model {
 			Connection cn = db.getConnection();
 			PreparedStatement ps = cn.prepareStatement(
 					"SELECT  fa.nameFa, fa.status, fa.enrollmentStart, fa.enrollmentEnd, fa.totalPlaces, (fa.totalPlaces - count(e.ID_fa)) as leftPlaces "
-							+ "FROM FormativeAction fa LEFT JOIN Enrollment e on e.ID_fa=fa.ID_fa AND (e.ID_fa, e.ID_professional) in "
-							+ "(select e.ID_fa, e.ID_professional from Enrollment e where e.status = 'RECEIVED' OR e.status = 'CONFIRMED')"
+							+ "FROM FormativeAction fa LEFT JOIN Enrollment e on e.ID_fa=fa.ID_fa "
 							+ "GROUP BY fa.ID_fa;");
 			ResultSet rs = ps.executeQuery();
 
@@ -66,7 +65,7 @@ public class Model {
 			query.append("INNER JOIN FormativeAction fa ");
 			query.append("ON e.ID_fa = fa.ID_fa ");
 			query.append("INNER JOIN Fee ");
-			query.append("ON fa.ID_fa = Fee.ID_fa and Fee.category=e.category AND (e.status = 'CONFIRMED' OR e.status = 'RECEIVED')");
+			query.append("ON fa.ID_fa = Fee.ID_fa and Fee.category=e.category ");
 			query.append("WHERE lower(fa.nameFa) = lower(?);");
 
 			PreparedStatement ps = cn.prepareStatement(query.toString());

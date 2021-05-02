@@ -18,42 +18,31 @@ public class Payment {
 	private float amount;
 	private Date payDate;
 	private boolean confirmed ,cash;
-	private String description = "";
 
-	/**
-	 * Default constructor
-	 * 
-	 * @param ID_invoice
-	 * @param amount
-	 * @param payDate
-	 * @param confirmed
-	 * @param cash
-	 * @param description
-	 */
-	public Payment(int ID_invoice, float amount, Date payDate, boolean confirmed , boolean cash, String description) {
+	public Payment(int ID_invoice, float amount, Date payDate, boolean confirmed , boolean cash) {
 		this.ID_invoice = ID_invoice;
 		this.amount = amount;
 		this.payDate = payDate;
 
 		this.confirmed = confirmed;
 		this.cash = cash;
-		
-		this.description = description;
 	}
 
-	
 	/**
-	 * Constructor with ID
-	 * 
+	 * Constructor with the ID of the payment
+	 *
 	 * @param ID_payment
-	 * @param ID_invoice
+	 * @param ID_fa
+	 * @param ID_professional
 	 * @param amount
 	 * @param payDate
+	 * @param sender
+	 * @param receiver
+	 * @param fiscalNumber
+	 * @param address
 	 * @param confirmed
-	 * @param cash
-	 * @param description
 	 */
-	public Payment(int ID_payment, int ID_invoice, float amount, Date payDate,  boolean confirmed, boolean cash, String description) {
+	public Payment(int ID_payment, int ID_invoice, float amount, Date payDate,  boolean confirmed, boolean cash) {
 		this.ID = ID_payment;
 		this.ID_invoice = ID_invoice;
 
@@ -63,9 +52,12 @@ public class Payment {
 		this.confirmed = confirmed;
 
 		this.cash=cash;
-		
-		this.description = description;
 	}
+
+
+
+	
+
 
 	public static String tableName() {
 		return "Payment";
@@ -120,8 +112,7 @@ public class Payment {
 					datepay,
 					
 					rs.getBoolean("confirmed"),
-					rs.getBoolean("cash"),
-					rs.getString("description"));
+					rs.getBoolean("cash"));
 		
 
 			enrollments.add(e);
@@ -166,8 +157,7 @@ public class Payment {
 				datepay,
 				
 				rs.getBoolean("confirmed"),
-				rs.getBoolean("cash"),
-				rs.getString("description"));
+				rs.getBoolean("cash"));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -205,7 +195,7 @@ public class Payment {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if(this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_fa, ID_professional, amount, payDate, confirmed,cash, description) VALUES(?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_payment, ID_fa, ID_professional, amount, payDate, confirmed,cash) VALUES(?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -217,12 +207,11 @@ public class Payment {
 			pstmt.setTimestamp(4, this.getPayDate().toTimestamp());
 			pstmt.setBoolean(5, this.isConfirmed());
 			pstmt.setBoolean(6, this.isCash());
-			pstmt.setString(7, this.getDescription());
 
 			pstmt.executeUpdate(); // statement execution
 			pstmt.close();
 		}else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -233,8 +222,6 @@ public class Payment {
 			pstmt.setBoolean(3, this.isConfirmed());
 			pstmt.setBoolean(4, this.isCash());
 			pstmt.setInt(5, this.getID_invoice());
-			pstmt.setString(6, this.getDescription());
-
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -246,6 +233,11 @@ public class Payment {
 
 		conn.close();
 	}
+
+
+
+
+
 
 
 	public void setID_invoice(int iD_invoice) {
@@ -300,16 +292,6 @@ public class Payment {
 
 	public void setID_fa(int iD_fa) {
 		ID_invoice = iD_fa;
-	}
-
-
-	public String getDescription() {
-		return description;
-	}
-
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 

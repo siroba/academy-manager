@@ -176,8 +176,8 @@ public class View extends JFrame {
 		btnConfirmAndEnroll.setBounds(31, 330, 235, 25);
 		registrationPanel.add(btnConfirmAndEnroll);
 		
-		chckbxNewCheckBox = new JCheckBox("Do you want a receipt?");
-		chckbxNewCheckBox.setBounds(12, 207, 169, 23);
+		chckbxNewCheckBox = new JCheckBox("Do you want an invoice?");
+		chckbxNewCheckBox.setBounds(12, 205, 169, 23);
 		registrationPanel.add(chckbxNewCheckBox);
 
 		JSeparator separator = new JSeparator();

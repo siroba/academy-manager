@@ -6,7 +6,7 @@ import java.util.*;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
-import Entities.Movement;
+import Entities.Invoice;
 import Entities.Payment;
 import Entities.Professional;
 import Utils.Database;
@@ -87,13 +87,11 @@ public class Model {
 		
 		if(refundPercentage > 0) { // If there is nothing to return, do not proceed			
 				// 2.3 - Create the Invoice for the same value payed
-
-			Movement refundInvoice = new Movement(payedAmount * refundPercentage, dateIn, sender, receiver, address, fiscalNumber, selected.formativeAction.getID(), selected.professional.getID(), ""); // TODO: Description
-
+			Invoice refundInvoice = new Invoice(payedAmount * refundPercentage, dateIn, sender, receiver, address, fiscalNumber, selected.formativeAction.getID(), selected.professional.getID());
 			refundInvoice.insert(db); // Insert it to update its ID
 	
 				// 2.4 - Generate a Payment for the amount due
-			Payment p = new Payment(refundInvoice.getID(), payedAmount * refundPercentage, dateIn, true, cash, ""); // TODO: Description
+			Payment p = new Payment(refundInvoice.getID(), payedAmount * refundPercentage, dateIn, true, cash);
 			p.insert(db); // Insert it into the database
 		}
 	}
@@ -101,15 +99,8 @@ public class Model {
 	public float getPayedAmount(int ID_professional, int ID_fa) {
 		String query = "SELECT SUM(Payment.amount) FROM Payment " + 
 				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
-				"WHERE ID_professional=? AND Invoice.ID_fa=? AND sender<>'COIIPA';";
-		float payed = (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
-		
-		query = "SELECT SUM(Payment.amount) FROM Payment " + 
-				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
-				"WHERE ID_professional=? AND Invoice.ID_fa=? AND sender='COIIPA';";
-		float received = (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
-		
-		return payed-received;
+				"WHERE ID_professional=? AND Invoice.ID_fa=?;";
+		return (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
 	}
 	
 	public float getRefundPercentage(int days) {

@@ -12,17 +12,20 @@ import java.util.List;
 import PL53.util.Date;
 import Utils.Database;
 
-public class Movement {
+public class Invoice {
 	private int ID = -1, ID_fa, ID_professional;
 	private Date dateIn;
-	private String sender, receiver, fiscalNumber, address, description = "";
+	private String sender, receiver, fiscalNumber, address;
 	private float amount;
 	private List<Payment> payments = new ArrayList<Payment>();
 
-	
 	/**
-	 * Constructor with ID
+	 * Constructor with ID_invoice
+
+	
+
 	 * 
+
 	 * @param ID_invoice
 	 * @param amount
 	 * @param dateIn
@@ -32,10 +35,8 @@ public class Movement {
 	 * @param fiscalNumber
 	 * @param ID_fa
 	 * @param ID_professional
-	 * @param description
 	 */
-	public Movement(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
-
+	public Invoice(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID = ID_invoice;
@@ -45,34 +46,7 @@ public class Movement {
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
 		this.ID_professional = ID_professional;
-		this.description = description;
 
-	}
-
-	
-	/**
-	 * Default constructor
-	 * 
-	 * @param amount
-	 * @param dateIn
-	 * @param sender
-	 * @param receiver
-	 * @param address
-	 * @param fiscalNumber
-	 * @param ID_fa
-	 * @param ID_professional
-	 * @param description
-	 */
-	public Movement(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
-		this.amount = amount;
-		this.ID_fa = ID_fa;
-		this.dateIn = dateIn;
-		this.sender = sender;
-		this.receiver = receiver;
-		this.fiscalNumber = fiscalNumber;
-		this.address = address;
-		this.ID_professional = ID_professional;
-		this.description = description;
 	}
 
 	public List<Payment> getPayments() {
@@ -82,7 +56,32 @@ public class Movement {
 	public void setPayments(List<Payment> payments) {
 		this.payments = payments;
 	}
-	
+	/**
+	 * Default Constructor
+
+	 *
+
+	 * @param amount
+	 * @param dateIn
+	 * @param sender
+	 * @param receiver
+	 * @param address
+	 * @param fiscalNumber
+	 * @param ID_fa
+	 * @param ID_professional
+	 */
+	public Invoice(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+		this.amount = amount;
+		this.ID_fa = ID_fa;
+		this.dateIn = dateIn;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.fiscalNumber = fiscalNumber;
+		this.address = address;
+		this.ID_professional = ID_professional;
+
+	}
+
 	public static String tableName() {
 		return "Invoice";
 	}
@@ -111,14 +110,14 @@ public class Movement {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<Movement> get(String query, Database db) throws SQLException {
+	public static List<Invoice> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 
-		List<Movement> invoices = new ArrayList<>();
+		List<Invoice> invoices = new ArrayList<>();
 		int id_invoice = rs.getInt("ID_invoice");
 
 		List<Payment> payments = Payment.get("SELECT * FROM Payment WHERE ID_invoice=" + id_invoice, db);
@@ -130,7 +129,7 @@ public class Movement {
 			} catch (ParseException e) {
 				dateIn = Date.fromMillis(rs.getLong("dateIn"));
 			}
-			Movement e = new Movement(
+			Invoice e = new Invoice(
 					rs.getInt("ID_invoice"),
 					rs.getFloat("amount"),
 					dateIn,
@@ -139,8 +138,11 @@ public class Movement {
 					rs.getString("fiscalNumber"),
 					rs.getString("address"),
 					rs.getInt("ID_fa"),
-					rs.getInt("ID_professional"),
-					rs.getString("description"));
+					rs.getInt("ID_professional")
+
+
+
+					);
 			e.setPayments(payments);
 			invoices.add(e);
 		}
@@ -162,7 +164,7 @@ public class Movement {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static Movement getOne(String query, Database db) throws SQLException {
+	public static Invoice getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -182,7 +184,7 @@ public class Movement {
 
 
 
-		Movement e = new Movement(
+		Invoice e = new Invoice(
 				rs.getInt("ID_invoice"),
 				rs.getFloat("amount"),
 				dateIn,
@@ -191,8 +193,8 @@ public class Movement {
 				rs.getString("fiscalNumber"),
 				rs.getString("address"),
 				rs.getInt("ID_fa"),
-				rs.getInt("ID_professional"),
-				rs.getString("description"));
+				rs.getInt("ID_professional")
+				);
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -220,7 +222,7 @@ public class Movement {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if(this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional, description) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -236,12 +238,11 @@ public class Movement {
 			pstmt.setInt(8, this.getID_fa());
 			pstmt.setInt(9, this.getID_professional());
 			pstmt.setInt(10, this.getID_professional());
-			pstmt.setString(11, this.getDescription());
 
 			pstmt.executeUpdate(); // statement execution
 			pstmt.close();
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -255,7 +256,6 @@ public class Movement {
 			pstmt.setString(6, this.getFiscalNumber());
 			pstmt.setInt(7, this.getID_fa());
 			pstmt.setInt(8, this.getID_professional());
-			pstmt.setString(9, this.getDescription());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -342,15 +342,5 @@ public class Movement {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-
-	public String getDescription() {
-		return description;
-	}
-
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 }
