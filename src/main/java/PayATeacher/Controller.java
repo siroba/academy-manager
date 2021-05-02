@@ -16,6 +16,7 @@ import Entities.FormativeAction;
 import Entities.MovementTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
+import Entities.Teacher;
 import Entities.TeacherTeaches;
 import PL53.util.Date;
 import PL53.util.DateTime;
@@ -82,6 +83,11 @@ public class Controller implements PL53.util.Controller {
 						JOptionPane.showMessageDialog(null, "You have to introduce the name of the teacher");
 					} else if (view.getFiscalNumberTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the fiscal number");
+					} else if (!Teacher.checkFiscalNumber(view.getFiscalNumberTextField())) {
+						JOptionPane.showMessageDialog(null,
+							    "Please provide a valid fiscal number. E.g. \\\"55566677R\\.",
+							    "Invalid fiscal number",
+							    JOptionPane.ERROR_MESSAGE);
 					} else if (view.getAddressTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the address");
 					} else if (view.getDateTransferTextField().getYear() == 0) {
@@ -104,14 +110,31 @@ public class Controller implements PL53.util.Controller {
 					} else {
 						String name = view.getNameTextField();
 						String fiscalNumber = view.getFiscalNumberTextField();
+						
 						String address = view.getAddressTextField();
 						Date dateTransfer = view.getDateTransferTextField();
 						int ID_fa = selectedRow.formativeAction.getID();
 						float amountAgreed = Float
-								.parseFloat((String) view.getTable().getValueAt(view.getSelected(), 3));
+								.parseFloat((String) view.getTable().getValueAt(view.getSelected(), 4));
 						String sender = "COIIPA";
-						String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2);
+						String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2) + " " + (String) view.getTable().getValueAt(view.getSelected(), 3) ;
+						String fiscalNumberDB = model.getFiscalNumber(new Teacher((String) view.getTable().getValueAt(view.getSelected(), 2), (String) view.getTable().getValueAt(view.getSelected(), 3), "", "", ""));
 						boolean confirmed = true;
+						// CHeck if fiscal number stored in the DB matches the entered one & provide the option to update it in the db if not 
+						if (fiscalNumber != fiscalNumberDB) {
+							int dialogButton = JOptionPane.YES_NO_CANCEL_OPTION;
+							int option = JOptionPane.showConfirmDialog (null, "The fiscal number for the teacher " + receiver + " does not match the one stored in the database. \nWould you like to replace the fiscal number in the database "+  fiscalNumberDB +" by " + fiscalNumber + "?","WARNING", dialogButton);
+				            if(option == JOptionPane.YES_OPTION) {
+				            	model.updateFiscalNumber(new Teacher((String) view.getTable().getValueAt(view.getSelected(), 2), (String) view.getTable().getValueAt(view.getSelected(), 3), "", "", ""), fiscalNumber);
+				            	JOptionPane.showMessageDialog(null,
+										"The fiscal number of " + receiver + " has been updated succesfully.");
+				            }	
+				            if(option == JOptionPane.CANCEL_OPTION) {
+				            	JOptionPane.showMessageDialog(null,
+										"No invoice has been created and no payment has been made");
+				            	return;
+				            }	
+						}
 						Date dateInvoice = view.getDateTextField();
 						String IDInvoice = view.getIDInvoice();
 						int ID_teacher = selectedRow.teacher.getID();
@@ -128,7 +151,7 @@ public class Controller implements PL53.util.Controller {
 						if (paymentTeacher != null) {
 
 							JOptionPane.showMessageDialog(null,
-									"The invoice has been successfully created anf the payment has been attached");
+									"The invoice has been successfully created and the payment has been attached");
 
 							model.initModel();
 
@@ -158,7 +181,7 @@ public class Controller implements PL53.util.Controller {
 
 	public TableModel getTableModel(Data[] datas) {
 
-		String header[] = { "Course name", "status", "Teacher name", "Due amount" };
+		String header[] = { "Course name", "status", "Teacher name", "Teacher surname", "Due amount" };
 
 		ArrayList<String[]> rows = new ArrayList<String[]>();
 
@@ -168,7 +191,7 @@ public class Controller implements PL53.util.Controller {
 			for (TeacherTeaches tt : d.formativeAction.getTeacherTeaches()) {
 
 				rows.add(new String[] { d.formativeAction.getName(), d.formativeAction.getStatus().toString(),
-						tt.getTeacher().getName(), Float.toString(tt.getRemuneration()) });
+						tt.getTeacher().getName(), tt.getTeacher().getSurname(), Float.toString(tt.getRemuneration()) });
 			}
 
 		}

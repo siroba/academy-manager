@@ -82,13 +82,13 @@ insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
 	(3013, 20, '2021-03-05 10:00:00.0', true,  4013),
 	(3014, -10, '2021-03-05 10:00:00.0', true, 4000);
 
-insert into Teacher (ID_teacher, name) values
-	(1000, "Fanjul"),
-	(1001, "Marcos"),
-	(1002, "Marek"),
-	(1003, "Vivien"),
-	(1004, "Silvia"),
-	(1005, "Rosalina");
+insert into Teacher (ID_teacher, name, surname, phone, email, fiscalNumber) values
+	(1000, "Jose", "Garcia Fanjul", "", "", "2345345656H"),
+	(1001, "Marcos", "Gutierrez Alonso", "", "", "78967856A"),
+	(1002, "Marek", "Ruschulte", "", "", "45667899D"),
+	(1003, "Vivien", "Drescher", "", "", "45345678G"),
+	(1004, "Silvia", "Rodriguez", "", "", "66756789F"),
+	(1005, "Rosalina", "Alvarez", "", "", "43214565G");
 	
 insert into TeacherTeaches (ID_teacher , ID_fa , remuneration) values
 	(1000,1000, 50.0),
