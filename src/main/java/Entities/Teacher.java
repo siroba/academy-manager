@@ -138,6 +138,34 @@ public class Teacher {
 		
 		return t;
 	}
+	public Teacher getTeacherByName(Database db) throws SQLException {
+		Connection conn = db.getConnection(); 
+		PreparedStatement pstmt;
+		
+		String sql = "SELECT *  FROM " + tableName() + " WHERE name=? and surname=?";
+		
+		pstmt = conn.prepareStatement(sql);
+		// Sets of the parameters of the prepared statement
+
+		pstmt.setString(1, this.getName());
+		pstmt.setString(2, this.getSurname());
+
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		Teacher t = new Teacher(rs.getInt("ID_teacher"),
+				rs.getString("name"), 
+				rs.getString("surname"), 
+				rs.getString("phone"), 
+				rs.getString("email"), 
+				rs.getString("fiscalNumber"));
+		
+		rs.close();
+		pstmt.close();
+		conn.close();
+		
+		return t;
+	}
 
 	public void removeTeacher(Database db) throws SQLException {
 		Connection conn = db.getConnection(); 
