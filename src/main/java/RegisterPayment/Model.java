@@ -112,19 +112,6 @@ public class Model {
 		return Movement.get(queryInvoice, db);
 	}
 
-	public float getAmountTotalPaid(Data selectedRow) {
-		
-
-		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
-				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " + " GROUP BY Payment.ID_invoice "
-				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=?), 0.0);";
-
-		float sumPayments = (float) ((double) (db
-				.executeQueryArray(sql, selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional())
-				.get(0)[0]));
-		return sumPayments;
-	}
-
 	/**
 	 * It confirms the enrollment if the totalAmountPayed >= the fee
 	 * 
@@ -237,6 +224,12 @@ public class Model {
         return (int)db.executeQueryArray(sql, ID_fa).get(0)[0];
     }
 
+	/**
+	 * The sum of all the negative payments
+	 * 
+	 * @param d
+	 * @return
+	 */
 	public float getAmountReturned(Data d) {
 
 		String sql = "SELECT COALESCE((SELECT SUM ( CASE WHEN Payment.amount <0 THEN Payment.amount ELSE 0 END) FROM Payment "
@@ -249,6 +242,12 @@ public class Model {
 		return sumPayments;
 	}
 
+	/**
+	 * The sum of all the positive payments
+	 * 
+	 * @param d
+	 * @return
+	 */
 	public float getAmountPaid(Data d) {
 		String sql = "SELECT COALESCE((SELECT SUM ( CASE WHEN Payment.amount >0 THEN Payment.amount ELSE 0 END) FROM Payment"
 				+ "				INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice GROUP BY Payment.ID_invoice "
@@ -260,4 +259,24 @@ public class Model {
 		return sumPayments;
 	}
 
+
+
+	/**
+	 * The sum of all the payments (positive and negative)
+	 * 
+	 * @param selectedRow
+	 * @return
+	 */
+	public float getAmountTotalPaid(Data selectedRow) {
+		
+
+		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " + " GROUP BY Payment.ID_invoice "
+				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=?), 0.0);";
+
+		float sumPayments = (float) ((double) (db
+				.executeQueryArray(sql, selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional())
+				.get(0)[0]));
+		return sumPayments;
+	}
 }

@@ -7,22 +7,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.multi.MultiInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import BaseProject.SwingUtil;
-import Entities.Movement;
-import Entities.Payment;
 import PL53.util.Date;
 import PL53.util.DateTime;
-import RegisterPayment.Data;
 
 public class Controller implements PL53.util.Controller {
 	private Model model;
@@ -62,10 +55,9 @@ public class Controller implements PL53.util.Controller {
 			public void mouseClicked(MouseEvent e) {
 
 				selectedRow = model.getDataNoCoiipa(view.getSelectedInvoice());
-				float alreadyPayed = model.getAmountTotalPaid(selectedRow);
+				/*float alreadyPayed = model.getAmountTotalPaid(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
-				float currentDueAmountProf = selectedRow.fee - totalPayed;
-			
+				float currentDueAmountProf = selectedRow.fee - totalPayed;*/
 
 				showPayments();
 			}
@@ -156,7 +148,7 @@ public class Controller implements PL53.util.Controller {
 
 						try {
 							model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
-						
+
 						} catch (SQLException | ParseException e1) {
 							e1.printStackTrace();
 						}
@@ -185,89 +177,61 @@ public class Controller implements PL53.util.Controller {
 
 		});
 
-		view.getBtnNewButton().addActionListener(new ActionListener() {
+		view.getBtnNewRefund().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean aux = true;
-
+				Date now = Date.now();
+				Date refundDate = view.getdateTextPaneRefund().getDate();
+				int daysBetweenNowAction = Date.daysSince(now, refundDate);
+				
+				float inputAmount = view.getAmountRefund();
+				float totalPaid = model.getAmountTotalPaid(selectedRow);
+				float fee = selectedRow.fee;
+				
+				// Checks
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
 					return;
-				}
-
-				float alreadyPaid = model.getAmountTotalPaid(selectedRow);
-				float totalPaid = alreadyPaid - view.getAmountRefund();
-				float dueAmountCOIIPA = selectedRow.fee - alreadyPaid;
-
-				if (view.getAmountRefund() <= 0) {
+				}else if (inputAmount <= 0) {
 					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
 					return;
-				}
-
-				DateTime now = DateTime.now();
-				long daysBetweenNowAction = DateTime.daysSince(now, view.getdateTextPaneRefund().getDate());
-
-				if (daysBetweenNowAction < 0) {
-
+				}else if (daysBetweenNowAction < 0) {
 					JOptionPane.showMessageDialog(null,
 							"Payments cannot be made in the future( the date must be on the current date or in the past).",
 							"date not valid ", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-
-				if (dueAmountCOIIPA > view.getAmountRefund()) {
-					aux = false;
-					int option = JOptionPane.showConfirmDialog(null, "The amount of the movement (" + dueAmountCOIIPA
-
-							+ ") is hihger than the amount that has to bee returned to the professional, Do you want to return the diferrence ("
-
-							+ String.format("%.2f", (totalPaid - selectedRow.invoice.getAmount())) + ")?", "warning",
+				
+				// If the user wants to compensate the movement
+				if (inputAmount > totalPaid-fee) {
+					int option = JOptionPane.showConfirmDialog(null, "The amount of the movement (" + inputAmount
+							+ ") is hihger than the amount that has to bee returned to the professional (" + (totalPaid-fee) + "), Do you want to return the diferrence ("
+							+ String.format("%.2f", (inputAmount - (totalPaid-fee))) + ")?", "warning",
 							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					if (option == 0) {
-						float toReturn = dueAmountCOIIPA - view.getAmountRefund();
-						Date payDate = view.getDateTextPane().getDate();
-						/*
-						 * Movement invoiceReturn = new Movement(toReturn, payDate,
-						 * selectedRow.invoice.getReceiver(), selectedRow.invoice.getSender(),
-						 * selectedRow.invoice.getAddress(), selectedRow.invoice.getFiscalNumber(),
-						 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional());
-						 */
+						float amount = inputAmount - (totalPaid-fee); // the amount to compensate
 						try {
-
-							model.createPaymentRefund(selectedRow.invoice.getID(), -toReturn, payDate, view.isCash(),
-									true);
-
+							model.createPaymentRefund(selectedRow.invoice.getID(), amount, refundDate, view.isCash(), true);
 						} catch (SQLException | ParseException e1) {
-
 							e1.printStackTrace();
 						}
 
-					} else if (option == 1) {
-						float amount = view.getAmountRefund();
-
-						Date payDate = view.getdateTextPaneRefund().getDate();
+					} /*else if (option == 1) {
 						try {
-							model.createPaymentRefund(selectedRow.invoice.getID(), -amount, payDate, view.isCash(),true);
+							model.createPaymentRefund(selectedRow.invoice.getID(), -amount, payDate, view.isCash(),
+									true);
 
-							
 						} catch (SQLException | ParseException e1) {
 							e1.printStackTrace();
 						}
 
 						return;
-					}
+					}*/
 
-				} else if (totalPaid < selectedRow.invoice.getAmount()) {
-					JOptionPane.showMessageDialog(null,
-							"The payment is lower than  the amount that has to be returned to the professional ");
-					aux = false;
-				}
-
-				float amount = view.getAmountRefund();
-				Date payDate = view.getdateTextPaneRefund().getDate();
+				} 
 
 				try {
-					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPaid);
+					model.createPayment(selectedRow.invoice, -inputAmount, refundDate, view.isCash(), true, totalPaid);
 					JOptionPane.showMessageDialog(null, "The payment has been registered");
 					view.resetAmountPaid();
 
@@ -292,7 +256,7 @@ public class Controller implements PL53.util.Controller {
 	public TableModel getTableModel(List<Data> list) {
 
 		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
-				"Date of the registration" , "Amount paid", "Amount returned" };
+				"Date of the registration", "Amount paid", "Amount returned" };
 
 		String body[][] = new String[list.size()][header.length];
 		for (int i = 0; i < list.size(); i++) {
@@ -300,7 +264,8 @@ public class Controller implements PL53.util.Controller {
 
 			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
 					d.professional.getEmail(), Float.toString(d.invoice.getAmount()),
-					d.enrollment.getTimeEn().toString(), Float.toString(model.getAmountPaid(d)), Float.toString(model.getAmountReturned(d)) };
+					d.enrollment.getTimeEn().toString(), Float.toString(model.getAmountPaid(d)),
+					Float.toString(model.getAmountReturned(d)) };
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
@@ -323,7 +288,6 @@ public class Controller implements PL53.util.Controller {
 		view.getMovementsTable().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getMovementsTable());
 
-	
 		/*
 		 * float amount = 0; for (AuxPayment payment : paymentList) { amount +=
 		 * payment.getAmount(); }

@@ -65,7 +65,7 @@ public class View extends JFrame {
 	private JTable movementsTable;
 	private JScrollPane scrollPane_1;
 	private JDecimalField AmountRefund;
-	private JButton btnNewButton;
+	private JButton btnNewRefund;
 	private DateInput dateTextPaneRefund;
 
 	public View() {
@@ -178,12 +178,12 @@ public class View extends JFrame {
 		panel.add(AmountRefund);
 		AmountRefund.setColumns(10);
 		
-		btnNewButton = new JButton("Add movement");
+		btnNewRefund = new JButton("Add movement");
 		
 		
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btnNewButton.setBounds(295, 107, 136, 44);
-		panel.add(btnNewButton);
+		btnNewRefund.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnNewRefund.setBounds(295, 107, 136, 44);
+		panel.add(btnNewRefund);
 	}
 
 	public Window getFrame() {
@@ -254,8 +254,8 @@ public class View extends JFrame {
 	public float getAmountRefund() {
 		return AmountRefund.getValue();
 	}
-	public JButton getBtnNewButton() {
-		return btnNewButton;
+	public JButton getBtnNewRefund() {
+		return btnNewRefund;
 	}
 	
 }
