@@ -47,6 +47,11 @@ public class JIntField extends JNumberField<Integer>{
 	}
 	
 	@Override
+	public void setValue(Integer f)  {
+		this.setText(f);
+	}
+	
+	@Override
 	protected Integer getInternalValue() {
 		if (numberDigits(getText()) > 0)
 			return Integer.parseInt(this.getText());

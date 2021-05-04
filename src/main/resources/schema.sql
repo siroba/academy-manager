@@ -71,8 +71,12 @@ CREATE TABLE IF NOT EXISTS Payment(
 );
 
 CREATE TABLE IF NOT EXISTS Teacher (
-	ID_teacher 		integer PRIMARY KEY AUTOINCREMENT,
-	name       		text NOT NULL
+	ID_teacher 	 integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	name            text NOT NULL,
+   	surname         text NOT NULL,
+   	phone           text NOT NULL,
+    	email           text NOT NULL,
+    	fiscalNumber	 text NOT NULL	
 );
 
 CREATE TABLE IF NOT EXISTS InvoiceTeacher (

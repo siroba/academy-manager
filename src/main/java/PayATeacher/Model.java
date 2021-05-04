@@ -10,6 +10,7 @@ import Entities.FormativeAction;
 import Entities.MovementTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
+import Entities.Teacher;
 import Entities.TeacherTeaches;
 import PayATeacher.Data;
 import Utils.Database;
@@ -84,8 +85,16 @@ public class Model {
 		invoice.insert(db);
 		paymentTeacher.setInvoiceID(invoice.getID());
 		paymentTeacher.insert(db);
+	}
 
+	// Get fiscal number of teacher
+	public String getFiscalNumber(Teacher t) throws SQLException {
+		return t.getTeacherByName(db).getFiscalNumber();
+	}
 
+	// Update fiscal number of teacher 
+	public void updateFiscalNumber(Teacher t, String fN) throws SQLException {
+		t.updateTeacherFiscalNumber(db, fN);
 	}
 
 

@@ -19,7 +19,7 @@ import Entities.FormativeAction;
 import Entities.Session;
 import Entities.Teacher;
 import Entities.TeacherTeaches;
-import PL53.swing.DateTimeInput.DateTimeModifiedListener;
+import PL53.swing.DateInput.DateModifiedListener;
 import PL53.util.DateTime;
 import Utils.SwingUtil;
 
@@ -140,12 +140,8 @@ public class Controller implements PL53.util.Controller {
 		
 		// Does not work because I don't know what "EventListener" to put in the Date/DateTime Input's textfields. 
 		// It does not seem to be working with an ActionPerformed
-		view.getEnrollEndDateTimeInput().addDateTimeListener(new DateTimeModifiedListener() {
-			public void timeModified() {
-				
-			}
-			
-			public void dateTimeModified() {
+		view.getEnrollEndDateTimeInput().getDatePanel().addDateListener(new DateModifiedListener() {
+			public void dateModified() {
 				validateDates(new ArrayList<DateTime>(), view.getEnrollStart(), view.getEnrollEnd());
 			}
 		});
@@ -289,9 +285,9 @@ public class Controller implements PL53.util.Controller {
 		 * "You need to provide a teacher to create a formative Action.",
 		 * "Teacher not valid", JOptionPane.ERROR_MESSAGE); return; }
 		 */
-		if (view.getLocation().isBlank()) {
-			JOptionPane.showMessageDialog(null, "You need to provide a location to create a formative Action.",
-					"Location not valid", JOptionPane.ERROR_MESSAGE);
+		if (sessions.size()<=0) {
+			JOptionPane.showMessageDialog(null, "You need add at least one session.",
+					"There are no sessions!", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		// Validate session dates
@@ -370,8 +366,8 @@ public class Controller implements PL53.util.Controller {
 		for (int i = 0; i < formativeActionDates.size(); i++) {
 
 			// Get date of each session start
-			DateTime formativeActionDate = formativeActionDates.get(i);
-
+			DateTime formativeActionDate = formativeActionDates.get(formativeActionDates.size()-1);
+			
 			long daysBetweenNowAction = DateTime.daysSince(formativeActionDate, now);
 			long daysBetweenStartAction = DateTime.daysSince(formativeActionDate, enrollStart);
 			long daysBetweenEndAction = DateTime.daysSince(formativeActionDate, enrollEnd);

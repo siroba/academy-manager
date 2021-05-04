@@ -84,6 +84,8 @@ public class View extends JFrame {
 		dateIn.getYearsTextField().setDefaultValue(2021);
 		
 		invoiceInfoPanel = new JPanel();
+		invoiceInfoPanel.setEnabled(false);
+		invoiceInfoPanel.setVisible(false);
 		invoiceInfoPanel.setBounds(10, 269, 422, 45);
 		contentPane.add(invoiceInfoPanel);
 		invoiceInfoPanel.setLayout(null);
