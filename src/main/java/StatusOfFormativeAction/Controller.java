@@ -128,7 +128,7 @@ public class Controller implements PL53.util.Controller {
 		List<Payment> paymentList = model.getPaymentsTeacher(lastSelectedKey, selectedTeacher);
 		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList, 
 				new String[] {"date", "amount"}, 
-				new String[] {"Date", "amount"}, 
+				new String[] {"Date", "Amount"}, 
 				false);
 		view.getTablePayments().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTablePayments());
@@ -142,7 +142,12 @@ public class Controller implements PL53.util.Controller {
 	}
 	
 	public void cleanPayments() {
-		view.getTablePayments().setModel(new DefaultTableModel());
+		String[] colHeadings = {"Date","Amount"};
+		
+		DefaultTableModel model = new DefaultTableModel(0, colHeadings.length) ;
+		model.setColumnIdentifiers(colHeadings);
+		view.getTablePayments().setModel(model);
+		SwingUtil.autoAdjustColumns(view.getTablePayments());
 		view.getLabelSummary().setText("");
 	}
 }
