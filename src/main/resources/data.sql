@@ -107,6 +107,6 @@ insert into InvoiceTeacher (Id_invoice , amount, dateIn, sender, receiver, addre
 	('4004', 100, '2021-01-04 ', 'COIIPA', 'recieverName', 'address', 'fiscalNumber',  1002, 1004);
 
 insert into PaymentTeacher( ID_payment, amount, datePay,  confirmed, ID_invoice) values
-	(3000, 50, '2021-01-02 ', true, '4000'),
-	(3001, 30, '2021-01-04 ', false, '4001'),
-	(3002, 70, '2021-01-07 ', false, '4002');
+	(3000, 50, '2021-01-02 00:00:00.0 ', true, '4000'),
+	(3001, 30, '2021-01-04 00:00:00.0 ', false, '4001'),
+	(3002, 70, '2021-01-07 00:00:00.0 ', false, '4002');

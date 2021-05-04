@@ -179,7 +179,7 @@ public class Model {
 			Connection cn = db.getConnection();
 
 			PreparedStatement ps = cn.prepareStatement(
-					"select pt.amount, datetime(datePay) as datePay, t.name, sender, receiver from FormativeAction fa\r\n"
+					"select pt.amount, datePay, t.name, sender, receiver from FormativeAction fa\r\n"
 					+ "inner join TeacherTeaches tt on fa.ID_fa = tt.ID_fa\r\n"
 					+ "inner join Teacher t on t.ID_teacher = tt.ID_teacher\r\n"
 					+ "inner join InvoiceTeacher it on fa.ID_fa = it.ID_fa and t.ID_teacher = it.ID_teacher\r\n"
@@ -193,12 +193,12 @@ public class Model {
 			List<Payment> listPayments = new ArrayList<>();
 
 			while (rs.next()) {
-				listPayments.add(new Payment(Date.parseString(rs.getString("datePay")),
+				listPayments.add(new Payment(Date.parse(rs.getTimestamp("datePay")),
 						rs.getString("sender").equals("COIIPA") ? rs.getInt("amount") : -rs.getInt("amount")));
 			}
 
 			return listPayments;
-		} catch (SQLException | ParseException e) {
+		} catch (SQLException e) {
 			throw new UnexpectedException(e);
 		}
 	}
