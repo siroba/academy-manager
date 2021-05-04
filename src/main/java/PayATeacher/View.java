@@ -46,7 +46,6 @@ public class View extends JFrame {
 	private JButton addPayment;
 	private JDecimalField amoundRefound;
 	private JTextField surname;
-	private JTextField dueAmountTextField;
 
 	/**
 	 * Create the frame.
@@ -90,7 +89,7 @@ public class View extends JFrame {
 		contentPane.add(dateTextField);
 		
 		dateTransferTextField = new DateInput();
-		dateTransferTextField.setBounds(10, 580, 230, 65);
+		dateTransferTextField.setBounds(873, 325, 230, 65);
 		dateTransferTextField.setBorder(blackline);
 		dateTransferTextField.getYearsTextField().setBound(2000, 3000);
 		contentPane.add(dateTransferTextField);
@@ -168,21 +167,21 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel_9 = new JLabel("Date of the transfer");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_9.setBounds(10, 545, 115, 13);
+		lblNewLabel_9.setBounds(874, 281, 115, 13);
 		contentPane.add(lblNewLabel_9);
 		
 		
 		
 
-		registerButton = new JButton("Pay the teacher");
+		registerButton = new JButton("Record the invoice");
 		
 		registerButton.setFont(new Font("Tahoma", Font.BOLD, 12));
-		registerButton.setBounds(279, 580, 158, 41);
+		registerButton.setBounds(918, 415, 158, 41);
 
 		contentPane.add(registerButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 695, 117);
+		scrollPane.setBounds(10, 101, 1172, 117);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -198,20 +197,15 @@ public class View extends JFrame {
 		contentPane.add(separator_1);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(715, 101, 367, 117);
+		scrollPane_1.setBounds(10, 540, 477, 172);
 		contentPane.add(scrollPane_1);
 		
 		JLabel lblNewLabel_10 = new JLabel("Movements");
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_10.setBounds(715, 72, 115, 13);
+		lblNewLabel_10.setBounds(107, 506, 115, 13);
 		contentPane.add(lblNewLabel_10);
 		
-		JSeparator separator_3 = new JSeparator();
-		separator_3.setOrientation(SwingConstants.VERTICAL);
-		separator_3.setBounds(530, 494, 12, 239);
-		contentPane.add(separator_3);
-		
-		JLabel lblNewLabel_12 = new JLabel("Payments made by the teachers");
+		JLabel lblNewLabel_12 = new JLabel("Record movements");
 		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNewLabel_12.setBounds(568, 517, 330, 31);
 		contentPane.add(lblNewLabel_12);
@@ -231,9 +225,9 @@ public class View extends JFrame {
 		lblNewLabel_14.setBounds(568, 670, 45, 13);
 		contentPane.add(lblNewLabel_14);
 		
-		addPayment = new JButton("Add payment");
+		addPayment = new JButton("Add movement");
 		addPayment.setFont(new Font("Tahoma", Font.BOLD, 10));
-		addPayment.setBounds(898, 581, 170, 41);
+		addPayment.setBounds(873, 671, 170, 41);
 		contentPane.add(addPayment);
 		
 		amoundRefound = new JDecimalField(2);
@@ -241,16 +235,20 @@ public class View extends JFrame {
 		amoundRefound.setBounds(568, 693, 163, 19);
 		contentPane.add(amoundRefound);
 		
-		JLabel lblNewLabel_16 = new JLabel("Due amount");
-		lblNewLabel_16.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_16.setBounds(757, 670, 106, 13);
-		contentPane.add(lblNewLabel_16);
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Teacher");
+		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.BOLD, 10));
+		chckbxNewCheckBox.setBounds(873, 601, 93, 21);
+		contentPane.add(chckbxNewCheckBox);
 		
-		dueAmountTextField = new JTextField();
-		dueAmountTextField.setText("");
-		dueAmountTextField.setBounds(757, 693, 137, 19);
-		contentPane.add(dueAmountTextField);
-		dueAmountTextField.setColumns(10);
+		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("COIIPA");
+		chckbxNewCheckBox_1.setFont(new Font("Dialog", Font.BOLD, 12));
+		chckbxNewCheckBox_1.setBounds(873, 624, 93, 21);
+		contentPane.add(chckbxNewCheckBox_1);
+		
+		JLabel lblNewLabel_16 = new JLabel("Sender of the movement");
+		lblNewLabel_16.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_16.setBounds(861, 558, 182, 13);
+		contentPane.add(lblNewLabel_16);
 	}
 	
 	public String getAddressTextField() {
@@ -323,9 +321,7 @@ public class View extends JFrame {
 	public float getAmoundRefound() {
 		return amoundRefound.getValue();
 	}
-	public JTextField getDueAmountTextField() {
-		return dueAmountTextField;
-	}
+	
 	public JTextField getSurname() {
 		return surname;
 	}
