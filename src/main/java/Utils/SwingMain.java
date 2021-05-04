@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import PL53.util.FileGenerator;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -66,6 +68,9 @@ public class SwingMain {
 		db.createDatabase(false);
 		db.loadDatabase();
 
+		// Remove all files from the "Files" directory 
+		FileGenerator.deleteFolderRecursively();
+		
 		// Secretary
 		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
 

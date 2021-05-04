@@ -140,16 +140,19 @@ public class Model {
 		return normalPayments + refundPayments;
 	}
 
-	public void createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
+	public boolean createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
 			throws SQLException, ParseException {
+		boolean enrollmentConfirmed = false; 
 		if(totalAmountPayed == invoiceReturn.getAmount()) {
 			String sql = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?";
 			db.executeUpdateQuery(sql, invoiceReturn.getID_fa(), invoiceReturn.getID_professional());
+			enrollmentConfirmed = true; 
 		}
 		//invoiceReturn.insert(db);
 		int id_invoice = invoiceReturn.getID();
 		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
 		p.insert(db);
+		return enrollmentConfirmed; 
 	}
 	
 	public void createPaymentRefund(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed) // TODO: OH GOD PLEASE NO
@@ -220,6 +223,5 @@ public class Model {
 		
 		return null;
 	}
-
 
 }
