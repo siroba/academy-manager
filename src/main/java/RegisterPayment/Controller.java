@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -18,10 +20,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import BaseProject.SwingUtil;
+import Entities.FormativeAction;
 import Entities.Movement;
 import Entities.Payment;
+import Entities.Professional;
+import Entities.Session;
 import PL53.util.Date;
 import PL53.util.DateTime;
+import PL53.util.FileGenerator;
 import RegisterPayment.Data;
 
 public class Controller implements PL53.util.Controller {
@@ -77,7 +83,7 @@ public class Controller implements PL53.util.Controller {
 					return;
 				}
 				if (view.isCash() && view.getAmountPaidTextField() > 1000) {
-					JOptionPane.showMessageDialog(null, "With cash the payments has to be lower than 1000€");
+					JOptionPane.showMessageDialog(null, "With cash the payments has to be lower than 1000ï¿½");
 					return;
 				}
 
@@ -91,7 +97,7 @@ public class Controller implements PL53.util.Controller {
 				view.setDueAmountProfessinalLabel(String.valueOf(currentDueAmountProf));
 
 				if (view.getAmountPayed() <= 0) {
-					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
+					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "ï¿½");
 					return;
 				}
 
@@ -199,7 +205,7 @@ public class Controller implements PL53.util.Controller {
 				float totalPayed = alreadyPayed + view.getAmountPayed();
 
 				if (view.getAmountPayed() <= 0) {
-					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "€");
+					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "ï¿½");
 					return;
 				}
 
@@ -263,13 +269,23 @@ public class Controller implements PL53.util.Controller {
 				Date payDate = view.getdateTextPaneRefund().getDate();
 
 				try {
-					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
-					JOptionPane.showMessageDialog(null, "The payment has been registered");
+					boolean enrollmentConfirmed =  model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+					JOptionPane.showMessageDialog(null, "The payment has been registered");					
+					if (enrollmentConfirmed) {
+						// Generate a file to confirm the enrollment 
+						Professional p = selectedRow.professional; 
+						FormativeAction fA = selectedRow.formativeAction;
+						List<Session> ss = fA.getSessions();
+						List<String> body = FileGenerator.bodyConfirmationEnrollment(fA, p, ss, selectedRow.fee, totalPayed);
+						FileGenerator.generateFile("service@coiipa.com", p.getEmail(), "Confirmation of Enrollment", body, "ConfirmationEnrollment" + File.separator + "Confirmation_enrollment_fA" + fA.getID() + "_p" + p.getID() + ".txt");
+					}	
 					view.resetAmountPaid();
-
 					model.initModel();
 					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
 				} catch (SQLException | ParseException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

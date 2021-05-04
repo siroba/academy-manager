@@ -145,16 +145,19 @@ public class Model {
 		return sumPayments;
 	}
 
-	public void createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
+	public boolean createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
 			throws SQLException, ParseException {
+		boolean enrollmentConfirmed = false; 
 		if(totalAmountPayed == invoiceReturn.getAmount()) {
 			String sql = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?";
 			db.executeUpdateQuery(sql, invoiceReturn.getID_fa(), invoiceReturn.getID_professional());
+			enrollmentConfirmed = true; 
 		}
 		// invoiceReturn.insert(db);
 		int id_invoice = invoiceReturn.getID();
 		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
 		p.insert(db);
+		return enrollmentConfirmed; 
 	}
 
 	public void createPaymentRefund(int invoiceID, float toReturn, Date payDate, boolean cash, boolean confirmed) 
@@ -240,7 +243,6 @@ public class Model {
 	
 	public int getFreePlaces(int ID_fa) throws SQLException, ParseException {
         String sql ="SELECT FormativeAction.totalPlaces- COUNT(Enrollment.ID_fa) FROM Enrollment INNER JOIN FormativeAction ON FormativeAction.ID_fa = Enrollment.ID_fa WHERE Enrollment.ID_fa=? AND Enrollment.status<>'CANCELLED';";
-
         return (int)db.executeQueryArray(sql, ID_fa).get(0)[0];
     }
 
