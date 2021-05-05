@@ -239,14 +239,14 @@ public class Controller implements PL53.util.Controller {
 				}
 
 				try {
-					boolean enrollmentConfirmed =  model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+					boolean enrollmentConfirmed =  model.createPayment(selectedRow.invoice, -inputAmount, refundDate, view.isCash(), true, totalPaid);
 					JOptionPane.showMessageDialog(null, "The payment has been registered");
 					if (enrollmentConfirmed) {
 						// Generate a file to confirm the enrollment
 						Professional p = selectedRow.professional;
 						FormativeAction fA = selectedRow.formativeAction;
 						List<Session> ss = fA.getSessions();
-						List<String> body = FileGenerator.bodyConfirmationEnrollment(fA, p, ss, selectedRow.fee, totalPayed);
+						List<String> body = FileGenerator.bodyConfirmationEnrollment(fA, p, ss, selectedRow.fee, totalPaid);
 						FileGenerator.generateFile("service@coiipa.com", p.getEmail(), "Confirmation of Enrollment", body, "ConfirmationEnrollment" + File.separator + "Confirmation_enrollment_fA" + fA.getID() + "_p" + p.getID() + ".txt");
 					}
 					view.resetAmountPaid();
