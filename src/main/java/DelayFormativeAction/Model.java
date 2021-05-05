@@ -33,14 +33,14 @@ public class Model {
 		String sessionQuery = "UPDATE Session SET sessionStart=? WHERE ID_session=?";
 		
 		for(Session s: fa.getSessions()) // Delay all the sessions by the same amount
-			db.executeUpdate(sessionQuery, delay(s.getSessionStart(), dateTimeInput), s.getID());
+			db.executeUpdate(sessionQuery, delay(s.getSessionStart(), dateTimeInput).toSQLiteString(), s.getID());
 		
 		// Delay the end of the enrollment period by the same amount
 		DateTime enEnd = delay(fa.getEnrollmentEnd(), dateTimeInput);
 		
 		String query = "UPDATE FormativeAction SET enrollmentEnd=?, status=? WHERE ID_fa=?";
 		
-		db.executeUpdate(query, enEnd.toTimestamp(), FormativeAction.Status.DELAYED.toString(), fa.getID());
+		db.executeUpdate(query, enEnd.toSQLiteString(), FormativeAction.Status.DELAYED.toString(), fa.getID());
 	}
 
 	public DateTime delay(DateTime dt, DateTimeInput dti) {

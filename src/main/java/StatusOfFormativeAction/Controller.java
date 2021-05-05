@@ -113,7 +113,7 @@ public class Controller implements PL53.util.Controller {
 				new String[] {"Date", "amount"}, 
 				false);
 		view.getTablePayments().setModel(tmodel);
-		//SwingUtil.autoAdjustColumns(view.getTablePayments());
+		SwingUtil.autoAdjustColumns(view.getTablePayments());
 		
 		float amount = 0;
 		for (Payment payment : paymentList) {
@@ -131,7 +131,7 @@ public class Controller implements PL53.util.Controller {
 				new String[] {"Date", "Amount"}, 
 				false);
 		view.getTablePayments().setModel(tmodel);
-		//SwingUtil.autoAdjustColumns(view.getTablePayments());
+		SwingUtil.autoAdjustColumns(view.getTablePayments());
 		
 		float amount = 0;
 		for (Payment payment : paymentList) {
@@ -147,7 +147,7 @@ public class Controller implements PL53.util.Controller {
 		DefaultTableModel model = new DefaultTableModel(0, colHeadings.length) ;
 		model.setColumnIdentifiers(colHeadings);
 		view.getTablePayments().setModel(model);
-		//SwingUtil.autoAdjustColumns(view.getTablePayments());
+		SwingUtil.autoAdjustColumns(view.getTablePayments());
 		view.getLabelSummary().setText("");
 	}
 }
