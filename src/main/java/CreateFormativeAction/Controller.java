@@ -217,6 +217,7 @@ public class Controller implements PL53.util.Controller {
 				view.setTableFees(getTableModelFees(fees));
 				view.setGroup("");
 				view.setFee(0);
+				view.getBtnDeleteFee().setEnabled(false);
 			}
 		});
 
@@ -227,12 +228,15 @@ public class Controller implements PL53.util.Controller {
 					fees.clear();
 					view.setTableFees(getTableModelFees(fees));
 					fees.add(new Fee("Free of charge", 0));
+					view.getBtnAddFee().setEnabled(false);
+					view.getBtnDeleteFee().setEnabled(false);
 				} else {
 					fees.clear();
 					fees.add(new Fee("Standard"));
 					fees.add(new Fee("College Members"));
 					fees.add(new Fee("UniOvi Members"));
 					view.setTableFees(getTableModelFees(fees));
+					view.getBtnAddFee().setEnabled(true);
 				}
 			}
 		});
