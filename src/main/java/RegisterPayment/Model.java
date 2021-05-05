@@ -59,8 +59,8 @@ public class Model {
 		return this.data[i];
 	}
 
-	public Data[] getAllData() {
-		return this.data;
+	public ArrayList<Data> getAllData() {
+		return new ArrayList<Data>(Arrays.asList(this.data));
 	}
 
 	private Data[] initData() throws SQLException, ParseException {

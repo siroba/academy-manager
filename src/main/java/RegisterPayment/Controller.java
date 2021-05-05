@@ -67,7 +67,7 @@ public class Controller implements PL53.util.Controller {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
-				selectedRow = model.getDataNoCoiipa(view.getSelectedInvoice());
+				selectedRow = model.getData(view.getSelectedInvoice());
 
 				showPayments();
 			}
@@ -184,7 +184,7 @@ public class Controller implements PL53.util.Controller {
 					view.resetAmountPaid();
 
 					model.initModel();
-					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
+					view.setTable(getTableModel(model.getAllData()));
 				} catch (SQLException | ParseException e1) {
 					e1.printStackTrace();
 				}
@@ -281,7 +281,7 @@ public class Controller implements PL53.util.Controller {
 					}	
 					view.resetAmountPaid();
 					model.initModel();
-					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
+					view.setTable(getTableModel(model.getAllData()));
 				} catch (SQLException | ParseException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -298,7 +298,7 @@ public class Controller implements PL53.util.Controller {
 
 		view.setVisible(true);
 
-		view.setTable(getTableModel(model.getAllDataNoCoiipa()));
+		view.setTable(getTableModel(model.getAllData()));
 	}
 
 	public TableModel getTableModel(List<Data> list) {
@@ -329,7 +329,7 @@ public class Controller implements PL53.util.Controller {
 
 	public void showPayments() {
 		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(),
-				model.getDataNoCoiipa(view.getTable().getSelectedRow()));
+				model.getData(view.getTable().getSelectedRow()));
 		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList,
 				new String[] { "sender", "receiver", "date", "amount" });
 		view.getMovementsTable().setModel(tmodel);
