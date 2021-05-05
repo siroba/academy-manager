@@ -70,7 +70,7 @@ public class Controller {
 		
 		String error = "The following warning occured while trying to close the formative action:\n\n";
 		Boolean errorOccured = false;
-		Boolean ret = false;
+		Boolean ret = true;
 		String fa = view.getListFormativeActions().getSelectedValue();
 		
 		// check if Payments of professionals are correct
@@ -86,7 +86,7 @@ public class Controller {
 		else if (professionalsWithStatusReceived) {
 			errorOccured = true;
 			error += "The income received from the professionals corresponds with the expected income\n"
-					+ "But not all professionals are with status confirmed, therefore there might be a mistake.";
+					+ "But not all professionals are with status confirmed, therefore there might be a mistake.\n";
 			view.getLblFeesCorrect().setText("The income received from the professionals \n"
 					+ "corresponds with the expected income.\n"
 					+ "But not all professionals reached the status \n"
