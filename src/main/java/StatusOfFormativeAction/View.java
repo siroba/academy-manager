@@ -16,7 +16,8 @@ public class View {
 	private JLabel lblActive;
 	private JTable tabFormativeActions;
 	private JTable tabPayments;
-	
+	private JLabel lblSummary;
+	private JTable tabTeacher;
 	
 	public View() {
 		initComponents();
@@ -26,10 +27,10 @@ public class View {
 		frame = new JFrame();
 		frame.setTitle("Status of Formative Actions");
 		frame.setName("Status of Formative Actions");
-		frame.setBounds(0, 0, 600, 700);
+		frame.setBounds(0, 0, 900, 700);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][200:250:][200:250:][200:250:]"));
+		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[][200:250:][200:250:][200:250:][40]"));
 		
 		lblActive = new JLabel();
 		lblActive.setText(" ");
@@ -41,7 +42,7 @@ public class View {
 		tabFormativeActions.setDefaultEditor(Object.class, null);
 		tabFormativeActions.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane tableListFormativeActions = new JScrollPane(tabFormativeActions);
-		frame.getContentPane().add(tableListFormativeActions, "cell 0 1, grow");
+		frame.getContentPane().add(tableListFormativeActions, "cell 0 1 2 1, grow");
 		
 		tabRegistration = new JTable();
 		tabRegistration.setDefaultEditor(Object.class, null);
@@ -50,11 +51,20 @@ public class View {
 		JScrollPane tableRegPanel = new JScrollPane(tabRegistration);
 		frame.getContentPane().add(tableRegPanel, "cell 0 2, grow");
 		
+		tabTeacher = new JTable();
+		tabTeacher.setDefaultEditor(Object.class, null);
+		tabTeacher.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		frame.getContentPane().add(new JScrollPane(tabTeacher), "cell 1 2, grow");
+		
 		tabPayments = new JTable();
 		tabPayments.setDefaultEditor(Object.class, null);
 		tabPayments.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane tablePayments = new JScrollPane(tabPayments);
-		frame.getContentPane().add(tablePayments, "cell 0 3, grow");
+		frame.getContentPane().add(tablePayments, "cell 0 3 2 1, grow");
+		
+		frame.getContentPane().add(new JLabel("Summary: "), "cell 0 4");
+		lblSummary = new JLabel();
+		frame.getContentPane().add(lblSummary, "cell 0 4");
 	}
 	
 	//Getters to access from the controller (compact representation)
@@ -63,4 +73,6 @@ public class View {
 	public JLabel getLabelActive() { return this.lblActive; }
 	public JTable getTableFormativeActions() { return this.tabFormativeActions; }
 	public JTable getTablePayments() { return this.tabPayments; }
+	public JLabel getLabelSummary() { return this.lblSummary; }
+	public JTable getTableTeacher() { return this.tabTeacher; }
 }

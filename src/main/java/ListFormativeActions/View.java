@@ -37,8 +37,8 @@ public class View {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 
 		frame = new JFrame();
-		frame.setTitle("Courses");
-		frame.setName("Courses");
+		frame.setTitle("List of Formative Actions");
+		frame.setName("List of Formative Actions");
 		frame.setBounds(0, 0, 1000, 422);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -51,7 +51,7 @@ public class View {
 		cbStatusSelection = new JComboBox<String>();
 		cbStatusSelection.setFont(new Font("Dialog", Font.PLAIN, 12));
 		cbStatusSelection
-				.setModel(new DefaultComboBoxModel<String>(new String[] { "Active", "Executed", "Cancelled" }));
+				.setModel(new DefaultComboBoxModel<String>(new String[] { "Active", "Executed", "Cancelled", "Delayed" }));
 		frame.getContentPane().add(cbStatusSelection, "cell 0 1,gapx 10");
 
 		// Filter by start date

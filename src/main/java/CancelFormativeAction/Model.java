@@ -5,11 +5,17 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import Entities.Enrollment;
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.Movement;
+import Entities.MovementTeacher;
 import Entities.Payment;
+import Entities.PaymentTeacher;
 import Entities.Professional;
+import Entities.Teacher;
+import PL53.util.Date;
 import RegisterCancellations.Data;
 import Utils.Database;
 
@@ -50,7 +56,7 @@ public class Model {
 	}
 
 	public double getInvoices(int index) {
-		String query = "SELECT SUM(amount) FROM InvoiceTeacher GROUP BY ID_fa HAVING ID_fa=?";
+		String query = "SELECT SUM(amount) FROM InvoiceTeacher GROUP BY ID_fa HAVING ID_fa=? AND ID_invoice IN (SELECT ID_Invoice FROM PaymentTeacher)";
 
 
 		List<Object[]> obj = db.executeQueryArray(query, data[index].getID());
@@ -68,9 +74,20 @@ public class Model {
 	}
 
 	public Data[] getSolicitedRefunds(FormativeAction fa) throws SQLException {
-		String queryEnrollments = "SELECT Enrollment.* FROM Enrollment "
-								+ "INNER JOIN Invoice ON Invoice.ID_fa=Enrollment.ID_fa AND Invoice.ID_professional=Enrollment.ID_professional "
-								+ "WHERE Invoice.receiver='COIIPA' AND ID_invoice IN (SELECT ID_invoice FROM Payment) AND ID_invoice NOT IN (SELECT ID_invoice FROM Invoice WHERE sender='COIIPA') AND Enrollment.ID_fa=" + fa.getID() + ";";
+		String queryEnrollments = "SELECT Enrollment.* FROM Enrollment \n"
+				+ "INNER JOIN Invoice ON Invoice.ID_fa=Enrollment.ID_fa AND Invoice.ID_professional=Enrollment.ID_professional "
+				+ "WHERE Invoice.receiver='COIIPA' AND ID_invoice IN (SELECT ID_invoice FROM Payment) AND Enrollment.ID_fa=" + fa.getID()
+				+ " AND (Enrollment.ID_fa,Enrollment.ID_professional) NOT IN (SELECT ID_fa, ID_professional FROM Invoice WHERE sender='COIIPA');";
+				
+				/*+ "INNER JOIN FormativeAction ON FormativeAction.ID_fa=Enrollment.ID_fa " 
+				+ "WHERE FormativeAction.status='CANCELLED' AND "
+				+ "		(SELECT inv.amount FROM Invoice as inv  "
+				+ "		WHERE inv.ID_professional=Enrollment.ID_professional AND  "
+				+ "				inv.ID_fa=Enrollment.ID_fa AND  "
+				+ "				sender='COIIPA')<>(SELECT inv.amount FROM Invoice as inv "
+				+ "		WHERE inv.ID_professional=Enrollment.ID_professional AND  "
+				+ "				inv.ID_fa=Enrollment.ID_fa AND  "
+				+ "				receiver='COIIPA');";*/
 		
 		String queryInvoice = "SELECT * FROM Invoice WHERE ID_fa=" + fa.getID() + " AND ID_professional=";
 		String queryPayments = "SELECT * FROM Payment WHERE ID_invoice=";
@@ -82,7 +99,7 @@ public class Model {
 			Data d = new Data();
 			d.formativeAction = fa;
 			d.enrollment = en;
-			d.invoice = Invoice.getOne(queryInvoice + en.getID_professional(), db);
+			d.invoice = Movement.getOne(queryInvoice + en.getID_professional(), db);
 			d.professional = Professional.getOne(queryProfessional + d.invoice.getID_professional(), db);
 			d.payment = Payment.getOne(queryPayments + d.invoice.getID(), db);
 			
@@ -93,30 +110,61 @@ public class Model {
 		dd = allData.toArray(dd);
 		return dd;
 	}
-	
-	/**
-	 * Refunds all the money to the professionals
-	 * 
-	 * @param index Selected formative action
-	 */
-	public void refund(int index) {
-		// TODO Auto-generated method stub
-
-	}
 
 	/**
 	 * Generates an invoice for the teachers of the formative action that have
 	 * already been payed.
 	 * 
 	 * @param index Selected formative action
+	 * @throws SQLException 
+	 * @throws ParseException 
 	 */
-	public void invoiceTeachers(int index) {
-		// TODO Auto-generated method stub
-
+	public void invoiceTeachers(int index, Date dateIn, String fiscalNumber, String address) throws SQLException, ParseException {
+		String query = "SELECT * FROM InvoiceTeacher WHERE ID_fa=" + data[index].getID();
+		
+		for(MovementTeacher inv: MovementTeacher.get(query, db)) {
+			Teacher t = Teacher.getOne("SELECT * FROM Teacher WHERE ID_teacher=" + inv.getID_teacher(), db);
+			
+			// As for the ID of the new invoice 
+			// TODO: PO does not want this
+			String invoiceId = JOptionPane.showInputDialog(null, "What is the ID of the invoice for the teacher " + t.getName() + " for " + inv.getAmount() + "€?", null);
+			
+			// A simple description for the transaction
+			String description = "The formative action " + data[index].getName() + " was cancelled.";
+			
+			// Create the new invoice and insert it into the DB
+			MovementTeacher newInv = new MovementTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID(), description);
+			newInv.insert(db);
+			
+			// Create a new Payment for that Invoice and insert it
+			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true, ""); // TODO: Description
+			p.insert(db);
+		}
+		
 	}
 
 	public FormativeAction[] getCancelled() {
 		return cancelled;
+	}
+
+	public int getUsedPlaces(int ID_fa) {
+		String query = "SELECT COUNT(*) FROM Enrollment WHERE ID_fa=?;";
+		
+		return (int)(db.executeQueryArray(query, ID_fa).get(0)[0]);
+	}
+
+	public void payRefund(Movement in, boolean cash) throws SQLException, ParseException {
+		in.insert(db);
+		
+		Payment p = new Payment(in.getID(), in.getAmount(), in.getDateIn(), true, cash, ""); // TODO: Description
+		p.insert(db);
+	}
+	
+	public float getPayedAmount(int ID_professional, int ID_fa) {
+		String query = "SELECT SUM(Payment.amount) FROM Payment " + 
+				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
+				"WHERE ID_professional=? AND Invoice.ID_fa=?;";
+		return (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
 	}
 
 }

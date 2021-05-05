@@ -15,7 +15,7 @@ import PL53.util.Random;
 import Utils.Database;
 
 /**
- *
+ * 
  */
 public class FormativeAction {
 	private int ID = -1;
@@ -89,7 +89,7 @@ public class FormativeAction {
 
 	public FormativeAction(int ID_fa, String name, int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
-			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees, List<TeacherTeaches> teachers) {
+			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees) {
 
 		this.ID = ID_fa;
 		this.name = name;
@@ -199,16 +199,16 @@ public class FormativeAction {
 			this.ID = tableKeys.getInt(1);
 			tableKeys.close();
 			pstmt.close();
-
+			
 			for(Session s: this.sessions) {
 				s.setID_fa(this.getID());
 			}
-
+			
 			for(Fee f: this.fees) {
 				f.setID_fa(this.getID());
 			}
 		}
-
+		
 		conn.close();
 	}
 
@@ -246,11 +246,10 @@ public class FormativeAction {
 			}
 
 			int id_fa = rs.getInt("ID_fa");
-
-			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+			
+			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa + " ORDER BY sessionStart", db);
 			List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
-			List<TeacherTeaches> teachers = TeacherTeaches.get("SELECT * FROM TeacherTeaches WHERE ID_fa=" + id_fa, db);
-
+			
 			FormativeAction f = new FormativeAction(
 					id_fa,
 					rs.getString("nameFa"),
@@ -260,10 +259,10 @@ public class FormativeAction {
 					Status.valueOf(rs.getString("status").toUpperCase()),
 					dstart,
 					dend,
-					sessions,
-					fees,
-					teachers);
+					sessions, 
+					fees);
 
+			f.setTeacherTeaches(TeacherTeaches.get(f, db));
 			fa.add(f);
 		}
 
@@ -308,8 +307,8 @@ public class FormativeAction {
 		}
 
 		int id_fa = rs.getInt("ID_fa");
-
-		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+		
+		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa + " ORDER BY sessionStart", db);
 		List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
 		
 		FormativeAction fa = new FormativeAction(
@@ -321,12 +320,10 @@ public class FormativeAction {
 				Status.valueOf(rs.getString("status").toUpperCase()),
 				dstart,
 				dend,
-				sessions,
-				fees,
-				null);
-		List<TeacherTeaches> teachers = TeacherTeaches.get(fa, db);
-		fa.setTeacherTeaches(teachers);
-
+				sessions, 
+				fees);
+		fa.setTeacherTeaches(TeacherTeaches.get(fa, db));
+		
 		// Very important to always close all the objects related to the database
 		rs.close();
 		st.close();
@@ -334,18 +331,18 @@ public class FormativeAction {
 
 		return fa;
 	}
-
+	
 	public TeacherTeaches teach(Teacher t, float remuneration) {
 		TeacherTeaches tt = new TeacherTeaches(t, this, remuneration);
 		teachers.add(tt);
-
+		
 		return tt;
 	}
-
+	
 	public List<TeacherTeaches> getTeacherTeaches(){
 		return teachers;
 	}
-
+	
 	public void setTeacherTeaches(List<TeacherTeaches> t) {
 		this.teachers = t;
 	}
@@ -353,9 +350,17 @@ public class FormativeAction {
 	public float refund(String group) {
         return this.refundPercentage()*this.getFee(group);
     }
+	
+	public float refundPercentage(Date date) {
+        int days = Date.daysSince(this.sessions.get(0).getSessionStart(), date);
 
+        if(days > 7) return 1f;
+        else if (days <= 6 && days >=3) return 0.5f;
+        else return 0f;
+	}
+  
     public float refundPercentage() {
-        int days = Date.daysSince(enrollmentEnd);
+        int days = Date.daysSince(this.sessions.get(0).getSessionStart());
 
         if(days > 7) return 1f;
         else if (days <= 6 && days >=3) return 0.5f;
@@ -429,7 +434,7 @@ public class FormativeAction {
 	public void setSessions(List<Session> sessions) {
 		for(Session s: sessions)
 			s.setID_fa(this.getID());
-
+		
 		this.sessions = sessions;
 	}
 
@@ -441,7 +446,7 @@ public class FormativeAction {
 	public List<Fee> getFees() {
 		return fees;
 	}
-
+	
 	public float getFee(String group) {
 		List<Fee> fees = this.getFees();
 		float fee = 0;
@@ -454,7 +459,7 @@ public class FormativeAction {
 	public void setFees(List<Fee> fees) {
 		for(Fee f: fees)
 			f.setID_fa(this.getID());
-
+		
 		this.fees = fees;
 	}
 
@@ -462,7 +467,7 @@ public class FormativeAction {
 		fee.setID_fa(this.getID());
 		this.fees.add(fee);
 	}
-
+	
 	public enum Status {
 		ACTIVE, DELAYED, EXECUTED, CANCELLED;
 	}

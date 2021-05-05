@@ -30,6 +30,8 @@ public class View extends JFrame {
 	private JTextField fiscalNumber;
 	public DateInput dateIn;
 	private JCheckBox isCash;
+	private JPanel invoiceInfoPanel;
+	private JPanel panel;
 	
 	/**
 	 * Create the frame.
@@ -37,7 +39,7 @@ public class View extends JFrame {
 	public View() {
 		setTitle("Select an enrollment to cancel");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 867, 337);
+		setBounds(100, 100, 867, 299);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -55,42 +57,60 @@ public class View extends JFrame {
 		scrollPane.setViewportView(table);
 		contentPane.add(scrollPane);
 		
+		panel = new JPanel();
+		panel.setBounds(329, 147, 377, 109);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
 		btnCancelRegistration = new JButton("Cancel registration");
-		btnCancelRegistration.setBounds(329, 263, 207, 25);
-		contentPane.add(btnCancelRegistration);
+		btnCancelRegistration.setBounds(0, 84, 207, 25);
+		panel.add(btnCancelRegistration);
 		
-		JLabel lblNewLabel_1 = new JLabel("COIIPA's address:");
-		lblNewLabel_1.setBounds(20, 149, 170, 14);
-		contentPane.add(lblNewLabel_1);
-		
-		address = new JTextField();
-		address.setColumns(10);
-		address.setBounds(20, 174, 206, 20);
-		contentPane.add(address);
-		
-		JLabel lblNewLabel_2 = new JLabel("COIIPA's fiscal number:");
-		lblNewLabel_2.setBounds(236, 149, 151, 14);
-		contentPane.add(lblNewLabel_2);
-		
-		fiscalNumber = new JTextField();
-		fiscalNumber.setColumns(10);
-		fiscalNumber.setBounds(236, 174, 206, 20);
-		contentPane.add(fiscalNumber);
-		
-		JLabel lblNewLabel = new JLabel("Date of the invoice:");
-		lblNewLabel.setBounds(452, 147, 132, 14);
-		contentPane.add(lblNewLabel);
+		JLabel lblNewLabel = new JLabel("Date of the cancellation:");
+		lblNewLabel.setBounds(0, 0, 174, 14);
+		panel.add(lblNewLabel);
 		
 		dateIn = new DateInput();
-		dateIn.setBorder(BorderFactory.createLineBorder(Color.black));
-		dateIn.getYearsTextField().setBound(2021, 3000);
+		dateIn.getYearsTextField().setBound(2000, Integer.MAX_VALUE);
 		dateIn.getYearsTextField().setDefaultValue(2021);
-		dateIn.setBounds(452, 165, 211, 55);
-		contentPane.add(dateIn);
+		dateIn.setBounds(0, 18, 211, 55);
+		panel.add(dateIn);
+		dateIn.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		isCash = new JCheckBox("Cash payment");
-		isCash.setBounds(703, 173, 138, 23);
-		contentPane.add(isCash);
+		isCash.setBounds(239, 33, 138, 23);
+		panel.add(isCash);
+		dateIn.getYearsTextField().setBound(2021, 3000);
+		dateIn.getYearsTextField().setDefaultValue(2021);
+		
+		invoiceInfoPanel = new JPanel();
+		invoiceInfoPanel.setEnabled(false);
+		invoiceInfoPanel.setVisible(false);
+		invoiceInfoPanel.setBounds(10, 269, 422, 45);
+		contentPane.add(invoiceInfoPanel);
+		invoiceInfoPanel.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("COIIPA's address:");
+		lblNewLabel_1.setBounds(0, 0, 170, 14);
+		invoiceInfoPanel.add(lblNewLabel_1);
+		
+		address = new JTextField();
+		address.setBounds(0, 25, 206, 20);
+		invoiceInfoPanel.add(address);
+		address.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("COIIPA's fiscal number:");
+		lblNewLabel_2.setBounds(216, 0, 151, 14);
+		invoiceInfoPanel.add(lblNewLabel_2);
+		
+		fiscalNumber = new JTextField();
+		fiscalNumber.setBounds(216, 25, 206, 20);
+		invoiceInfoPanel.add(fiscalNumber);
+		fiscalNumber.setColumns(10);
+		
+		JLabel lblNewLabel_3 = new JLabel("Press the button to know the due amount:");
+		lblNewLabel_3.setBounds(61, 235, 258, 14);
+		contentPane.add(lblNewLabel_3);
 	}
 	
 	public JButton getBtnCancelRegistration() {

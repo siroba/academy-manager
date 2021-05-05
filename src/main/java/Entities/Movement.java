@@ -12,14 +12,16 @@ import java.util.List;
 import PL53.util.Date;
 import Utils.Database;
 
-public class Invoice {
+public class Movement {
 	private int ID = -1, ID_fa, ID_professional;
 	private Date dateIn;
-	private String sender, receiver, fiscalNumber, address;
+	private String sender, receiver, fiscalNumber, address, description = "";
 	private float amount;
+	private List<Payment> payments = new ArrayList<Payment>();
 
+	
 	/**
-	 * Constructor with ID_invoice
+	 * Constructor with ID
 	 * 
 	 * @param ID_invoice
 	 * @param amount
@@ -30,8 +32,10 @@ public class Invoice {
 	 * @param fiscalNumber
 	 * @param ID_fa
 	 * @param ID_professional
+	 * @param description
 	 */
-	public Invoice(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public Movement(int ID_invoice, float amount,  Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
+
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID = ID_invoice;
@@ -41,11 +45,13 @@ public class Invoice {
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
 		this.ID_professional = ID_professional;
+		this.description = description;
 
 	}
 
+	
 	/**
-	 * Default Constructor
+	 * Default constructor
 	 * 
 	 * @param amount
 	 * @param dateIn
@@ -55,8 +61,9 @@ public class Invoice {
 	 * @param fiscalNumber
 	 * @param ID_fa
 	 * @param ID_professional
+	 * @param description
 	 */
-	public Invoice(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional) {
+	public Movement(float amount, Date dateIn , String sender , String receiver, String address, String fiscalNumber,int ID_fa, int ID_professional, String description) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.dateIn = dateIn;
@@ -65,9 +72,17 @@ public class Invoice {
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
 		this.ID_professional = ID_professional;
-
+		this.description = description;
 	}
 
+	public List<Payment> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(List<Payment> payments) {
+		this.payments = payments;
+	}
+	
 	public static String tableName() {
 		return "Invoice";
 	}
@@ -96,14 +111,17 @@ public class Invoice {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<Invoice> get(String query, Database db) throws SQLException {
+	public static List<Movement> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 
-		List<Invoice> invoices = new ArrayList<>();
+		List<Movement> invoices = new ArrayList<>();
+		int id_invoice = rs.getInt("ID_invoice");
+
+		List<Payment> payments = Payment.get("SELECT * FROM Payment WHERE ID_invoice=" + id_invoice, db);
 
 		while (rs.next()) {
 			Date dateIn;
@@ -112,7 +130,7 @@ public class Invoice {
 			} catch (ParseException e) {
 				dateIn = Date.fromMillis(rs.getLong("dateIn"));
 			}
-			Invoice e = new Invoice(
+			Movement e = new Movement(
 					rs.getInt("ID_invoice"),
 					rs.getFloat("amount"),
 					dateIn,
@@ -121,9 +139,9 @@ public class Invoice {
 					rs.getString("fiscalNumber"),
 					rs.getString("address"),
 					rs.getInt("ID_fa"),
-					rs.getInt("ID_professional")
-					);
-
+					rs.getInt("ID_professional"),
+					rs.getString("description"));
+			e.setPayments(payments);
 			invoices.add(e);
 		}
 
@@ -144,7 +162,7 @@ public class Invoice {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static Invoice getOne(String query, Database db) throws SQLException {
+	public static Movement getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -158,8 +176,13 @@ public class Invoice {
 		} catch (ParseException e) {
 			dateIn = Date.fromMillis(rs.getLong("dateIn"));
     }
-    
-		Invoice e = new Invoice(
+		int id_invoice = rs.getInt("ID_invoice");
+
+		List<Payment> payments = Payment.get("SELECT * FROM Payment WHERE ID_invoice=" + id_invoice, db);
+
+
+
+		Movement e = new Movement(
 				rs.getInt("ID_invoice"),
 				rs.getFloat("amount"),
 				dateIn,
@@ -168,13 +191,15 @@ public class Invoice {
 				rs.getString("fiscalNumber"),
 				rs.getString("address"),
 				rs.getInt("ID_fa"),
-				rs.getInt("ID_professional")
-				);
+				rs.getInt("ID_professional"),
+				rs.getString("description"));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
 		st.close();
 		conn.close();
+
+		e.setPayments(payments);
 
 		return e;
 	}
@@ -195,7 +220,7 @@ public class Invoice {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		if(this.getID() != -1) {
-			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional) VALUES(?,?,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + "(ID_invoice, amount, dateIn, sender, receiver, address, fiscalNumber, ID_fa,  ID_professional, description) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -211,11 +236,12 @@ public class Invoice {
 			pstmt.setInt(8, this.getID_fa());
 			pstmt.setInt(9, this.getID_professional());
 			pstmt.setInt(10, this.getID_professional());
+			pstmt.setString(11, this.getDescription());
 
 			pstmt.executeUpdate(); // statement execution
 			pstmt.close();
 		} else {
-			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?)";
+			String SQL = "INSERT INTO " + tableName() + " VALUES(null,?,?,?,?,?,?,?,?,?)";
 
 			// Prepared Statement initialized with the INSERT statement
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -229,6 +255,7 @@ public class Invoice {
 			pstmt.setString(6, this.getFiscalNumber());
 			pstmt.setInt(7, this.getID_fa());
 			pstmt.setInt(8, this.getID_professional());
+			pstmt.setString(9, this.getDescription());
 			pstmt.executeUpdate(); // statement execution
 
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
@@ -241,14 +268,18 @@ public class Invoice {
 
 		conn.close();
 	}
-	
+
+
+
 	public float getAmount() {
 		return amount;
 	}
 	public void setAmount(float amount) {
 		this.amount = amount;
 	}
-  
+
+
+
 	public int getID_professional() {
 		return ID_professional;
 	}
@@ -311,5 +342,15 @@ public class Invoice {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

@@ -11,17 +11,17 @@ import PL53.util.DateTime;
 import Utils.Database;
 import Utils.UnexpectedException;
 
-
 public class Model {
 
-	private Database db=new Database();
-	
+	private Database db = new Database();
+
 	/**
 	 * Gets the list of active races in object form for a given registration date.
-	 * @throws ParseException 
+	 * 
+	 * @throws ParseException
 	 */
-	public List<FinancialBalance> getListFinancialBalance(Date startDate,Date endDate, String status){
-		//Query all rows from the result of a SQL query
+	public List<FinancialBalance> getListFinancialBalance(Date startDate, Date endDate, String status) {
+		// Query all rows from the result of a SQL query
 		try {
 		// Setup connection & statements 
 		Connection cn=db.getConnection(); //NOSONAR
@@ -66,8 +66,8 @@ public class Model {
 		// Expenses estimated
 		StringBuilder queryExpensesEstimated = new StringBuilder();
 		queryExpensesEstimated.append("select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_estimated from ");
-		queryExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(tT.remuneration),0) as expenses_estimated ");
-		queryExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa WHERE fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' group by fA.ID_fA) T ");
+		queryExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(CASE WHEN fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' THEN tT.remuneration END),0) as expenses_estimated ");
+		queryExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa group by fA.ID_fA) T ");
 		queryExpensesEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
 		queryExpensesEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
 		if (status != null) queryExpensesEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
@@ -124,10 +124,9 @@ public class Model {
 		}
 		return new ArrayList<>();
 	}
-	
 
-	public List<TotalBalance> getListTotalBalance(Date startDate,Date endDate, String status) {
-		//Query all rows from the result of a SQL query
+	public List<TotalBalance> getListTotalBalance(Date startDate, Date endDate, String status) {
+		// Query all rows from the result of a SQL query
 		try {
 			
 		// Set up connection & statements
@@ -181,8 +180,8 @@ public class Model {
 		queryTotalExpensesEstimated.append("select sum(expenses_estimated) as total_expenses_estimated ");
 		queryTotalExpensesEstimated.append("FROM ");
 		queryTotalExpensesEstimated.append("(select distinct(T.ID_fa), T.nameFa, T.status, T.expenses_estimated from ");
-		queryTotalExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(tT.remuneration),0) as expenses_estimated ");
-		queryTotalExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa WHERE fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' group by fA.ID_fA) T ");
+		queryTotalExpensesEstimated.append("(select fA.ID_fa, fA.nameFa, fA.status, IFNULL(sum(CASE WHEN fA.status='ACTIVE' or fA.status='DELAYED' or fA.status='EXECUTED' THEN tT.remuneration END),0) as expenses_estimated  ");
+		queryTotalExpensesEstimated.append("from FormativeAction fA left join TeacherTeaches tT on tT.ID_fa=fA.ID_fa group by fA.ID_fA) T ");
 		queryTotalExpensesEstimated.append("left join Session s on s.ID_fa=T.ID_fa ");
 		queryTotalExpensesEstimated.append("where date(s.sessionStart) BETWEEN \"" + startDate.toSQL() + "\" AND \"" + endDate.toSQL() + "\" ");
 		if (status != null) queryTotalExpensesEstimated.append("and T.status=\"" + status.toUpperCase() + "\" ");
@@ -217,26 +216,27 @@ public class Model {
 		}
 		return new ArrayList<>();
 	}
-	
+
 	/**
-	 * Returns a list containing the DateTime of the first and last session celebrated for all the formative action  
+	 * Returns a list containing the DateTime of the first and last session
+	 * celebrated for all the formative action
 	 */
 	private List<DateTime> getListFirstSessionLastSession(List<Session> sessions) {
-		List<DateTime> FirstSessionLastSession = new ArrayList<DateTime>(); 
+		List<DateTime> FirstSessionLastSession = new ArrayList<DateTime>();
 		if (!sessions.isEmpty()) {
-		int idFaLast = sessions.get(0).getID_fa();
+			int idFaLast = sessions.get(0).getID_fa();
 			DateTime DateTimeFaLast = sessions.get(0).getSessionStart();
-		    FirstSessionLastSession.add(DateTimeFaLast);
-		    for(int i=1; i<sessions.size(); i++){
-		    	if (idFaLast != sessions.get(i).getID_fa()) {
-		    		FirstSessionLastSession.add(DateTimeFaLast);
-		    		FirstSessionLastSession.add(sessions.get(i).getSessionStart());
-		    	}
-		    	idFaLast = sessions.get(i).getID_fa();
-		    	DateTimeFaLast = sessions.get(i).getSessionStart();
-		    }
-		    FirstSessionLastSession.add(sessions.get(sessions.size()-1).getSessionStart());
+			FirstSessionLastSession.add(DateTimeFaLast);
+			for (int i = 1; i < sessions.size(); i++) {
+				if (idFaLast != sessions.get(i).getID_fa()) {
+					FirstSessionLastSession.add(DateTimeFaLast);
+					FirstSessionLastSession.add(sessions.get(i).getSessionStart());
+				}
+				idFaLast = sessions.get(i).getID_fa();
+				DateTimeFaLast = sessions.get(i).getSessionStart();
+			}
+			FirstSessionLastSession.add(sessions.get(sessions.size() - 1).getSessionStart());
 		}
 		return FirstSessionLastSession;
-	}		
+	}
 }
