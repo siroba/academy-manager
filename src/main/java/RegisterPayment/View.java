@@ -159,6 +159,9 @@ public class View extends JFrame {
 		
 		dateTextPaneRefund = new DateInput();
 		dateTextPaneRefund.setBounds(48, 75, 212, 67);
+		dateTextPaneRefund.getYearsTextField().setBound(2000, Integer.MAX_VALUE);
+		dateTextPaneRefund.getYearsTextField().setDefaultValue(2021);
+		dateTextPaneRefund.setBorder(blackline);
 		panel.add(dateTextPaneRefund);
 		
 		JLabel lblNewLabel_8 = new JLabel("Date");

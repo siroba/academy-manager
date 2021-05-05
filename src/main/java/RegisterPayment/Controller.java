@@ -77,7 +77,7 @@ public class Controller implements PL53.util.Controller {
 					return;
 				}
 
-				float alreadyPayed = model.getAmountTotalPaid(selectedRow);
+				float alreadyPayed = model.getAmountPaid(selectedRow);
 				float totalPayed = alreadyPayed + view.getAmountPayed();
 				float toReturn = totalPayed - selectedRow.invoice.getAmount();
 				Date payDate = view.getDateTextPane().getDate();
@@ -184,7 +184,7 @@ public class Controller implements PL53.util.Controller {
 				int daysBetweenNowAction = Date.daysSince(now, refundDate);
 				
 				float inputAmount = view.getAmountRefund();
-				float totalPaid = model.getAmountTotalPaid(selectedRow);
+				float totalPaid = model.getAmountPaid(selectedRow);
 				float fee = selectedRow.fee;
 				
 				// Checks
