@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import PL53.util.FileGenerator;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -66,6 +68,9 @@ public class SwingMain {
 		db.createDatabase(false);
 		db.loadDatabase();
 
+		// Remove all files from the "Files" directory 
+		FileGenerator.deleteFolderRecursively();
+		
 		// Secretary
 		JLabel labelSecretary = new JLabel("Secretary", SwingConstants.CENTER);
 
@@ -163,7 +168,6 @@ public class SwingMain {
 		});
 		
 		JButton btnCheckFinancialBalance = new JButton("Check financial balance");
-
 		btnCheckFinancialBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CheckFinancialBalance.Controller controller;
@@ -171,15 +175,15 @@ public class SwingMain {
 				controller.initController();
 			}
 		});
-
-		// Empty grid elements
-		JLabel labelEmpty1 = new JLabel("");
-		JLabel labelEmpty2 = new JLabel("");
-		JLabel labelEmpty3 = new JLabel("");
-		JLabel labelEmpty4 = new JLabel("");
-		JLabel labelEmpty5 = new JLabel("");
-		JLabel labelEmpty6 = new JLabel("");
-		JLabel labelEmpty7 = new JLabel("");
+		
+		JButton btnManageTeachers = new JButton("Manage teachers");
+		btnManageTeachers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ManageTeachers.Controller controller;
+				controller = new ManageTeachers.Controller(new ManageTeachers.Model(), new ManageTeachers.View());
+				controller.initController();
+			}
+		});
 		
 		// Add elements to frame/grid
 		// Row 1
@@ -192,20 +196,20 @@ public class SwingMain {
 		frame.getContentPane().add(btnPlanFormativeAction);
 		// Row 3
 		frame.getContentPane().add(btnListFormativeActions);
-		frame.getContentPane().add(labelEmpty1);
+		frame.getContentPane().add(new JLabel(""));
 		frame.getContentPane().add(btnCheckFinancialBalance);
 		// Row 4
 		frame.getContentPane().add(btnStatusOfFormativeActions);
-		frame.getContentPane().add(labelEmpty2);
-		frame.getContentPane().add(labelEmpty3);
+		frame.getContentPane().add(new JLabel(""));
+		frame.getContentPane().add(btnManageTeachers);
 		// Row 5
 		frame.getContentPane().add(btnRegisterCancellations);
-		frame.getContentPane().add(labelEmpty4);
-		frame.getContentPane().add(labelEmpty5);
+		frame.getContentPane().add(new JLabel(""));
+		frame.getContentPane().add(new JLabel(""));
 		// Row 6
 		frame.getContentPane().add(btnPayTeacher);
-		frame.getContentPane().add(labelEmpty6);
-		frame.getContentPane().add(labelEmpty7);
+		frame.getContentPane().add(new JLabel(""));
+		frame.getContentPane().add(new JLabel(""));
 		
 		// Row 7
 		frame.getContentPane().add(btnDelayFA);

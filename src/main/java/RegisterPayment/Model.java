@@ -59,8 +59,8 @@ public class Model {
 		return this.data[i];
 	}
 
-	public Data[] getAllData() {
-		return this.data;
+	public ArrayList<Data> getAllData() {
+		return new ArrayList<Data>(Arrays.asList(this.data));
 	}
 
 	private Data[] initData() throws SQLException, ParseException {
@@ -112,32 +112,56 @@ public class Model {
 		return Movement.get(queryInvoice, db);
 	}
 
-	/**
-	 * It confirms the enrollment if the totalAmountPayed >= the fee
-	 * 
-	 * @param invoiceReturn
-	 * @param toReturn
-	 * @param payDate
-	 * @param cash
-	 * @param confirmed
-	 * @param totalAmountPayed
-	 * @throws SQLException
-	 * @throws ParseException
-	 */
-	public void createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
+	public float getAmountPayed(Data selectedRow) {
+		/*
+		 * String sqlRefund =
+		 * "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+		 *
+		 * + "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " +
+		 * " GROUP BY Payment.ID_invoice " +
+		 * "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender='COIIPA'), 0.0);"
+		 * ;
+		 *
+		 * String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment " +
+		 * "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " +
+		 * " GROUP BY Payment.ID_invoice " +
+		 * "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender<>'COIIPA'), 0.0);"
+		 * ;
+		 *
+		 * float normalPayments = (float) ((double) (db .executeQueryArray(sql,
+		 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional())
+		 * .get(0)[0])); float refundPayments = -(float) ((double) (db
+		 * .executeQueryArray(sqlRefund, selectedRow.invoice.getID_fa(),
+		 * selectedRow.invoice.getID_professional()) .get(0)[0]));
+		 */
+
+		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " + " GROUP BY Payment.ID_invoice "
+				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=?), 0.0);";
+
+		float sumPayments = (float) ((double) (db
+				.executeQueryArray(sql, selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional())
+				.get(0)[0]));
+		return sumPayments;
+	}
+
+	public boolean createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
 			throws SQLException, ParseException {
-		if(totalAmountPayed >= invoiceReturn.getAmount()) {
+		boolean enrollmentConfirmed = false;
+		if(totalAmountPayed == invoiceReturn.getAmount()) {
 			String sql = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?";
 			db.executeUpdateQuery(sql, invoiceReturn.getID_fa(), invoiceReturn.getID_professional());
+			enrollmentConfirmed = true;
 		}
 		// invoiceReturn.insert(db);
 		int id_invoice = invoiceReturn.getID();
 		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
 		p.insert(db);
+		return enrollmentConfirmed;
 	}
 
 
-	public void createPaymentRefund(int invoiceID, float toReturn, Date payDate, boolean cash, boolean confirmed) 
+	public void createPaymentRefund(int invoiceID, float toReturn, Date payDate, boolean cash, boolean confirmed)
 			throws SQLException, ParseException {
 
 		Payment p = new Payment(invoiceID, toReturn, payDate, confirmed, cash, ""); // TODO: Add description
@@ -217,16 +241,15 @@ public class Model {
 
 		return null;
 	}
-	
+
 	public int getFreePlaces(int ID_fa) throws SQLException, ParseException {
         String sql ="SELECT FormativeAction.totalPlaces- COUNT(Enrollment.ID_fa) FROM Enrollment INNER JOIN FormativeAction ON FormativeAction.ID_fa = Enrollment.ID_fa WHERE Enrollment.ID_fa=? AND Enrollment.status<>'CANCELLED';";
-
         return (int)db.executeQueryArray(sql, ID_fa).get(0)[0];
     }
 
 	/**
 	 * The sum of all the negative payments
-	 * 
+	 *
 	 * @param d
 	 * @return
 	 */
@@ -244,7 +267,7 @@ public class Model {
 
 	/**
 	 * The sum of all the positive payments
-	 * 
+	 *
 	 * @param d
 	 * @return
 	 */
@@ -263,12 +286,12 @@ public class Model {
 
 	/**
 	 * The sum of all the payments (positive and negative)
-	 * 
+	 *
 	 * @param selectedRow
 	 * @return
 	 */
 	public float getAmountTotalPaid(Data selectedRow) {
-		
+
 
 		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
 				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " + " GROUP BY Payment.ID_invoice "

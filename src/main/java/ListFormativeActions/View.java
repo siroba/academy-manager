@@ -51,7 +51,7 @@ public class View {
 		cbStatusSelection = new JComboBox<String>();
 		cbStatusSelection.setFont(new Font("Dialog", Font.PLAIN, 12));
 		cbStatusSelection
-				.setModel(new DefaultComboBoxModel<String>(new String[] { "Active", "Executed", "Cancelled" }));
+				.setModel(new DefaultComboBoxModel<String>(new String[] { "Active", "Executed", "Cancelled", "Delayed" }));
 		frame.getContentPane().add(cbStatusSelection, "cell 0 1,gapx 10");
 
 		// Filter by start date

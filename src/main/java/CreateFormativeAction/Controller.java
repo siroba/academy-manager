@@ -138,8 +138,6 @@ public class Controller implements PL53.util.Controller {
 			}
 		});
 		
-		// Does not work because I don't know what "EventListener" to put in the Date/DateTime Input's textfields. 
-		// It does not seem to be working with an ActionPerformed
 		view.getEnrollEndDateTimeInput().getDatePanel().addDateListener(new DateModifiedListener() {
 			public void dateModified() {
 				validateDates(new ArrayList<DateTime>(), view.getEnrollStart(), view.getEnrollEnd());
