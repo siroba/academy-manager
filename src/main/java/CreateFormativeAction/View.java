@@ -16,6 +16,7 @@ import PL53.swing.JIntField;
 import PL53.util.DateTime;
 
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 
@@ -293,6 +294,7 @@ public class View {
 
 		tableFees = new JTable();
 		tableFees.setDefaultEditor(Object.class, null);
+		tableFees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPaneFees.setViewportView(tableFees);
 		
 		// Fees - Button to Delete fee 
@@ -321,6 +323,7 @@ public class View {
 		
 		TFFee = new JDecimalField(6);
 		TFFee.setBounds(310, 312, 46, 19);
+		TFFee.setBound(0f, Float.MAX_VALUE);
 		feesPanel.add(TFFee);
 		TFFee.setColumns(10);
 		
