@@ -19,25 +19,15 @@ import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
-import javax.swing.JTextPane;
-
 import javax.swing.table.TableModel;
 
+import BaseProject.SwingUtil;
 import PL53.swing.DateInput;
-import PL53.swing.DateTimeInput;
 import PL53.swing.JDecimalField;
-import PL53.swing.JNumberField;
 import PL53.util.DateTime;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Date;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
-import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
-import javax.swing.JTextField;
 
 public class View extends JFrame {
 
@@ -208,11 +198,6 @@ public class View extends JFrame {
 		return this.dateTextPaneRefund;
 	}
 
-	public float getAmountPaidTextField() {
-		
-		return this.amountPaidTextField.getValue();
-	}
-
 	public void resetAmountPaid() {
 		this.amountPaidTextField.setText("0");
 	}
@@ -246,13 +231,12 @@ public class View extends JFrame {
 
 	public void setMovementsTable(TableModel model) {
 		movementsTable.setModel(model);
+		SwingUtil.autoAdjustColumns(movementsTable);
 	}
 
-	public float getAmountPayed() {
+	public float getAmountPaid() {
 		return amountPaidTextField.getValue();
 	}
-
-	
 	
 	public float getAmountRefund() {
 		return AmountRefund.getValue();
