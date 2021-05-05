@@ -34,19 +34,19 @@ public class Controller{
 	 * popup windows when a problem or controlled exception occurs.
 	 */
 	public void initController() {
-		// Hire a teacher
+		// Add a teacher
 		view.getAdd().addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
 		    	if (view.getTeacherName().isBlank()) {
 		    		JOptionPane.showMessageDialog(null,
-						    "You need to provide a name to hire a teacher.",
+						    "You need to provide a name to add a teacher.",
 						    "Name required",
 						    JOptionPane.ERROR_MESSAGE);
 					return;
 		    	}
 		    	if (view.getTeacherSurname().isBlank()) {
 		    		JOptionPane.showMessageDialog(null,
-						    "You need to provide a surname to hire a teacher.",
+						    "You need to provide a surname to add a teacher.",
 						    "Surname required",
 						    JOptionPane.ERROR_MESSAGE);
 					return;
@@ -76,7 +76,7 @@ public class Controller{
 		    	try {
 					model.insertTeacher(t);
 					JOptionPane.showMessageDialog(null,
-						    "The teacher has been hired successfully.",
+						    "The teacher has been added successfully.",
 						    "Action successfull",
 						    JOptionPane.INFORMATION_MESSAGE);
 					initView();
@@ -100,16 +100,25 @@ public class Controller{
 	            
 	        }
 	    });
-		// Fire a teacher
+		// Remove a teacher
 		view.getRemove().addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
 	        	String name = SwingUtil.getSelectedValue(view.getTableTeachers(), 0);
 	        	String surname = SwingUtil.getSelectedValue(view.getTableTeachers(), 1);
 	        	Teacher t = new Teacher(name, surname, "", "", "");
+	        	// Check if the teacher can be deleted 
+	        	if (model.checkTeacherTeachesInFormativeAction(t)) {
+	        		JOptionPane.showMessageDialog(null,
+						    "The teacher can not be removed because she/he teaches in an active formative action.",
+						    "Action not successfull",
+						    JOptionPane.INFORMATION_MESSAGE);
+	        		return; 
+	        	}
 		    	try {
+		    		// Remove teacher from the db 
 					model.removeTeacher(t);
 					JOptionPane.showMessageDialog(null,
-						    "The teacher has been fired successfully.",
+						    "The teacher has been removed successfully.",
 						    "Action successfull",
 						    JOptionPane.INFORMATION_MESSAGE);
 					setTeachers();
@@ -162,6 +171,15 @@ public class Controller{
 	        		}
 	        	}		
 		    	try {
+		    		// Check if there is anything to update 
+		    		if (!updatePhone && !updateEmail && !updateFiscalNumber) {
+		    			JOptionPane.showMessageDialog(null,
+							    "You need to provide some data to update the teacher's information.",
+							    "Nothing to update",
+							    JOptionPane.INFORMATION_MESSAGE);
+		    			return; 
+		    		}
+		    		// Update the data 
 					model.updateTeacher(t, updatePhone, phone, updateEmail, email, updateFiscalNumber, fiscalNumber);
 					JOptionPane.showMessageDialog(null,
 						    "The information of the teacher have been updated succesfully.",
