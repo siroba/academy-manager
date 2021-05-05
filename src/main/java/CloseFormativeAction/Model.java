@@ -23,7 +23,7 @@ public class Model {
 		try {
 			Connection cn = db.getConnection();
 			PreparedStatement ps = cn
-					.prepareStatement("SELECT nameFa FROM FormativeAction where lower(status) = 'active';");
+					.prepareStatement("SELECT nameFa FROM FormativeAction where lower(status) = 'active' OR lower(status) = 'delayed';");
 			ResultSet rs = ps.executeQuery();
 
 			List<String> formativeActionList = new ArrayList<String>();
