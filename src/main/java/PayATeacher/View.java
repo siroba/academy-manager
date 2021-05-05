@@ -11,6 +11,9 @@ import javax.swing.table.TableModel;
 
 import PL53.swing.DateInput;
 import PL53.swing.DateTimeInput;
+import PL53.swing.JDecimalField;
+import PL53.swing.JIntField;
+import PL53.swing.JNumberField;
 import PL53.util.Date;
 import PL53.util.DateTime;
 
@@ -21,6 +24,9 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.JCheckBox;
 
 public class View extends JFrame {
 	// Auto generated serial ID
@@ -34,6 +40,11 @@ public class View extends JFrame {
 	private DateInput dateTransferTextField;
 	private JTable table;
 	private JButton registerButton;
+	private JTextField IDInvoice;
+	private JDecimalField amount;
+	private DateInput dateTransferTextField_1;
+	private JButton addPayment;
+	private JDecimalField amoundRefound;
 
 	/**
 	 * Create the frame.
@@ -41,52 +52,54 @@ public class View extends JFrame {
 	public View() {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		
-		setBounds(100, 100, 691, 651);
+		setBounds(100, 100, 1242, 758);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Record Payments");
+		JLabel lblNewLabel = new JLabel("Record Payments made to the teachers");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblNewLabel.setBounds(247, 10, 163, 31);
+
+		lblNewLabel.setBounds(409, 10, 454, 31);
+
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Pending Payments");
+		JLabel lblNewLabel_1 = new JLabel("Record payments");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1.setBounds(32, 61, 153, 13);
+		lblNewLabel_1.setBounds(32, 61, 251, 30);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Data of the invoice");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_2.setBounds(50, 225, 170, 13);
+		lblNewLabel_2.setBounds(10, 279, 170, 13);
 		contentPane.add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_3 = new JLabel("Date of the invoice:");
-		lblNewLabel_3.setBounds(227, 250, 123, 13);
+		JLabel lblNewLabel_3 = new JLabel("Date of the invoice");
+		lblNewLabel_3.setBounds(10, 302, 123, 13);
 		contentPane.add(lblNewLabel_3);
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		dateTextField = new DateInput();
-		dateTextField.setBounds(227, 275, 211, 69);
+		dateTextField.setBounds(8, 325, 211, 69);
 		dateTextField.setBorder(blackline);
 		dateTextField.getYearsTextField().setBound(2000, 3000);
 		contentPane.add(dateTextField);
 		
 		dateTransferTextField = new DateInput();
-		dateTransferTextField.setBounds(208, 467, 230, 65);
+		dateTransferTextField.setBounds(10, 580, 230, 65);
 		dateTransferTextField.setBorder(blackline);
 		dateTransferTextField.getYearsTextField().setBound(2000, 3000);
 		contentPane.add(dateTransferTextField);
 		
 		JLabel lblNewLabel_5 = new JLabel("Issuer tax data");
-		lblNewLabel_5.setBounds(50, 343, 93, 13);
+		lblNewLabel_5.setBounds(317, 302, 93, 13);
 		contentPane.add(lblNewLabel_5);
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JPanel taxDataPanel = new JPanel();
-		taxDataPanel.setBounds(41, 366, 612, 59);
+		taxDataPanel.setBounds(317, 325, 634, 143);
 		taxDataPanel.setBorder(blackline);
 		contentPane.add(taxDataPanel);
 		taxDataPanel.setLayout(null);
@@ -102,7 +115,7 @@ public class View extends JFrame {
 		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JLabel lblNewLabel_8 = new JLabel("Address");
-		lblNewLabel_8.setBounds(382, 20, 81, 13);
+		lblNewLabel_8.setBounds(13, 97, 81, 13);
 		taxDataPanel.add(lblNewLabel_8);
 		lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
@@ -117,30 +130,104 @@ public class View extends JFrame {
 		fiscalNumberTextField.setColumns(10);
 		
 		addressTextField = new JTextField();
-		addressTextField.setBounds(382, 36, 217, 19);
+		addressTextField.setBounds(13, 114, 217, 19);
 		taxDataPanel.add(addressTextField);
 		addressTextField.setColumns(10);
 		
+		JLabel lblNewLabel_4 = new JLabel("ID Invoice");
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_4.setBounds(255, 97, 81, 13);
+		taxDataPanel.add(lblNewLabel_4);
+		
+		IDInvoice = new JTextField();
+		IDInvoice.setBounds(255, 114, 163, 19);
+		taxDataPanel.add(IDInvoice);
+		IDInvoice.setColumns(10);
+		
+		JLabel lblNewLabel_11 = new JLabel("Amount");
+		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_11.setBounds(415, 20, 59, 13);
+		taxDataPanel.add(lblNewLabel_11);
+		
+		amount = new JDecimalField(2);
+		amount.setBounds(415, 36, 163, 19);
+		taxDataPanel.add(amount);
+		amount.setColumns(10);
+		
 		JLabel lblNewLabel_9 = new JLabel("Date of the transfer");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_9.setBounds(227, 444, 115, 13);
+		lblNewLabel_9.setBounds(10, 545, 115, 13);
 		contentPane.add(lblNewLabel_9);
 		
 		
 		
-		registerButton = new JButton("Register");
+
+		registerButton = new JButton("Pay the teacher");
 		
 		registerButton.setFont(new Font("Tahoma", Font.BOLD, 12));
-		registerButton.setBounds(288, 563, 115, 41);
+		registerButton.setBounds(338, 598, 158, 41);
+
 		contentPane.add(registerButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 657, 117);
+		scrollPane.setBounds(10, 101, 695, 117);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
 		
 		scrollPane.setViewportView(table);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(0, 494, 1245, 13);
+		contentPane.add(separator);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(0, 239, 1261, 13);
+		contentPane.add(separator_1);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(750, 101, 448, 117);
+		contentPane.add(scrollPane_1);
+		
+		JLabel lblNewLabel_10 = new JLabel("Movements");
+		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_10.setBounds(755, 61, 115, 13);
+		contentPane.add(lblNewLabel_10);
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setOrientation(SwingConstants.VERTICAL);
+		separator_3.setBounds(659, 494, 12, 239);
+		contentPane.add(separator_3);
+		
+		JLabel lblNewLabel_12 = new JLabel("Payments to refound money to the teachers");
+		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel_12.setBounds(699, 517, 330, 31);
+		contentPane.add(lblNewLabel_12);
+		
+		dateTransferTextField_1 = new DateInput();
+		dateTransferTextField_1.setBounds(681, 590, 230, 65);
+		dateTransferTextField_1.setBorder(blackline);
+		contentPane.add(dateTransferTextField_1);
+		
+		JLabel lblNewLabel_13 = new JLabel("Date");
+		lblNewLabel_13.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_13.setBounds(681, 558, 59, 13);
+		contentPane.add(lblNewLabel_13);
+		
+		JLabel lblNewLabel_14 = new JLabel("Amount");
+		lblNewLabel_14.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_14.setBounds(948, 558, 45, 13);
+		contentPane.add(lblNewLabel_14);
+		
+		addPayment = new JButton("Add payment");
+		addPayment.setFont(new Font("Tahoma", Font.BOLD, 10));
+		addPayment.setBounds(989, 620, 170, 41);
+		contentPane.add(addPayment);
+		
+		amoundRefound = new JDecimalField(2);
+		amoundRefound.setColumns(10);
+		amoundRefound.setBounds(996, 555, 163, 19);
+		contentPane.add(amoundRefound);
 	}
 	
 	public String getAddressTextField() {
@@ -193,5 +280,24 @@ public class View extends JFrame {
 
 	public JButton getRegisterButton() {
 		return registerButton;
+	}
+	public String getIDInvoice(){
+		return IDInvoice.getText();
+	}
+
+	public void setIDInvoice(JTextField IDInvoice) {
+		this.IDInvoice=IDInvoice;
+	}
+	public DateInput getDateTransferTextField_1() {
+		return dateTransferTextField_1;
+	}
+	public JButton getAddPayment() {
+		return addPayment;
+	}
+	public float getAmount() {
+		return  amount.getValue();
+	}
+	public float getAmoundRefound() {
+		return amoundRefound.getValue();
 	}
 }

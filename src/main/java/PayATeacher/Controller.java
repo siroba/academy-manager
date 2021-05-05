@@ -6,15 +6,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import Entities.FormativeAction;
-import Entities.Invoice;
+import Entities.MovementTeacher;
 import Entities.PaymentTeacher;
 import Entities.Session;
+import Entities.Teacher;
+import Entities.TeacherTeaches;
 import PL53.util.Date;
 import PL53.util.DateTime;
 import PayATeacher.Data;
@@ -25,7 +28,7 @@ public class Controller implements PL53.util.Controller {
 	private Model model;
 	private View view;
 
-	private FormativeAction selectedRow;
+	private Data selectedRow;
 
 	public Controller() {
 		this.model = new Model();
@@ -63,10 +66,6 @@ public class Controller implements PL53.util.Controller {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
 				}
 
-				else {
-
-				}
-
 			}
 		});
 
@@ -76,50 +75,88 @@ public class Controller implements PL53.util.Controller {
 
 				// INPUT THE INVOICE
 				try {
+					DateTime now = DateTime.now();
+					long daysBetweenNowAction = DateTime.daysSince(view.getDateTransferTextField(), now);
 					if (selectedRow == null) {
 						JOptionPane.showMessageDialog(null, "You have to select one pending payment");
-					}
-					else if (view.getNameTextField().length()==0 )
-					{
+					} else if (view.getNameTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the name of the teacher");
-					}
-					else if (view.getFiscalNumberTextField().length()==0 )
-					{
+					} else if (view.getFiscalNumberTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the fiscal number");
-					}
-					else if (view.getAddressTextField().length()==0 )
-					{
+					} else if (!Teacher.checkFiscalNumber(view.getFiscalNumberTextField())) {
+						JOptionPane.showMessageDialog(null,
+							    "Please provide a valid fiscal number. E.g. \\\"55566677R\\.",
+							    "Invalid fiscal number",
+							    JOptionPane.ERROR_MESSAGE);
+					} else if (view.getAddressTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the address");
-					}
-					else if (view.getDateTransferTextField().getYear()==0 )
-					{
-						JOptionPane.showMessageDialog(null, "You have to introduce a valid year for the date of the transfer (ex: 2021) ");
-					}
-					else if (view.getDateTextField().getYear()==0 )
-					{
-						JOptionPane.showMessageDialog(null, "You have to introduce a valid year for the date of the invoice (ex: 2021)");
-					}
-					else{
-					String name = view.getNameTextField();
-					String fiscalNumber = view.getFiscalNumberTextField();
-					String address = view.getAddressTextField();
-					Date dateTransfer = view.getDateTransferTextField();
-					int ID_fa = selectedRow.getID();
-					float amount = Float.parseFloat((String) view.getTable().getValueAt(view.getSelected(), 3));
-					String sender = "COIIPA";
-					String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2);
-					boolean confirmed = true;
-					Date dateInvoice = view.getDateTextField();
+					} else if (view.getDateTransferTextField().getYear() == 0) {
+						JOptionPane.showMessageDialog(null,
+								"You have to introduce a valid year for the date of the transfer (ex: 2021) ");
+					} else if (view.getDateTextField().getYear() == 0) {
+						JOptionPane.showMessageDialog(null,
+								"You have to introduce a valid year for the date of the invoice (ex: 2021)");
+					} else if (view.getIDInvoice().length() == 0) {
+						JOptionPane.showMessageDialog(null, "You have to introduce the ID of the invoice");
+					} else if (view.getAmount() < 0) {
+						JOptionPane.showMessageDialog(null, "You have to introduce the amount of the invoice");
 
-					Invoice invoice = new Invoice(ID_fa, dateInvoice);
+					} else if (daysBetweenNowAction > 0) {
 
-					PaymentTeacher paymentTeacher = new PaymentTeacher(amount, dateTransfer, sender, receiver,
-							fiscalNumber, address, confirmed);
+						JOptionPane.showMessageDialog(null, "Tranfers cannot be made in the future.",
+								"date not valid ( the date must be on the current date or in the past)",
+								JOptionPane.ERROR_MESSAGE);
 
-					model.insertInvoice(invoice, paymentTeacher);
-					if (paymentTeacher != null) {
-						JOptionPane.showMessageDialog(null, "The invoice has been successfully created");
-					}
+					} else {
+						String name = view.getNameTextField();
+						String fiscalNumber = view.getFiscalNumberTextField();
+						
+						String address = view.getAddressTextField();
+						Date dateTransfer = view.getDateTransferTextField();
+						int ID_fa = selectedRow.formativeAction.getID();
+						float amountAgreed = Float
+								.parseFloat((String) view.getTable().getValueAt(view.getSelected(), 4));
+						String sender = "COIIPA";
+						String receiver = (String) view.getTable().getValueAt(view.getSelected(), 2) + " " + (String) view.getTable().getValueAt(view.getSelected(), 3) ;
+						String fiscalNumberDB = model.getFiscalNumber(new Teacher((String) view.getTable().getValueAt(view.getSelected(), 2), (String) view.getTable().getValueAt(view.getSelected(), 3), "", "", ""));
+						boolean confirmed = true;
+						// CHeck if fiscal number stored in the DB matches the entered one & provide the option to update it in the db if not 
+						if (fiscalNumber != fiscalNumberDB) {
+							int dialogButton = JOptionPane.YES_NO_CANCEL_OPTION;
+							int option = JOptionPane.showConfirmDialog (null, "The fiscal number for the teacher " + receiver + " does not match the one stored in the database. \nWould you like to replace the fiscal number in the database "+  fiscalNumberDB +" by " + fiscalNumber + "?","WARNING", dialogButton);
+				            if(option == JOptionPane.YES_OPTION) {
+				            	model.updateFiscalNumber(new Teacher((String) view.getTable().getValueAt(view.getSelected(), 2), (String) view.getTable().getValueAt(view.getSelected(), 3), "", "", ""), fiscalNumber);
+				            	JOptionPane.showMessageDialog(null,
+										"The fiscal number of " + receiver + " has been updated succesfully.");
+				            }	
+				            if(option == JOptionPane.CANCEL_OPTION) {
+				            	JOptionPane.showMessageDialog(null,
+										"No invoice has been created and no payment has been made");
+				            	return;
+				            }	
+						}
+						Date dateInvoice = view.getDateTextField();
+						String IDInvoice = view.getIDInvoice();
+						int ID_teacher = selectedRow.teacher.getID();
+						float amount = view.getAmount();
+
+						// TODO: The amount of the invoice and the payment can differ
+
+						MovementTeacher invoice = new MovementTeacher(IDInvoice, amount, ID_fa, dateInvoice, sender,
+								receiver, fiscalNumber, address, ID_teacher, ""); // TODO: Description
+
+						PaymentTeacher paymentTeacher = new PaymentTeacher(IDInvoice, amount, dateTransfer, confirmed, ""); // TODO: Description
+
+						model.insertInvoice(invoice, paymentTeacher);
+						if (paymentTeacher != null) {
+
+							JOptionPane.showMessageDialog(null,
+									"The invoice has been successfully created and the payment has been attached");
+
+							model.initModel();
+
+							initView();
+						}
 					}
 				} catch (NumberFormatException e2) {
 					JOptionPane.showMessageDialog(null, "The Invoice ID must be an integer");
@@ -127,7 +164,7 @@ public class Controller implements PL53.util.Controller {
 					JOptionPane.showMessageDialog(null, "Error creating the invoice");
 					e1.printStackTrace();
 				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
+
 					e1.printStackTrace();
 				}
 
@@ -142,19 +179,27 @@ public class Controller implements PL53.util.Controller {
 
 	}
 
-	public TableModel getTableModel(FormativeAction[] formativeActions) {
+	public TableModel getTableModel(Data[] datas) {
 
-		String header[] = { "Course name", "status", "Teacher name", "Due amount" };
+		String header[] = { "Course name", "status", "Teacher name", "Teacher surname", "Due amount" };
 
-		String body[][] = new String[formativeActions.length][header.length];
+		ArrayList<String[]> rows = new ArrayList<String[]>();
 
-		for (int i = 0; i < formativeActions.length; i++) {
-			FormativeAction d = formativeActions[i];
+		for (int i = 0; i < datas.length; i++) {
+			Data d = datas[i];
 
-			for (Session s : d.getSessions()) {
-				body[i] = new String[] { d.getName(), d.getStatus().toString(), s.getTeacherName(),
-						Float.toString(s.getRemuneration()) };
+			for (TeacherTeaches tt : d.formativeAction.getTeacherTeaches()) {
+
+				rows.add(new String[] { d.formativeAction.getName(), d.formativeAction.getStatus().toString(),
+						tt.getTeacher().getName(), tt.getTeacher().getSurname(), Float.toString(tt.getRemuneration()) });
 			}
+
+		}
+
+		String body[][] = new String[rows.size()][header.length];
+
+		for (int i = 0; i < rows.size(); i++) {
+			body[i] = rows.get(i);
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);

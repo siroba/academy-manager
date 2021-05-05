@@ -102,13 +102,13 @@ public class Date extends java.util.Date {
 	/**
 	 * Calculates the Date from the milliseconds passed since 1/1/1990 00:00:00.0
 	 * using the {@link LocalDateTime#ofEpochSecond(long, int, ZoneOffset)} (it
-	 * assumes UTC+1)
+	 * assumes UTC+2)
 	 *
 	 * @param millis
 	 * @return Date
 	 */
 	public static Date fromMillis(long millis) {
-		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(1));
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(2));
 
 		return new Date(ldt.getDayOfMonth(), ldt.getMonthValue(), ldt.getYear());
 	}
@@ -151,7 +151,7 @@ public class Date extends java.util.Date {
 	 * @return
 	 */
 	public long toMillis() {
-		return toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(1)) * 1000L;
+		return toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(2)) * 1000L;
 	}
 
 	public void setDate(int day, int month, int year) {

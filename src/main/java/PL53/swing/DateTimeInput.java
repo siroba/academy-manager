@@ -1,14 +1,21 @@
 package PL53.swing;
 
 import java.text.DecimalFormat;
+import java.util.EventListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.event.EventListenerList;
 
+import PL53.swing.DateInput.DateModifiedListener;
 import PL53.util.Date;
 import PL53.util.DateTime;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class DateTimeInput extends JPanel {
 	/** Auto generated serial ID */
@@ -22,6 +29,7 @@ public class DateTimeInput extends JPanel {
 	private JIntField hoursTextField, minutesTextField;
 	private DateInput datePanel;
 	private JLabel lblHour, labelSep;
+	protected EventListenerList listenerList = new EventListenerList();
 
 	/**
 	 * Default constructor. Creates the panel, adds all the components and creates
@@ -32,7 +40,7 @@ public class DateTimeInput extends JPanel {
 
 		setLayout(null);
 		JPanel timePanel = new JPanel();
-		timePanel.setBounds(42, 9, 120, 57);
+		timePanel.setBounds(10, 11, 120, 57);
 		this.add(timePanel);
 		timePanel.setLayout(null);
 
@@ -47,6 +55,18 @@ public class DateTimeInput extends JPanel {
 		hoursTextField.setBounds(21, 20, 34, 22);
 		timePanel.add(hoursTextField);
 
+		hoursTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(allTimeFieldsModified()) {
+					fireTimeEvent();
+					
+					if(allTimeFieldsModified())
+						fireDateTimeEvent();
+				}
+			}
+		});
+		
 		labelSep = new JLabel(":");
 		labelSep.setBounds(58, 23, 5, 15);
 		timePanel.add(labelSep);
@@ -57,13 +77,42 @@ public class DateTimeInput extends JPanel {
 		minutesTextField.setBounds(66, 20, 34, 22);
 		timePanel.add(minutesTextField);
 
+		minutesTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(allTimeFieldsModified()) {
+					fireTimeEvent();
+					
+					if(allTimeFieldsModified())
+						fireDateTimeEvent();
+				}
+			}
+		});
+		
 		datePanel = new DateInput();
 		datePanel.getLblYear().setLocation(28, 0);
 		datePanel.getLblYear().setFont(new Font("Dialog", Font.BOLD, 11));
 		datePanel.getLblYear().setText("day / month / year");
 		datePanel.setLayout(null);
-		datePanel.setBounds(180, 9, 208, 57);
+		datePanel.setBounds(148, 11, 208, 57);
 		this.add(datePanel);
+		
+		datePanel.addDateListener(new DateModifiedListener() {
+			@Override
+			public void dateModified() {
+				if(allTimeFieldsModified())
+					fireDateTimeEvent();
+			}
+		});
+	}
+	
+	protected boolean allTimeFieldsModified() {
+		return hoursTextField.getValue() != hoursTextField.getDefaultValue()
+				&& minutesTextField.getValue() != minutesTextField.getDefaultValue();
+	}
+	
+	protected boolean everythingModified () {
+		return datePanel.allDateFieldsModified() && allTimeFieldsModified();
 	}
 
 	public int getHour() {
@@ -124,6 +173,34 @@ public class DateTimeInput extends JPanel {
 		return new DateTime(this.getMinute(), this.getHour(), datePanel.getDay(), datePanel.getMonth(),
 				datePanel.getYear());
 	}
+	
+	public void addDateTimeListener(DateTimeModifiedListener listener) {
+		listenerList.add(DateTimeModifiedListener.class, listener);
+	}
 
+	public void removeDateTimeListener(DateTimeModifiedListener listener) {
+		listenerList.remove(DateTimeModifiedListener.class, listener);
+	}
+
+	protected void fireTimeEvent() {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i + 2) {
+			if (listeners[i] == DateTimeModifiedListener.class)
+				((DateTimeModifiedListener) listeners[i + 1]).timeModified();
+		}
+	}
+	
+	protected void fireDateTimeEvent() {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i + 2) {
+			if (listeners[i] == DateTimeModifiedListener.class)
+				((DateTimeModifiedListener) listeners[i + 1]).dateTimeModified();
+		}
+	}
+	
+	public interface DateTimeModifiedListener extends EventListener {
+		public void timeModified();
+		public void dateTimeModified();
+	}
 	
 }

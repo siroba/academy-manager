@@ -3,6 +3,7 @@ package DelayFormativeAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,7 +19,7 @@ public class Controller implements PL53.util.Controller{
 		this.model = new Model();
 		try {
 			model.initModel();
-		} catch (SQLException e) {
+		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
 		}
 
@@ -31,16 +32,21 @@ public class Controller implements PL53.util.Controller{
 		view.getBtnConfirm().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					model.delay(view.getSelected(), view.getDateTimeInput());
+				int option = JOptionPane.showConfirmDialog(null, "Have all the teachers agreed to this change?",
+						"Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-					model.initModel();
+				if (option == 0) {
+					try {
+						model.delay(view.getSelected(), view.getDateTimeInput());
 
-					view.setTable(getTableModel(model.getAllData()));
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				} catch (ArrayIndexOutOfBoundsException e2) {
-					JOptionPane.showMessageDialog(null, "You have to select one Formative Action");
+						model.initModel();
+
+						view.setTable(getTableModel(model.getAllData()));
+					} catch (SQLException | ParseException e1) {
+						e1.printStackTrace();
+					} catch (ArrayIndexOutOfBoundsException e2) {
+						JOptionPane.showMessageDialog(null, "You have to select one Formative Action");
+					}	
 				}
 			}
 		});

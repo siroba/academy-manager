@@ -17,6 +17,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -195,6 +196,12 @@ public class SwingUtil {
 			cm.addElement(value);
 		}
 		return cm;
+	}
+
+	public static void autoAdjustColumns(JTable table, JScrollPane tableContainer) {
+		autoAdjustColumns(table);
+		
+		tableContainer.setSize(table.getSize().width-2, tableContainer.getSize().height);
 	}
 	
 	

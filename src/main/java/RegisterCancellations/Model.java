@@ -6,8 +6,11 @@ import java.util.*;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
+import Entities.Movement;
+import Entities.Payment;
 import Entities.Professional;
 import Utils.Database;
+import  PL53.util.Date;
 
 /**
  * Access to course data, used as a model for the swing example and for unit and
@@ -48,7 +51,7 @@ public class Model {
 	}
 
 	private Data[] initData() throws SQLException, ParseException {
-		String query = "SELECT * FROM Enrollment WHERE status='RECEIVED';"; // TODO: "WHERE status='received';"
+		String query = "SELECT * FROM Enrollment INNER JOIN FormativeAction ON Enrollment.ID_fa=FormativeAction.ID_fa WHERE Enrollment.status<>'CANCELLED' AND (FormativeAction.status='ACTIVE' OR FormativeAction.status='DELAYED');"; // TODO: "WHERE status='received';"
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
 
@@ -69,9 +72,36 @@ public class Model {
 		return data.toArray(data2);
 	}
 
-	public void deleteEnrollment(Data selected) {
-		String query = "DELETE FROM Enrollment WHERE ID_fa=? AND ID_professional=?";
+	public void deleteEnrollment(Data selected, float refundAmount, Date dateIn, String sender, String receiver, String address, String fiscalNumber, boolean cash) throws SQLException, ParseException {
 		
+		// 1 - Cancel the enrollment
+		String query = "UPDATE Enrollment SET status='CANCELLED' WHERE ID_fa=? AND ID_professional=?";
 		db.executeUpdateQuery(query, selected.formativeAction.getID(), selected.professional.getID());
+		
+		// 2 - Create a new invoice for the refund
+			// 2.1 - Get the amount payed by the professional
+		//float payedAmount = getPayedAmount(selected.professional.getID(), selected.formativeAction.getID());
+		
+			// 2.2 - Get the appropiate percentage to refund
+		//float refundPercentage = selected.formativeAction.getRefundPercentage(dateIn));
+		
+		if(refundAmount > 0) { // If there is nothing to return, do not proceed			
+				// 2.3 - Create the Invoice for the same value payed
+
+			Movement refundInvoice = new Movement(refundAmount, dateIn, sender, receiver, address, fiscalNumber, selected.formativeAction.getID(), selected.professional.getID(), ""); // TODO: Description
+
+			refundInvoice.insert(db); // Insert it to update its ID
+	
+				// 2.4 - Generate a Payment for the amount due
+			Payment p = new Payment(refundInvoice.getID(), refundAmount, dateIn, true, cash, ""); // TODO: Description
+			//p.insert(db); // Insert it into the database
+		}
+	}
+	
+	public float getPayedAmount(int ID_professional, int ID_fa) {
+		String query = "SELECT SUM(Payment.amount) FROM Payment " + 
+				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
+				"WHERE ID_professional=? AND Invoice.ID_fa=?;";
+		return (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
 	}
 }

@@ -1,6 +1,7 @@
 package DelayFormativeAction;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import Entities.FormativeAction;
@@ -13,7 +14,7 @@ public class Model {
 	private Database db = new Database();
 	private FormativeAction[] data;
 
-	public void initModel() throws SQLException {
+	public void initModel() throws SQLException, ParseException {
 		String query = "SELECT * FROM FormativeAction WHERE status IN ('ACTIVE', 'DELAYED')";
 
 		List<FormativeAction> la = FormativeAction.get(query, db);
@@ -32,14 +33,14 @@ public class Model {
 		String sessionQuery = "UPDATE Session SET sessionStart=? WHERE ID_session=?";
 		
 		for(Session s: fa.getSessions()) // Delay all the sessions by the same amount
-			db.executeUpdate(sessionQuery, delay(s.getSessionStart(), dateTimeInput), s.getID());
+			db.executeUpdate(sessionQuery, delay(s.getSessionStart(), dateTimeInput).toSQLiteString(), s.getID());
 		
 		// Delay the end of the enrollment period by the same amount
 		DateTime enEnd = delay(fa.getEnrollmentEnd(), dateTimeInput);
 		
 		String query = "UPDATE FormativeAction SET enrollmentEnd=?, status=? WHERE ID_fa=?";
 		
-		db.executeUpdate(query, enEnd.toTimestamp(), FormativeAction.Status.DELAYED.toString(), fa.getID());
+		db.executeUpdate(query, enEnd.toSQLiteString(), FormativeAction.Status.DELAYED.toString(), fa.getID());
 	}
 
 	public DateTime delay(DateTime dt, DateTimeInput dti) {

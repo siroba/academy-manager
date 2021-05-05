@@ -1,15 +1,20 @@
 package PayATeacher;
 
-import Entities.Enrollment;
+
+
 import Entities.FormativeAction;
-import Entities.Invoice;
-import Entities.Payment;
+import Entities.MovementTeacher;
+
 import Entities.PaymentTeacher;
-import Entities.Professional;
+import Entities.Teacher;
+
+
 
 public class Data {
 	public FormativeAction formativeAction;
-	public Invoice invoice;
+	public MovementTeacher invoice;
 	public PaymentTeacher paymentTeacher;
+	public Teacher teacher;
+	
 
 }

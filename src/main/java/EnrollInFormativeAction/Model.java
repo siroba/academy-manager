@@ -6,6 +6,7 @@ import java.util.*;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
+import Entities.Movement;
 import Entities.Professional;
 import Exceptions.InvalidFieldValue;
 import Utils.Database;
@@ -20,7 +21,7 @@ public class Model {
         String query ="SELECT * FROM FormativeAction "
                     + "WHERE enrollmentEnd>datetime('now','localtime') "
                     + "GROUP BY FormativeAction.nameFa "
-                    + "HAVING (SELECT COUNT(Enrollment.ID_fa) FROM Enrollment WHERE Enrollment.ID_fa=FormativeAction.ID_fa)<totalPlaces;";
+                    + "HAVING (SELECT COUNT(Enrollment.ID_fa) FROM Enrollment WHERE Enrollment.ID_fa=FormativeAction.ID_fa AND status<>'CANCELLED')<totalPlaces;";
 
         this.formativeActions = FormativeAction.get(query, db);
     }
@@ -42,9 +43,15 @@ public class Model {
         return p;
     }
 
-    public void doEnrollment(Professional p, Enrollment en) throws SQLException, ParseException {
+    public void doEnrollment(FormativeAction fa, String group, Professional p, Enrollment en , String address , String fiscalNumber) throws SQLException, ParseException {
         p.insert(db);
         en.setID_professional(p.getID());
         en.insert(db);
+        
+        Movement i = new Movement(fa.getFee(group), en.getTimeEn(), p.getName(), "COIIPA" , address, fiscalNumber, en.getID_fa(), p.getID(), ""); // TODO: Description
+
+        i.insert(db);
+        
+        
     }
 }

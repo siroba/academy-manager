@@ -25,6 +25,7 @@ public class FormativeAction {
 	private DateTime enrollmentStart, enrollmentEnd;
 	private List<Session> sessions = new ArrayList<Session>();
 	private List<Fee> fees = new ArrayList<Fee>();
+	private List<TeacherTeaches> teachers = new ArrayList<TeacherTeaches>();
 
 	/**
 	 * Constructor that assigns random values
@@ -83,6 +84,7 @@ public class FormativeAction {
 	 * @param enrollmentStart
 	 * @param enrollmentEnd
 	 * @param faStart
+	 * @param teachers
 	 */
 
 	public FormativeAction(int ID_fa, String name, int totalPlaces,
@@ -99,6 +101,7 @@ public class FormativeAction {
 		this.enrollmentEnd = enrollmentEnd;
 		this.sessions = sessions;
 		this.fees = fees;
+		this.teachers = teachers;
 	}
 
 	public static List<FormativeAction> create(int n) {
@@ -174,6 +177,7 @@ public class FormativeAction {
 			pstmt.setString(8,  this.getEnrollmentStart().toSQLiteString());
 			pstmt.setString(9,  this.getEnrollmentEnd().toSQLiteString());
 			pstmt.executeUpdate(); // statement execution
+			pstmt.close();
 		} else {
 			String SQL = "INSERT INTO " + tableName() + " 	VALUES(null,?,?,?,?,?,?,?)";
 
@@ -193,16 +197,18 @@ public class FormativeAction {
 			ResultSet tableKeys = pstmt.getGeneratedKeys();
 			tableKeys.next();
 			this.ID = tableKeys.getInt(1);
+			tableKeys.close();
+			pstmt.close();
+			
+			for(Session s: this.sessions) {
+				s.setID_fa(this.getID());
+			}
+			
+			for(Fee f: this.fees) {
+				f.setID_fa(this.getID());
+			}
 		}
 		
-		for(Session s: this.sessions) {
-			s.setID_fa(this.getID());
-		}
-		
-		for(Fee f: this.fees) {
-			f.setID_fa(this.getID());
-		}
-
 		conn.close();
 	}
 
@@ -215,7 +221,7 @@ public class FormativeAction {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<FormativeAction> get(String query, Database db) throws SQLException {
+	public static List<FormativeAction> get(String query, Database db) throws SQLException, ParseException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -241,7 +247,7 @@ public class FormativeAction {
 
 			int id_fa = rs.getInt("ID_fa");
 			
-			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa + " ORDER BY sessionStart", db);
 			List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
 			
 			FormativeAction f = new FormativeAction(
@@ -256,6 +262,7 @@ public class FormativeAction {
 					sessions, 
 					fees);
 
+			f.setTeacherTeaches(TeacherTeaches.get(f, db));
 			fa.add(f);
 		}
 
@@ -301,7 +308,7 @@ public class FormativeAction {
 
 		int id_fa = rs.getInt("ID_fa");
 		
-		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa + " ORDER BY sessionStart", db);
 		List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
 		
 		FormativeAction fa = new FormativeAction(
@@ -315,7 +322,8 @@ public class FormativeAction {
 				dend,
 				sessions, 
 				fees);
-
+		fa.setTeacherTeaches(TeacherTeaches.get(fa, db));
+		
 		// Very important to always close all the objects related to the database
 		rs.close();
 		st.close();
@@ -323,13 +331,36 @@ public class FormativeAction {
 
 		return fa;
 	}
+	
+	public TeacherTeaches teach(Teacher t, float remuneration) {
+		TeacherTeaches tt = new TeacherTeaches(t, this, remuneration);
+		teachers.add(tt);
+		
+		return tt;
+	}
+	
+	public List<TeacherTeaches> getTeacherTeaches(){
+		return teachers;
+	}
+	
+	public void setTeacherTeaches(List<TeacherTeaches> t) {
+		this.teachers = t;
+	}
 
 	public float refund(String group) {
         return this.refundPercentage()*this.getFee(group);
     }
+	
+	public float refundPercentage(Date date) {
+        int days = Date.daysSince(this.sessions.get(0).getSessionStart(), date);
+
+        if(days > 7) return 1f;
+        else if (days <= 6 && days >=3) return 0.5f;
+        else return 0f;
+	}
   
     public float refundPercentage() {
-        int days = Date.daysSince(enrollmentEnd);
+        int days = Date.daysSince(this.sessions.get(0).getSessionStart());
 
         if(days > 7) return 1f;
         else if (days <= 6 && days >=3) return 0.5f;

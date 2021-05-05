@@ -2,8 +2,6 @@ package EnrollInFormativeAction;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -51,6 +49,13 @@ public class Controller implements PL53.util.Controller {
 	 * a problem or controlled exception occurs.
 	 */
 	public void initController() {
+		view.getChckbxNewCheckBox().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				view.enableInvoice(view.getWantInvoice());
+			}
+		});
+		
+		
 		view.getFAList().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!view.getFAList().getValueIsAdjusting()) {
@@ -88,17 +93,64 @@ public class Controller implements PL53.util.Controller {
 		view.getBtnConfirmAndEnroll().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				if (view.getProfName().isBlank()){
+					JOptionPane.showMessageDialog(null,
+						    "You need to provide a name to enroll.",
+						    "Name not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
+				if (view.getTextSurname().isBlank()){
+					JOptionPane.showMessageDialog(null,
+						    "You need to provide a surname to enroll.",
+						    "Name not valid",
+						    JOptionPane.ERROR_MESSAGE);
+					return; 
+				}
+
+				if(view.getWantInvoice()) {
+					if (view.getAddress().isBlank()){
+						JOptionPane.showMessageDialog(null,
+							    "You need to provide an address to enroll.",
+							    "Address not valid",
+							    JOptionPane.ERROR_MESSAGE);
+						return; 
+					}
+					
+					if (view.getFiscalNumber().isBlank()){
+						JOptionPane.showMessageDialog(null,
+							    "You need to provide a fiscal number to enroll.",
+							    "Fiscal number not valid",
+							    JOptionPane.ERROR_MESSAGE);
+						return; 
+					}else {
+						String regex = "^[A-Z]?[0-9]{8,8}[A-Z]$";
+						if(!view.getFiscalNumber().matches(regex)) {
+							JOptionPane.showMessageDialog(null,
+								    "That fiscal number is not valid. E.g. \"55566677R\"",
+								    "Fiscal number not valid",
+								    JOptionPane.ERROR_MESSAGE);
+							return; 
+						}
+					}
+				}
+				
+				
+				
 				String name = view.getProfName();
 				String surname = view.getTextSurname();
 				String phone = view.getTextPhone();
 				String email = view.getTextEmail();
 				String group = view.getGroup();
+				String address = view.getAddress();
+				String fiscalNumber = view.getFiscalNumber();
 
 				try {
 					Professional p = model.createProfessional(name, surname, phone, email);
 					Enrollment en = p.enroll(selected, p, Enrollment.Status.RECEIVED, DateTime.now(), group);
 
-					model.doEnrollment(p, en);
+					model.doEnrollment(selected, group, p, en , address, fiscalNumber );
 
 					model.loadFormativeActions();
 					view.setFAList(model.getFormativeActions());
