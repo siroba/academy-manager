@@ -20,7 +20,7 @@ public class Model {
 	public Model() {
 		db = new Database();
 	}
-	
+
 	/*
 	 * TODO Description of Function, parameter and return value
 	 */
@@ -37,9 +37,24 @@ public class Model {
 			List<FormativeActionDetails> formativeActionList = new ArrayList<FormativeActionDetails>();
 
 			while (rs.next()) {
+				PreparedStatement psFirstSessionStart = cn.prepareStatement(
+						"select s.sessionStart " + "from Session s inner join FormativeAction fa on fa.ID_fa = s.ID_fa "
+								+ "where fa.nameFa = ? order by s.ID_session ASC LIMIT 1;");
+				psFirstSessionStart.setString(1, rs.getString("nameFa"));
+
+				PreparedStatement psLastSessionStart = cn.prepareStatement(
+						"select s.sessionStart " + "from Session s inner join FormativeAction fa on fa.ID_fa = s.ID_fa "
+								+ "where fa.nameFa = ? order by s.ID_session DESC LIMIT 1;");
+				psLastSessionStart.setString(1, rs.getString("nameFa"));
+
+				ResultSet firstSession = psFirstSessionStart.executeQuery();
+				ResultSet lastSession = psLastSessionStart.executeQuery();
+
 				formativeActionList.add(new FormativeActionDetails(rs.getString("nameFa"), rs.getString("status"),
 						Date.parse(rs.getTimestamp("enrollmentStart")), Date.parse(rs.getTimestamp("enrollmentEnd")),
-						rs.getInt("totalPlaces"), rs.getInt("leftPlaces")));
+						rs.getInt("totalPlaces"), rs.getInt("leftPlaces"),
+						Date.parse(firstSession.getTimestamp("sessionStart")),
+						Date.parse(lastSession.getTimestamp("sessionStart"))));
 			}
 
 			rs.close();
@@ -66,7 +81,8 @@ public class Model {
 			query.append("INNER JOIN FormativeAction fa ");
 			query.append("ON e.ID_fa = fa.ID_fa ");
 			query.append("INNER JOIN Fee ");
-			query.append("ON fa.ID_fa = Fee.ID_fa and Fee.category=e.category AND (e.status = 'CONFIRMED' OR e.status = 'RECEIVED')");
+			query.append(
+					"ON fa.ID_fa = Fee.ID_fa and Fee.category=e.category AND (e.status = 'CONFIRMED' OR e.status = 'RECEIVED')");
 			query.append("WHERE lower(fa.nameFa) = lower(?);");
 
 			PreparedStatement ps = cn.prepareStatement(query.toString());
@@ -88,7 +104,7 @@ public class Model {
 			throw new UnexpectedException(e);
 		}
 	}
-	
+
 	/*
 	 * TODO Description of Function, parameter and return value
 	 */
@@ -100,14 +116,14 @@ public class Model {
 			throw new UnexpectedException(e);
 		}
 	}
-	
+
 	/*
 	 * TODO Description of Function, parameter and return value
 	 */
 	public List<Payment> getPayments(String formativeAction, String professional) {
 		try {
 			Connection cn = db.getConnection();
-			
+
 			PreparedStatement ps = cn.prepareStatement(
 					"select fa.nameFa, i.sender, i.receiver, pay.amount, pay.datePay from Professional p "
 							+ "inner join Enrollment e on p.ID_professional = e.ID_professional "
@@ -115,8 +131,8 @@ public class Model {
 							+ "inner join Invoice i on e.ID_professional = i.ID_professional and e.ID_fa = i.ID_fa "
 							+ "inner join Payment pay on i.ID_invoice = pay.ID_invoice "
 							+ "where lower(p.name) = ? and lower(fa.nameFa) = ?;");
-			ps.setString(1, professional.toLowerCase()); 
-			ps.setString(2, formativeAction.toLowerCase()); 
+			ps.setString(1, professional.toLowerCase());
+			ps.setString(2, formativeAction.toLowerCase());
 
 			ResultSet rs = ps.executeQuery();
 
@@ -126,7 +142,61 @@ public class Model {
 				listPayments.add(new Payment(Date.parse(rs.getTimestamp("datePay")),
 						rs.getString("sender").equals("COIIPA") ? -rs.getInt("amount") : rs.getInt("amount")));
 			}
+
+			return listPayments;
+		} catch (SQLException e) {
+			throw new UnexpectedException(e);
+		}
+	}
+	
+	public List<Teacher> getTeacherList(String fa){
+		
+		try {
+			Connection cn = db.getConnection();
+			PreparedStatement ps = cn.prepareStatement("select name, surname, remuneration from FormativeAction fa "
+					+ "inner join TeacherTeaches tt on fa.ID_fa=tt.ID_fa "
+					+ "inner join Teacher t on tt.ID_teacher = t.ID_teacher "
+					+ "where nameFa = ?");
 			
+			ps.setString(1, fa);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			List<Teacher> teachers = new ArrayList<>();
+			
+			while (rs.next()) {
+				teachers.add(new Teacher(rs.getString("name"), rs.getString("surname"), rs.getFloat("remuneration")));
+			}
+			
+			return teachers;
+		} catch(SQLException e) {
+			throw new UnexpectedException(e);
+		}
+	}
+	
+	public List<Payment> getPaymentsTeacher(String formativeAction, String teacher) {
+		try {
+			Connection cn = db.getConnection();
+
+			PreparedStatement ps = cn.prepareStatement(
+					"select pt.amount, datePay, t.name, sender, receiver from FormativeAction fa\r\n"
+					+ "inner join TeacherTeaches tt on fa.ID_fa = tt.ID_fa\r\n"
+					+ "inner join Teacher t on t.ID_teacher = tt.ID_teacher\r\n"
+					+ "inner join InvoiceTeacher it on fa.ID_fa = it.ID_fa and t.ID_teacher = it.ID_teacher\r\n"
+					+ "inner join PaymentTeacher pt on it.ID_invoice = pt.ID_invoice\r\n"
+					+ "where t.name = ? and nameFa = ?");
+			ps.setString(1, teacher);
+			ps.setString(2, formativeAction);
+
+			ResultSet rs = ps.executeQuery();
+
+			List<Payment> listPayments = new ArrayList<>();
+
+			while (rs.next()) {
+				listPayments.add(new Payment(Date.parse(rs.getTimestamp("datePay")),
+						rs.getString("sender").equals("COIIPA") ? rs.getInt("amount") : -rs.getInt("amount")));
+			}
+
 			return listPayments;
 		} catch (SQLException e) {
 			throw new UnexpectedException(e);

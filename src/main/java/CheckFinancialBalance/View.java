@@ -100,7 +100,7 @@ public class View {
 		frame.getContentPane().add(chckbxStatus, "cell 0 1,gapx 50,height 35!");
 		status = new JComboBox<String>();
 		status.setFont(new Font("Dialog", Font.PLAIN, 12));
-		status.setModel(new DefaultComboBoxModel<String>(new String[] {"Active", "Executed", "Cancelled"}));
+		status.setModel(new DefaultComboBoxModel<String>(new String[] {"Active", "Executed", "Cancelled", "Delayed"}));
 		frame.getContentPane().add(status, "cell 0 1,gapx 10");
 		
 		// Apply filter button 

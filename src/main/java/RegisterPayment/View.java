@@ -19,25 +19,15 @@ import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
-import javax.swing.JTextPane;
-
 import javax.swing.table.TableModel;
 
+import BaseProject.SwingUtil;
 import PL53.swing.DateInput;
-import PL53.swing.DateTimeInput;
 import PL53.swing.JDecimalField;
-import PL53.swing.JNumberField;
 import PL53.util.DateTime;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Date;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
-import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
-import javax.swing.JTextField;
 
 public class View extends JFrame {
 
@@ -64,16 +54,13 @@ public class View extends JFrame {
 	private JCheckBox isCash;
 	private JTable movementsTable;
 	private JScrollPane scrollPane_1;
-	private JTextPane descriptionPane;
-	private JPanel descriptionPanel;
 	private JDecimalField AmountRefund;
-	private JButton btnNewButton;
+	private JButton btnNewRefund;
 	private DateInput dateTextPaneRefund;
-	private JTextField dueAmountLabel;
 
 	public View() {
 
-		setBounds(100, 100, 1352, 602);
+		setBounds(100, 100, 1166, 602);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -148,29 +135,10 @@ public class View extends JFrame {
 
 		movementsTable = new JTable();
 		scrollPane_1.setViewportView(movementsTable);
-
-		descriptionPanel = new JPanel();
-		descriptionPanel.setVisible(false);
-		descriptionPanel.setEnabled(false);
-		descriptionPanel.setBounds(1157, 92, 169, 118);
-		contentPane.add(descriptionPanel);
-		descriptionPanel.setLayout(null);
-
-		JLabel lblNewLabel_6 = new JLabel("Description");
-		lblNewLabel_6.setBounds(0, 0, 99, 14);
-		descriptionPanel.add(lblNewLabel_6);
-
-		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(0, 21, 169, 97);
-		descriptionPanel.add(scrollPane_2);
-
-		descriptionPane = new JTextPane();
-		descriptionPane.setEditable(false);
-		scrollPane_2.setViewportView(descriptionPane);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(572, 349, 754, 179);
+		panel.setBounds(667, 349, 475, 179);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -181,6 +149,9 @@ public class View extends JFrame {
 		
 		dateTextPaneRefund = new DateInput();
 		dateTextPaneRefund.setBounds(48, 75, 212, 67);
+		dateTextPaneRefund.getYearsTextField().setBound(2000, Integer.MAX_VALUE);
+		dateTextPaneRefund.getYearsTextField().setDefaultValue(2021);
+		dateTextPaneRefund.setBorder(blackline);
 		panel.add(dateTextPaneRefund);
 		
 		JLabel lblNewLabel_8 = new JLabel("Date");
@@ -200,22 +171,12 @@ public class View extends JFrame {
 		panel.add(AmountRefund);
 		AmountRefund.setColumns(10);
 		
-		btnNewButton = new JButton("Add movement");
+		btnNewRefund = new JButton("Add movement");
 		
 		
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btnNewButton.setBounds(499, 75, 136, 44);
-		panel.add(btnNewButton);
-		
-		JLabel lblNewLabel_10 = new JLabel("Due amount");
-		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_10.setBounds(295, 106, 74, 13);
-		panel.add(lblNewLabel_10);
-		
-		dueAmountLabel = new JTextField();
-		dueAmountLabel.setBounds(295, 129, 152, 19);
-		panel.add(dueAmountLabel);
-		dueAmountLabel.setColumns(10);
+		btnNewRefund.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnNewRefund.setBounds(295, 107, 136, 44);
+		panel.add(btnNewRefund);
 	}
 
 	public Window getFrame() {
@@ -235,11 +196,6 @@ public class View extends JFrame {
 
 	public DateInput getdateTextPaneRefund() {
 		return this.dateTextPaneRefund;
-	}
-
-	public float getAmountPaidTextField() {
-		
-		return this.amountPaidTextField.getValue();
 	}
 
 	public void resetAmountPaid() {
@@ -275,29 +231,18 @@ public class View extends JFrame {
 
 	public void setMovementsTable(TableModel model) {
 		movementsTable.setModel(model);
+		SwingUtil.autoAdjustColumns(movementsTable);
 	}
 
-	public float getAmountPayed() {
+	public float getAmountPaid() {
 		return amountPaidTextField.getValue();
-	}
-
-	public void setDescription(String str) {
-		boolean blank = str == null || str.isBlank();
-
-		this.descriptionPanel.setVisible(!blank);
-		this.descriptionPanel.setEnabled(!blank);
-
-		if (!blank)
-			this.descriptionPane.setText(str);
 	}
 	
 	public float getAmountRefund() {
 		return AmountRefund.getValue();
 	}
-	public JButton getBtnNewButton() {
-		return btnNewButton;
+	public JButton getBtnNewRefund() {
+		return btnNewRefund;
 	}
-	public JTextField getDueAmountLabel() {
-		return dueAmountLabel;
-	}
+	
 }
