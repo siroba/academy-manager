@@ -72,6 +72,25 @@ public class FileGenerator{
 		return lines; 
 	}
 	
+	public static List<String> bodyWarningEnrollment(FormativeAction fA, Professional p,  float fee) throws IOException {
+
+		// Concatenate the content of the email to a list of strings 
+		List<String> lines = Arrays.asList("Dear " + p.getName() + " " + p.getSurname() + ",", 
+											"hereby we inform you that your enrollment for the formative action " + fA.getName() + "is in the pending payment list.");
+		List<String> lines2 = Arrays.asList("From now, you will have 48 hours to made the corresponding payment.",
+				"The fee is:" +fee+"€");
+		List<String> lines3 = Arrays.asList("We look forward to seeing you.",
+											"Best regards",
+											"The COIIPA Team");
+		lines = new ArrayList<>(lines);
+		lines2 = new ArrayList<>(lines2);
+		lines3 = new ArrayList<>(lines3);
+
+
+		lines.addAll(lines3);
+		
+		return lines; 
+	}
 	public static void deleteFolderRecursively() {
 		
 		 File file = new File(path);
