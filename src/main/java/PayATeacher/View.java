@@ -156,6 +156,8 @@ public class View extends JFrame {
 		taxDataPanel.add(lblNewLabel_11);
 		
 		amount = new JDecimalField(2);
+		amount.setBound(0f, Float.MAX_VALUE);
+		amount.setMaxLength(5);
 		amount.setBounds(446, 99, 163, 19);
 		taxDataPanel.add(amount);
 		amount.setColumns(10);
@@ -243,6 +245,8 @@ public class View extends JFrame {
 		contentPane.add(addMovement);
 		
 		amoundRefound = new JDecimalField(2);
+		amoundRefound.setBound(0f, Float.MAX_VALUE);
+		amoundRefound.setMaxLength(5);
 		amoundRefound.setColumns(10);
 		amoundRefound.setBounds(497, 671, 163, 19);
 		contentPane.add(amoundRefound);
