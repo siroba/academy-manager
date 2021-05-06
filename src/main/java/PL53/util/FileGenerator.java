@@ -52,10 +52,11 @@ public class FileGenerator {
 		lines = new ArrayList<>(lines);
 		lines2 = new ArrayList<>(lines2);
 
-		// Add information about refund in case the payed amount exceeds the expected
-		// fee
-		if ((payed - fee) > 0) {
-			lines.add("We received a payment of " + payed + " from you instead of the expected fee of " + fee + ".");
+		
+		// Add information about refund in case the payed amount exceeds the expected fee 
+		if ((payed - fee)>0) {
+			lines.add("We received a payment of " +  payed + "€ from you instead of the expected fee of "+ fee +"€.");
+
 			lines.add("The exceeding amount of money will be refunded to you in the following days.");
 
 		}
@@ -76,7 +77,7 @@ public class FileGenerator {
 		List<String> lines = Arrays.asList("Dear " + p.getName() + " " + p.getSurname() + ",",
 				"hereby we inform you that your enrollment for the formative action " + fA.getName()
 						+ "is in the pending payment list. From now, you will have 48 hours to made the corresponding payment.",
-				"The fee is: " + fee + "�");
+				"The fee is: " + fee + "�");
 		List<String> lines2 = Arrays.asList("We look forward to seeing you.", "Best regards", "The COIIPA Team");
 		lines = new ArrayList<>(lines);
 		lines2 = new ArrayList<>(lines2);

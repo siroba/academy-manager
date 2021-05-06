@@ -144,7 +144,7 @@ public class Controller implements PL53.util.Controller {
 						Professional p = selectedRow.professional;
 						FormativeAction fA = selectedRow.formativeAction;
 						List<Session> ss = fA.getSessions();
-						List<String> body = FileGenerator.bodyConfirmationEnrollment(fA, p, ss, selectedRow.fee, newTotal);
+						List<String> body = FileGenerator.bodyConfirmationEnrollment(fA, p, ss, selectedRow.fee, toReturn + selectedRow.fee);
 						FileGenerator.generateFile(
 								Constants.COIIPAemail, 
 								p.getEmail(), 
