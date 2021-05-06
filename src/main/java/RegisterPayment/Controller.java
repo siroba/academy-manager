@@ -1,6 +1,5 @@
 package RegisterPayment;
 
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -9,26 +8,19 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.multi.MultiInternalFrameUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import BaseProject.SwingUtil;
 import Entities.FormativeAction;
-import Entities.Movement;
-import Entities.Payment;
 import Entities.Professional;
 import Entities.Session;
+import PL53.util.Constants;
 import PL53.util.Date;
 import PL53.util.DateTime;
 import PL53.util.FileGenerator;
-import RegisterPayment.Data;
 
 public class Controller implements PL53.util.Controller {
 	private Model model;
@@ -37,255 +29,231 @@ public class Controller implements PL53.util.Controller {
 
 	public Controller() {
 		this.model = new Model();
+
 		try {
 			model.initModel();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
 		}
+
 		this.view = new View();
-		// no model-specific initialization, only view-specific initialization
 		this.initView();
 	}
-
-	/**
-	 * Controller initialization: add event handlers to the UI objects. Each event
-	 * handler is instantiated in the same way, so that it invokes a private method
-	 * of this handler, enclosed in a generic exception handler to display windows.
-	 * Each event handler is instantiated in the same way, so that it invokes a
-	 * private method of this controller, enclosed in a generic exception handler to
-	 * display popup windows when a problem or exception occurs. popup windows when
-	 * a problem or controlled exception occurs.
-	 */
 
 	public void initController() {
 
 		view.getTable().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				selectedRow = model.getData(view.getSelectedInvoice());
 
-				selectedRow = model.getDataNoCoiipa(view.getSelectedInvoice());
-
-				showPayments();
+				if (selectedRow != null)
+					try {
+						view.setMovementsTable(showPayments(selectedRow));
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 			}
 
 		});
 
+		// "Normal payment" button (from the professional to COIIPA)
 		view.getConfirmButton().addActionListener(new ActionListener() {
+			@SuppressWarnings("unused")
 			public void actionPerformed(ActionEvent e) {
-				boolean aux = true;
-				
-				if (selectedRow == null) {
-					JOptionPane.showMessageDialog(null, "You have to select one payment");
-					return;
-				}
-				if (view.isCash() && view.getAmountPaidTextField() > 1000) {
-					JOptionPane.showMessageDialog(null, "With cash the payments has to be lower than 1000�");
-					return;
-				}
-
-				float alreadyPayed = model.getAmountPayed(selectedRow);
-				float totalPayed = alreadyPayed + view.getAmountPayed();
-				float toReturn = totalPayed - selectedRow.invoice.getAmount();
-				Date payDate = view.getDateTextPane().getDate();
-				
-				float currentDueAmountProf= selectedRow.fee - totalPayed;
-				
-				view.setDueAmountProfessinalLabel(String.valueOf(currentDueAmountProf));
-
-				if (view.getAmountPayed() <= 0) {
-					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "�");
-					return;
-				}
-
-				int calcTime = DateTime.daysSince(view.getDateTextPane().getDate(), selectedRow.enrollment.getTimeEn());
-
-				if (calcTime > 2 || calcTime < -1) {
+				try {
 					DateTime now = DateTime.now();
-					long daysBetweenNowAction = DateTime.daysSince(now, view.getDateTextPane().getDate());
+	
+					// Data from the form
+					boolean isCash = view.isCash();
+					float newPayment = view.getAmountPaid();					// The input amount to pay to COIIPA
+					Date payDate = view.getDateTextPane().getDate();
+					
+					// Data from the database
+					float professionalPaid = model.getAmountPaid(selectedRow); // Sum of all the payments to COIIPA
+					float refundedAmount = model.getAmountReturned(selectedRow);// Sum of all the payments to the professional
+					float totalPaid = model.getAmountTotalPaid(selectedRow);	// Sum of all the payments
+	
+					// Payment calculations
+					float fee = selectedRow.invoice.getAmount();
+					float newTotal = totalPaid + newPayment;
+					float toReturn = newTotal - fee;
+	
+					// Dates...
+					int daysFromEnrollment = DateTime.daysSince(payDate, selectedRow.enrollment.getTimeEn());
+					long daysBetweenNowAction = DateTime.daysSince(now, payDate);
+				
+					/////////////////////////////////////////////////////////////////////////////////////
+					
+					// Conditions to check (validations)
+					if (selectedRow == null) {
+						JOptionPane.showMessageDialog(null, "You have to select one payment");
+						return;
+					} else if (isCash && newPayment > 1000) {
+						JOptionPane.showMessageDialog(null, "With cash the payments has to be lower than 1000€");
+						return;
+					} else if (newPayment <= 0) {
+						JOptionPane.showMessageDialog(null, "You cannot do a payment for " + newPayment + "€");
+						return;
+					} else if (daysBetweenNowAction < 0) {
+						JOptionPane.showMessageDialog(null,
+								"Payments cannot be made in the future (the date must be on the current date or in the past).",
+								"Date not valid", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+	
+					if (daysFromEnrollment > 2) {
+						int freePlaces = model.getFreePlaces(selectedRow.formativeAction.getID());
+	
+						if (freePlaces > 0) {
+							JOptionPane.showMessageDialog(null,
+									"The payment has been made after the estipulated period, any way as there are still free places the payment is accepted");
+						} else {
+							JOptionPane.showMessageDialog(null,
+									"The payment must be done with a margin of 48 hours after the enrollmet");
+							return;
+						}
+					}
+	
+					if (toReturn > 0) {
+						String difference = String.format("%.2f", toReturn);
+	
+						int option = JOptionPane.showConfirmDialog(null, "The sum of payments (" + newTotal
+								+ ") is hihger than the fee, Do you want to return the diferrence (" + difference + ")?",
+								"warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	
+						if (option == 0) { // The user clicked YES
+							
+							// Register the compensation
+							newTotal -= toReturn;
+							
+							model.createPayment(selectedRow.invoice, -toReturn, payDate, view.isCash(),
+									true, newTotal);
+	
+						}
+					} else if (toReturn < 0) {
+						JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
+					}
+	
+					boolean enrollmentConfirmed = model.createPayment(selectedRow.invoice, newPayment, payDate, isCash, true, newTotal);
+					JOptionPane.showMessageDialog(null, "The payment has been registered");
+					
+					if (enrollmentConfirmed) {
+						// Generate a file to confirm the enrollment
+						Professional p = selectedRow.professional;
+						FormativeAction fA = selectedRow.formativeAction;
+						List<Session> ss = fA.getSessions();
+						List<String> body = FileGenerator.bodyConfirmationEnrollment(fA, p, ss, selectedRow.fee, toReturn + selectedRow.fee);
+						FileGenerator.generateFile(
+								Constants.COIIPAemail, 
+								p.getEmail(), 
+								"Confirmation of Enrollment",
+								body, 
+								"ConfirmationEnrollment" + File.separator + "Confirmation_enrollment_fA" + fA.getID() + "_p" + p.getID() + ".txt");
+						
+						JOptionPane.showMessageDialog(null, "An email with the enrollment confirmation has been sent to " + p.getEmail());
+					}
+					
+					view.resetAmountPaid();
+					model.initModel();
+					view.setTable(getTableModel(model.getAllData()));
+					
+				} catch (SQLException | ParseException e1) { // This is bad practice (the entire function is inside a try/catch)!!
+					e1.printStackTrace();					 // Oh well... We don't get paid enough
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 
-					if (daysBetweenNowAction < 0) {
+		});
 
+		view.getBtnNewRefund().addActionListener(new ActionListener() {
+			@SuppressWarnings("unused")
+			public void actionPerformed(ActionEvent e) {
+				try {
+					DateTime now = DateTime.now();
+	
+					// Data from the form
+					boolean isCash = view.isCash();
+					float newRefund = view.getAmountRefund();
+					Date refundDate = view.getdateTextPaneRefund().getDate();
+					
+					// Data from the database
+					float professionalPaid = model.getAmountPaid(selectedRow);	// Sum of all the payments to COIIPA
+					float refundedAmount = model.getAmountReturned(selectedRow);// Sum of all the payments to the professional
+					float totalPaid = model.getAmountTotalPaid(selectedRow);	// Sum of all the payments
+	
+					// Payment calculations
+					float fee = selectedRow.invoice.getAmount();
+					float newTotal = totalPaid + newRefund;
+					float toReturn = newTotal - fee;
+	
+					// Dates...
+					int daysFromEnrollment = DateTime.daysSince(refundDate, selectedRow.enrollment.getTimeEn());
+					int daysBetweenNowAction = Date.daysSince(now, refundDate);
+					
+					/////////////////////////////////////////////////////////////////////////////////////
+					
+					// Checks
+					if (selectedRow == null) {
+						JOptionPane.showMessageDialog(null, "You have to select one payment");
+						return;
+	
+					} else if (newRefund <= 0) {
+						JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPaid() + "�");
+	
+						return;
+					} else if (daysBetweenNowAction < 0) {
 						JOptionPane.showMessageDialog(null,
 								"Payments cannot be made in the future( the date must be on the current date or in the past).",
 								"date not valid ", JOptionPane.ERROR_MESSAGE);
 						return;
-					} else {
-						try {
-							if (model.getFreePlaces(selectedRow.formativeAction.getID()) > 0) {
-								JOptionPane.showMessageDialog(null,
-										"The payment has been made after the extipulated period, any way as there are still free places the enrollment is confirmed");
-
-							} else {
-								JOptionPane.showMessageDialog(null,
-										"The payment must be done with a margin of 48 hours after the enrollmet");
-								return;
-							}
-						} catch (HeadlessException | SQLException | ParseException e1) {
-							e1.printStackTrace();
-						}
-
 					}
-				}
-
-				if (totalPayed > selectedRow.invoice.getAmount()) {
-					aux = false;
-					int option = JOptionPane.showConfirmDialog(null, "The sum of payments (" + totalPayed
-
-							+ ") is hihger than the fee, Do you want to return the diferrence ("
-
-							+ String.format("%.2f", (totalPayed - selectedRow.invoice.getAmount())) + ")?", "warning",
-							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-					if (option == 0) {
+	
+					// If the user wants to compensate the movement
+					if (toReturn > 0) {
+						String difference = String.format("%.2f", (newRefund - toReturn));
 						
-						/*
-						 * Movement invoiceReturn = new Movement(toReturn, payDate,
-						 * selectedRow.invoice.getReceiver(), selectedRow.invoice.getSender(),
-						 * selectedRow.invoice.getAddress(), selectedRow.invoice.getFiscalNumber(),
-						 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional());
-						 */
-						try {
-							model.createPaymentRefund(selectedRow.invoice.getID(), -toReturn, payDate, view.isCash(),
+						int option = JOptionPane.showConfirmDialog(null,
+								"The amount of the movement (" + newRefund
+										+ ") is higher than the amount that has to be returned to the professional ("
+										+ toReturn + "). Do you want to return the difference ("
+										+ difference + ")?",
+								"Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	
+						if (option == 0) { // The user clicked YES
+							float amount = newRefund - toReturn; // the amount to compensate
+							model.createPaymentRefund(selectedRow.invoice.getID(), amount, refundDate, view.isCash(),
 									true);
-
-						} catch (SQLException | ParseException e1) {
-
-							e1.printStackTrace();
 						}
-
-					} else if (option == 1) {
-						float amount = view.getAmountPaidTextField();
-						
-						try {
-							model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
-							view.setDueAmountLabel(String.valueOf(toReturn));
-						} catch (SQLException | ParseException e1) {
-							e1.printStackTrace();
-						}
-
-						return;
 					}
 
-				} else if (totalPayed < selectedRow.invoice.getAmount()) {
-					JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
-					aux = false;
-				}
-
-				float amount = view.getAmountPaidTextField();
-			
-
-				try {
-					model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
+					boolean enrollmentConfirmed = model.createPayment(selectedRow.invoice, -newRefund, refundDate,
+							view.isCash(), true, totalPaid);
 					JOptionPane.showMessageDialog(null, "The payment has been registered");
-					view.resetAmountPaid();
-
-					model.initModel();
-					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
-				} catch (SQLException | ParseException e1) {
-					e1.printStackTrace();
-				}
-			}
-
-		});
-
-		view.getBtnNewButton().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				boolean aux = true;
-
-				if (selectedRow == null) {
-					JOptionPane.showMessageDialog(null, "You have to select one payment");
-					return;
-				}
-
-				float alreadyPayed = model.getAmountPayed(selectedRow);
-				float totalPayed = alreadyPayed + view.getAmountPayed();
-
-				if (view.getAmountPayed() <= 0) {
-					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmountPayed() + "�");
-					return;
-				}
-
-				DateTime now = DateTime.now();
-				long daysBetweenNowAction = DateTime.daysSince(now, view.getdateTextPaneRefund().getDate());
-
-				if (daysBetweenNowAction < 0) {
-
-					JOptionPane.showMessageDialog(null,
-							"Payments cannot be made in the future( the date must be on the current date or in the past).",
-							"date not valid ", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-
-				if (totalPayed > selectedRow.invoice.getAmount()) {
-					aux = false;
-					int option = JOptionPane.showConfirmDialog(null, "The sum of payments (" + totalPayed
-
-							+ ") is hihger than the amount that has to bee returned to the professional, Do you want to return the diferrence ("
-
-							+ String.format("%.2f", (totalPayed - selectedRow.invoice.getAmount())) + ")?", "warning",
-							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-					if (option == 0) {
-						float toReturn = totalPayed - selectedRow.invoice.getAmount();
-						Date payDate = view.getDateTextPane().getDate();
-						/*
-						 * Movement invoiceReturn = new Movement(toReturn, payDate,
-						 * selectedRow.invoice.getReceiver(), selectedRow.invoice.getSender(),
-						 * selectedRow.invoice.getAddress(), selectedRow.invoice.getFiscalNumber(),
-						 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional());
-						 */
-						try {
-							model.createPaymentRefund(selectedRow.invoice.getID(), -toReturn, payDate, view.isCash(),
-									true);
-
-						} catch (SQLException | ParseException e1) {
-
-							e1.printStackTrace();
-						}
-
-					} else if (option == 1) {
-						float amount = view.getAmountRefund();
-						Date payDate = view.getdateTextPaneRefund().getDate();
-						try {
-							model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
-						} catch (SQLException | ParseException e1) {
-							e1.printStackTrace();
-						}
-
-						return;
-					}
-
-				} else if (totalPayed < selectedRow.invoice.getAmount()) {
-					JOptionPane.showMessageDialog(null,
-							"The payment is lower than  the amount that has to be returned to the professional ");
-					aux = false;
-				}
-
-				float amount = view.getAmountRefund();
-				Date payDate = view.getdateTextPaneRefund().getDate();
-
-				try {
-					boolean enrollmentConfirmed =  model.createPayment(selectedRow.invoice, amount, payDate, view.isCash(), aux, totalPayed);
-					JOptionPane.showMessageDialog(null, "The payment has been registered");					
+					
 					if (enrollmentConfirmed) {
-						// Generate a file to confirm the enrollment 
-						Professional p = selectedRow.professional; 
+						// Generate a file to confirm the enrollment
+						Professional p = selectedRow.professional;
 						FormativeAction fA = selectedRow.formativeAction;
 						List<Session> ss = fA.getSessions();
-						List<String> body = FileGenerator.bodyConfirmationEnrollment(fA, p, ss, selectedRow.fee, totalPayed);
-						FileGenerator.generateFile("service@coiipa.com", p.getEmail(), "Confirmation of Enrollment", body, "ConfirmationEnrollment" + File.separator + "Confirmation_enrollment_fA" + fA.getID() + "_p" + p.getID() + ".txt");
-					}	
+						List<String> body = FileGenerator.bodyConfirmationEnrollment(fA, p, ss, selectedRow.fee, totalPaid);
+						FileGenerator.generateFile(
+								Constants.COIIPAemail, 
+								p.getEmail(), 
+								"Confirmation of Enrollment",
+								body, 
+								"ConfirmationEnrollment" + File.separator + "Confirmation_enrollment_fA" + fA.getID() + "_p" + p.getID() + ".txt");
+						
+						JOptionPane.showMessageDialog(null, "An email with the enrollment confirmation has been sent to " + p.getEmail());
+					}
+					
 					view.resetAmountPaid();
 					model.initModel();
-					view.setTable(getTableModel(model.getAllDataNoCoiipa()));
-				} catch (SQLException | ParseException e1) {
-					e1.printStackTrace();
+					view.setTable(getTableModel(model.getAllData()));
+				} catch (SQLException | ParseException e1) { // This is bad practice (the entire function is inside a try/catch)!!
+					e1.printStackTrace();					 // Oh well... We don't get paid enough
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -295,29 +263,34 @@ public class Controller implements PL53.util.Controller {
 	}
 
 	public void initView() {
-
-		view.setVisible(true);
-
-		view.setTable(getTableModel(model.getAllDataNoCoiipa()));
+		view.setVisible(true); // Show the window
+		
+		try {
+			view.setTable(getTableModel(model.getAllData()));	// Initialise the table
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public TableModel getTableModel(List<Data> list) {
+	public TableModel getTableModel(List<Data> list) throws SQLException {
 
-		String header[] = { "Course name", "Professional name", "Professional surname", "Professional email", "Fee",
-				"Date of the registration" };
+		String header[] = { "Course name", 			"Professional name",	"Professional surname", 
+							"Professional email", 	"Fee", 					"Date of the registration", 
+							"Amount paid", 			"Amount returned" };
 
 		String body[][] = new String[list.size()][header.length];
 		for (int i = 0; i < list.size(); i++) {
 			Data d = list.get(i);
 
-			body[i] = new String[] { d.formativeAction.getName(), d.professional.getName(), d.professional.getSurname(),
-					d.professional.getEmail(), Float.toString(d.invoice.getAmount()),
-					d.enrollment.getTimeEn().toString() };
+			body[i] = new String[] { 
+					d.formativeAction.getName(),			d.professional.getName(),					d.professional.getSurname(),
+					d.professional.getEmail(), 				Float.toString(d.invoice.getAmount()),		d.enrollment.getTimeEn().toString(), 
+					Float.toString(model.getAmountPaid(d)),	Float.toString(model.getAmountReturned(d)) 
+				};
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
-		// loads each of the pojos values using PropertyUtils (from apache coommons
-		// beanutils)
+
 		for (int i = 0; i < body.length; i++) {
 			for (int j = 0; j < header.length; j++) {
 				tm.setValueAt(body[i][j], i, j);
@@ -327,21 +300,28 @@ public class Controller implements PL53.util.Controller {
 		return tm;
 	}
 
-	public void showPayments() {
-		List<AuxPayment> paymentList = model.getPayments(selectedRow.formativeAction.getName(),
-				model.getDataNoCoiipa(view.getTable().getSelectedRow()));
-		TableModel tmodel = SwingUtil.getTableModelFromPojos(paymentList,
-				new String[] { "sender", "receiver", "date", "amount" });
-		view.getMovementsTable().setModel(tmodel);
-		SwingUtil.autoAdjustColumns(view.getMovementsTable());
+	public TableModel showPayments(Data d) throws SQLException {
+		List<AuxPayment> paymentList = model.getAuxPayments(d);
+		
+		String header[] = { "sender", "receiver", "date", "amount" };
 
-		view.setDescription(selectedRow.invoice.getDescription());
-		/*
-		 * float amount = 0; for (AuxPayment payment : paymentList) { amount +=
-		 * payment.getAmount(); }
-		 */
-		// view.getLabelSummary().setText("" + amount);
-
+		String body[][] = new String[paymentList.size()][header.length];
+		
+		for (int i = 0; i < paymentList.size(); i++) {
+			AuxPayment aux = paymentList.get(i);
+		
+			body[i] = new String[] {aux.sender, aux.receiver, aux.getDate().toString(), Float.toString(aux.getAmount())};
+		}
+		
+		TableModel tm = new DefaultTableModel(header, body.length);
+		
+		for (int i = 0; i < body.length; i++) {
+			for (int j = 0; j < header.length; j++) {
+				tm.setValueAt(body[i][j], i, j);
+			}
+		}
+		
+		return tm;
 	}
 
 }

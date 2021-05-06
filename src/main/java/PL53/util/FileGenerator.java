@@ -57,7 +57,7 @@ public class FileGenerator{
 		
 		// Add information about refund in case the payed amount exceeds the expected fee 
 		if ((payed - fee)>0) {
-			lines.add("We received a payment of " +  payed + " from you instead of the expected fee of "+ fee +".");
+			lines.add("We received a payment of " +  payed + "€ from you instead of the expected fee of "+ fee +"€.");
 			lines.add("The exceeding amount of money will be refunded to you in the following days.");
 			
 		}
