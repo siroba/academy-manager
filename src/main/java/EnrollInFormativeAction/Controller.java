@@ -2,6 +2,8 @@ package EnrollInFormativeAction;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -15,7 +17,9 @@ import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Professional;
 import Exceptions.InvalidFieldValue;
+import PL53.util.Constants;
 import PL53.util.DateTime;
+import PL53.util.FileGenerator;
 
 public class Controller implements PL53.util.Controller {
 	private Model model;
@@ -160,6 +164,19 @@ public class Controller implements PL53.util.Controller {
 					
 					model.doEnrollment(selected, group, p, en , address, fiscalNumber, fee);
 
+					// Generate a file to warning the professional about the fee of the payment and the period to pay it
+					
+					List<String> body = FileGenerator.bodyWarningEnrollment(selected, p, selected.getFee(group));
+					FileGenerator.generateFile(
+							Constants.COIIPAemail, 
+							p.getEmail(), 
+							"Warning of Enrollment",
+							body, 
+							"WarningEnrollment" + File.separator + "warning_enrollment_professional" +p.getName()+File.separator +"in fa"+selected.getID() + "_p" + p.getID() + ".txt");
+					
+					JOptionPane.showMessageDialog(null, "An email with the enrollment confitions to be confirmed has been sent to " + p.getEmail());
+					
+					
 					model.loadFormativeActions();
 					view.setFAList(model.getFormativeActions());
 					
@@ -170,6 +187,8 @@ public class Controller implements PL53.util.Controller {
 					e1.printStackTrace();
 				} catch (InvalidFieldValue e2) {
 					JOptionPane.showMessageDialog(null, e2.toString());
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
