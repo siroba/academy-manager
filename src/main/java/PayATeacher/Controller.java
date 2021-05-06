@@ -58,9 +58,9 @@ public class Controller implements PL53.util.Controller {
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
-					}else {
-						
 					}
+					
+					view.setFiscalNumber(selectedRow.teacher.getFiscalNumber());
 				}
 
 			}

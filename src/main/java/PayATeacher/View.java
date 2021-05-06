@@ -219,6 +219,8 @@ public class View extends JFrame {
 		contentPane.add(lblNewLabel_12);
 		
 		dateTransferTextField_1 = new DateInput();
+		dateTransferTextField_1.getYearsTextField().setBound(2000, 3000);
+		dateTransferTextField_1.getYearsTextField().setDefaultValue(2021);
 		dateTransferTextField_1.setBounds(497, 580, 230, 65);
 		dateTransferTextField_1.setBorder(blackline);
 		contentPane.add(dateTransferTextField_1);
@@ -386,5 +388,9 @@ public class View extends JFrame {
 
 	public String getSelectedMovement() {
 		return (String)invoicesDropdown.getSelectedItem();
+	}
+
+	public void setFiscalNumber(String fiscalNumber) {
+		fiscalNumberTextField.setText(fiscalNumber);
 	}
 }
