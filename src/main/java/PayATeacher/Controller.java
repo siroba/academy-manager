@@ -14,7 +14,6 @@ import javax.swing.table.TableModel;
 import Entities.MovementTeacher;
 import Entities.PaymentTeacher;
 import Entities.Teacher;
-import Entities.TeacherTeaches;
 import PL53.util.Date;
 import PL53.util.DateTime;
 
@@ -92,11 +91,7 @@ public class Controller implements PL53.util.Controller {
 					// payments to the professional
 					// float totalPaid = model.getAmountTotalPaid(selectedRow); // Sum of all the
 					// payments
-					String fiscalNumberDB = model.getFiscalNumber(selectedRow.teacher); // new Teacher((String)
-																						// view.getTable().getValueAt(view.getSelected(),
-																						// 2), (String)
-																						// view.getTable().getValueAt(view.getSelected(),
-																						// 3), "", "", ""));
+					String fiscalNumberDB = model.getFiscalNumber(ID_teacher);
 
 					float remuneration = selectedRow.teacherTeaches.getRemuneration();
 					String sender = "COIIPA";
@@ -141,12 +136,12 @@ public class Controller implements PL53.util.Controller {
 					} else {
 						// Check if fiscal number stored in the DB matches the entered one & provide the
 						// option to update it in the db if not
-						if (fiscalNumber != fiscalNumberDB) {
+						if (fiscalNumber.compareTo(fiscalNumberDB)!=0) {
 							int option = JOptionPane.showConfirmDialog(null,
 									"The fiscal number for the teacher " + reciever
 											+ " does not match the one stored in the database.\n"
-											+ "Would you like to replace the fiscal number in the database "
-											+ fiscalNumberDB + " by " + fiscalNumber + "?",
+											+ "Would you like to replace the fiscal number in the database \""
+											+ fiscalNumberDB + "\" by \"" + fiscalNumber + "\"?",
 									"WARNING", JOptionPane.YES_NO_CANCEL_OPTION);
 
 							if (option == JOptionPane.YES_OPTION) {
