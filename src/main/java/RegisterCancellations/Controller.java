@@ -53,12 +53,19 @@ public class Controller implements PL53.util.Controller {
 		view.getBtnCancelRegistration().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Data selected = model.getData(view.getSelected());
+				int selectedRow = view.getSelected();
+				if (selectedRow == -1)
+					return;
+				
+				Data selected = model.getData(selectedRow);
 
+				float amountPayed = model.getPayedAmount(selected.professional.getID(), selected.formativeAction.getID());
+				float refundAmount = amountPayed*selected.formativeAction.refundPercentage(view.getDateIn());
+				
 				int input = JOptionPane.showConfirmDialog(null,
 						"You are going to cancel the registration of " + selected.professional.getName() + 
 						" to "	+ selected.formativeAction.getName() + ". Are you sure? " + 
-						selected.formativeAction.refund(selected.enrollment.getGroup()) + "€ will be refunded to " + 
+						refundAmount + "€ will be refunded to " + 
 						selected.professional.getName() + ".",
 						"Are you sure you want to cancel the registration?", 
 						JOptionPane.YES_NO_OPTION,
@@ -67,10 +74,9 @@ public class Controller implements PL53.util.Controller {
 				
 				if(input == 0) {
 					try {
-						model.deleteEnrollment(selected, view.getDateIn(), "COIIPA", selected.professional.getName(), view.getAddress(), view.getFiscalNumber(), view.getIsCash());
+						model.deleteEnrollment(selected, refundAmount, view.getDateIn(), "COIIPA", selected.professional.getName(), view.getAddress(), view.getFiscalNumber(), view.getIsCash());
 						model.initModel();
 					} catch (SQLException | ParseException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					

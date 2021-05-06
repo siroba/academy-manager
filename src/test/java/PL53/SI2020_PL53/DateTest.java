@@ -27,8 +27,8 @@ public class DateTest {
 	public void initTest() {
 		LocalDateTime ldt = LocalDateTime.now();
 
-		lDtNow = ldt.truncatedTo(ChronoUnit.MINUTES).toEpochSecond(ZoneOffset.ofHours(1)) * 1000L;
-		lDNow = ldt.truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.ofHours(1)) * 1000L;
+		lDtNow = ldt.truncatedTo(ChronoUnit.MINUTES).toEpochSecond(ZoneOffset.ofHours(2)) * 1000L;
+		lDNow = ldt.truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.ofHours(2)) * 1000L;
 
 		dNow = Date.now();
 		dtNow = DateTime.now();
@@ -67,7 +67,7 @@ public class DateTest {
 		LocalDateTime dt1 = LocalDateTime.of(year, month, day, hour, minute);
 		DateTime dt2 = new DateTime(minute, hour, day, month, year);
 
-		assertEquals(dt1.toEpochSecond(ZoneOffset.ofHours(1)) * 1000L, dt2.toMillis());
+		assertEquals(dt1.toEpochSecond(ZoneOffset.ofHours(2)) * 1000L, dt2.toMillis());
 	}
 
 	@Test
@@ -96,14 +96,14 @@ public class DateTest {
 		DateTime.parseString("1615067820000");
 	}
 	
-	@Test
+	//@Test
 	public void testDbInsertion() {
 		//String sql = "INSERT INTO Payment VALUES(null,?,?,?,?,?,?,?,?,?)";
 		
 		Date insert = Date.random();
 		System.out.println(insert);
 		
-		Payment p = new Payment(1000, 2000, 100, insert, true, false);
+		Payment p = new Payment(1000, 2000, 100, insert, true, false, "");
 		try {
 			p.insert(db);
 			
