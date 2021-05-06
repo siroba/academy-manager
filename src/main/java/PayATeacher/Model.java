@@ -146,18 +146,21 @@ public class Model {
 			for(PaymentTeacher m: mt) {
 				String sender = i.getSender();
 				String receiver = i.getReceiver();
-				float amount = m.getAmount();
+				float amount = -m.getAmount();
 				String datePayment = m.getPayDate().toString();
 	
 				// If the amount is negative, the payment was from COIIPA
-				if (amount < 0) {
+				if (amount > 0) {
 					String tmp = sender;
 					sender = receiver;
 					receiver = tmp;
+					
+					//amount*=-1;
 	
 					// Otherwise, if the sender is COIIPA, just set the amount to be negative
-				} else if (sender.equals("COIIPA")) {
-					amount *= -1;
+				}  if (sender.equals("COIIPA")) {
+					
+					//amount *= -1;
 				}
 				
 				str.add(new String[] {sender, receiver, datePayment, Float.toString(amount)});

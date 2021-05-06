@@ -226,11 +226,16 @@ public class Controller implements PL53.util.Controller {
 				//float COIIPAPaid = model.getAmountReturned(selectedRow);	// Sum of all the payments to the teacher
 				float totalPaid = model.getAmountTotalPaid(selectedRow);	// Sum of all the payments
 				int numberInvoices = selectedRow.movementsTeacher.size();
+
 				
 				// Payment calculations
 				float remuneration = selectedRow.teacherTeaches.getRemuneration();
 				float newTotal = totalPaid + newRefund;
-				float toReturn = newTotal - remuneration;
+				float toReturn = newTotal - remuneration ;
+				
+				
+
+				//float toReturn = totalPaid - newRefund ;//newTotal - remuneration;
 
 				// Dates...
 				DateTime now = DateTime.now();
@@ -270,41 +275,39 @@ public class Controller implements PL53.util.Controller {
 							String difference = String.format("%.2f", (newRefund - toReturn));
 
 							int option = JOptionPane.showConfirmDialog(null, "The amount of the movement (" + newRefund
-									+ ") is higher than the amount that has to be returned to COIIPA (" + toReturn
-									+ "). Do you want to return the difference (" + difference + ")?", "Warning",
+									+ ") is higher than the amount that has to be returned to COIIPA . Do you want to return the difference (" + toReturn + ")?", "Warning",
 									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 							if (option == 0) { // The user clicked YES
 								float amount = newRefund - toReturn; // the amount to compensate
-								model.createPaymentRefund(movementID, -amount, refundDate, true);
+								model.createPaymentRefund(movementID, amount, refundDate, true);
 							}
 						} else if (toReturn < 0) { // Payment lower than it should be
 							JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
 						}
 
-						model.createPayment(movementID, newRefund, refundDate, true);
+						model.createPayment(movementID, -newRefund, refundDate, true);
 						JOptionPane.showMessageDialog(null, "The payment has been registered");
 
 					} else if (COIIPA) { // Movement made by COIIPA to the teacher
-
-						if (toReturn > 0) { // Payment higher than it should be
+						if ((toReturn) > 0) { // Payment higher than it should be
+							
 							String difference = String.format("%.2f", (newRefund - toReturn));
 
 							int option = JOptionPane.showConfirmDialog(null, "The amount of the movement (" + newRefund
-									+ ") is higher than the amount that has to be returned to the teacher (" + toReturn
-									+ "). Do you want to return the difference (" + difference + ")?", "Warning",
+									+ ") is higher than the amount that has to be returned to the teacher . Do you want to return the difference (" + toReturn + ")?", "Warning",
 									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 							if (option == 0) { // The user clicked YES
-								float amount = newRefund - toReturn; // the amount to compensate
-								model.createPaymentRefund(movementID, amount, refundDate,
+								//float amount = newRefund - toReturn; // the amount to compensate
+								model.createPaymentRefund(movementID, -toReturn, refundDate,
 										true);
 							}
 						} else if (toReturn < 0) { // Payment lower than it should be
-							JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
+							JOptionPane.showMessageDialog(null, "The payment is lower than  the remuneration ");
 						}
 
-						model.createPaymentRefund(movementID, -newRefund, refundDate, true);
+						model.createPaymentRefund(movementID, newRefund, refundDate, true);
 						JOptionPane.showMessageDialog(null, "The payment has been registered");
 
 					}

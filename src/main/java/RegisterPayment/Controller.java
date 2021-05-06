@@ -186,7 +186,7 @@ public class Controller implements PL53.util.Controller {
 					// Payment calculations
 					float fee = selectedRow.invoice.getAmount();
 					float newTotal = totalPaid + newRefund;
-					float toReturn = newTotal - fee;
+					float toReturn = totalPaid-newRefund; //newTotal - fee;
 	
 					// Dates...
 					int daysFromEnrollment = DateTime.daysSince(refundDate, selectedRow.enrollment.getTimeEn());
