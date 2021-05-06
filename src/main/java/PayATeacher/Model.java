@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import Entities.FormativeAction;
 import Entities.MovementTeacher;
+import Entities.Payment;
 import Entities.PaymentTeacher;
 import Entities.Session;
 import Entities.Teacher;
@@ -173,4 +174,55 @@ public class Model {
 		
 		return count > 0;
 	}
+
+	public float getAmountPaid(Data selectedRow) {
+		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM Payment "
+				+ "INNER JOIN MovementTeacher ON PaymentTeacher.ID_invoice=MovementTeacher.ID_Invoice AND PaymentTeacher.amount >0 " 
+				+ "GROUP BY PaymentTeacher.ID_invoice "
+				+ "HAVING MovementTeacher.ID_fa=? AND MovementTeacher.ID_teacher=? AND PaymentTeacher.amount >0 ), 0.0) as paid;";
+
+		
+		double sumPayments = (double) (db
+				.executeQueryArray(sql, selectedRow.movementTeacher.getID_fa(), selectedRow.movementTeacher.getID_teacher()).get(0)[0]);
+		
+		
+		return (float) sumPayments;
+	}
+
+	public float getAmountReturned(Data selectedRow) {
+		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM PaymentTeacher "
+				+ "INNER JOIN MovementTeacher ON PaymentTeacher.ID_invoice=MovementTeacher.ID_Invoice AND PaymentTeacher.amount < 0 "
+				+ "GROUP BY Payment.ID_invoice "
+				+ "HAVING MovementTeacher.ID_fa=? AND MovementTeacher.ID_teacher=? AND PaymentTeacher.amount < 0 ), 0.0);";
+
+		double sumPayments =  (double) (db
+				.executeQueryArray(sql, selectedRow.movementTeacher.getID_fa(), selectedRow.movementTeacher.getID_teacher()).get(0)[0]);
+		return (float)sumPayments;
+	}
+
+	public float getAmountTotalPaid(Data selectedRow) {
+		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM PaymentTeacher "
+				+ "INNER JOIN MovementTeacher ON PaymentTeacher.ID_invoice=MovementTeacher.ID_Invoice " + " GROUP BY PaymentTeacher.ID_invoice "
+				+ "HAVING MovementTeacher.ID_fa=? AND MovementTeacher.ID_teacher=?), 0.0);";
+
+		float sumPayments = (float) ((double) (db
+				.executeQueryArray(sql, selectedRow.movementTeacher.getID_fa(), selectedRow.movementTeacher.getID_teacher()).get(0)[0]));
+
+		
+		return sumPayments;
+	}
+
+	public void createPayment(String id, float newRefund, Date refundDate, boolean b, float newTotal) {
+		
+		
+		// invoiceReturn.insert(db);
+		int id_invoice = invoiceReturn.getID();
+		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
+		p.insert(db);
+		
+	}
+		
+	}
+	
+	
 }
