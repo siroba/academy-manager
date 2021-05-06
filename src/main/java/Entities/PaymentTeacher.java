@@ -24,6 +24,13 @@ public class PaymentTeacher {
 
 	private String description = "";
 
+	/**
+	 * @param ID_invoice
+	 * @param amount
+	 * @param payDate
+	 * @param confirmed
+	 * @param description
+	 */
 	public PaymentTeacher(String ID_invoice, float amount, Date payDate, boolean confirmed, String description) {
 		this.ID_invoice = ID_invoice;
 		this.amount = amount;

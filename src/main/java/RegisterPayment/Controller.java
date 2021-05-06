@@ -127,8 +127,9 @@ public class Controller implements PL53.util.Controller {
 							// Register the compensation
 							newTotal -= toReturn;
 							
-							model.createPayment(selectedRow.invoice, -toReturn, payDate, view.isCash(),
-									true, newTotal);
+							model.createPayment(selectedRow.invoice, -toReturn, payDate, view.isCash(), true, newTotal);
+
+							toReturn = 0;
 	
 						}
 					} else if (toReturn < 0) {
