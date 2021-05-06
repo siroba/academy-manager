@@ -151,7 +151,11 @@ public abstract class DbUtil {
 	 * Simple method to execute all sql statements found in a file, taking into account:
 	 * <br/>- Each statement MUST end in ; and may occupy several lines.
 	 <br/>- Line comments (--) are allowed.
+<<<<<<< HEAD
 	 <br/>- All drop statements are executed at the beginning, 
+=======
+	 <br/>- All drop statements are executed at the beginning,
+>>>>>>> main
 	 <br/>- Failures are ignored in case the table does not exist (only for drop).
 	 */
 	public void executeScript(String fileName) {

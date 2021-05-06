@@ -3,25 +3,22 @@ package StatusOfFormativeAction;
 import PL53.util.Date;
 
 public class FormativeActionDetails {
+//(name, state, enrolment period, date, total places and places left)
 	private String name;
 	private String status;
 	private Date enrollmentPeriodStart;
 	private Date enrollmentPeriodEnd;
 	private int totalPlaces;
 	private int leftPlaces;
-	private Date dateOfFirstSession;
-	private Date dateOfLastSession;
 	
 	public FormativeActionDetails(String name, String status, Date enrollmentPeriodStart, Date enrollmentPeriodEnd,
-			int totalPlaces, int leftPlaces, Date dateOfFirstSession, Date dateOfLastSession) {
+			int totalPlaces, int leftPlaces) {
 		this.name = name;
 		this.status = status;
 		this.enrollmentPeriodStart = enrollmentPeriodStart;
 		this.enrollmentPeriodEnd = enrollmentPeriodEnd;
 		this.totalPlaces = totalPlaces;
 		this.leftPlaces = leftPlaces;
-		this.dateOfFirstSession = dateOfFirstSession;
-		this.dateOfLastSession = dateOfLastSession;
 	}
 
 	public String getName() {
@@ -70,21 +67,5 @@ public class FormativeActionDetails {
 
 	public void setLeftPlaces(int leftPlaces) {
 		this.leftPlaces = leftPlaces;
-	}
-
-	public Date getDateOfFirstSession() {
-		return dateOfFirstSession;
-	}
-
-	public void setDateOfFirstSession(Date dateOfFirstSession) {
-		this.dateOfFirstSession = dateOfFirstSession;
-	}
-
-	public Date getDateOfLastSession() {
-		return dateOfLastSession;
-	}
-
-	public void setDateOfLastSession(Date dateOfLastSession) {
-		this.dateOfLastSession = dateOfLastSession;
 	}
 }

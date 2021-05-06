@@ -59,11 +59,6 @@ public class JDecimalField extends JNumberField<Float> {
 		else
 			return minValue;
 	}
-	
-	@Override
-	public void setValue(Float f)  {
-		this.setText(f);
-	}
 
 	@Override
 	protected Float parse(String str) {
@@ -77,7 +72,7 @@ public class JDecimalField extends JNumberField<Float> {
 
 	@Override
 	public void setText(Float f) {
-		setText(Float.toString(f));
+		this.setText(Float.toString(f));
 	}
 
 	@Override

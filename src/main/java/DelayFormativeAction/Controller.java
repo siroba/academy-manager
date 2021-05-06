@@ -32,21 +32,16 @@ public class Controller implements PL53.util.Controller{
 		view.getBtnConfirm().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int option = JOptionPane.showConfirmDialog(null, "Have all the teachers agreed to this change?",
-						"Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				try {
+					model.delay(view.getSelected(), view.getDateTimeInput());
 
-				if (option == 0) {
-					try {
-						model.delay(view.getSelected(), view.getDateTimeInput());
+					model.initModel();
 
-						model.initModel();
-
-						view.setTable(getTableModel(model.getAllData()));
-					} catch (SQLException | ParseException e1) {
-						e1.printStackTrace();
-					} catch (ArrayIndexOutOfBoundsException e2) {
-						JOptionPane.showMessageDialog(null, "You have to select one Formative Action");
-					}	
+					view.setTable(getTableModel(model.getAllData()));
+				} catch (SQLException | ParseException e1) {
+					e1.printStackTrace();
+				} catch (ArrayIndexOutOfBoundsException e2) {
+					JOptionPane.showMessageDialog(null, "You have to select one Formative Action");
 				}
 			}
 		});

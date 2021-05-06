@@ -9,8 +9,8 @@ import javax.swing.JOptionPane;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
-import Entities.Movement;
-import Entities.MovementTeacher;
+import Entities.Invoice;
+import Entities.InvoiceTeacher;
 import Entities.Payment;
 import Entities.PaymentTeacher;
 import Entities.Professional;
@@ -99,7 +99,7 @@ public class Model {
 			Data d = new Data();
 			d.formativeAction = fa;
 			d.enrollment = en;
-			d.invoice = Movement.getOne(queryInvoice + en.getID_professional(), db);
+			d.invoice = Invoice.getOne(queryInvoice + en.getID_professional(), db);
 			d.professional = Professional.getOne(queryProfessional + d.invoice.getID_professional(), db);
 			d.payment = Payment.getOne(queryPayments + d.invoice.getID(), db);
 			
@@ -122,22 +122,13 @@ public class Model {
 	public void invoiceTeachers(int index, Date dateIn, String fiscalNumber, String address) throws SQLException, ParseException {
 		String query = "SELECT * FROM InvoiceTeacher WHERE ID_fa=" + data[index].getID();
 		
-		for(MovementTeacher inv: MovementTeacher.get(query, db)) {
+		for(InvoiceTeacher inv: InvoiceTeacher.get(query, db)) {
 			Teacher t = Teacher.getOne("SELECT * FROM Teacher WHERE ID_teacher=" + inv.getID_teacher(), db);
-			
-			// As for the ID of the new invoice 
-			// TODO: PO does not want this
 			String invoiceId = JOptionPane.showInputDialog(null, "What is the ID of the invoice for the teacher " + t.getName() + " for " + inv.getAmount() + "€?", null);
 			
-			// A simple description for the transaction
-			String description = "The formative action " + data[index].getName() + " was cancelled.";
-			
-			// Create the new invoice and insert it into the DB
-			MovementTeacher newInv = new MovementTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID(), description);
+			InvoiceTeacher newInv = new InvoiceTeacher(invoiceId, inv.getAmount(), inv.getID_fa(), dateIn, t.getName(), "COIIPA", fiscalNumber, address, t.getID());
 			newInv.insert(db);
-			
-			// Create a new Payment for that Invoice and insert it
-			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true, ""); // TODO: Description
+			PaymentTeacher p = new PaymentTeacher(newInv.getID(), inv.getAmount(), dateIn, true);
 			p.insert(db);
 		}
 		
@@ -153,18 +144,11 @@ public class Model {
 		return (int)(db.executeQueryArray(query, ID_fa).get(0)[0]);
 	}
 
-	public void payRefund(Movement in, boolean cash) throws SQLException, ParseException {
+	public void payRefund(Invoice in, boolean cash) throws SQLException, ParseException {
 		in.insert(db);
 		
-		Payment p = new Payment(in.getID(), in.getAmount(), in.getDateIn(), true, cash, ""); // TODO: Description
+		Payment p = new Payment(in.getID(), in.getAmount(), in.getDateIn(), true, cash);
 		p.insert(db);
-	}
-	
-	public float getPayedAmount(int ID_professional, int ID_fa) {
-		String query = "SELECT SUM(Payment.amount) FROM Payment " + 
-				"INNER JOIN Invoice ON Invoice.ID_invoice=Payment.ID_invoice " + 
-				"WHERE ID_professional=? AND Invoice.ID_fa=?;";
-		return (float)((double)(db.executeQueryArray(query, ID_professional, ID_fa).get(0)[0]));
 	}
 
 }
