@@ -194,7 +194,7 @@ public class Model {
 
 			while (rs.next()) {
 				listPayments.add(new Payment(Date.parse(rs.getTimestamp("datePay")),
-						rs.getString("sender").equals("COIIPA") ? rs.getInt("amount") : -rs.getInt("amount")));
+						rs.getString("sender").equals("COIIPA") ? -rs.getInt("amount") : rs.getInt("amount")));
 			}
 
 			return listPayments;
