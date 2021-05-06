@@ -6,7 +6,7 @@ import java.util.*;
 
 import Entities.Enrollment;
 import Entities.FormativeAction;
-import Entities.Movement;
+import Entities.Invoice;
 import Entities.Professional;
 import Exceptions.InvalidFieldValue;
 import Utils.Database;
@@ -47,9 +47,7 @@ public class Model {
         p.insert(db);
         en.setID_professional(p.getID());
         en.insert(db);
-        
-        Movement i = new Movement(fa.getFee(group), en.getTimeEn(), p.getName(), "COIIPA" , address, fiscalNumber, en.getID_fa(), p.getID(), ""); // TODO: Description
-
+        Invoice i = new Invoice(fa.getFee(group), en.getTimeEn(), p.getName(), "COIIPA" , address, fiscalNumber, en.getID_fa(), p.getID());
         i.insert(db);
         
         

@@ -68,49 +68,36 @@ public class Controller {
 	
 	public boolean checkFormativeAction(boolean close) {
 		
-		String error = "The following warning occured while trying to close the formative action:\n\n";
+		String error = "The following error occured while trying to close the formative action:\n\n";
 		Boolean errorOccured = false;
-		Boolean ret = true;
+		Boolean ret = false;
 		String fa = view.getListFormativeActions().getSelectedValue();
 		
-		// check if Payments of professionals are correct
 		int confirmedIncomeProfessional = model.getSumIncomeConfirmedProfessional(fa);
 		int expectedIncomeProfessional = model.getSumIncomeExpectedProfessional(fa);
-		boolean professionalsWithStatusReceived = model.getProfessionalsWithStatusReceived(fa);
 		if (confirmedIncomeProfessional != expectedIncomeProfessional) {
 			errorOccured = true;
 			error += "The income from the professionals does not correspond with the expected income\n";
 			view.getLblFeesCorrect().setText("The income from the professionals \ndoes not correspond with the expected income\n"
-					+ "Expected: " + expectedIncomeProfessional + "\nActual: " + confirmedIncomeProfessional);
-		}
-		else if (professionalsWithStatusReceived) {
-			errorOccured = true;
-			error += "The income received from the professionals corresponds with the expected income\n"
-					+ "But not all professionals are with status confirmed, therefore there might be a mistake.\n";
-			view.getLblFeesCorrect().setText("The income received from the professionals \n"
-					+ "corresponds with the expected income.\n"
-					+ "But not all professionals reached the status \n"
-					+ "confirmed, therefore there might be a mistake.");
+					+ "Expected: " + expectedIncomeProfessional + "\n Actual: " + confirmedIncomeProfessional);
 		}
 		else {
 			view.getLblFeesCorrect().setText("Correct");
 		}
 		
-		//check if payments for teachers are correct
 		int confirmedPaymentsToTeacher = model.getPaymentTeacherConfirmed(fa);
 		int expectedPaymentsToTeacher = model.getPaymentTeacherExpected(fa);
 		if (confirmedPaymentsToTeacher != expectedPaymentsToTeacher) {
 			errorOccured = true;
 			error += "The payments to the teacher does not correspond with the expected payments\n";
 			view.getLblRemunerationsCorrect().setText("The payments to the teacher does not \ncorrespond with the expected payments\n"
-					+ "Expected: " + expectedPaymentsToTeacher + "\nActual: " + confirmedPaymentsToTeacher);
+					+ "Expected: " + expectedPaymentsToTeacher + "\n Actual: " + confirmedPaymentsToTeacher);
 		}
 		else {
 			view.getLblRemunerationsCorrect().setText("Correct");
 		}
 		
 		
-		//check if all sessions are celebrated
 		Date lastSession = model.getDateOfLastSession(fa);
 		if (lastSession.after(new Date()) || lastSession.equals(new Date())) {
 			errorOccured = true;

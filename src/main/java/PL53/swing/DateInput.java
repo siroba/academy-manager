@@ -2,28 +2,20 @@ package PL53.swing;
 
 import java.awt.Dimension;
 import java.text.DecimalFormat;
-import java.util.EventListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import PL53.util.Date;
-
 import javax.swing.SwingConstants;
-import javax.swing.event.EventListenerList;
-
 import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class DateInput extends JPanel {
 	/** Auto generated serial ID */
 	private static final long serialVersionUID = 1733893010805448139L;
 	private JIntField daysTextField, yearsTextField, monthsTextField;
 	private JLabel lblYear, labelSep1, labelSep2;
-
+	
 	/**
 	 * The format for the day and month, see
 	 * {@link JIntField#JIntField(int, DecimalFormat)}.
@@ -31,15 +23,11 @@ public class DateInput extends JPanel {
 	public static final DecimalFormat format = new DecimalFormat("#0");
 
 	/**
-	 * The format for the year, see {@link JIntField#JIntField(int, DecimalFormat)}.
+	 * The format for the year, see
+	 * {@link JIntField#JIntField(int, DecimalFormat)}.
 	 */
 	public static final DecimalFormat yearFormat = new DecimalFormat("0000");
-
-	/**
-	 * The list of event listeners
-	 */
-	protected EventListenerList listenerList = new EventListenerList();
-
+  
 	/**
 	 * Default constructor. Creates the panel and adds all the components.
 	 */
@@ -58,14 +46,6 @@ public class DateInput extends JPanel {
 		daysTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		daysTextField.setBounds(9, 21, 34, 22);
 		add(daysTextField);
-		
-		daysTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				if(allDateFieldsModified())
-					fireMyEvent();
-			}
-		});
 
 		labelSep1 = new JLabel("/");
 		labelSep1.setBounds(52, 25, 5, 15);
@@ -78,14 +58,6 @@ public class DateInput extends JPanel {
 		monthsTextField.setBounds(66, 21, 34, 22);
 		add(monthsTextField);
 
-		monthsTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				if(allDateFieldsModified())
-					fireMyEvent();
-			}
-		});
-		
 		labelSep2 = new JLabel("/");
 		labelSep2.setBounds(109, 25, 5, 15);
 		add(labelSep2);
@@ -95,21 +67,6 @@ public class DateInput extends JPanel {
 		yearsTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		yearsTextField.setBounds(123, 21, 70, 22);
 		add(yearsTextField);
-		
-		yearsTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				if(allDateFieldsModified())
-					fireMyEvent();
-			}
-		});
-
-	}
-
-	protected boolean allDateFieldsModified() {
-		return daysTextField.getValue() != daysTextField.getDefaultValue()
-				&& monthsTextField.getValue() != monthsTextField.getDefaultValue()
-				&& yearsTextField.getValue() != yearsTextField.getDefaultValue();
 	}
 
 	public int getDay() {
@@ -155,25 +112,5 @@ public class DateInput extends JPanel {
 	 */
 	public Date getDate() {
 		return new Date(this.getDay(), this.getMonth(), this.getYear());
-	}
-
-	public void addDateListener(DateModifiedListener listener) {
-		listenerList.add(DateModifiedListener.class, listener);
-	}
-
-	public void removeDateListener(DateModifiedListener listener) {
-		listenerList.remove(DateModifiedListener.class, listener);
-	}
-
-	protected void fireMyEvent() {
-		Object[] listeners = listenerList.getListenerList();
-		for (int i = 0; i < listeners.length; i = i + 2) {
-			if (listeners[i] == DateModifiedListener.class)
-				((DateModifiedListener) listeners[i + 1]).dateModified();
-		}
-	}
-
-	public interface DateModifiedListener extends EventListener {
-		public void dateModified();
 	}
 }

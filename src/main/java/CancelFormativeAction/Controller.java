@@ -11,11 +11,10 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import BaseProject.SwingUtil;
 import Entities.FormativeAction;
-import Entities.Movement;
+import Entities.Invoice;
 import PL53.swing.CheckboxTableModel;
-import PL53.util.Constants;
-import PL53.util.Date;
 import RegisterCancellations.Data;
 
 public class Controller implements PL53.util.Controller {
@@ -36,10 +35,27 @@ public class Controller implements PL53.util.Controller {
 	}
 
 	@Override
-	public void initController() {		
+	public void initController() {
+		view.getIsCashCheckBox().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				view.hideInvoiceData(!view.getIsCash());
+			}
+		});
+		
 		view.getBtnCancel().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!view.filledCoiipasInfo()) {
+					view.setCoiipaInfoRed();
+					JOptionPane.showMessageDialog(null,
+						    "Please, fill the information of COIIPA.",
+						    "Information empty",
+						    JOptionPane.ERROR_MESSAGE);
+					return;
+				}else {
+					view.setCoiipaInfoNormal();
+				}
+				
 				int index = view.getSelected();
 
 				if(index == -1) {
@@ -54,7 +70,8 @@ public class Controller implements PL53.util.Controller {
 				double teachers = model.getInvoices(index);
         
 				int option = JOptionPane.showConfirmDialog(null, 
-						payments + "€ will be owed to Professionals" + (teachers>0?(" and " + teachers + "€ will be returned from the teachers."):""),
+
+						payments + "€ will be refunded to Professionals and " + teachers + "€ will be returned from the teachers.",
 
 						"Are you sure you want to continue?",
 						JOptionPane.YES_NO_OPTION,
@@ -65,8 +82,7 @@ public class Controller implements PL53.util.Controller {
 
 					try {
 						if(teachers > 0) {
-							//model.invoiceTeachers(index, view.getDateIn(), Constants.COIIPAfiscalNumber, Constants.COIIPAadress);
-							// TODO: Do we need an invoice or not??
+							model.invoiceTeachers(index, view.getDateIn(), view.getFiscalNumber(), view.getAddress());
 						}
 						model.initModel();
 
@@ -117,16 +133,15 @@ public class Controller implements PL53.util.Controller {
 						if(i>=d.length)
 							continue;
 						
-						Movement in = new Movement(
+						Invoice in = new Invoice(
 								Float.parseFloat((String) view.getTableRefunds().getValueAt(i, 2)),
 								view.getDateIn(),
 								"COIIPA", 
 								(String) view.getTableRefunds().getValueAt(i, 1),
-								Constants.COIIPAadress, 
-								Constants.COIIPAfiscalNumber,
+								view.getAddress(), 
+								view.getFiscalNumber(),
 								cancelledSelected.getID(), 
-								d[i].professional.getID(),
-								"Refund because the formative action " + cancelledSelected.getName() + " was cancelled.");
+								d[i].professional.getID());
 						
 						model.payRefund(in, view.getIsCash());
 					}
@@ -137,6 +152,7 @@ public class Controller implements PL53.util.Controller {
 					view.setTableCancelledFA(getTableModel(model.getCancelled()));
 					view.setTableRefunds(getCheckboxTableModel(new Data[]{}));
 				} catch (SQLException | ParseException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -159,10 +175,10 @@ public class Controller implements PL53.util.Controller {
 			FormativeAction d = data[i];
 			// TODO: Fix this
 			body[i] = new String[] { 
-									d.getName(), 
-									d.getEnrollmentEnd().toString(),
-									Integer.toString(model.getUsedPlaces(d.getID())), 
-									Integer.toString(d.getTotalPlaces())
+										d.getName(), 
+										d.getEnrollmentEnd().toString(),
+										Integer.toString(model.getUsedPlaces(d.getID())), 
+										Integer.toString(d.getTotalPlaces())
 									};
 		}
 
@@ -186,38 +202,14 @@ public class Controller implements PL53.util.Controller {
 
 		for (int i = 0; i < data.length; i++) {
 			Data d = data[i];
-			
-			//int daysLeft = Date.daysSince(d.formativeAction.getEnrollmentEnd(), Date.now());
-			
 			body[i] = new String[] { 
 					d.professional.getName(), 
-					Float.toString(model.getPayedAmount(d.professional.getID(), d.formativeAction.getID())),
+					Float.toString(d.payment.getAmount()),
 					d.enrollment.getTimeEn().toString()};
 		}
 
 		tm.addRows(body);
 
 		return tm;
-	}
-	
-	/**
-	 * This is from another user story... oh well
-	 * 
-	 * If a registered person wishes to make a cancellation 7 calendar days or more before the course, 100% of the amount paid will be refunded. 
-	 * If he resigns with between 3 calendar days and 6 calendar days missing, 50% of the amount of the course will be returned. 
-	 * If he resigns with less than 3 calendar days left, the amount of the course will not be refunded.
-	 * 
-	 * @param daysLeft
-	 * @param payedAmount
-	 * @return
-	 */
-	public float getRefund(int daysLeft, float payedAmount) {
-		if(daysLeft<3)
-			return 0;
-		
-		if(daysLeft<=6)
-			return payedAmount * 0.5f;
-		
-		return payedAmount;
 	}
 }

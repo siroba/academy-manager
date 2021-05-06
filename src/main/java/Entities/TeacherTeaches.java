@@ -81,14 +81,12 @@ public class TeacherTeaches {
 		String sqlTeacher = "SELECT * FROM Teacher WHERE ID_teacher=";
 		
 		while(rs.next()) {
-			try {
 			TeacherTeaches t = new TeacherTeaches(
 					Teacher.getOne(sqlTeacher + rs.getInt("ID_teacher"), db), 
 					fa, 
 					rs.getFloat("remuneration"));
-
+			
 			list.add(t);
-			}catch(SQLException e) {} // TODO: result set closed(??)
 		}
 		rs.close();
 		st.close();

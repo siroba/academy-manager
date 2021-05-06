@@ -3,7 +3,6 @@ package PL53.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Calendar;
@@ -151,15 +150,7 @@ public class DateTime extends Date {
 	 * @return LocalDate
 	 */
 	public LocalDateTime toLocalDateTime() {
-		try {
-			return LocalDateTime.of(year, month, day, hour, minute);
-		}catch(DateTimeException e) {
-			if(month == 2) {
-				return LocalDateTime.of(year, month, 28, hour, minute);
-			}else {
-				return LocalDateTime.of(year, month, 30, hour, minute);
-			}
-		}
+		return LocalDateTime.of(year, month, day, hour, minute);
 	}
 
 	/**
