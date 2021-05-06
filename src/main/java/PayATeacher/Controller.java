@@ -62,7 +62,7 @@ public class Controller implements PL53.util.Controller {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					DateTime now = DateTime.now();
-					
+
 					// Data from the form
 					String name = view.getNameTextField();
 					String surname = view.getSurname().getText();
@@ -72,30 +72,37 @@ public class Controller implements PL53.util.Controller {
 					Date dateInvoice = view.getDateTextField();
 					String IDInvoice = view.getIDInvoice();
 					float amount = view.getAmount();
-	
+
 					int ID_teacher = selectedRow.teacher.getID();
 					int ID_fa = selectedRow.formativeAction.getID();
-					
+
 					// Data from the database
-					//float professionalPaid = model.getAmountPaid(selectedRow);  // Sum of all the payments to COIIPA
-					//float refundedAmount = model.getAmountReturned(selectedRow);// Sum of all the payments to the professional
-					//float totalPaid = model.getAmountTotalPaid(selectedRow);	  // Sum of all the payments
-					String fiscalNumberDB = model.getFiscalNumber(selectedRow.teacher);	  //new Teacher((String) view.getTable().getValueAt(view.getSelected(), 2), (String) view.getTable().getValueAt(view.getSelected(), 3), "", "", ""));
-	
+					// float professionalPaid = model.getAmountPaid(selectedRow); // Sum of all the
+					// payments to COIIPA
+					// float refundedAmount = model.getAmountReturned(selectedRow);// Sum of all the
+					// payments to the professional
+					// float totalPaid = model.getAmountTotalPaid(selectedRow); // Sum of all the
+					// payments
+					String fiscalNumberDB = model.getFiscalNumber(selectedRow.teacher); // new Teacher((String)
+																						// view.getTable().getValueAt(view.getSelected(),
+																						// 2), (String)
+																						// view.getTable().getValueAt(view.getSelected(),
+																						// 3), "", "", ""));
+
 					float remuneration = selectedRow.teacherTeaches.getRemuneration();
 					String sender = "COIIPA";
 					String reciever = selectedRow.teacher.getName();
-	
+
 					// Payment calculations
-					//float fee = selectedRow.invoice.getAmount();
-					//float newTotal = totalPaid + newPayment;
+					// float fee = selectedRow.invoice.getAmount();
+					// float newTotal = totalPaid + newPayment;
 					float toReturn = remuneration - amount;
-	
+
 					// Dates...
 					int daysBetweenNowAction = DateTime.daysSince(dateTransfer, now);
-				
+
 					/////////////////////////////////////////////////////////////////////////////////////
-					
+
 					// INPUT THE INVOICE
 					if (selectedRow == null) {
 						JOptionPane.showMessageDialog(null, "You have to select one pending payment");
@@ -104,43 +111,48 @@ public class Controller implements PL53.util.Controller {
 					} else if (view.getFiscalNumberTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the fiscal number");
 					} else if (!Teacher.checkFiscalNumber(view.getFiscalNumberTextField())) {
-						JOptionPane.showMessageDialog(null,
-							    "Please provide a valid fiscal number. E.g. \"55566677R\".",
-							    "Invalid fiscal number",
-							    JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Please provide a valid fiscal number. E.g. \"55566677R\".",
+								"Invalid fiscal number", JOptionPane.ERROR_MESSAGE);
 					} else if (view.getAddressTextField().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the address");
 					} else if (view.getDateTransferTextField().getYear() == 0) {
-						JOptionPane.showMessageDialog(null, "You have to introduce a valid year for the date of the transfer (ex: 2021) ");
+						JOptionPane.showMessageDialog(null,
+								"You have to introduce a valid year for the date of the transfer (ex: 2021) ");
 					} else if (view.getDateTextField().getYear() == 0) {
-						JOptionPane.showMessageDialog(null, "You have to introduce a valid year for the date of the invoice (ex: 2021)");
+						JOptionPane.showMessageDialog(null,
+								"You have to introduce a valid year for the date of the invoice (ex: 2021)");
 					} else if (view.getIDInvoice().length() == 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the ID of the invoice");
 					} else if (view.getAmount() < 0) {
 						JOptionPane.showMessageDialog(null, "You have to introduce the amount of the invoice");
 					} else if (daysBetweenNowAction > 0) {
-						JOptionPane.showMessageDialog(null, 
-								"Tranfers cannot be made in the future.",
+						JOptionPane.showMessageDialog(null, "Tranfers cannot be made in the future.",
 								"Date not valid ( the date must be on the current date or in the past)",
 								JOptionPane.ERROR_MESSAGE);
-					} else { 
-						// Check if fiscal number stored in the DB matches the entered one & provide the option to update it in the db if not 
+					} else {
+						// Check if fiscal number stored in the DB matches the entered one & provide the
+						// option to update it in the db if not
 						if (fiscalNumber != fiscalNumberDB) {
-							int option = JOptionPane.showConfirmDialog (null, 
-									"The fiscal number for the teacher " + reciever + " does not match the one stored in the database.\n"
-									+ "Would you like to replace the fiscal number in the database "+  fiscalNumberDB +" by " + fiscalNumber + "?","WARNING", JOptionPane.YES_NO_CANCEL_OPTION);
-							
-				            if(option == JOptionPane.YES_OPTION) {
-				            	model.updateFiscalNumber(selectedRow.teacher, fiscalNumber);
-				            	JOptionPane.showMessageDialog(null, "The fiscal number of " + reciever + " has been updated succesfully.");
-				            }else if(option == JOptionPane.CANCEL_OPTION) {
-				            	JOptionPane.showMessageDialog(null,
+							int option = JOptionPane.showConfirmDialog(null,
+									"The fiscal number for the teacher " + reciever
+											+ " does not match the one stored in the database.\n"
+											+ "Would you like to replace the fiscal number in the database "
+											+ fiscalNumberDB + " by " + fiscalNumber + "?",
+									"WARNING", JOptionPane.YES_NO_CANCEL_OPTION);
+
+							if (option == JOptionPane.YES_OPTION) {
+								model.updateFiscalNumber(selectedRow.teacher, fiscalNumber);
+								JOptionPane.showMessageDialog(null,
+										"The fiscal number of " + reciever + " has been updated succesfully.");
+							} else if (option == JOptionPane.CANCEL_OPTION) {
+								JOptionPane.showMessageDialog(null,
 										"No invoice has been created and no payment has been made");
-				            	return;
-				            }	
+								return;
+							}
 						}
 
-						////////////////////////////// CREATE THE INVOICE AND THE PAYMENT ////////////////////////////////////////////
+						////////////////////////////// CREATE THE INVOICE AND THE PAYMENT
+						////////////////////////////// ////////////////////////////////////////////
 
 						MovementTeacher invoice = new MovementTeacher(IDInvoice, amount, ID_fa, dateInvoice, sender,
 								reciever, fiscalNumber, address, ID_teacher, "");
@@ -148,16 +160,15 @@ public class Controller implements PL53.util.Controller {
 						PaymentTeacher paymentTeacher = new PaymentTeacher(IDInvoice, amount, dateTransfer, true, "");
 
 						model.insertInvoice(invoice, paymentTeacher);
-						
+
 						//////////////////////////////////////////// /////////////////////////////////////////////////////////////////
-						
+
 						if (amount > remuneration) {
 							String str = String.format("%.2f", (remuneration - amount));
-						
+
 							int option = JOptionPane.showConfirmDialog(null, "The amount inputted (" + amount
-									+ ") is hihger than the amount agreed, Do you want to return the diferrence ("
-									+ str + ")?", "warning",
-									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+									+ ") is hihger than the amount agreed, Do you want to return the diferrence (" + str
+									+ ")?", "warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 							if (option == 0) {
 
@@ -167,14 +178,17 @@ public class Controller implements PL53.util.Controller {
 									e1.printStackTrace();
 								}
 
-								JOptionPane.showMessageDialog(null, "The invoice has been successfully created and the payment has been attached");
+								JOptionPane.showMessageDialog(null,
+										"The invoice has been successfully created and the payment has been attached");
 							}
-						}else if (amount < remuneration) {
-							JOptionPane.showMessageDialog(null, "The amount inputted is lower than  the agreed amount ");
+						} else if (amount < remuneration) {
+							JOptionPane.showMessageDialog(null,
+									"The amount inputted is lower than  the agreed amount ");
 						}
 
 						if (paymentTeacher != null) {
-							JOptionPane.showMessageDialog(null, "The invoice has been successfully created and the payment has been attached");
+							JOptionPane.showMessageDialog(null,
+									"The invoice has been successfully created and the payment has been attached");
 
 							model.initModel();
 							initView();
@@ -199,21 +213,70 @@ public class Controller implements PL53.util.Controller {
 
 				boolean teacher = view.getCheckTeacher();
 				boolean COIIPA = view.getCheckCOIIPA();
-				
-				float amount = view.getAmoundRefound();
-				Date payDate = view.getDateTransferTextField_1();
+
+				// Data from the form
+				float newRefund = view.getAmoundRefound();
+				Date refundDate = view.getDateTransferTextField_1();
+
+				// Data from the database
+				float teacherPaid = model.getAmountPaid(selectedRow); // Sum of all the payments to COIIPA
+				float COIIPAPaid = model.getAmountReturned(selectedRow);// Sum of all the payments to the teacher
+				float totalPaid = model.getAmountTotalPaid(selectedRow); // Sum of all the payments
+
+				// Payment calculations
+				float remuneration = selectedRow.teacherTeaches.getRemuneration();
+				float newTotal = totalPaid + newRefund;
+				float toReturn = newTotal - remuneration;
+
+				// Dates...
+				DateTime now = DateTime.now();
+				int daysBetweenNowAction = Date.daysSince(now, refundDate);
+
+				/////////////////////////////////////////////////////////////////////////////////////
+
+				// Checks
+				if (selectedRow == null) {
+					JOptionPane.showMessageDialog(null, "You have to select one teacher");
+					return;
+
+				} else if (newRefund <= 0) {
+					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmoundRefound() + "€");
+
+					return;
+				} else if (daysBetweenNowAction < 0) {
+					JOptionPane.showMessageDialog(null,
+							"Payments cannot be made in the future( the date must be on the current date or in the past).",
+							"date not valid ", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
 				// Movement made by the teacher to refund money
 				if (teacher) {
 					
+					if (toReturn > 0) {
+						String difference = String.format("%.2f", (newRefund - toReturn));
+						
+						int option = JOptionPane.showConfirmDialog(null,
+								"The amount of the movement (" + newRefund
+										+ ") is higher than the amount that has to be returned to COIIPA ("
+										+ toReturn + "). Do you want to return the difference ("
+										+ difference + ")?",
+								"Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	
+						if (option == 0) { // The user clicked YES
+							float amount = newRefund - toReturn; // the amount to compensate
+							model.createPaymentRefund(selectedRow.movementTeacher.getID(), amount, refundDate,
+									true);
+						}
+					}
 
 				}
 
 				// Movement made by COIIPA to the teacher
 				if (COIIPA) {
 
-				}else {
-					JOptionPane.showMessageDialog(null, "You must select the sender of the movement",
-							"Select sender",
+				} else {
+					JOptionPane.showMessageDialog(null, "You must select the sender of the movement", "Select sender",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -237,8 +300,7 @@ public class Controller implements PL53.util.Controller {
 			Data d = datas[i];
 
 			rows.add(new String[] { d.formativeAction.getName(), d.formativeAction.getStatus().toString(),
-					d.teacher.getName(), d.teacher.getSurname(),
-					Float.toString(d.teacherTeaches.getRemuneration()) });
+					d.teacher.getName(), d.teacher.getSurname(), Float.toString(d.teacherTeaches.getRemuneration()) });
 
 		}
 
@@ -261,7 +323,8 @@ public class Controller implements PL53.util.Controller {
 	}
 
 	/**
-	 * Expects the input to be according to {@link Model#getDataForPaymentsTable(Data)}
+	 * Expects the input to be according to
+	 * {@link Model#getDataForPaymentsTable(Data)}
 	 * 
 	 * @param pt
 	 * @return
@@ -273,7 +336,7 @@ public class Controller implements PL53.util.Controller {
 
 		for (int i = 0; i < pt.size(); i++) {
 			String[] str = pt.get(i);
-			body[i] = new String[] { str[0], str[1], str[2], str[3]};
+			body[i] = new String[] { str[0], str[1], str[2], str[3] };
 		}
 
 		TableModel tm = new DefaultTableModel(header, body.length);
