@@ -25,6 +25,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JSeparator;
 import javax.swing.JRadioButton;
+import javax.swing.ListSelectionModel;
 
 public class View extends JFrame {
 	// Auto generated serial ID
@@ -190,6 +191,7 @@ public class View extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		scrollPane.setViewportView(table);
 		
