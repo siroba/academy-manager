@@ -150,7 +150,15 @@ public class Controller implements PL53.util.Controller {
 					Professional p = model.createProfessional(name, surname, phone, email);
 					Enrollment en = p.enroll(selected, p, Enrollment.Status.RECEIVED, DateTime.now(), group);
 
-					model.doEnrollment(selected, group, p, en , address, fiscalNumber );
+					List<Fee> fees = selected.getFees();
+					float fee = 0;
+					for (int i=0; i<fees.size(); i++) {
+						if (fees.get(i).getGroup().equals(view.getGroup())) {
+							fee = fees.get(i).getAmount();
+						}
+					}
+					
+					model.doEnrollment(selected, group, p, en , address, fiscalNumber, fee);
 
 					model.loadFormativeActions();
 					view.setFAList(model.getFormativeActions());
