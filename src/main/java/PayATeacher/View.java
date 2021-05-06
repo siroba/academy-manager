@@ -6,16 +6,22 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
+
+import Entities.MovementTeacher;
+import Entities.Teacher;
 import PL53.swing.DateInput;
 import PL53.swing.JDecimalField;
 import PL53.util.Date;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.List;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JSeparator;
 import javax.swing.JRadioButton;
@@ -38,9 +44,11 @@ public class View extends JFrame {
 	private JButton addMovement;
 	private JDecimalField amoundRefound;
 	private JTextField surname;
-	private JTable table_1;
+	private JTable tablePayments;
 	private JRadioButton radioBtnTeacher;
 	private JRadioButton radioBtnCoiipa;
+	private JComboBox<String> invoicesDropdown;
+	private JPanel multipleInvoicesPanel;
 
 	/**
 	 * Create the frame.
@@ -197,8 +205,8 @@ public class View extends JFrame {
 		scrollPane_1.setBounds(10, 540, 477, 172);
 		contentPane.add(scrollPane_1);
 		
-		table_1 = new JTable();
-		scrollPane_1.setViewportView(table_1);
+		tablePayments = new JTable();
+		scrollPane_1.setViewportView(tablePayments);
 		
 		JLabel lblNewLabel_10 = new JLabel("Movements");
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
@@ -207,22 +215,22 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel_12 = new JLabel("Record movements");
 		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel_12.setBounds(568, 515, 330, 31);
+		lblNewLabel_12.setBounds(497, 515, 330, 31);
 		contentPane.add(lblNewLabel_12);
 		
 		dateTransferTextField_1 = new DateInput();
-		dateTransferTextField_1.setBounds(568, 580, 230, 65);
+		dateTransferTextField_1.setBounds(497, 580, 230, 65);
 		dateTransferTextField_1.setBorder(blackline);
 		contentPane.add(dateTransferTextField_1);
 		
 		JLabel lblNewLabel_13 = new JLabel("Date");
 		lblNewLabel_13.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_13.setBounds(568, 558, 59, 13);
+		lblNewLabel_13.setBounds(497, 558, 59, 13);
 		contentPane.add(lblNewLabel_13);
 		
 		JLabel lblNewLabel_14 = new JLabel("Amount");
 		lblNewLabel_14.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_14.setBounds(568, 670, 45, 13);
+		lblNewLabel_14.setBounds(497, 670, 45, 13);
 		contentPane.add(lblNewLabel_14);
 		
 		addMovement = new JButton("Add movement");
@@ -233,25 +241,45 @@ public class View extends JFrame {
 		
 		amoundRefound = new JDecimalField(2);
 		amoundRefound.setColumns(10);
-		amoundRefound.setBounds(568, 693, 163, 19);
+		amoundRefound.setBounds(497, 693, 163, 19);
 		contentPane.add(amoundRefound);
 		
 		JLabel lblNewLabel_16 = new JLabel("Sender of the movement");
 		lblNewLabel_16.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_16.setBounds(861, 558, 182, 13);
+		lblNewLabel_16.setBounds(750, 562, 131, 13);
 		contentPane.add(lblNewLabel_16);
 		
 		ButtonGroup bgroup = new ButtonGroup();
 		radioBtnTeacher = new JRadioButton("Teacher");
 		bgroup.add(radioBtnTeacher);
-		radioBtnTeacher.setBounds(861, 580, 103, 21);
+		radioBtnTeacher.setBounds(750, 584, 103, 21);
 		contentPane.add(radioBtnTeacher);
 		
 		radioBtnCoiipa = new JRadioButton("COIIPA");
 		bgroup.add(radioBtnCoiipa);
 		radioBtnCoiipa.setSelected(true);
-		radioBtnCoiipa.setBounds(861, 604, 103, 21);
+		radioBtnCoiipa.setBounds(750, 608, 103, 21);
 		contentPane.add(radioBtnCoiipa);
+		
+		multipleInvoicesPanel = new JPanel();
+		multipleInvoicesPanel.setEnabled(false);
+		multipleInvoicesPanel.setVisible(false);
+		multipleInvoicesPanel.setBounds(891, 561, 176, 68);
+		contentPane.add(multipleInvoicesPanel);
+		multipleInvoicesPanel.setLayout(null);
+		
+		invoicesDropdown = new JComboBox<String>();
+		invoicesDropdown.setBounds(0, 47, 176, 21);
+		multipleInvoicesPanel.add(invoicesDropdown);
+		
+		JLabel lblNewLabel_17 = new JLabel("There is more than one Invoice.");
+		lblNewLabel_17.setBounds(0, 0, 176, 14);
+		multipleInvoicesPanel.add(lblNewLabel_17);
+		
+		JLabel lblNewLabel_18 = new JLabel("Please select one:");
+		lblNewLabel_18.setBounds(0, 19, 98, 14);
+		multipleInvoicesPanel.add(lblNewLabel_18);
+		
 	}
 	
 	public String getAddressTextField() {
@@ -335,11 +363,28 @@ public class View extends JFrame {
 		return radioBtnCoiipa.isSelected();
 	}
 
-	public void setMovementTable(TableModel tm) {
-		this.table_1.setModel(tm);
+	public void setTablePayments(TableModel tm) {
+		this.tablePayments.setModel(tm);
 	}
 
-	public JTable getTable_1() {
-		return table_1;
+	public JTable getTablePayments() {
+		return tablePayments;
+	}
+
+	public void setInvoicesDropdownVisible(boolean b) {
+		multipleInvoicesPanel.setVisible(b);
+		multipleInvoicesPanel.setEnabled(b);
+	}
+
+	public void setInvoicesDropdown(List<MovementTeacher> movementsTeacher) {
+		this.invoicesDropdown.removeAllItems();
+		
+		for(MovementTeacher t: movementsTeacher) {
+			invoicesDropdown.addItem(t.getID());
+		}
+	}
+
+	public String getSelectedMovement() {
+		return (String)invoicesDropdown.getSelectedItem();
 	}
 }

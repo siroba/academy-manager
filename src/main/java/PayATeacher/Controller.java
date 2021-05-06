@@ -45,12 +45,21 @@ public class Controller implements PL53.util.Controller {
 
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one payment");
-				} else if (model.hasMovements(selectedRow)) {
-					try {
-						TableModel tm = getModelPayments(model.getDataForPaymentsTable(selectedRow));
-						view.setMovementTable(tm);
-					} catch (SQLException e1) {
-						e1.printStackTrace();
+				} else {
+					view.setInvoicesDropdownVisible(selectedRow.movementsTeacher.size()>1);
+					
+					if (!selectedRow.movementsTeacher.isEmpty()) {
+						try {
+							TableModel tm = getModelPayments(model.getDataForPaymentsTable(selectedRow));
+							view.setTablePayments(tm);
+							
+							if(selectedRow.movementsTeacher.size()>1)
+								view.setInvoicesDropdown(selectedRow.movementsTeacher);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+					}else {
+						
 					}
 				}
 
@@ -151,8 +160,7 @@ public class Controller implements PL53.util.Controller {
 							}
 						}
 
-						////////////////////////////// CREATE THE INVOICE AND THE PAYMENT
-						////////////////////////////// ////////////////////////////////////////////
+						////////////////////////////// CREATE THE INVOICE AND THE PAYMENT //////////////////////////////
 
 						MovementTeacher invoice = new MovementTeacher(IDInvoice, amount, ID_fa, dateInvoice, sender,
 								reciever, fiscalNumber, address, ID_teacher, "");
@@ -161,7 +169,7 @@ public class Controller implements PL53.util.Controller {
 
 						model.insertInvoice(invoice, paymentTeacher);
 
-						//////////////////////////////////////////// /////////////////////////////////////////////////////////////////
+						////////////////////////////////////////////////////////////////////////////////////////////////
 
 						if (amount > remuneration) {
 							String str = String.format("%.2f", (remuneration - amount));
@@ -208,7 +216,7 @@ public class Controller implements PL53.util.Controller {
 
 		// Function to add movements
 		view.getAddMovement().addActionListener(new ActionListener() {
-			@SuppressWarnings("unused")
+			// @SuppressWarnings("unused")
 			public void actionPerformed(ActionEvent e) {
 
 				boolean teacher = view.getCheckTeacher();
@@ -219,10 +227,11 @@ public class Controller implements PL53.util.Controller {
 				Date refundDate = view.getDateTransferTextField_1();
 
 				// Data from the database
-				float teacherPaid = model.getAmountPaid(selectedRow); // Sum of all the payments to COIIPA
-				float COIIPAPaid = model.getAmountReturned(selectedRow);// Sum of all the payments to the teacher
-				float totalPaid = model.getAmountTotalPaid(selectedRow); // Sum of all the payments
-
+				//float teacherPaid = model.getAmountPaid(selectedRow); 		// Sum of all the payments to COIIPA
+				//float COIIPAPaid = model.getAmountReturned(selectedRow);	// Sum of all the payments to the teacher
+				float totalPaid = model.getAmountTotalPaid(selectedRow);	// Sum of all the payments
+				int numberInvoices = selectedRow.movementsTeacher.size();
+				
 				// Payment calculations
 				float remuneration = selectedRow.teacherTeaches.getRemuneration();
 				float newTotal = totalPaid + newRefund;
@@ -238,9 +247,11 @@ public class Controller implements PL53.util.Controller {
 				if (selectedRow == null) {
 					JOptionPane.showMessageDialog(null, "You have to select one teacher");
 					return;
-
-				} else if (newRefund <= 0) {
-					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmoundRefound() + "€");
+				} else if(numberInvoices == 0) {
+					JOptionPane.showMessageDialog(null, "There are no Invoices recorded for the selected option. Please, record one before paying.");
+					return;
+				}else if (newRefund <= 0) {
+					JOptionPane.showMessageDialog(null, "You cannot do a payment for " + view.getAmoundRefound() + "ï¿½");
 
 					return;
 				} else if (daysBetweenNowAction < 0) {
@@ -250,63 +261,60 @@ public class Controller implements PL53.util.Controller {
 					return;
 				}
 
-				// Movement made by the teacher to refund money
-				if (teacher) {
+				try {
+					String movementID;
+					
+					if(numberInvoices > 1) {
+						movementID = view.getSelectedMovement();
+					}else {
+						movementID = selectedRow.movementsTeacher.get(0).getID();
+					}
+					
+					if (teacher) { // Movement made by the teacher to refund money
+						if (toReturn > 0) { // Payment higher than it should be
+							String difference = String.format("%.2f", (newRefund - toReturn));
 
-					if (toReturn > 0) { // Payment higher than it should be
-						String difference = String.format("%.2f", (newRefund - toReturn));
+							int option = JOptionPane.showConfirmDialog(null, "The amount of the movement (" + newRefund
+									+ ") is higher than the amount that has to be returned to COIIPA (" + toReturn
+									+ "). Do you want to return the difference (" + difference + ")?", "Warning",
+									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-						int option = JOptionPane.showConfirmDialog(null,
-								"The amount of the movement (" + newRefund
-										+ ") is higher than the amount that has to be returned to COIIPA (" + toReturn
-										+ "). Do you want to return the difference (" + difference + ")?",
-								"Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-						if (option == 0) { // The user clicked YES
-							float amount = newRefund - toReturn; // the amount to compensate
-							model.createPaymentRefund(selectedRow.movementTeacher.getID(), amount, refundDate, true);
+							if (option == 0) { // The user clicked YES
+								float amount = newRefund - toReturn; // the amount to compensate
+								model.createPaymentRefund(movementID, -amount, refundDate, true);
+							}
+						} else if (toReturn < 0) { // Payment lower than it should be
+							JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
 						}
-					}
 
-					else if (toReturn < 0) { // Payment lower than it should be
-						JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
-					}
+						model.createPayment(movementID, newRefund, refundDate, true);
+						JOptionPane.showMessageDialog(null, "The payment has been registered");
 
-					boolean enrollmentConfirmed = model.createPayment(selectedRow.movementTeacher.getID(), newRefund,
-							refundDate, true, newTotal);
-					JOptionPane.showMessageDialog(null, "The payment has been registered");
+					} else if (COIIPA) { // Movement made by COIIPA to the teacher
 
-				}
+						if (toReturn > 0) { // Payment higher than it should be
+							String difference = String.format("%.2f", (newRefund - toReturn));
 
-				// Movement made by COIIPA to the teacher
-				if (COIIPA) {
+							int option = JOptionPane.showConfirmDialog(null, "The amount of the movement (" + newRefund
+									+ ") is higher than the amount that has to be returned to the teacher (" + toReturn
+									+ "). Do you want to return the difference (" + difference + ")?", "Warning",
+									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-					if (toReturn > 0) { // Payment higher than it should be
-						String difference = String.format("%.2f", (newRefund - toReturn));
-
-						int option = JOptionPane.showConfirmDialog(null,
-								"The amount of the movement (" + newRefund
-										+ ") is higher than the amount that has to be returned to the teacher ("
-										+ toReturn + "). Do you want to return the difference (" + difference + ")?",
-								"Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-						if (option == 0) { // The user clicked YES
-							float amount = newRefund - toReturn; // the amount to compensate
-							model.createPaymentRefund(selectedRow.movementTeacher.getID(), amount, refundDate, true);
+							if (option == 0) { // The user clicked YES
+								float amount = newRefund - toReturn; // the amount to compensate
+								model.createPaymentRefund(movementID, amount, refundDate,
+										true);
+							}
+						} else if (toReturn < 0) { // Payment lower than it should be
+							JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
 						}
+
+						model.createPaymentRefund(movementID, -newRefund, refundDate, true);
+						JOptionPane.showMessageDialog(null, "The payment has been registered");
+
 					}
-
-					else if (toReturn < 0) { // Payment lower than it should be
-						JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
-					}
-
-						model.createPaymentRefund(selectedRow.movementTeacher.getID(), newRefund,
-							refundDate, true);
-					JOptionPane.showMessageDialog(null, "The payment has been registered");
-
-				} else {
-					JOptionPane.showMessageDialog(null, "You must select the sender of the movement", "Select sender",
-							JOptionPane.ERROR_MESSAGE);
+				} catch (SQLException | ParseException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});

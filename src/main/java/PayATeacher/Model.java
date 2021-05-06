@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import Entities.FormativeAction;
 import Entities.MovementTeacher;
-import Entities.Payment;
 import Entities.PaymentTeacher;
 import Entities.Session;
 import Entities.Teacher;
@@ -42,17 +41,17 @@ public class Model {
 			fa.setTeacherTeaches(TeacherTeaches.get(fa, db));
 			for ( TeacherTeaches tt : fa.getTeacherTeaches()) {
 				
-				/*String movementsQuery = "SELECT * FROM InvoiceTeacher WHERE ID_teacher=" + tt.getTeacher().getID() + " AND ID_fa=" + fa.getID();
+				String movementsQuery = "SELECT * FROM InvoiceTeacher WHERE ID_teacher=" + tt.getTeacher().getID() + " AND ID_fa=" + fa.getID();
 				List<MovementTeacher> movements = MovementTeacher.get(movementsQuery, db);
 				
-				if(movements.isEmpty()) {*/
-					Data data3 = new Data();
-					data3.formativeAction=fa;
-					data3.teacher=tt.getTeacher();
-					data3.teacherTeaches = tt;
-					data4.add(data3);
-				/*}else {
-					for(MovementTeacher mt: movements) {
+				Data data3 = new Data();
+				data3.formativeAction=fa;
+				data3.teacher=tt.getTeacher();
+				data3.teacherTeaches = tt;
+				data3.movementsTeacher = movements;
+				data4.add(data3);
+					
+					/*for(MovementTeacher mt: movements) {
 						String paymens = "SELECT * FROM PaymentTeacher WHERE ID_invoice=" + mt.getID();
 						List<PaymentTeacher> payments = PaymentTeacher.get(paymens, db);
 						
@@ -167,6 +166,12 @@ public class Model {
 		return str;
 	}
 
+	/**
+	 * Checks if the selected teacher has any "InvoiceTeacher" on his name for the selected FormativeAction.
+	 * 
+	 * @param selectedRow
+	 * @return
+	 */
 	public boolean hasMovements(Data selectedRow) {
 		String sql = "SELECT COUNT(*) FROM InvoiceTeacher WHERE ID_teacher=? AND ID_fa=?";
 		
@@ -175,54 +180,79 @@ public class Model {
 		return count > 0;
 	}
 
+	/**
+	 * Returns the sum of all the positive payments made for this TeacherTeaches
+	 * 
+	 * @param selectedRow
+	 * @return
+	 */
 	public float getAmountPaid(Data selectedRow) {
 		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM Payment "
-				+ "INNER JOIN MovementTeacher ON PaymentTeacher.ID_invoice=MovementTeacher.ID_Invoice AND PaymentTeacher.amount >0 " 
+				+ "INNER JOIN InvoiceTeacher ON PaymentTeacher.ID_invoice=InvoiceTeacher.ID_Invoice AND PaymentTeacher.amount >0 " 
 				+ "GROUP BY PaymentTeacher.ID_invoice "
-				+ "HAVING MovementTeacher.ID_fa=? AND MovementTeacher.ID_teacher=? AND PaymentTeacher.amount >0 ), 0.0) as paid;";
+				+ "HAVING InvoiceTeacher.ID_fa=? AND InvoiceTeacher.ID_teacher=? AND PaymentTeacher.amount >0 ), 0.0) as paid;";
 
 		
 		double sumPayments = (double) (db
-				.executeQueryArray(sql, selectedRow.movementTeacher.getID_fa(), selectedRow.movementTeacher.getID_teacher()).get(0)[0]);
+				.executeQueryArray(sql, selectedRow.formativeAction.getID(), selectedRow.teacher.getID()).get(0)[0]);
 		
 		
 		return (float) sumPayments;
 	}
 
+	/**
+	 * Returns the sum of all the negative payments made for this TeacherTeaches
+	 * 
+	 * @param selectedRow
+	 * @return
+	 */
 	public float getAmountReturned(Data selectedRow) {
 		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM PaymentTeacher "
-				+ "INNER JOIN MovementTeacher ON PaymentTeacher.ID_invoice=MovementTeacher.ID_Invoice AND PaymentTeacher.amount < 0 "
+				+ "INNER JOIN InvoiceTeacher ON PaymentTeacher.ID_invoice=InvoiceTeacher.ID_Invoice AND PaymentTeacher.amount < 0 "
 				+ "GROUP BY Payment.ID_invoice "
-				+ "HAVING MovementTeacher.ID_fa=? AND MovementTeacher.ID_teacher=? AND PaymentTeacher.amount < 0 ), 0.0);";
+				+ "HAVING InvoiceTeacher.ID_fa=? AND InvoiceTeacher.ID_teacher=? AND PaymentTeacher.amount < 0 ), 0.0);";
 
 		double sumPayments =  (double) (db
-				.executeQueryArray(sql, selectedRow.movementTeacher.getID_fa(), selectedRow.movementTeacher.getID_teacher()).get(0)[0]);
+				.executeQueryArray(sql, selectedRow.formativeAction.getID(), selectedRow.teacher.getID()).get(0)[0]);
 		return (float)sumPayments;
 	}
 
+	/**
+	 * Gets the total sum of all the payments made (positive and negative) for this TeacherTeaches
+	 * 
+	 * @param selectedRow
+	 * @return
+	 */
 	public float getAmountTotalPaid(Data selectedRow) {
 		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM PaymentTeacher "
-				+ "INNER JOIN MovementTeacher ON PaymentTeacher.ID_invoice=MovementTeacher.ID_Invoice " + " GROUP BY PaymentTeacher.ID_invoice "
-				+ "HAVING MovementTeacher.ID_fa=? AND MovementTeacher.ID_teacher=?), 0.0);";
+				+ "INNER JOIN InvoiceTeacher ON PaymentTeacher.ID_invoice=InvoiceTeacher.ID_Invoice " + " GROUP BY PaymentTeacher.ID_invoice "
+				+ "HAVING InvoiceTeacher.ID_fa=? AND InvoiceTeacher.ID_teacher=?), 0.0);";
 
-		float sumPayments = (float) ((double) (db
-				.executeQueryArray(sql, selectedRow.movementTeacher.getID_fa(), selectedRow.movementTeacher.getID_teacher()).get(0)[0]));
+		float sumPayments = (float) ((double) (db.executeQueryArray(sql, selectedRow.formativeAction.getID(), selectedRow.teacher.getID()).get(0)[0]));
 
 		
 		return sumPayments;
 	}
 
-	public void createPayment(String id, float newRefund, Date refundDate, boolean b, float newTotal) {
-		
-		
-		// invoiceReturn.insert(db);
-		int id_invoice = invoiceReturn.getID();
-		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
+	
+	/**
+	 * Creates a payment and inserts it into the db
+	 * 
+	 * @param id_invoice
+	 * @param amount
+	 * @param payDate
+	 * @param confirmed
+	 * @return
+	 * @throws SQLException
+	 * @throws ParseException
+	 */
+	public void createPayment(String id_invoice, float amount, Date payDate, boolean confirmed) throws SQLException, ParseException {		
+		PaymentTeacher p = new PaymentTeacher(id_invoice, amount, payDate, confirmed, ""); // TODO: Description
 		p.insert(db);
-		
 	}
-		
+
+	public MovementTeacher getMovementTeacherFor(Data selectedRow) {
+		String sql = "SELECT * FROM InvoiceTeacher WHERE ID_fa=" + selectedRow.formativeAction.getID() + " AND ID_professional=";
+		return null;
 	}
-	
-	
 }
