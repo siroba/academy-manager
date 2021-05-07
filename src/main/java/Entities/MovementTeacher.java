@@ -12,10 +12,10 @@ import java.util.List;
 import PL53.util.Date;
 import Utils.Database;
 
-public class InvoiceTeacher {
+public class MovementTeacher {
 	private int ID_fa, ID_teacher;
 	private Date dateIn;
-	private String sender, receiver, fiscalNumber, address, ID = "";
+	private String sender, receiver, fiscalNumber, address, ID = "", description="";
 	private float amount;
 
 	/**
@@ -25,8 +25,8 @@ public class InvoiceTeacher {
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(String ID_invoice, float amount, int ID_fa, Date dateIn, String sender, String receiver,
-			String fiscalNumber, String address, int ID_teacher) {
+	public MovementTeacher(String ID_invoice, float amount, int ID_fa, Date dateIn, String sender, String receiver,
+			String fiscalNumber, String address, int ID_teacher, String description) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.ID = ID_invoice;
@@ -36,6 +36,7 @@ public class InvoiceTeacher {
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
 		this.ID_teacher = ID_teacher;
+		this.description = description;
 
 	}
 
@@ -45,8 +46,8 @@ public class InvoiceTeacher {
 	 * @param ID_fa
 	 * @param dateIn
 	 */
-	public InvoiceTeacher(int ID_fa, float amount, Date dateIn, String sender, String receiver, String fiscalNumber,
-			String address, int ID_teacher) {
+	public MovementTeacher(int ID_fa, float amount, Date dateIn, String sender, String receiver, String fiscalNumber,
+			String address, int ID_teacher, String description) {
 		this.amount = amount;
 		this.ID_fa = ID_fa;
 		this.dateIn = dateIn;
@@ -55,7 +56,7 @@ public class InvoiceTeacher {
 		this.fiscalNumber = fiscalNumber;
 		this.address = address;
 		this.ID_teacher = ID_teacher;
-
+		this.description = description;
 	}
 
 	public static String tableName() {
@@ -86,14 +87,14 @@ public class InvoiceTeacher {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static List<InvoiceTeacher> get(String query, Database db) throws SQLException {
+	public static List<MovementTeacher> get(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
 		// executeQuery will return a resultSet
 		ResultSet rs = st.executeQuery(query.toString());
 
-		List<InvoiceTeacher> invoices = new ArrayList<>();
+		List<MovementTeacher> invoices = new ArrayList<>();
 
 		while (rs.next()) {
 			Date dateIn;
@@ -103,9 +104,9 @@ public class InvoiceTeacher {
 				dateIn = Date.fromMillis(rs.getLong("dateIn"));
 			}
 
-			InvoiceTeacher e = new InvoiceTeacher(rs.getString("ID_invoice"), rs.getFloat("amount"), rs.getInt("ID_fa"),
+			MovementTeacher e = new MovementTeacher(rs.getString("ID_invoice"), rs.getFloat("amount"), rs.getInt("ID_fa"),
 					dateIn, rs.getString("sender"), rs.getString("receiver"), rs.getString("fiscalNumber"),
-					rs.getString("address"), rs.getInt("ID_teacher"));
+					rs.getString("address"), rs.getInt("ID_teacher"), rs.getString("description"));
 
 			invoices.add(e);
 		}
@@ -135,7 +136,7 @@ public class InvoiceTeacher {
 	 * @throws SQLException
 	 * @throws ParseException
 	 */
-	public static InvoiceTeacher getOne(String query, Database db) throws SQLException {
+	public static MovementTeacher getOne(String query, Database db) throws SQLException {
 		Connection conn = db.getConnection();
 		// Statement object needed to send statements to the database
 		Statement st = conn.createStatement();
@@ -150,9 +151,9 @@ public class InvoiceTeacher {
 			dateIn = Date.fromMillis(rs.getLong("dateIn"));
 		}
 
-		InvoiceTeacher e = new InvoiceTeacher(rs.getString("ID_invoice"), rs.getFloat("amount"), rs.getInt("ID_fa"),
+		MovementTeacher e = new MovementTeacher(rs.getString("ID_invoice"), rs.getFloat("amount"), rs.getInt("ID_fa"),
 				dateIn, rs.getString("sender"), rs.getString("receiver"), rs.getString("fiscalNumber"),
-				rs.getString("address"), rs.getInt("ID_teacher"));
+				rs.getString("address"), rs.getInt("ID_teacher"), rs.getString("description"));
 
 		// Very important to always close all the objects related to the database
 		rs.close();
@@ -178,7 +179,7 @@ public class InvoiceTeacher {
 		Connection conn = db.getConnection(); // Obtain the connection
 
 		String SQL = "INSERT INTO " + tableName()
-				+ "(ID_invoice, amount, ID_fa,  dateIn, sender, receiver , fiscalNumber , address , ID_teacher) VALUES(?,?,?,?,?,?,?,?,?)";
+				+ "(ID_invoice, amount, ID_fa,  dateIn, sender, receiver , fiscalNumber , address , ID_teacher, description) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
 		// Prepared Statement initialized with the INSERT statement
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -193,6 +194,7 @@ public class InvoiceTeacher {
 		pstmt.setString(7, this.getFiscalNumber());
 		pstmt.setString(8, this.getAddress());
 		pstmt.setInt(9, this.getID_teacher());
+		pstmt.setString(10, this.getDescription());
 
 		pstmt.executeUpdate(); // statement execution
 
@@ -265,4 +267,11 @@ public class InvoiceTeacher {
 		this.address = address;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

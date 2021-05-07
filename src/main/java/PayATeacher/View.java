@@ -1,28 +1,30 @@
 package PayATeacher;
 
 import java.awt.Color;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 
+import Entities.MovementTeacher;
 import PL53.swing.DateInput;
-import PL53.swing.DateTimeInput;
+import PL53.swing.JDecimalField;
 import PL53.util.Date;
-import PL53.util.DateTime;
-
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.List;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import javax.swing.JRadioButton;
+import javax.swing.ListSelectionModel;
 
 public class View extends JFrame {
 	// Auto generated serial ID
@@ -37,6 +39,16 @@ public class View extends JFrame {
 	private JTable table;
 	private JButton registerButton;
 	private JTextField IDInvoice;
+	private JDecimalField amount;
+	private DateInput dateTransferTextField_1;
+	private JButton addMovement;
+	private JDecimalField amoundRefound;
+	private JTextField surname;
+	private JTable tablePayments;
+	private JRadioButton radioBtnTeacher;
+	private JRadioButton radioBtnCoiipa;
+	private JComboBox<String> invoicesDropdown;
+	private JPanel multipleInvoicesPanel;
 
 	/**
 	 * Create the frame.
@@ -44,7 +56,7 @@ public class View extends JFrame {
 	public View() {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		
-		setBounds(100, 100, 723, 758);
+		setBounds(100, 100, 1129, 758);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -54,13 +66,13 @@ public class View extends JFrame {
 		JLabel lblNewLabel = new JLabel("Record Payments made to the teachers");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 17));
 
-		lblNewLabel.setBounds(147, 10, 454, 31);
+		lblNewLabel.setBounds(423, 10, 346, 31);
 
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Record payments");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel_1.setBounds(32, 61, 251, 30);
+		lblNewLabel_1.setBounds(10, 40, 251, 30);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Data of the invoice");
@@ -74,112 +86,208 @@ public class View extends JFrame {
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		dateTextField = new DateInput();
-		dateTextField.setBounds(8, 325, 211, 69);
+		dateTextField.setBounds(8, 328, 211, 69);
 		dateTextField.setBorder(blackline);
 		dateTextField.getYearsTextField().setBound(2000, 3000);
+		dateTextField.getYearsTextField().setDefaultValue(2021);
 		contentPane.add(dateTextField);
 		
 		dateTransferTextField = new DateInput();
-		dateTransferTextField.setBounds(10, 580, 230, 65);
+		dateTransferTextField.setBounds(873, 328, 230, 65);
 		dateTransferTextField.setBorder(blackline);
 		dateTransferTextField.getYearsTextField().setBound(2000, 3000);
+		dateTransferTextField.getYearsTextField().setDefaultValue(2021);
 		contentPane.add(dateTransferTextField);
 		
 		JLabel lblNewLabel_5 = new JLabel("Issuer tax data");
-		lblNewLabel_5.setBounds(236, 302, 93, 13);
+		lblNewLabel_5.setBounds(229, 302, 93, 13);
 		contentPane.add(lblNewLabel_5);
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JPanel taxDataPanel = new JPanel();
-		taxDataPanel.setBounds(229, 325, 454, 143);
+		taxDataPanel.setBounds(229, 328, 634, 143);
 		taxDataPanel.setBorder(blackline);
 		contentPane.add(taxDataPanel);
 		taxDataPanel.setLayout(null);
 		
 		JLabel lblNewLabel_6 = new JLabel("Name");
-		lblNewLabel_6.setBounds(13, 20, 45, 13);
+		lblNewLabel_6.setBounds(22, 20, 45, 13);
 		taxDataPanel.add(lblNewLabel_6);
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JLabel lblNewLabel_7 = new JLabel("Fiscal number");
-		lblNewLabel_7.setBounds(179, 20, 81, 13);
+		lblNewLabel_7.setBounds(446, 20, 81, 13);
 		taxDataPanel.add(lblNewLabel_7);
 		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		JLabel lblNewLabel_8 = new JLabel("Address");
-		lblNewLabel_8.setBounds(13, 97, 81, 13);
+		lblNewLabel_8.setBounds(22, 76, 81, 13);
 		taxDataPanel.add(lblNewLabel_8);
 		lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 10));
 		
 		nameTextField = new JTextField();
-		nameTextField.setBounds(12, 36, 135, 19);
+		nameTextField.setBounds(22, 36, 172, 19);
 		taxDataPanel.add(nameTextField);
 		nameTextField.setColumns(10);
 		
 		fiscalNumberTextField = new JTextField();
-		fiscalNumberTextField.setBounds(179, 36, 163, 19);
+		fiscalNumberTextField.setBounds(446, 36, 163, 19);
 		taxDataPanel.add(fiscalNumberTextField);
 		fiscalNumberTextField.setColumns(10);
 		
 		addressTextField = new JTextField();
-		addressTextField.setBounds(13, 114, 217, 19);
+		addressTextField.setBounds(22, 99, 217, 19);
 		taxDataPanel.add(addressTextField);
 		addressTextField.setColumns(10);
 		
 		JLabel lblNewLabel_4 = new JLabel("ID Invoice");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_4.setBounds(255, 97, 81, 13);
+		lblNewLabel_4.setBounds(261, 76, 81, 13);
 		taxDataPanel.add(lblNewLabel_4);
 		
 		IDInvoice = new JTextField();
-		IDInvoice.setBounds(255, 114, 163, 19);
+		IDInvoice.setBounds(261, 99, 163, 19);
 		taxDataPanel.add(IDInvoice);
 		IDInvoice.setColumns(10);
 		
+		JLabel lblNewLabel_11 = new JLabel("Amount");
+		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_11.setBounds(446, 76, 59, 13);
+		taxDataPanel.add(lblNewLabel_11);
+		
+		amount = new JDecimalField(2);
+		amount.setBound(0f, Float.MAX_VALUE);
+		amount.setMaxLength(5);
+		amount.setBounds(446, 99, 163, 19);
+		taxDataPanel.add(amount);
+		amount.setColumns(10);
+		
+		surname = new JTextField();
+		surname.setBounds(261, 36, 163, 19);
+		taxDataPanel.add(surname);
+		surname.setColumns(10);
+		
+		JLabel lblNewLabel_15 = new JLabel("Surname");
+		lblNewLabel_15.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_15.setBounds(261, 20, 73, 13);
+		taxDataPanel.add(lblNewLabel_15);
+		
 		JLabel lblNewLabel_9 = new JLabel("Date of the transfer");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_9.setBounds(10, 545, 115, 13);
+		lblNewLabel_9.setBounds(874, 302, 115, 13);
 		contentPane.add(lblNewLabel_9);
 		
 		
 		
 
-		registerButton = new JButton("Pay the teacher");
+		registerButton = new JButton("Record the invoice");
 		
 		registerButton.setFont(new Font("Tahoma", Font.BOLD, 12));
-		registerButton.setBounds(338, 598, 158, 41);
+		registerButton.setBounds(909, 415, 158, 41);
 
 		contentPane.add(registerButton);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 695, 117);
+		scrollPane.setBounds(10, 80, 1093, 170);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		scrollPane.setViewportView(table);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 494, 718, 13);
+		separator.setBounds(0, 494, 1245, 13);
 		contentPane.add(separator);
 		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(0, 239, 718, 13);
+		separator_1.setBounds(0, 260, 1261, 13);
 		contentPane.add(separator_1);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(750, 101, 631, 117);
+		scrollPane_1.setBounds(10, 540, 477, 172);
 		contentPane.add(scrollPane_1);
 		
-		JSeparator separator_2 = new JSeparator();
-		separator_2.setOrientation(SwingConstants.VERTICAL);
-		separator_2.setBounds(718, 0, 22, 739);
-		contentPane.add(separator_2);
+		tablePayments = new JTable();
+		scrollPane_1.setViewportView(tablePayments);
 		
 		JLabel lblNewLabel_10 = new JLabel("Movements");
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_10.setBounds(755, 61, 115, 13);
+		lblNewLabel_10.setBounds(10, 515, 115, 13);
 		contentPane.add(lblNewLabel_10);
+		
+		JLabel lblNewLabel_12 = new JLabel("Record movements");
+		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel_12.setBounds(497, 515, 330, 31);
+		contentPane.add(lblNewLabel_12);
+		
+		dateTransferTextField_1 = new DateInput();
+		dateTransferTextField_1.getYearsTextField().setBound(2000, 3000);
+		dateTransferTextField_1.getYearsTextField().setDefaultValue(2021);
+		dateTransferTextField_1.setBounds(497, 580, 230, 65);
+		dateTransferTextField_1.setBorder(blackline);
+		contentPane.add(dateTransferTextField_1);
+		
+		JLabel lblNewLabel_13 = new JLabel("Date");
+		lblNewLabel_13.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_13.setBounds(497, 558, 59, 13);
+		contentPane.add(lblNewLabel_13);
+		
+		JLabel lblNewLabel_14 = new JLabel("Amount");
+		lblNewLabel_14.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_14.setBounds(497, 656, 45, 13);
+		contentPane.add(lblNewLabel_14);
+		
+		addMovement = new JButton("Add movement");
+		
+		addMovement.setFont(new Font("Tahoma", Font.BOLD, 10));
+		addMovement.setBounds(769, 671, 170, 41);
+		contentPane.add(addMovement);
+		
+		amoundRefound = new JDecimalField(2);
+		amoundRefound.setBound(0f, Float.MAX_VALUE);
+		amoundRefound.setMaxLength(5);
+		amoundRefound.setColumns(10);
+		amoundRefound.setBounds(497, 671, 163, 19);
+		contentPane.add(amoundRefound);
+		
+		JLabel lblNewLabel_16 = new JLabel("Sender of the movement");
+		lblNewLabel_16.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_16.setBounds(750, 562, 131, 13);
+		contentPane.add(lblNewLabel_16);
+		
+		ButtonGroup bgroup = new ButtonGroup();
+		radioBtnTeacher = new JRadioButton("Teacher");
+		bgroup.add(radioBtnTeacher);
+		radioBtnTeacher.setBounds(750, 584, 103, 21);
+		contentPane.add(radioBtnTeacher);
+		
+		radioBtnCoiipa = new JRadioButton("COIIPA");
+		bgroup.add(radioBtnCoiipa);
+		radioBtnCoiipa.setSelected(true);
+		radioBtnCoiipa.setBounds(750, 608, 103, 21);
+		contentPane.add(radioBtnCoiipa);
+		
+		multipleInvoicesPanel = new JPanel();
+		multipleInvoicesPanel.setEnabled(false);
+		multipleInvoicesPanel.setVisible(false);
+		multipleInvoicesPanel.setBorder(blackline);
+		multipleInvoicesPanel.setBounds(885, 561, 213, 76);
+		contentPane.add(multipleInvoicesPanel);
+		multipleInvoicesPanel.setLayout(null);
+		
+		invoicesDropdown = new JComboBox<String>();
+		invoicesDropdown.setBounds(5, 47, 202, 21);
+		multipleInvoicesPanel.add(invoicesDropdown);
+		
+		JLabel lblNewLabel_17 = new JLabel("There is more than one Invoice.");
+		lblNewLabel_17.setBounds(5, 5, 202, 14);
+		multipleInvoicesPanel.add(lblNewLabel_17);
+		
+		JLabel lblNewLabel_18 = new JLabel("Please select one:");
+		lblNewLabel_18.setBounds(5, 24, 202, 14);
+		multipleInvoicesPanel.add(lblNewLabel_18);
+		
 	}
 	
 	public String getAddressTextField() {
@@ -240,5 +348,55 @@ public class View extends JFrame {
 	public void setIDInvoice(JTextField IDInvoice) {
 		this.IDInvoice=IDInvoice;
 	}
+	public Date getDateTransferTextField_1() {
+		return dateTransferTextField_1.getDate();
+	}
+	public JButton getAddMovement() {
+		return addMovement;
+	}
+	public float getAmount() {
+		return  amount.getValue();
+	}
+	public float getAmoundRefound() {
+		return amoundRefound.getValue();
+	}
+	
+	public JTextField getSurname() {
+		return surname;
+	}
+	public boolean getCheckTeacher() {
+		return radioBtnTeacher.isSelected();
+	}
+	public boolean getCheckCOIIPA() {
+		return radioBtnCoiipa.isSelected();
+	}
 
+	public void setTablePayments(TableModel tm) {
+		this.tablePayments.setModel(tm);
+	}
+
+	public JTable getTablePayments() {
+		return tablePayments;
+	}
+
+	public void setInvoicesDropdownVisible(boolean b) {
+		multipleInvoicesPanel.setVisible(b);
+		multipleInvoicesPanel.setEnabled(b);
+	}
+
+	public void setInvoicesDropdown(List<MovementTeacher> movementsTeacher) {
+		this.invoicesDropdown.removeAllItems();
+		
+		for(MovementTeacher t: movementsTeacher) {
+			invoicesDropdown.addItem(t.getID());
+		}
+	}
+
+	public String getSelectedMovement() {
+		return (String)invoicesDropdown.getSelectedItem();
+	}
+
+	public void setFiscalNumber(String fiscalNumber) {
+		fiscalNumberTextField.setText(fiscalNumber);
+	}
 }

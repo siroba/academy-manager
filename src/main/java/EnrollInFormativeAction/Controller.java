@@ -2,6 +2,8 @@ package EnrollInFormativeAction;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -15,7 +17,9 @@ import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Professional;
 import Exceptions.InvalidFieldValue;
+import PL53.util.Constants;
 import PL53.util.DateTime;
+import PL53.util.FileGenerator;
 
 public class Controller implements PL53.util.Controller {
 	private Model model;
@@ -108,29 +112,35 @@ public class Controller implements PL53.util.Controller {
 						    JOptionPane.ERROR_MESSAGE);
 					return; 
 				}
-				if (view.getAddress().isBlank() && view.getWantInvoice()){
-					JOptionPane.showMessageDialog(null,
-						    "You need to provide an address to enroll.",
-						    "Address not valid",
-						    JOptionPane.ERROR_MESSAGE);
-					return; 
-				}
-				if (view.getFiscalNumber().isBlank() && view.getWantInvoice()){
-					JOptionPane.showMessageDialog(null,
-						    "You need to provide a fiscal number to enroll.",
-						    "Fiscal number not valid",
-						    JOptionPane.ERROR_MESSAGE);
-					return; 
+
+				if(view.getWantInvoice()) {
+					if (view.getAddress().isBlank()){
+						JOptionPane.showMessageDialog(null,
+							    "You need to provide an address to enroll.",
+							    "Address not valid",
+							    JOptionPane.ERROR_MESSAGE);
+						return; 
+					}
+					
+					if (view.getFiscalNumber().isBlank()){
+						JOptionPane.showMessageDialog(null,
+							    "You need to provide a fiscal number to enroll.",
+							    "Fiscal number not valid",
+							    JOptionPane.ERROR_MESSAGE);
+						return; 
+					}else {
+						String regex = "^[A-Z]?[0-9]{8,8}[A-Z]$";
+						if(!view.getFiscalNumber().matches(regex)) {
+							JOptionPane.showMessageDialog(null,
+								    "That fiscal number is not valid. E.g. \"55566677R\"",
+								    "Fiscal number not valid",
+								    JOptionPane.ERROR_MESSAGE);
+							return; 
+						}
+					}
 				}
 				
-				String regex = "^[A-Z]?[0-9]{8,8}[A-Z]$";
-				if(!view.getFiscalNumber().matches(regex)) {
-					JOptionPane.showMessageDialog(null,
-						    "That fiscal number is not valid. E.g. \"55566677R\"",
-						    "Fiscal number not valid",
-						    JOptionPane.ERROR_MESSAGE);
-					return; 
-				}
+				
 				
 				String name = view.getProfName();
 				String surname = view.getTextSurname();
@@ -144,8 +154,29 @@ public class Controller implements PL53.util.Controller {
 					Professional p = model.createProfessional(name, surname, phone, email);
 					Enrollment en = p.enroll(selected, p, Enrollment.Status.RECEIVED, DateTime.now(), group);
 
-					model.doEnrollment(selected, group, p, en , address, fiscalNumber );
+					List<Fee> fees = selected.getFees();
+					float fee = 0;
+					for (int i=0; i<fees.size(); i++) {
+						if (fees.get(i).getGroup().equals(view.getGroup())) {
+							fee = fees.get(i).getAmount();
+						}
+					}
+					
+					model.doEnrollment(selected, group, p, en , address, fiscalNumber, fee);
 
+					// Generate a file to warning the professional about the fee of the payment and the period to pay it
+					
+					List<String> body = FileGenerator.bodyWarningEnrollment(selected, p, selected.getFee(group));
+					FileGenerator.generateFile(
+							Constants.COIIPAemail, 
+							p.getEmail(), 
+							"Warning of Enrollment",
+							body, 
+							"WarningEnrollment" + File.separator + "warning_enrollment_professional" +p.getName()+File.separator +"in fa"+selected.getID() + "_p" + p.getID() + ".txt");
+					
+					JOptionPane.showMessageDialog(null, "An email with the enrollment confitions to be confirmed has been sent to " + p.getEmail());
+					
+					
 					model.loadFormativeActions();
 					view.setFAList(model.getFormativeActions());
 					
@@ -156,6 +187,8 @@ public class Controller implements PL53.util.Controller {
 					e1.printStackTrace();
 				} catch (InvalidFieldValue e2) {
 					JOptionPane.showMessageDialog(null, e2.toString());
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
