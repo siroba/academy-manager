@@ -72,4 +72,10 @@ public class Model {
 		
 		return new DateTime(minute, hour, day, month, year);
 	}
+
+	public void refund(int selected) {
+		FormativeAction fa = data[selected];
+		
+		
+	}
 }

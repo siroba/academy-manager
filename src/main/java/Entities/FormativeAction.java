@@ -351,6 +351,11 @@ public class FormativeAction {
         return this.refundPercentage()*this.getFee(group);
     }
 	
+	/**
+	 * Returns the a percentage according to the days left from the first session and the given date
+	 * @param date
+	 * @return
+	 */
 	public float refundPercentage(Date date) {
         int days = Date.daysSince(this.sessions.get(0).getSessionStart(), date);
 
