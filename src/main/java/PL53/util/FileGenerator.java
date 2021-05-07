@@ -117,4 +117,18 @@ public class FileGenerator {
 			file.delete();
 		}
 	}
+
+	public static List<String> bodyConfirmationReceipt(FormativeAction fA, Professional p, float f) {
+		// Concatenate the content of the email to a list of strings
+				List<String> lines = Arrays.asList("Dear " + p.getName() + " " + p.getSurname() + ",",
+						"hereby we inform you that this is your recipt for the formative action  " + fA.getName(),
+						"The amount paid  is: " + f + " euros.");
+				List<String> lines2 = Arrays.asList("We look forward to seeing you.", "Best regards", "The COIIPA Team");
+				lines = new ArrayList<>(lines);
+				lines2 = new ArrayList<>(lines2);
+
+				lines.addAll(lines2);
+
+				return lines;
+	}
 }

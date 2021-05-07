@@ -138,6 +138,22 @@ public class Controller implements PL53.util.Controller {
 					boolean enrollmentConfirmed = model.createPayment(selectedRow.invoice, newPayment, payDate, isCash, true, newTotal);
 					JOptionPane.showMessageDialog(null, "The payment has been registered");
 					
+					if(isCash) {
+						Professional p = selectedRow.professional;
+						FormativeAction fA = selectedRow.formativeAction;
+						List<Session> ss = fA.getSessions();
+						List<String> body = FileGenerator.bodyConfirmationReceipt(fA, p, toReturn + selectedRow.fee);
+						FileGenerator.generateFile(
+								Constants.COIIPAemail, 
+								p.getEmail(), 
+								"Receipt",
+								body, 
+								"Receipt" + File.separator + "Confirmation_receipt" + fA.getID() + "_p" + p.getID() + ".txt");
+						
+						JOptionPane.showMessageDialog(null, "Receipt done to " + p.getName());
+						
+					}
+					
 					if (enrollmentConfirmed) {
 						// Generate a file to confirm the enrollment
 						Professional p = selectedRow.professional;
