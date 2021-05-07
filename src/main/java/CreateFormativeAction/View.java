@@ -290,6 +290,7 @@ public class View {
 
 		tableFees = new JTable();
 		tableFees.setDefaultEditor(Object.class, null);
+		tableFees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPaneFees.setViewportView(tableFees);
 		
 		// Fees - Button to Delete fee 
