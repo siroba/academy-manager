@@ -16,7 +16,6 @@ import Entities.Enrollment;
 import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Professional;
-import Entities.Session;
 import Exceptions.InvalidFieldValue;
 import PL53.util.Constants;
 import PL53.util.DateTime;
@@ -155,22 +154,29 @@ public class Controller implements PL53.util.Controller {
 					Professional p = model.createProfessional(name, surname, phone, email);
 					Enrollment en = p.enroll(selected, p, Enrollment.Status.RECEIVED, DateTime.now(), group);
 
-					model.doEnrollment(selected, group, p, en , address, fiscalNumber );
+					List<Fee> fees = selected.getFees();
+					float fee = 0;
+					for (int i=0; i<fees.size(); i++) {
+						if (fees.get(i).getGroup().equals(view.getGroup())) {
+							fee = fees.get(i).getAmount();
+						}
+					}
 					
-					
-						// Generate a file to warning the professional about the fee of the payment and the period to pay it
-						
-						List<String> body = FileGenerator.bodyWarningEnrollment(selected, p, selected.getFee(group));
-						FileGenerator.generateFile(
-								Constants.COIIPAemail, 
-								p.getEmail(), 
-								"Warning of Enrollment",
-								body, 
-								"WarningEnrollment" + File.separator + "warning_enrollment_professional" +p.getName()+File.separator +"in fa"+selected.getID() + "_p" + p.getID() + ".txt");
-						
-						JOptionPane.showMessageDialog(null, "An email with the enrollment confitions to be confirmed has been sent to " + p.getEmail());
-					
+					model.doEnrollment(selected, group, p, en , address, fiscalNumber, fee);
 
+					// Generate a file to warning the professional about the fee of the payment and the period to pay it
+					
+					List<String> body = FileGenerator.bodyWarningEnrollment(selected, p, selected.getFee(group));
+					FileGenerator.generateFile(
+							Constants.COIIPAemail, 
+							p.getEmail(), 
+							"Warning of Enrollment",
+							body, 
+							"WarningEnrollment" + File.separator + "warning_enrollment_professional" +p.getName()+File.separator +"in fa"+selected.getID() + "_p" + p.getID() + ".txt");
+					
+					JOptionPane.showMessageDialog(null, "An email with the enrollment confitions to be confirmed has been sent to " + p.getEmail());
+					
+					
 					model.loadFormativeActions();
 					view.setFAList(model.getFormativeActions());
 					
@@ -182,7 +188,6 @@ public class Controller implements PL53.util.Controller {
 				} catch (InvalidFieldValue e2) {
 					JOptionPane.showMessageDialog(null, e2.toString());
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

@@ -8,7 +8,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableModel;
 
 import Entities.MovementTeacher;
-import Entities.Teacher;
 import PL53.swing.DateInput;
 import PL53.swing.JDecimalField;
 import PL53.util.Date;
@@ -157,6 +156,8 @@ public class View extends JFrame {
 		taxDataPanel.add(lblNewLabel_11);
 		
 		amount = new JDecimalField(2);
+		amount.setBound(0f, Float.MAX_VALUE);
+		amount.setMaxLength(5);
 		amount.setBounds(446, 99, 163, 19);
 		taxDataPanel.add(amount);
 		amount.setColumns(10);
@@ -234,18 +235,20 @@ public class View extends JFrame {
 		
 		JLabel lblNewLabel_14 = new JLabel("Amount");
 		lblNewLabel_14.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_14.setBounds(497, 670, 45, 13);
+		lblNewLabel_14.setBounds(497, 656, 45, 13);
 		contentPane.add(lblNewLabel_14);
 		
 		addMovement = new JButton("Add movement");
 		
 		addMovement.setFont(new Font("Tahoma", Font.BOLD, 10));
-		addMovement.setBounds(861, 671, 170, 41);
+		addMovement.setBounds(769, 671, 170, 41);
 		contentPane.add(addMovement);
 		
 		amoundRefound = new JDecimalField(2);
+		amoundRefound.setBound(0f, Float.MAX_VALUE);
+		amoundRefound.setMaxLength(5);
 		amoundRefound.setColumns(10);
-		amoundRefound.setBounds(497, 693, 163, 19);
+		amoundRefound.setBounds(497, 671, 163, 19);
 		contentPane.add(amoundRefound);
 		
 		JLabel lblNewLabel_16 = new JLabel("Sender of the movement");
@@ -268,20 +271,21 @@ public class View extends JFrame {
 		multipleInvoicesPanel = new JPanel();
 		multipleInvoicesPanel.setEnabled(false);
 		multipleInvoicesPanel.setVisible(false);
-		multipleInvoicesPanel.setBounds(891, 561, 176, 68);
+		multipleInvoicesPanel.setBorder(blackline);
+		multipleInvoicesPanel.setBounds(885, 561, 213, 76);
 		contentPane.add(multipleInvoicesPanel);
 		multipleInvoicesPanel.setLayout(null);
 		
 		invoicesDropdown = new JComboBox<String>();
-		invoicesDropdown.setBounds(0, 47, 176, 21);
+		invoicesDropdown.setBounds(5, 47, 202, 21);
 		multipleInvoicesPanel.add(invoicesDropdown);
 		
 		JLabel lblNewLabel_17 = new JLabel("There is more than one Invoice.");
-		lblNewLabel_17.setBounds(0, 0, 176, 14);
+		lblNewLabel_17.setBounds(5, 5, 202, 14);
 		multipleInvoicesPanel.add(lblNewLabel_17);
 		
 		JLabel lblNewLabel_18 = new JLabel("Please select one:");
-		lblNewLabel_18.setBounds(0, 19, 98, 14);
+		lblNewLabel_18.setBounds(5, 24, 202, 14);
 		multipleInvoicesPanel.add(lblNewLabel_18);
 		
 	}

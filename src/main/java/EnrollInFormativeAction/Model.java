@@ -43,9 +43,13 @@ public class Model {
         return p;
     }
 
-    public void doEnrollment(FormativeAction fa, String group, Professional p, Enrollment en , String address , String fiscalNumber) throws SQLException, ParseException {
+    public void doEnrollment(FormativeAction fa, String group, Professional p, Enrollment en , String address , String fiscalNumber, float fee) throws SQLException, ParseException {
         p.insert(db);
         en.setID_professional(p.getID());
+        
+        if(fee == 0)
+        	en.setStatus(Enrollment.Status.CONFIRMED);
+        
         en.insert(db);
         
         Movement i = new Movement(fa.getFee(group), en.getTimeEn(), p.getName(), "COIIPA" , address, fiscalNumber, en.getID_fa(), p.getID(), ""); // TODO: Description

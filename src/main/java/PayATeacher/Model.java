@@ -93,14 +93,14 @@ public class Model {
 	/**
 	 * Returns the Fiscal Number of a teacher
 	 * 
-	 * @param t
+	 * @param iD_teacher
 	 * @return
 	 * @throws SQLException
 	 */
-	public String getFiscalNumber(Teacher t) throws SQLException {
+	public String getFiscalNumber(int iD_teacher) throws SQLException {
 		String sql = "SELECT fiscalNumber FROM Teacher WHERE ID_teacher=?";
 		
-		return db.executeQueryPojo(String.class, sql, t.getID()).get(0);
+		return (String)db.executeQueryArray(sql, iD_teacher).get(0)[0];
 	}
 	
 	/**
@@ -140,24 +140,27 @@ public class Model {
 		List<MovementTeacher> it = MovementTeacher.get(sql, db);
 		
 		for(MovementTeacher i: it) {
-			String sqlPayment = "SELECT * FROM PaymentTeacher WHERE ID_invoice=" + i.getID();
+			String sqlPayment = "SELECT * FROM PaymentTeacher WHERE ID_invoice='" + i.getID() + "'";
 			List<PaymentTeacher> mt = PaymentTeacher.get(sqlPayment, db);
 		
 			for(PaymentTeacher m: mt) {
 				String sender = i.getSender();
 				String receiver = i.getReceiver();
-				float amount = m.getAmount();
+				float amount = -m.getAmount();
 				String datePayment = m.getPayDate().toString();
 	
 				// If the amount is negative, the payment was from COIIPA
-				if (amount < 0) {
+				if (amount > 0) {
 					String tmp = sender;
 					sender = receiver;
 					receiver = tmp;
+					
+					//amount*=-1;
 	
 					// Otherwise, if the sender is COIIPA, just set the amount to be negative
-				} else if (sender.equals("COIIPA")) {
-					amount *= -1;
+				}  if (sender.equals("COIIPA")) {
+					
+					//amount *= -1;
 				}
 				
 				str.add(new String[] {sender, receiver, datePayment, Float.toString(amount)});
@@ -249,10 +252,5 @@ public class Model {
 	public void createPayment(String id_invoice, float amount, Date payDate, boolean confirmed) throws SQLException, ParseException {		
 		PaymentTeacher p = new PaymentTeacher(id_invoice, amount, payDate, confirmed, ""); // TODO: Description
 		p.insert(db);
-	}
-
-	public MovementTeacher getMovementTeacherFor(Data selectedRow) {
-		String sql = "SELECT * FROM InvoiceTeacher WHERE ID_fa=" + selectedRow.formativeAction.getID() + " AND ID_professional=";
-		return null;
 	}
 }

@@ -61,6 +61,11 @@ public class Controller implements PL53.util.Controller {
 		view.getConfirmButton().addActionListener(new ActionListener() {
 			@SuppressWarnings("unused")
 			public void actionPerformed(ActionEvent e) {
+				if (selectedRow == null) {
+					JOptionPane.showMessageDialog(null, "You have to select one payment");
+					return;
+				}
+				
 				try {
 					DateTime now = DateTime.now();
 	
@@ -86,10 +91,7 @@ public class Controller implements PL53.util.Controller {
 					/////////////////////////////////////////////////////////////////////////////////////
 					
 					// Conditions to check (validations)
-					if (selectedRow == null) {
-						JOptionPane.showMessageDialog(null, "You have to select one payment");
-						return;
-					} else if (isCash && newPayment > 1000) {
+					if (isCash && newPayment > 1000) {
 						JOptionPane.showMessageDialog(null, "With cash the payments has to be lower than 1000€");
 						return;
 					} else if (newPayment <= 0) {
@@ -128,9 +130,6 @@ public class Controller implements PL53.util.Controller {
 							newTotal -= toReturn;
 							
 							model.createPayment(selectedRow.invoice, -toReturn, payDate, view.isCash(), true, newTotal);
-
-							toReturn = 0;
-	
 						}
 					} else if (toReturn < 0) {
 						JOptionPane.showMessageDialog(null, "The payment is lower than  the fee ");
@@ -187,7 +186,7 @@ public class Controller implements PL53.util.Controller {
 					// Payment calculations
 					float fee = selectedRow.invoice.getAmount();
 					float newTotal = totalPaid + newRefund;
-					float toReturn = newTotal - fee;
+					float toReturn = totalPaid-newRefund; //newTotal - fee;
 	
 					// Dates...
 					int daysFromEnrollment = DateTime.daysSince(refundDate, selectedRow.enrollment.getTimeEn());
