@@ -10,37 +10,14 @@ import java.text.ParseException;
 import java.util.*;
 
 import Utils.Database;
-import Utils.UnexpectedException;
 import Entities.Enrollment;
 import Entities.Fee;
 import Entities.FormativeAction;
 import Entities.Movement;
 import Entities.Payment;
-//import Entities.FormativeAction;
 import Entities.Professional;
 import PL53.util.Date;
 
-/**
- * Access to course data, used as a model for the swing example and for unit and
- * user interface testing.
- *
- * <br/>
- * In the methods of this example all the business logic is performed by a
- * single sql query, so we always use the utility methods in the Database class
- * that are used in the example. <br/>
- * The utility methods in the Database class that use apache commons-dbutils and
- * control the connection are always used. In case different queries are
- * performed in the same method, the connection should be controlled from this
- * class. (see as example the implementation in Database).
- *
- * <br/>
- * If you use any other framework to manage persistence, the functionality
- * provided by this class would be the one assigned to the Services,
- * Repositories, Repositories, and Services, Repositories, and Services. <br/>
- * If you use some other framework to handle persistence, the functionality
- * provided by this class would be the one assigned to Services, Repositories
- * and DAOs.
- */
 public class Model {
 
 	private Database db = new Database();
@@ -50,17 +27,21 @@ public class Model {
 		data = initData();
 	}
 
+	/**
+	 * Returns the indicated data from the array. Returns null if out of bounds.
+	 * 
+	 * @param i
+	 * @return
+	 */
 	public Data getData(int i) {
-
-		if (i < 0 || i > this.data.length - 1) {
-
+		if (i < 0 || i > this.data.length - 1)
 			return null;
-		}
+
 		return this.data[i];
 	}
 
-	public Data[] getAllData() {
-		return this.data;
+	public ArrayList<Data> getAllData() {
+		return new ArrayList<Data>(Arrays.asList(this.data));
 	}
 
 	private Data[] initData() throws SQLException, ParseException {
@@ -68,14 +49,14 @@ public class Model {
 
 		String sql = "	SELECT  Invoice.* FROM Invoice WHERE Invoice.amount <> ("
 				+ "	SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment GROUP BY Payment.ID_invoice "
-				+ "HAVING Payment.ID_invoice=Invoice.ID_fa), 0))";
+				+ "HAVING Payment.ID_invoice=Invoice.ID_invoice), 0))";
 		String queryFa = "SELECT * FROM FormativeAction WHERE ID_fa=";
 		String queryProf = "SELECT * FROM Professional WHERE ID_professional=";
 
-
 		List<Movement> invoices = Movement.get(sql, db);
 		for (Movement in : invoices) {
-			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" + in.getID_fa() + " AND ID_professional=" + in.getID_professional();
+			String queryEnr = "SELECT * FROM Enrollment WHERE ID_fa=" + in.getID_fa() + " AND ID_professional="
+					+ in.getID_professional();
 			String queryFee = "SELECT * FROM Fee WHERE ID_fa=" + in.getID_fa() + " AND category='";
 			Data d = new Data();
 			d.invoice = in;
@@ -89,20 +70,7 @@ public class Model {
 
 		Data data2[] = new Data[data.size()];
 		return data.toArray(data2);
-
 	}
-
-	private String queryEnroll(int ID_fa, int ID_prof) {
-		return "SELECT * FROM Enrollment WHERE ID_fa=" + ID_fa + " AND ID_professional=" + ID_prof;
-	}
-
-	/*
-	 * void createPayment(int id_invoice, float amount, Date datePay, boolean
-	 * isCash, boolean confirmed) throws SQLException, ParseException { Payment p =
-	 * new Payment(id_invoice, amount, datePay, confirmed, isCash);
-	 *
-	 * p.insert(db); }
-	 */
 
 	public List<Movement> getPayments(Data d) throws SQLException {
 
@@ -112,101 +80,69 @@ public class Model {
 		return Movement.get(queryInvoice, db);
 	}
 
-	public float getAmountPayed(Data selectedRow) {
-		/*
-		 * String sqlRefund =
-		 * "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
-		 *
-		 * + "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " +
-		 * " GROUP BY Payment.ID_invoice " +
-		 * "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender='COIIPA'), 0.0);"
-		 * ;
-		 *
-		 * String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment " +
-		 * "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " +
-		 * " GROUP BY Payment.ID_invoice " +
-		 * "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND sender<>'COIIPA'), 0.0);"
-		 * ;
-		 *
-		 * float normalPayments = (float) ((double) (db .executeQueryArray(sql,
-		 * selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional())
-		 * .get(0)[0])); float refundPayments = -(float) ((double) (db
-		 * .executeQueryArray(sqlRefund, selectedRow.invoice.getID_fa(),
-		 * selectedRow.invoice.getID_professional()) .get(0)[0]));
-		 */
-
-		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
-				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " + " GROUP BY Payment.ID_invoice "
-				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=?), 0.0);";
-
-		float sumPayments = (float) ((double) (db
-				.executeQueryArray(sql, selectedRow.invoice.getID_fa(), selectedRow.invoice.getID_professional())
-				.get(0)[0]));
-		return sumPayments;
-	}
-
-	public void createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed, float totalAmountPayed)
-			throws SQLException, ParseException {
-		if(totalAmountPayed == invoiceReturn.getAmount()) {
+	public boolean createPayment(Movement invoiceReturn, float toReturn, Date payDate, boolean cash, boolean confirmed,
+			float totalAmountPayed) throws SQLException, ParseException {
+		
+		boolean enrollmentConfirmed = false;
+		
+		if (totalAmountPayed >= invoiceReturn.getAmount()) {
 			String sql = "UPDATE Enrollment SET status='CONFIRMED' WHERE ID_fa=? AND ID_professional=?";
 			db.executeUpdateQuery(sql, invoiceReturn.getID_fa(), invoiceReturn.getID_professional());
+			enrollmentConfirmed = true;
 		}
+		
 		// invoiceReturn.insert(db);
 		int id_invoice = invoiceReturn.getID();
 		Payment p = new Payment(id_invoice, toReturn, payDate, confirmed, cash, ""); // TODO: Description
 		p.insert(db);
+		
+		return enrollmentConfirmed;
 	}
 
-	public void createPaymentRefund(int invoiceID, float toReturn, Date payDate, boolean cash, boolean confirmed) 
+	public void createPaymentRefund(int invoiceID, float toReturn, Date payDate, boolean cash, boolean confirmed)
 			throws SQLException, ParseException {
 
 		Payment p = new Payment(invoiceID, toReturn, payDate, confirmed, cash, ""); // TODO: Add description
 		p.insert(db);
 	}
 
-	public List<AuxPayment> getPayments(String formativeAction, Data data2) {
-		try {
-			Connection cn = db.getConnection();
+	public List<AuxPayment> getAuxPayments(Data data2) throws SQLException {
+		Connection cn = db.getConnection();
 
-			PreparedStatement ps = cn.prepareStatement(
-					"select fa.nameFa, i.sender, i.receiver, pay.amount, pay.datePay from Professional p "
-							+ "inner join Enrollment e on p.ID_professional = e.ID_professional "
-							+ "inner join FormativeAction fa on e.ID_fa = fa.ID_fa "
-							+ "inner join Invoice i on e.ID_professional = i.ID_professional and e.ID_fa = i.ID_fa "
-							+ "inner join Payment pay on i.ID_invoice = pay.ID_invoice "
-							+ "where p.ID_professional=? AND fa.ID_fa=? ;");
-			ps.setInt(1, data2.professional.getID());
-			ps.setInt(2, data2.formativeAction.getID());
+		PreparedStatement ps = cn.prepareStatement(
+				"select fa.nameFa, i.sender, i.receiver, pay.amount, pay.datePay from Professional p "
+						+ "inner join Enrollment e on p.ID_professional = e.ID_professional "
+						+ "inner join FormativeAction fa on e.ID_fa = fa.ID_fa "
+						+ "inner join Invoice i on e.ID_professional = i.ID_professional and e.ID_fa = i.ID_fa "
+						+ "inner join Payment pay on i.ID_invoice = pay.ID_invoice "
+						+ "where p.ID_professional=? AND fa.ID_fa=? ;");
+		ps.setInt(1, data2.professional.getID());
+		ps.setInt(2, data2.formativeAction.getID());
 
-			ResultSet rs = ps.executeQuery();
+		ResultSet rs = ps.executeQuery();
 
-			List<AuxPayment> listPayments = new ArrayList<>();
+		List<AuxPayment> listPayments = new ArrayList<>();
 
-			while (rs.next()) {
-				String sender = rs.getString("sender");
-				String receiver = rs.getString("receiver");
-				float amount = rs.getFloat("amount");
+		while (rs.next()) {
+			String sender = rs.getString("sender");
+			String receiver = rs.getString("receiver");
+			float amount = rs.getFloat("amount");
 
-				// If the amount is negative, the payment was from COIIPA
-				if(amount < 0) {
-					String tmp = sender;
-					sender = receiver;
-					receiver = tmp;
+			// If the amount is negative, the payment was from COIIPA
+			if (amount < 0) {
+				String tmp = sender;
+				sender = receiver;
+				receiver = tmp;
 
 				// Otherwise, if the sender is COIIPA, just set the amount to be negative
-				}else if(sender.equals("COIIPA")){
-					amount *= -1;
-				}
-
-				listPayments.add(new AuxPayment(Date.parse(rs.getTimestamp("datePay")),
-						amount, sender, receiver));
+			} else if (sender.equals("COIIPA")) {
+				amount *= -1;
 			}
 
-			return listPayments;
-		} catch (SQLException e) {
-			throw new UnexpectedException(e);
+			listPayments.add(new AuxPayment(Date.parse(rs.getTimestamp("datePay")), amount, sender, receiver));
 		}
 
+		return listPayments;
 	}
 
 	/**
@@ -237,11 +173,67 @@ public class Model {
 
 		return null;
 	}
-	
+
 	public int getFreePlaces(int ID_fa) throws SQLException, ParseException {
-        String sql ="SELECT FormativeAction.totalPlaces- COUNT(Enrollment.ID_fa) FROM Enrollment INNER JOIN FormativeAction ON FormativeAction.ID_fa = Enrollment.ID_fa WHERE Enrollment.ID_fa=? AND Enrollment.status<>'CANCELLED';";
+		String sql = "SELECT FormativeAction.totalPlaces- COUNT(Enrollment.ID_fa) FROM Enrollment INNER JOIN FormativeAction ON FormativeAction.ID_fa = Enrollment.ID_fa WHERE Enrollment.ID_fa=? AND Enrollment.status<>'CANCELLED';";
+		return (int) db.executeQueryArray(sql, ID_fa).get(0)[0];
+	}
 
-        return (int)db.executeQueryArray(sql, ID_fa).get(0)[0];
-    }
+	/**
+	 * The sum of all the negative payments
+	 *
+	 * @param d
+	 * @return
+	 */
+	public float getAmountReturned(Data d) {
 
+		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice AND Payment.amount < 0 "
+				+ "GROUP BY Payment.ID_invoice "
+				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND Payment.amount < 0 ), 0.0);";
+
+		double sumPayments =  (double) (db
+				.executeQueryArray(sql, d.invoice.getID_fa(), d.invoice.getID_professional()).get(0)[0]);
+		
+		return (float)sumPayments;
+	}
+
+	/**
+	 * The sum of all the positive payments
+	 *
+	 * @param d
+	 * @return
+	 * @throws SQLException 
+	 */
+	public float getAmountPaid(Data d) throws SQLException {
+		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice AND Payment.amount >0 " 
+				+ "GROUP BY Payment.ID_invoice "
+				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=? AND Payment.amount >0 ), 0.0) as paid;";
+
+		
+		double sumPayments = (double) (db
+				.executeQueryArray(sql, d.invoice.getID_fa(), d.invoice.getID_professional()).get(0)[0]);
+		
+		
+		return (float) sumPayments;
+	}
+
+	/**
+	 * The sum of all the payments (positive and negative)
+	 *
+	 * @param selectedRow
+	 * @return
+	 */
+	public float getAmountTotalPaid(Data d) {
+
+		String sql = "SELECT COALESCE((SELECT SUM (Payment.amount) FROM Payment "
+				+ "INNER JOIN Invoice ON Payment.ID_invoice=Invoice.ID_Invoice " + " GROUP BY Payment.ID_invoice "
+				+ "HAVING Invoice.ID_fa=? AND Invoice.ID_professional=?), 0.0);";
+
+		float sumPayments = (float) ((double) (db
+				.executeQueryArray(sql, d.invoice.getID_fa(), d.invoice.getID_professional()).get(0)[0]));
+		
+		return sumPayments;
+	}
 }

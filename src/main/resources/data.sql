@@ -43,7 +43,7 @@ insert into Enrollment(ID_fa, ID_professional, status, timeEn, category) values
 	(1001, 2002, 'CONFIRMED', '2021-01-23 22:00:00.0', 'Standard'),
 	(1001, 2003, 'CONFIRMED', '2021-02-03 20:00:00.0', 'Standard'),
 	(1001, 2004, 'CONFIRMED', '2021-02-01 08:00:00.0', 'Standard'),
-	(1002, 2000, 'RECEIVED', '2021-03-02 12:00:00.0', 'Standard'),
+	(1002, 2000, 'CONFIRMED', '2021-03-02 12:00:00.0', 'Standard'),
 	(1002, 2005, 'RECEIVED', '2021-03-05 08:00:00.0', 'Standard'),
 	(1002, 2001, 'CONFIRMED', '2021-03-05 08:00:00.0', 'Standard');
 
@@ -82,13 +82,13 @@ insert into Payment(ID_payment, amount, datePay, confirmed, ID_invoice) values
 	(3013, 20, '2021-03-05 10:00:00.0', true,  4013),
 	(3014, -10, '2021-03-05 10:00:00.0', true, 4000);
 
-insert into Teacher (ID_teacher, name) values
-	(1000, "Fanjul"),
-	(1001, "Marcos"),
-	(1002, "Marek"),
-	(1003, "Vivien"),
-	(1004, "Silvia"),
-	(1005, "Rosalina");
+insert into Teacher (ID_teacher, name, surname, phone, email, fiscalNumber) values
+	(1000, "Jose", "Garcia Fanjul", "", "", "23455656H"),
+	(1001, "Marcos", "Gutierrez Alonso", "", "", "78967856A"),
+	(1002, "Marek", "Ruschulte", "", "", "45667899D"),
+	(1003, "Vivien", "Drescher", "", "", "45345678G"),
+	(1004, "Silvia", "Rodriguez", "", "", "66756789F"),
+	(1005, "Rosalina", "Alvarez", "", "", "43214565G");
 	
 insert into TeacherTeaches (ID_teacher , ID_fa , remuneration) values
 	(1000,1000, 50.0),
@@ -104,9 +104,11 @@ insert into InvoiceTeacher (Id_invoice , amount, dateIn, sender, receiver, addre
 	('4001', 50, '2021-01-02' , 'COIIPA', 'recieverName', 'address', 'fiscalNumber', 1000, 1001),
 	('4002', 60, '2021-01-03 ', 'COIIPA', 'recieverName', 'address', 'fiscalNumber', 1001, 1002),
 	('4003', 60, '2021-01-03 ', 'COIIPA', 'recieverName', 'address', 'fiscalNumber', 1001, 1003),
-	('4004', 100, '2021-01-04 ', 'COIIPA', 'recieverName', 'address', 'fiscalNumber',  1002, 1004);
+	('4004', 100, '2021-01-04 ', 'COIIPA', 'recieverName', 'address', 'fiscalNumber',  1002, 1004),
+	('4005', 80, '2021-05-04 ', 'COIIPA', 'Rosalina', 'address', 'fiscalNumber',  1003, 1005);
 
 insert into PaymentTeacher( ID_payment, amount, datePay,  confirmed, ID_invoice) values
-	(3000, 50, '2021-01-02 ', true, '4000'),
-	(3001, 30, '2021-01-04 ', false, '4001'),
-	(3002, 70, '2021-01-07 ', false, '4002');
+	(3000, 50, '2021-01-02 00:00:00.0 ', true, '4000'),
+	(3001, 30, '2021-01-04 00:00:00.0 ', false, '4001'),
+	(3002, 70, '2021-01-07 00:00:00.0 ', false, '4002'),
+	(3003, 70, '2021-05-04 00:00:00.0 ', true, '4005');

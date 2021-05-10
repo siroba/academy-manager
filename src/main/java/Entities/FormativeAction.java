@@ -247,7 +247,7 @@ public class FormativeAction {
 
 			int id_fa = rs.getInt("ID_fa");
 			
-			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+			List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa + " ORDER BY sessionStart", db);
 			List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
 			
 			FormativeAction f = new FormativeAction(
@@ -308,7 +308,7 @@ public class FormativeAction {
 
 		int id_fa = rs.getInt("ID_fa");
 		
-		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa, db);
+		List<Session> sessions = Session.get("SELECT * FROM Session WHERE ID_fa=" + id_fa + " ORDER BY sessionStart", db);
 		List<Fee> fees = Fee.get("SELECT * FROM Fee WHERE ID_fa=" + id_fa, db);
 		
 		FormativeAction fa = new FormativeAction(
@@ -350,9 +350,22 @@ public class FormativeAction {
 	public float refund(String group) {
         return this.refundPercentage()*this.getFee(group);
     }
+	
+	/**
+	 * Returns the a percentage according to the days left from the first session and the given date
+	 * @param date
+	 * @return
+	 */
+	public float refundPercentage(Date date) {
+        int days = Date.daysSince(this.sessions.get(0).getSessionStart(), date);
+
+        if(days > 7) return 1f;
+        else if (days <= 6 && days >=3) return 0.5f;
+        else return 0f;
+	}
   
     public float refundPercentage() {
-        int days = Date.daysSince(enrollmentEnd);
+        int days = Date.daysSince(this.sessions.get(0).getSessionStart());
 
         if(days > 7) return 1f;
         else if (days <= 6 && days >=3) return 0.5f;
