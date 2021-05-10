@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 /**
@@ -29,7 +30,9 @@ public class DateTime extends Date {
 	/**
 	 * {@link DateFormat} variable to format the dates
 	 */
-	public static final DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	
+	public static final ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
 
 	private int hour, minute;
 
@@ -106,9 +109,9 @@ public class DateTime extends Date {
 	 * @throws ParseException
 	 */
 	public static DateTime parseString(String datetime) throws ParseException {
-		java.util.Date d = dateformat.parse(datetime);
+		java.time.LocalDateTime d = java.time.LocalDateTime.parse(datetime, dateformat);
 
-		return DateTime.fromMillis(d.getTime());
+		return DateTime.fromMillis(d.toInstant(zoneOffset).toEpochMilli());
 	}
 
 	/**
@@ -128,7 +131,7 @@ public class DateTime extends Date {
 	 */
 	@Override
 	public long toMillis() {
-		return this.toLocalDateTime().toEpochSecond(ZoneOffset.ofHours(2)) * 1000l;
+		return this.toLocalDateTime().toEpochSecond(zoneOffset) * 1000l;
 	}
 
 	/**
@@ -140,7 +143,7 @@ public class DateTime extends Date {
 	 * @return
 	 */
 	public static DateTime fromMillis(long millis) {
-		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, ZoneOffset.ofHours(2));
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(millis / 1000L, 0, zoneOffset);
 
 		return new DateTime(ldt.getMinute(), ldt.getHour(), ldt.getDayOfMonth(), ldt.getMonthValue(), ldt.getYear());
 	}

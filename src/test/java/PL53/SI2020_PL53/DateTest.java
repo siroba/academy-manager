@@ -52,7 +52,7 @@ public class DateTest {
 	@Test
 	public void testDateFromMillis() {
 		Date d = Date.fromMillis(lDNow);
-		System.out.println(d);
+		//System.out.println(d);
 		assertEquals(lDNow, d.toMillis());
 	}
 
@@ -80,9 +80,9 @@ public class DateTest {
 		// '2011-12-03T10:15:30'
 		String t = year + "-" + month + "-" + day + " 0" + hour + ":" + minute;
 
-		System.out.println(DateTime.fromMillis(1615067820000L));
-
 		DateTime dt2 = DateTime.parseString(t);
+
+		System.out.println(dt2);
 
 		assertEquals(dt2.getHour(), hour);
 		assertEquals(dt2.getMinute(), minute);
@@ -91,7 +91,7 @@ public class DateTest {
 		assertEquals(dt2.getYear(), year);
 	}
 
-	@Test(expected = ParseException.class)
+	@Test(expected = java.time.format.DateTimeParseException.class)
 	public void testStringParseException() throws ParseException {
 		DateTime.parseString("1615067820000");
 	}
@@ -101,7 +101,7 @@ public class DateTest {
 		//String sql = "INSERT INTO Payment VALUES(null,?,?,?,?,?,?,?,?,?)";
 		
 		Date insert = Date.random();
-		System.out.println(insert);
+		//System.out.println(insert);
 		
 		Payment p = new Payment(1000, 2000, 100, insert, true, false, "");
 		try {
@@ -110,7 +110,7 @@ public class DateTest {
 			Payment p2 = Payment.getOne("SELECT * FROM Payment WHERE ID_payment=" + p.getID(), db);
 			
 			Date read = p2.getPayDate();
-			System.out.println(read);
+			//System.out.println(read);
 			
 			assertEquals(insert.toString(), read.toString());
 		} catch (SQLException | ParseException e) {
