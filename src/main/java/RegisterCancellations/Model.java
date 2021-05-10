@@ -83,12 +83,12 @@ public class Model {
 		//float payedAmount = getPayedAmount(selected.professional.getID(), selected.formativeAction.getID());
 		
 			// 2.2 - Get the appropiate percentage to refund
-		//float refundPercentage = selected.formativeAction.getRefundPercentage(dateIn));
+		//float refundPercentage = selected.formativeAction.refundPercentage(dateIn);
 		
 		if(refundAmount > 0) { // If there is nothing to return, do not proceed			
 				// 2.3 - Create the Invoice for the same value payed
 
-			Movement refundInvoice = new Movement(refundAmount, dateIn, sender, receiver, address, fiscalNumber, selected.formativeAction.getID(), selected.professional.getID(), ""); // TODO: Description
+			Movement refundInvoice = new Movement(refundAmount, dateIn, sender, receiver, address, fiscalNumber, selected.formativeAction.getID(), selected.professional.getID(), "Cancelled enrollment");
 
 			refundInvoice.insert(db); // Insert it to update its ID
 	

@@ -38,7 +38,7 @@ public class Controller implements PL53.util.Controller{
 				if (option == 0) {
 					try {
 						model.delay(view.getSelected(), view.getDateTimeInput());
-
+						model.refund(view.getSelected());
 						model.initModel();
 
 						view.setTable(getTableModel(model.getAllData()));
