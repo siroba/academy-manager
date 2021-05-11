@@ -14,7 +14,6 @@ import org.junit.Test;
 import Entities.Payment;
 import PL53.util.Date;
 import PL53.util.DateTime;
-import PL53.util.Random;
 import Utils.Database;
 
 public class DateTest {
@@ -96,21 +95,18 @@ public class DateTest {
 		DateTime.parseString("1615067820000");
 	}
 	
-	//@Test
-	public void testDbInsertion() {
-		//String sql = "INSERT INTO Payment VALUES(null,?,?,?,?,?,?,?,?,?)";
-		
+	@Test
+	public void testDbInsertion() {		
 		Date insert = Date.random();
-		//System.out.println(insert);
 		
-		Payment p = new Payment(1000, 2000, 100, insert, true, false, "");
+		Payment p = new Payment(1000, 100, insert, true, false, "");
+		
 		try {
 			p.insert(db);
 			
 			Payment p2 = Payment.getOne("SELECT * FROM Payment WHERE ID_payment=" + p.getID(), db);
 			
 			Date read = p2.getPayDate();
-			//System.out.println(read);
 			
 			assertEquals(insert.toString(), read.toString());
 		} catch (SQLException | ParseException e) {
