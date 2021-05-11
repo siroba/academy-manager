@@ -86,7 +86,7 @@ public class DateTest {
 		int month = 12;
 		int year = 2021;
 		// '2011-12-03T10:15:30'
-		String t = year + "-" + month + "-" + day + " 0" + hour + ":" + minute;
+		String t = year + "-" + month + "-" + day + " 0" + hour + ":" + minute + ":00";
 
 		DateTime dt2 = DateTime.parseString(t);
 
@@ -128,12 +128,24 @@ public class DateTest {
 	 */
 	@Test
 	public void testDateDifference() {
+		int day = 20;
+		int month = 11;
+		int year = 2021;
+
+		Date dt1 = new Date(day, month, year);
+		Date dt2 = new Date(day+1, month+1, year+1);
+
+		assertEquals(396, Date.daysSince(dt2, dt1));
+	}
+	
+	@Test
+	public void testDateTimeDifference() {
 		int minute = 30;
 		int hour = 00;
 		int day = 20;
 		int month = 11;
 		int year = 2021;
-		// '2011-12-03T10:15:30'
+
 		DateTime dt1 = new DateTime(minute, hour, day, month, year);
 		DateTime dt2 = new DateTime(minute+1, hour+1, day+1, month+1, year+1);
 
