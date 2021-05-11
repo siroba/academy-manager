@@ -190,7 +190,7 @@ public class Model {
 	 * @return
 	 */
 	public float getAmountPaid(Data selectedRow) {
-		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM Payment "
+		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM PaymentTeacher "
 				+ "INNER JOIN InvoiceTeacher ON PaymentTeacher.ID_invoice=InvoiceTeacher.ID_Invoice AND PaymentTeacher.amount >0 " 
 				+ "GROUP BY PaymentTeacher.ID_invoice "
 				+ "HAVING InvoiceTeacher.ID_fa=? AND InvoiceTeacher.ID_teacher=? AND PaymentTeacher.amount >0 ), 0.0) as paid;";
@@ -212,7 +212,7 @@ public class Model {
 	public float getAmountReturned(Data selectedRow) {
 		String sql = "SELECT COALESCE((SELECT SUM (PaymentTeacher.amount) FROM PaymentTeacher "
 				+ "INNER JOIN InvoiceTeacher ON PaymentTeacher.ID_invoice=InvoiceTeacher.ID_Invoice AND PaymentTeacher.amount < 0 "
-				+ "GROUP BY Payment.ID_invoice "
+				+ "GROUP BY PaymentTeacher.ID_invoice "
 				+ "HAVING InvoiceTeacher.ID_fa=? AND InvoiceTeacher.ID_teacher=? AND PaymentTeacher.amount < 0 ), 0.0);";
 
 		double sumPayments =  (double) (db
