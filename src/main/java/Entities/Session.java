@@ -17,12 +17,24 @@ public class Session {
 	private int numberOfHours;
 	private DateTime sessionStart;
 
+	/**
+	 * @param location
+	 * @param numberOfHours
+	 * @param sessionStart
+	 */
 	public Session(String location, int numberOfHours, DateTime sessionStart) {
 		this.location = location;
 		this.numberOfHours = numberOfHours;
 		this.sessionStart = sessionStart;
 	}
 
+	/**
+	 * @param ID
+	 * @param ID_fa
+	 * @param location
+	 * @param numberOfHours
+	 * @param sessionStart
+	 */
 	public Session(int ID, int ID_fa, String location, int numberOfHours, DateTime sessionStart) {
 		this.ID = ID;
 		this.ID_fa = ID_fa;

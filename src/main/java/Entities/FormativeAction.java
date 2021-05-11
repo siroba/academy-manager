@@ -14,9 +14,6 @@ import PL53.util.DateTime;
 import PL53.util.Random;
 import Utils.Database;
 
-/**
- * 
- */
 public class FormativeAction {
 	private int ID = -1;
 	private String name, objectives, mainContents;
@@ -45,17 +42,12 @@ public class FormativeAction {
 	 * Default constructor
 	 *
 	 * @param name
-	 * @param duration
-	 * @param location
-	 * @param remuneration
 	 * @param totalPlaces
 	 * @param objectives
 	 * @param mainContents
-	 * @param teacherName
 	 * @param status
 	 * @param enrollmentStart
 	 * @param enrollmentEnd
-	 * @param faStart
 	 */
 	public FormativeAction(String name, int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
@@ -72,21 +64,18 @@ public class FormativeAction {
 
 	/**
 	 * Constructor with ID
+	 *
+	 * @param ID_fa
 	 * @param name
-	 * @param duration
-	 * @param location
-	 * @param remuneration
 	 * @param totalPlaces
 	 * @param objectives
 	 * @param mainContents
-	 * @param teacherName
 	 * @param status
 	 * @param enrollmentStart
 	 * @param enrollmentEnd
-	 * @param faStart
-	 * @param teachers
+	 * @param sessions
+	 * @param fees
 	 */
-
 	public FormativeAction(int ID_fa, String name, int totalPlaces,
 			String objectives, String mainContents, Status status, DateTime enrollmentStart,
 			DateTime enrollmentEnd, List<Session> sessions, List<Fee> fees) {
@@ -101,7 +90,6 @@ public class FormativeAction {
 		this.enrollmentEnd = enrollmentEnd;
 		this.sessions = sessions;
 		this.fees = fees;
-		this.teachers = teachers;
 	}
 
 	public static List<FormativeAction> create(int n) {
