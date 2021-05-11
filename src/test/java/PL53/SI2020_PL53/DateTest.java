@@ -21,10 +21,13 @@ public class DateTest {
 	long lDNow, lDtNow;
 	DateTime dtNow;
 	Date dNow;
-	Database db = new Database();
+	Database db;
   
 	@Before
 	public void setUp() {
+		db = new Database();
+		
+		
 		LocalDateTime ldt = LocalDateTime.now();
 
 		lDtNow = ldt.truncatedTo(ChronoUnit.MINUTES).toEpochSecond(ZoneOffset.ofHours(2)) * 1000L;

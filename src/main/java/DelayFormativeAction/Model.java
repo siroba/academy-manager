@@ -27,28 +27,40 @@ public class Model {
 		return data;
 	}
 
-	public void delay(int selected, DateTimeInput dateTimeInput) {
-		FormativeAction fa = data[selected];
-		
+	public FormativeAction getData(int selected) {
+		return data[selected];
+	}
+
+	/**
+	 * Delays a Formative Action and all of its sessions.
+	 * 
+	 * @param fa Formative Action to delay
+	 * @param dateTime Delay amount (in datetime object)
+	 */
+	public void delay(FormativeAction fa, DateTime dateTime) {		
 		String sessionQuery = "UPDATE Session SET sessionStart=? WHERE ID_session=?";
 		
 		for(Session s: fa.getSessions()) // Delay all the sessions by the same amount
-			db.executeUpdate(sessionQuery, delay(s.getSessionStart(), dateTimeInput).toSQLiteString(), s.getID());
+			db.executeUpdate(sessionQuery, delay(s.getSessionStart(), dateTime).toSQLiteString(), s.getID());
 		
 		// Delay the end of the enrollment period by the same amount
-		DateTime enEnd = delay(fa.getEnrollmentEnd(), dateTimeInput);
+		DateTime enEnd = delay(fa.getEnrollmentEnd(), dateTime);
 		
 		String query = "UPDATE FormativeAction SET enrollmentEnd=?, status=? WHERE ID_fa=?";
 		
 		db.executeUpdate(query, enEnd.toSQLiteString(), FormativeAction.Status.DELAYED.toString(), fa.getID());
 	}
 
-	public DateTime delay(DateTime dt, DateTimeInput dti) {
+	private static int daysInMonth[] = new int[] {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	
+	public DateTime delay(DateTime dt, DateTime dti) {
 		int minute = dt.getMinute() + dti.getMinute();
 		int hour = dt.getHour() + dti.getHour();
 		int day = dt.getDay() + dti.getDay();
 		int month = dt.getMonth() + dti.getMonth();
 		int year = dt.getYear() + dti.getYear();
+		
+		
 		
 		if(minute > 59) {
 			hour += minute/60;
@@ -60,9 +72,15 @@ public class Model {
 			hour = hour%24;
 		}
 		
-		if(day > 31) {
-			month += day/31;
-			day = day%31;
+		if(month > 12) {
+			year += month/12;
+			month = month%12;
+		}
+		
+		if(day > daysInMonth[month-1]) {
+			int daysInThisMonth = daysInMonth[month-1];
+			month += day/daysInThisMonth;
+			day = day%daysInThisMonth;
 		}
 		
 		if(month > 12) {
