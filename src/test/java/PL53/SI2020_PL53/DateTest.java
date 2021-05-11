@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class DateTest {
 	Database db = new Database();
   
 	@Before
-	public void initTest() {
+	public void setUp() {
 		LocalDateTime ldt = LocalDateTime.now();
 
 		lDtNow = ldt.truncatedTo(ChronoUnit.MINUTES).toEpochSecond(ZoneOffset.ofHours(2)) * 1000L;
@@ -31,6 +32,11 @@ public class DateTest {
 
 		dNow = Date.now();
 		dtNow = DateTime.now();
+	}
+
+	@After
+	public void tearDown() {
+		
 	}
 
 	@Test
