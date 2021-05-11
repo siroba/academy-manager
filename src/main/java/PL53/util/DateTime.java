@@ -108,7 +108,7 @@ public class DateTime extends Date {
 	public static DateTime parseString(String datetime) throws ParseException {
 		java.util.Date d = dateformat.parse(datetime);
 
-		return DateTime.fromMillis(d.getTime());
+		return DateTime.fromMillis(d.getTime() - 1000*60*60);
 	}
 
 	/**

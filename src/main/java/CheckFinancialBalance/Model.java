@@ -16,8 +16,7 @@ public class Model {
 	private Database db = new Database();
 
 	/**
-	 * Gets the list of active races in object form for a given registration date.
-	 * 
+	 * Gets a list of financial balance objects for all formative actions with at least one session between the startDate & endDate having the specified status 
 	 * @throws ParseException
 	 */
 	public List<FinancialBalance> getListFinancialBalance(Date startDate, Date endDate, String status) {
@@ -124,7 +123,10 @@ public class Model {
 		}
 		return new ArrayList<>();
 	}
-
+	
+	/*
+	 * Gets a list of one total balance object over all formative actions with at least one session between the startDate & endDate having the specified status
+	*/ 
 	public List<TotalBalance> getListTotalBalance(Date startDate, Date endDate, String status) {
 		// Query all rows from the result of a SQL query
 		try {
