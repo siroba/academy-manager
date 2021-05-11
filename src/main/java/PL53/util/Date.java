@@ -22,7 +22,7 @@ import java.util.Random;
  * {@link #toSQL()} and {@link #from(java.time.Instant)} (in combination with
  * {@link java.sql.Date#toInstant()} exist.
  */
-public class Date extends java.util.Date {
+public class Date implements Comparable<Date> {
 	// Auto-generated serial ID
 	private static final long serialVersionUID = -6185333649323730247L;
 
@@ -287,6 +287,11 @@ public class Date extends java.util.Date {
 		return new Date(d.getDayOfMonth(), d.getMonthValue(), d.getYear());
 	}
 
+	@Override
+	public int compareTo(Date other) {
+	    return Date.daysSince(this, other);
+	}
+	
 	/**
 	 * @author marcos
 	 *

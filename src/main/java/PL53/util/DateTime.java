@@ -2,7 +2,6 @@ package PL53.util;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -23,14 +22,11 @@ import java.util.Calendar;
  * functions {@link #toTimestamp()} and {@link #parseString(String)}
  * (Timestamps are stored as longs in the database) exist.
  */
-public class DateTime extends Date {
-	// Auto-generated serial ID
-	private static final long serialVersionUID = 2169788639882609776L;
-
+public class DateTime extends Date{
 	/**
 	 * {@link DateFormat} variable to format the dates
 	 */
-	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	public static final DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	
 	public static final ZoneOffset zoneOffset = ZoneOffset.ofHours(2);
 
@@ -248,7 +244,7 @@ public class DateTime extends Date {
         String m = (this.minute < 10 ? "0" : "") + this.minute;
         String d = (this.day < 10 ? "0" : "") + this.day;
         String M = (this.month < 10 ? "0" : "") + this.month;
-        return this.year + "-" + M + "-" + d + " " + h + ":" + m + ":00.0";
+        return this.year + "-" + M + "-" + d + " " + h + ":" + m + ":00";
     }
 
 	public void setTime(int minute, int hour) {
@@ -272,4 +268,8 @@ public class DateTime extends Date {
 		this.minute = minute;
 	}
 
+	@Override
+	public int compareTo(Date other) {
+	    return DateTime.minutesSince(this, (DateTime)other);
+	}
 }
