@@ -1,4 +1,10 @@
 # Information Systems' JDBC project
+This is an application code in Java with a SQLite database to manage an academy: 
+* Enroll students
+* Hire teachers
+* Pay fees
+* Create courses
+* and more...
 
 ## Documentation
 See [the documents available](https://github.com/siroba/SI2020-PL53/tree/main/docs).<br/>
